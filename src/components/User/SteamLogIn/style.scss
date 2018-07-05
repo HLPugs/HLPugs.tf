@@ -1,0 +1,29 @@
+#SteamLogIn {
+  margin: 7px;
+  height: 32px;
+  background: linear-gradient(to bottom right, #00c853, #00e676, #00c853);
+  border-radius: 16px;
+  overflow: hidden;
+  font-size: 30px;
+  display: flex;
+  align-items: center;
+  box-shadow: var(--paper-1);
+  cursor: pointer;
+  transition: background-position .5s ease;
+  background-size: 200% 200%;
+  background-position: 0% 0%;
+  text-decoration: none;
+  color: var(--font-color);
+  
+  &:hover {
+    background-position: 100% 100%;
+  }
+  
+  span {
+    font-size: 15px;
+    padding: 10px;
+    padding-top: 7px;
+    padding-left: 5px;
+    white-space: nowrap;
+  }
+}
