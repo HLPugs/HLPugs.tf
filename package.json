@@ -12,7 +12,8 @@
 		"tslint": "tslint -c tslint.json -p tsconfig.json"
 	},
 	"dependencies": {
-		"express": "^4.16.3"
+		"express": "^4.16.3",
+		"tslint-config-airbnb": "^5.9.2"
 	},
 	"devDependencies": {
 		"@types/express": "^4.16.0",
