@@ -3,3 +3,9 @@ dist/**/*
 
 # Dependency directory
 node_modules
+
+# Don't expose sensitive data
+/src/config/default.json
+
+# Webstorm files
+.idea
