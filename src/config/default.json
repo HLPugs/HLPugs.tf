@@ -1,5 +1,13 @@
 {
  "app": {
 
+ },
+ "db": {
+  "postgres": {
+  "host": "",
+   "username": "",
+   "password": "",
+   "port": 5432
+  }
  }
 }
