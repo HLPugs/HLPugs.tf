@@ -12,10 +12,13 @@
 		"tslint": "tslint -c tslint.json -p tsconfig.json"
 	},
 	"dependencies": {
-		"express": "^4.16.3"
+		"express": "^4.16.3",
+		"node-config-ts": "^1.2.5",
+		"request": "^2.87.0"
 	},
 	"devDependencies": {
 		"@types/express": "^4.16.0",
+		"@types/request": "^2.47.1",
 		"tslint": "^5.9.1",
 		"tslint-config-airbnb": "^5.9.2",
 		"typescript": "^2.7.2"
