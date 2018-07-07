@@ -9,7 +9,8 @@
 		"watch-node": "nodemon dist/server.js",
 		"build-ts": "tsc",
 		"watch-ts": "tsc -w",
-		"tslint": "tslint -c tslint.json -p tsconfig.json"
+		"tslint": "tslint -c tslint.json -p tsconfig.json",
+		"postinstall": "node-config-ts"
 	},
 	"dependencies": {
 		"express": "^4.16.3",
