@@ -6,9 +6,9 @@ import * as request from 'request';
  * @module Discord
  * @param {string} message - The message to send.
  * @param {string} channel - The channel to send the message in.
- * @param {boolean?} fancy - If fancy = true, put the message contents in a Discord embed
+ * @param {boolean} [fancy=false] - If fancy = true, put the message contents in a Discord embed
  * ('false' if unspecified).
- * @param {() => void} done - The callback function that runs if the message successfully sends.
+ * @param {() => void} [done] - The callback function that runs if the message successfully sends.
  */
 // tslint:disable-next-line:max-line-length
 export function postToDiscord(message: string, channel: string, fancy: boolean = false, done?: () => void): void {
