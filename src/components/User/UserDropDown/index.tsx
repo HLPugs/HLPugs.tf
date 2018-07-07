@@ -2,6 +2,8 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import './style.css';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
 interface UserDropDownProps {
   steamid?: string;
 }
@@ -12,14 +14,17 @@ class UserDropDown extends React.Component<UserDropDownProps, {}> {
       <ul id="UserDropDown">
         <li>
           <Link to={`/player/${this.props.steamid}`}>
+            <FontAwesomeIcon icon="user"/>
             Profile
           </Link>
         </li>
         <li>
+          <FontAwesomeIcon icon="cog" />
           Settings
         </li>
         <li>
           <a href="/logout">
+            <FontAwesomeIcon icon="sign-out-alt" />
             Logout
           </a>
         </li>

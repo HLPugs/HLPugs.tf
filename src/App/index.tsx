@@ -5,10 +5,11 @@ import { SiteConfiguration, UserScheme } from '../common/types';
 import Home from '../pages/Home';
 import './style.css';
 
-import fontawesome from '@fortawesome/fontawesome';
-import * as faSteamSymbol from '@fortawesome/fontawesome-free-brands/faSteamSymbol';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faSteamSymbol } from '@fortawesome/free-brands-svg-icons';
+import { faUser, faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 
-fontawesome.library.add(faSteamSymbol);
+library.add(faSteamSymbol, faUser, faCog, faSignOutAlt);
 
 interface AppState {
   configuration: SiteConfiguration;

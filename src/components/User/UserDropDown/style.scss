@@ -21,6 +21,10 @@
     color: var(--font-color-secondary);
     transition: all .2s ease;
     
+    svg {
+      padding-right: 5px;
+    }
+
     a {
       color: var(--font-color-secondary);
       text-decoration: none;
