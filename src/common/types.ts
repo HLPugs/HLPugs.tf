@@ -16,7 +16,7 @@ export interface NavItem {
   type: 'tab' | 'divider' | 'module';
   tabConfig?: {
     icon: IconName;
-    iconPrefix: IconPrefix
+    iconPrefix: IconPrefix;
     name: string;
     link: string;
     external: boolean;
