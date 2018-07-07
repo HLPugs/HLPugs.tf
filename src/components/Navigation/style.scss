@@ -1,0 +1,20 @@
+@import '../../sassVariables.scss';
+
+nav {
+    grid-area: nav;
+    background: var(--color-darker);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    box-shadow: var(--paper-3);
+}
+
+@media (max-width: 256 + $position-count * 200 + px) {
+    nav {
+        flex-direction: row;
+        background: none;
+        justify-content: flex-end;
+        box-shadow: none;
+        z-index: 1;
+    }
+}

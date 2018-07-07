@@ -1,3 +1,5 @@
+import { IconName, IconPrefix } from '@fortawesome/fontawesome-svg-core';
+
 export interface SiteConfiguration {
   branding: SiteBranding;
   navigation: NavItem[];
@@ -12,10 +14,17 @@ export interface SiteBranding {
 
 export interface NavItem {
   type: 'tab' | 'divider' | 'module';
-  icon?: string;
-  name?: string;
-  link?: string;
-  external?: boolean;
+  tabConfig?: {
+    icon: IconName;
+    iconPrefix: IconPrefix
+    name: string;
+    link: string;
+    external: boolean;
+  };
+  moduleConfig?: {
+    name: string;
+    moduleName: string;
+  };
 }
 
 export interface TfClass {

@@ -1,0 +1,74 @@
+@import '../../../sassVariables.scss';
+
+.navDivider {
+    height: 1px;
+    background: var(--gradient-overlay-darker);
+    margin-bottom: 5px;
+}
+
+.navTab {
+    height: 56px;
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all .2s ease;
+    color: var(--font-color-secondary);
+    text-decoration: none;
+    cursor: pointer;
+
+    div {
+        font-size: 24px;
+        min-width: 56px;
+        display: flex;
+        justify-content: center;
+    }
+
+    span {
+        font-size: 16px;
+        width: 100%;
+    }
+
+    &:hover {
+        background: var(--color-dark);
+        color: var(--font-color);
+        box-shadow: var(--paper-1);
+    
+        &::after {
+            visibility: hidden;
+        }
+    }
+}
+
+@media (max-width: 400 + $position-count * 200 + px) {
+    .navTab {
+        span {
+            display: none;
+        }
+
+        &:hover::after {
+            visibility: visible;
+        }
+    }
+}
+
+@media (max-width: 256 + $position-count * 200 + px) {
+    .navDivider {
+        height: auto;
+        width: 1px;
+        margin-bottom: 0;
+    }
+
+    .navTab {
+        &:hover {
+            background: var(--gradient-overlay-darker);
+            box-shadow: var(--paper-inset-1);
+        }
+        
+        &::after {
+            top: calc(100% + 5px);
+            left: 50% !important;
+            transform: translateX(-50%);
+        }
+    }
+}

@@ -6,10 +6,10 @@ import Home from '../pages/Home';
 import './style.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faSteamSymbol } from '@fortawesome/free-brands-svg-icons';
-import { faUser, faCog, faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
+import { faSteamSymbol, faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
+import { faUser, faCog, faSignOutAlt, faTachometerAlt, faGavel, faMicrophone } from '@fortawesome/free-solid-svg-icons';
 
-library.add(faSteamSymbol, faUser, faCog, faSignOutAlt);
+library.add(faSteamSymbol, faDiscord, faUser, faCog, faSignOutAlt, faTachometerAlt, faGavel, faMicrophone, faPatreon);
 
 interface AppState {
   configuration: SiteConfiguration;
@@ -32,7 +32,78 @@ class App extends React.Component<{}, AppState> {
           siteSubTitle: 'PUG NA HL',
           logoPath: 'logo.svg'
         },
-        navigation: [],
+        navigation: [
+          {
+            type: 'tab',
+            tabConfig: {
+              icon: 'gavel',
+              iconPrefix: 'fas',
+              name: 'Rules',
+              link: '/rules',
+              external: false
+            }
+          },
+          {
+            type: 'tab',
+            tabConfig: {
+              icon: 'tachometer-alt',
+              iconPrefix: 'fas',
+              name: 'Overview',
+              link: '/overview',
+              external: false
+            }
+          },
+          {
+            type: 'divider'
+          },
+          {
+            type: 'tab',
+            tabConfig: {
+              icon: 'microphone',
+              iconPrefix: 'fas',
+              name: 'Mumble',
+              link: 'mumble://hlpugs.tf',
+              external: true
+            }
+          },
+          {
+            type: 'tab',
+            tabConfig: {
+              icon: 'discord',
+              iconPrefix: 'fab',
+              name: 'Overview',
+              link: '/overview',
+              external: true
+            }
+          },
+          {
+            type: 'tab',
+            tabConfig: {
+              icon: 'patreon',
+              iconPrefix: 'fab',
+              name: 'Patreon',
+              link: 'https://patreon.com/hlpugs',
+              external: true
+            }
+          },
+          {
+            type: 'divider'
+          },
+          {
+            type: 'module',
+            moduleConfig: {
+              name: 'Captain',
+              moduleName: 'Captain'
+            }
+          },
+          {
+            type: 'module',
+            moduleConfig: {
+              name: 'Pre-Ready',
+              moduleName: 'PreReady'
+            }
+          }
+        ],
         classes: []
       },
       user: {

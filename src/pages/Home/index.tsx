@@ -2,6 +2,7 @@ import * as React from 'react';
 import { SiteConfiguration, UserScheme } from '../../common/types';
 import Header from '../../components/Header';
 import User from '../../components/User';
+import Navigation from '../../components/Navigation';
 import './style.css';
 
 interface HomeProps {
@@ -20,6 +21,7 @@ class Home extends React.Component<HomeProps, {}> {
           logoPath={this.props.configuration.branding.logoPath} 
         />
         <User user={this.props.user} />
+        <Navigation navigationGroup={this.props.configuration.navigation} />
       </div>
     );
   }
