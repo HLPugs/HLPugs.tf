@@ -1,8 +1,7 @@
 import * as express from 'express';
+import { routing } from './modules';
 
 const app: express.Application = express();
-
-import { routing } from './modules';
 
 app.use(routing);
 

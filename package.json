@@ -9,13 +9,20 @@
 		"watch-node": "nodemon dist/server.js",
 		"build-ts": "tsc",
 		"watch-ts": "tsc -w",
-		"tslint": "tslint -c tslint.json -p tsconfig.json"
+		"tslint": "tslint -c tslint.json -p tsconfig.json",
+		"postinstall": "node-config-ts"
 	},
 	"dependencies": {
-		"express": "^4.16.3"
+		"chai": "^4.1.2",
+		"config": "^1.30.0",
+		"express": "^4.16.3",
+		"mocha": "^5.2.0",
+		"request": "^2.87.0"
 	},
 	"devDependencies": {
+		"@types/config": "0.0.34",
 		"@types/express": "^4.16.0",
+		"@types/request": "^2.47.1",
 		"tslint": "^5.9.1",
 		"tslint-config-airbnb": "^5.9.2",
 		"typescript": "^2.7.2"
