@@ -10,7 +10,7 @@ import * as request from 'request';
  * @param {() => void} [done] - The callback function that runs if the message successfully sends.
  */
 // tslint:disable-next-line:max-line-length
-export function postToDiscord(message: string, channel: string, fancy: boolean = false, done?: () => void): void {
+export function postToDiscord(message: string, channel: string, fancy = false, done?: () => void): void {
   const webhook = config.get(`discord.webhooks.${channel}`);
   if (webhook !== undefined) {
     const data = {
@@ -31,5 +31,7 @@ export function postToDiscord(message: string, channel: string, fancy: boolean =
       // Run callback if exists
 	    (done || Function)();
     });
+  } else {
+  	// Log something error related
   }
 }
