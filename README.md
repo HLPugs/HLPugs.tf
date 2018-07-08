@@ -1,2 +1,2 @@
 # Intel
-Back end for the Captain Draft & Mix PUG Service ugnder HLPugs.tf
+Back end for the Captain Draft & Mix PUG Service under HLPugs.tf

@@ -10,3 +10,5 @@ node_modules
 # Webstorm files
 .idea
 
+# Auto-generated files
+/config/Config.d.ts
