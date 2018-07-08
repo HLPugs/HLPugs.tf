@@ -8,12 +8,12 @@
       "username": "",
       "password": "",
       "port": 5432
-    },
+    }
+  },
     "discord": {
       "username": "HLPugs.tf",
       "webhooks": {
         "channel-name": "webhook-url"
-      }
     }
   }
 }
