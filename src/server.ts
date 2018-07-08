@@ -6,5 +6,7 @@ const app: express.Application = express();
 app.use(routing);
 
 app.listen(3001, () => {
-  postToDiscord(`Node server listening on port 3001`, 'site-status');
+  postToDiscord(`Node server listening on port 3001`, 'site-status', false, () => {
+    console.log('Successfully sent discord message.');
+  });
 });

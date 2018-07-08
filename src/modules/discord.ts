@@ -1,6 +1,5 @@
-import { config } from 'node-config-ts';
+import * as config from 'config';
 import * as request from 'request';
-
 /**
  * Posts a string to the HLPugs.tf Discord server as a webhook message.
  * @module Discord
@@ -12,8 +11,7 @@ import * as request from 'request';
  */
 // tslint:disable-next-line:max-line-length
 export function postToDiscord(message: string, channel: string, fancy: boolean = false, done?: () => void): void {
-  const webhook = config.discord.webhooks[channel];
-  console.log(webhook);
+  const webhook = config.get(`discord.webhooks.${channel}`);
   if (webhook !== undefined) {
     const data = {
       url: webhook,
@@ -21,7 +19,7 @@ export function postToDiscord(message: string, channel: string, fancy: boolean =
       body: {
         avatar_url: '',
         content: message,
-        username: 'HLPugs.tf',
+        username: config.get('discord.username'),
 	    embeds: fancy ? [{ description: message }] : [],
       },
       json: true,
@@ -30,7 +28,8 @@ export function postToDiscord(message: string, channel: string, fancy: boolean =
       if (err) {
         console.warn(`[Webhook] ${err}`);
       }
-      done();
+      // Run callback if exists
+	    (done || Function)();
     });
   }
 }
