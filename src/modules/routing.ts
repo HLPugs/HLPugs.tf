@@ -8,7 +8,7 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.get('/verify', steam.verify(), (req: Request, res: Response) => {
-
+  res.redirect('/');
 });
 
 router.get('/auth', steam.authenticate(), (req: Request, res: Response) => {
