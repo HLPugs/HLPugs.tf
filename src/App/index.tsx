@@ -14,7 +14,8 @@ import {
   faTachometerAlt,
   faGavel,
   faMicrophone,
-  faComments
+  faComments,
+  faBullhorn
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -26,7 +27,8 @@ library.add(
   faGavel,
   faMicrophone,
   faPatreon,
-  faComments
+  faComments,
+  faBullhorn
 );
 
 interface AppState {

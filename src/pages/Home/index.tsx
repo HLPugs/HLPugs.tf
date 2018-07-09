@@ -3,6 +3,7 @@ import { SiteConfiguration, UserScheme } from '../../common/types';
 import Header from '../../components/Header';
 import User from '../../components/User';
 import Navigation from '../../components/Navigation';
+import DraftArea from '../../components/DraftArea';
 import Chat from '../../components/Chat';
 import './style.css';
 
@@ -23,6 +24,7 @@ class Home extends React.Component<HomeProps, {}> {
         />
         <User user={this.props.user} />
         <Navigation navigationGroup={this.props.configuration.navigation} />
+        <DraftArea socket={this.props.socket} classes={this.props.configuration.classes} />
         <Chat socket={this.props.socket} />
       </div>
     );

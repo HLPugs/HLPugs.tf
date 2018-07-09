@@ -1,0 +1,33 @@
+#announcementsHolder {
+    margin: 7px;
+    margin-bottom: 0px;
+    min-height: 36px;
+    display: flex;
+    border-radius: 3px;
+    overflow: hidden;
+    background: var(--background-light);
+    box-shadow: var(--paper-2);
+    cursor: pointer;
+    
+    #announcementIcon {
+        background: var(--color-gradient);
+        box-shadow: var(--paper-2);
+        width: 36px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-shrink: 0;
+        font-size: 20px;
+    }
+    
+    #announcements {
+        padding: 4px;
+        padding-left: 8px;
+        padding-right: 6px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        top: -2px;
+        user-select: none;
+    }
+}
