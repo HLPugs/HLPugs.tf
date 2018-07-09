@@ -12,8 +12,13 @@ interface AnnouncementsState {
 }
 
 class Announcements extends React.Component<AnnouncementsProps, AnnouncementsState> {
+
+    private announcementsTimer: number;
+
     constructor(props: AnnouncementsProps) {
         super(props);
+
+        this.announcementsTimer = window.setInterval(this.cycleAnnouncements, 5000);
 
         this.state = {
             announcements: [
@@ -35,7 +40,10 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
 
     render() {
         return (
-            <div id="announcementsHolder" onClick={this.cycleAnnouncements}>
+            <div 
+                id="announcementsHolder" 
+                onClick={() => {this.cycleAnnouncements(); clearInterval(this.announcementsTimer); }}
+            >
                 <div id="announcementIcon">
                     <FontAwesomeIcon icon="bullhorn" />
                 </div>
