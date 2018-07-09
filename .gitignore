@@ -5,7 +5,10 @@ dist/**/*
 node_modules
 
 # Don't expose sensitive data
-/src/config/default.json
+/config/default.json
 
 # Webstorm files
 .idea
+
+# Auto-generated files
+/config/Config.d.ts
