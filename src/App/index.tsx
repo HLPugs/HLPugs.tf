@@ -7,9 +7,27 @@ import './style.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSteamSymbol, faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
-import { faUser, faCog, faSignOutAlt, faTachometerAlt, faGavel, faMicrophone } from '@fortawesome/free-solid-svg-icons';
+import {
+  faUser,
+  faCog,
+  faSignOutAlt,
+  faTachometerAlt,
+  faGavel,
+  faMicrophone,
+  faComments
+} from '@fortawesome/free-solid-svg-icons';
 
-library.add(faSteamSymbol, faDiscord, faUser, faCog, faSignOutAlt, faTachometerAlt, faGavel, faMicrophone, faPatreon);
+library.add(
+  faSteamSymbol,
+  faDiscord, faUser,
+  faCog,
+  faSignOutAlt,
+  faTachometerAlt,
+  faGavel,
+  faMicrophone,
+  faPatreon,
+  faComments
+);
 
 interface AppState {
   configuration: SiteConfiguration;
@@ -23,7 +41,7 @@ class App extends React.Component<{}, AppState> {
   constructor(props: Object) {
     super(props);
     
-    this.socket = io();
+    this.socket = io(window.location.hostname + ':3001');
     
     this.state = {
       configuration: {

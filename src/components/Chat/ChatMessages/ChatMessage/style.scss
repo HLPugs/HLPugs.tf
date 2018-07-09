@@ -1,0 +1,29 @@
+.message {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    transition: box-shadow .3s ease;
+    border-bottom: solid 1px var(--background);
+
+    .info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+        
+        .username {
+            color: var(--font-color-tertiary);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        
+        .timestamp {
+            color: var(--font-color-tertiary);
+            font-size: 12px;
+        }
+    }
+
+    &:hover {
+        box-shadow: var(--paper-2);
+    }
+}

@@ -34,7 +34,7 @@
         color: var(--font-color);
         box-shadow: var(--paper-1);
     
-        &::after {
+        &[data-tooltip]::after {
             visibility: hidden;
         }
     }
@@ -46,7 +46,7 @@
             display: none;
         }
 
-        &:hover::after {
+        &[data-tooltip]:hover::after {
             visibility: visible;
         }
     }

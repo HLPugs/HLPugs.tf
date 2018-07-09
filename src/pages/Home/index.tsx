@@ -3,6 +3,7 @@ import { SiteConfiguration, UserScheme } from '../../common/types';
 import Header from '../../components/Header';
 import User from '../../components/User';
 import Navigation from '../../components/Navigation';
+import Chat from '../../components/Chat';
 import './style.css';
 
 interface HomeProps {
@@ -22,6 +23,7 @@ class Home extends React.Component<HomeProps, {}> {
         />
         <User user={this.props.user} />
         <Navigation navigationGroup={this.props.configuration.navigation} />
+        <Chat socket={this.props.socket} />
       </div>
     );
   }
