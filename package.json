@@ -9,13 +9,25 @@
 		"watch-node": "nodemon dist/server.js",
 		"build-ts": "tsc",
 		"watch-ts": "tsc -w",
+		"test": "./node_modules/.bin/mocha/ -r ts-node/register src/test/test-*.ts",
 		"tslint": "tslint -c tslint.json -p tsconfig.json"
 	},
 	"dependencies": {
-		"express": "^4.16.3"
+		"config": "^1.30.0",
+		"express": "^4.16.3",
+		"request": "^2.87.0"
 	},
 	"devDependencies": {
+		"@types/chai": "^4.1.4",
 		"@types/express": "^4.16.0",
+		"@types/chai-as-promised": "^7.1.0",
+		"@types/config": "0.0.34",
+		"@types/mocha": "^5.2.4",
+		"@types/request": "^2.47.1",
+		"chai": "^4.1.2",
+		"chai-as-promised": "^7.1.1",
+		"mocha": "^5.2.0",
+		"ts-node": "^7.0.0",
 		"tslint": "^5.9.1",
 		"tslint-config-airbnb": "^5.9.2",
 		"typescript": "^2.7.2"
