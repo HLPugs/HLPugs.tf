@@ -15,7 +15,8 @@
 	"dependencies": {
 		"config": "^1.30.0",
 		"express": "^4.16.3",
-		"request": "^2.87.0"
+		"request": "^2.87.0",
+		"steam-login": "^0.1.7"
 	},
 	"devDependencies": {
 		"@types/chai": "^4.1.4",
