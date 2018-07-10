@@ -29,5 +29,14 @@
         position: relative;
         top: -2px;
         user-select: none;
+
+        span {
+            opacity: 1;
+            transition: opacity 0.25s ease;
+
+            &.cyclingAnnouncements {
+                opacity: 0;
+            }
+        }
     }
 }

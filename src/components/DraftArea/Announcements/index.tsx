@@ -9,6 +9,7 @@ interface AnnouncementsProps {
 interface AnnouncementsState {
     announcements: string[];
     index: number;
+    transitioning: boolean;
 }
 
 class Announcements extends React.Component<AnnouncementsProps, AnnouncementsState> {
@@ -26,7 +27,8 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
                 'Testing',
                 'What a wondeful test'
             ],
-            index: 0
+            index: 0,
+            transitioning: false
         };
     }
 
@@ -34,8 +36,15 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
         const newIndex: number = this.state.index + 1 === this.state.announcements.length ? 0 : this.state.index + 1;
 
         this.setState({
-            index: newIndex
+            transitioning: true
         });
+
+        setTimeout(
+            () => { 
+                this.setState({ index: newIndex, transitioning: false }); 
+            }, 
+            250
+        );
     }
 
     render() {
@@ -48,7 +57,9 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
                     <FontAwesomeIcon icon="bullhorn" />
                 </div>
                 <div id="announcements">
-                    <span>{this.state.announcements[this.state.index]}</span>
+                    <span className={this.state.transitioning ? 'cyclingAnnouncements' : ''}>
+                        {this.state.announcements[this.state.index]}
+                    </span>
                 </div>
             </div>
         );
