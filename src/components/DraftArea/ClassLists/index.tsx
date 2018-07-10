@@ -1,5 +1,5 @@
 import * as React from 'react';
-// import ClassBox from './ClassBox';
+import ClassBox from './ClassBox';
 import { TfClass } from '../../../common/types';
 import './style.css';
 
@@ -11,7 +11,11 @@ interface ClassListsProps {
 class DraftArea extends React.Component<ClassListsProps, {}> {
   render() {
     return (
-      <div id="ClassLists" />
+      <div id="classList">
+        {this.props.classes.map((tfclass: TfClass) => 
+          <ClassBox properties={tfclass} key={tfclass.name} socket={this.props.socket} />
+        )}
+      </div>
     );
   }
 }

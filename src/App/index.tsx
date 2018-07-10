@@ -91,8 +91,8 @@ class App extends React.Component<{}, AppState> {
             tabConfig: {
               icon: 'discord',
               iconPrefix: 'fab',
-              name: 'Overview',
-              link: '/overview',
+              name: 'Discord',
+              link: 'https://discord.gg/rwXy3rq',
               external: true
             }
           },
@@ -124,7 +124,28 @@ class App extends React.Component<{}, AppState> {
             }
           }
         ],
-        classes: []
+        classes: [
+          {
+            name: 'Scout',
+            numberPerTeam: 1
+          },
+          {
+            name: 'Demo',
+            numberPerTeam: 1
+          },
+          {
+            name: 'Medic',
+            numberPerTeam: 1
+          },
+          {
+            name: 'Sniper',
+            numberPerTeam: 1
+          },
+          {
+            name: 'Flex',
+            numberPerTeam: 3
+          }
+        ]
       },
       user: {
         loggedIn: true,
