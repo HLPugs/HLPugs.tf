@@ -19,7 +19,7 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
     constructor(props: AnnouncementsProps) {
         super(props);
 
-        this.announcementsTimer = window.setInterval(this.cycleAnnouncements, 5000);
+        this.announcementsTimer = window.setInterval(this.cycleAnnouncements, 15000);
 
         this.state = {
             announcements: [
