@@ -47,3 +47,8 @@ export interface ChatMessageType {
     message: string;
 
 }
+
+export interface PreDraftRequirementType {
+    name: string;
+    state: boolean;
+}

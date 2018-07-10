@@ -1,0 +1,9 @@
+#PreDraftRequirements {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 100%;
+    font-size: 16px;
+    opacity: 0;
+    transition: opacity .3s ease;
+}
