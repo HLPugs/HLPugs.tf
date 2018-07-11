@@ -22,21 +22,21 @@ class ChatMessages extends React.Component<ChatMessagesProps, ChatMessagesState>
                     userid: '7',
                     id: '20902692',
                     timestamp: new Date(),
-                    message: 'Pugs?'
+                    message: 'Pugs? :thinking_face: :thinking_face:'
                 },
                 {
                     username: 'exaflamer1',
                     userid: '8',
                     id: '1509238509',
                     timestamp: new Date(),
-                    message: 'pugs r dead'
+                    message: 'pugs r dead :frowning:'
                 },
                 {
                     username: 'Nicell',
                     userid: '7',
                     id: '18510815',
                     timestamp: new Date(),
-                    message: 'rip'
+                    message: 'rip :cry:'
                 }
             ]
         };

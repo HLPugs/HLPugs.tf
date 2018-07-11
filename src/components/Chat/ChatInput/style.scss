@@ -4,9 +4,11 @@
     padding: 5px;
     flex-shrink: 0;
     flex-grow: 0;
+    position: relative;
     
     #messageInput {
         padding: 5px;
+        padding-right: 25px;
         height: 46px;
         box-sizing: border-box;
         border: none;
@@ -37,4 +39,32 @@
             display: none;
         }
     }
+
+    #emojiPickerToggle {
+        position: absolute;
+        font-size: 20px;
+        color: var(--font-color-tertiary);
+        cursor: pointer;
+        transition: color .2s ease;
+        right: 8px;
+        top: 6px;
+
+        &:hover {
+            color: var(--font-color);
+        }
+    }
+
+    #emojiPickerHolder {
+        position: absolute;
+        bottom: 100%;
+        right: 5px;
+    }
+}
+
+#emojiBackgroundToggle {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    bottom: 0;
+    right: 0;
 }
