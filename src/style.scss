@@ -57,7 +57,7 @@ body {
         opacity: 0;
         background: var(--background-light);
         box-shadow: var(--paper-1);
-        border-radius: 3px;
+        border-radius: 4px;
         z-index: 99;
         transition: opacity .2s ease, visibility 0s linear .2s;
         pointer-events: none;
