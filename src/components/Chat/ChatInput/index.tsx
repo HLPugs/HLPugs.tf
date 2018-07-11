@@ -47,6 +47,14 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                 this.messageInput.current.value = emoji.colons + ' ';
             }
         }
+
+        this.setState({
+            pickerToggle: false
+        });
+
+        if (this.messageInput.current) {
+            this.messageInput.current.focus();
+        }
     }
 
     picker = () => {
@@ -59,12 +67,25 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                     color="#03a9f4"
                     sheetSize={32}
                     autoFocus={true}
-                    onClick={(emoji) => { this.addEmoji(emoji); }}
+                    emojiTooltip={true} 
+                    onClick={(emoji: EmojiData) => { this.addEmoji(emoji); }}
                 />
             );
         }
 
         return null;
+    }
+
+    handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+
+            // Submit text to socket
+
+            if (this.messageInput.current) {
+                this.messageInput.current.value = '';
+            }
+        }
     }
 
     render() {
@@ -74,6 +95,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                     placeholder="@Support for serious concerns" 
                     id="messageInput" 
                     ref={this.messageInput}
+                    onKeyPress={this.handleKeyPress}
                     onClick={() => { this.setState({pickerToggle: false}); }} 
                 />
                 <div id="emojiPickerToggle" onClick={this.togglePicker} >
