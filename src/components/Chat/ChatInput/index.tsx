@@ -1,10 +1,10 @@
 import * as React from 'react';
 import AutoComletions from './AutoCompletions';
-import { Picker, EmojiData } from 'emoji-mart';
+import EmojiPicker from './EmojiPicker';
+import { EmojiData } from 'emoji-mart';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import allEmojis from 'emoji-mart/data/all.json';
 import './style.css';
-import './emoji-mart.css';
 
 const searchEmojis = (
     fragment: string,
@@ -105,25 +105,6 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
         if (this.messageInput.current) {
             this.messageInput.current.focus();
         }
-    }
-
-    picker = () => {
-        if (this.state.pickerToggle) {
-            return  (
-                <Picker
-                    custom={[]}
-                    set="twitter"
-                    perLine={7}
-                    color="#03a9f4"
-                    sheetSize={32}
-                    autoFocus={true}
-                    emojiTooltip={true} 
-                    onClick={(emoji: EmojiData) => { this.addEmoji(emoji); }}
-                />
-            );
-        }
-
-        return null;
     }
 
     handleChange = () => {
@@ -255,7 +236,6 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                     ref={this.messageInput}
                     onChange={this.handleChange}
                     onKeyDown={this.handleKeyPress}
-                    onClick={() => { this.setState({pickerToggle: false}); }} 
                 />
                 <div id="emojiPickerToggle" onClick={this.togglePicker} >
                     <FontAwesomeIcon icon="smile" />
@@ -267,7 +247,11 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                     completionClick={this.completionClick}
                 />
                 <div id="emojiPickerHolder">
-                    {this.picker()}
+                    <EmojiPicker 
+                        addEmoji={this.addEmoji} 
+                        handleClickOutside={this.togglePicker} 
+                        pickerToggle={this.state.pickerToggle} 
+                    />
                 </div>
             </div>
         );
