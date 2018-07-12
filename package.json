@@ -13,6 +13,7 @@
     "@types/socket.io-client": "^1.4.32",
     "@types/webfontloader": "^1.6.29",
     "emoji-mart": "^2.6.1",
+    "moment": "^2.22.2",
     "node-sass-chokidar": "^1.2.0",
     "react": "^16.4.1",
     "react-dom": "^16.4.1",

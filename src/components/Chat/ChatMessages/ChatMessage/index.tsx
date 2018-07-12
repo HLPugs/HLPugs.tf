@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { ChatMessageType } from '../../../../common/types';
 import { Emoji } from 'emoji-mart';
+import * as moment from 'moment';
 import './style.css';
 
 interface ChatMessageProps {
@@ -83,7 +84,7 @@ class ChatMessage extends React.Component<ChatMessageProps, {}> {
                         {this.props.properties.username}
                     </Link>
                     <div className="timestamp">
-                        {this.props.properties.timestamp.getHours()}:{this.props.properties.timestamp.getMinutes()}
+                        <span>{moment(this.props.properties.timestamp).format('LT')}</span>
                     </div>
                 </div>
                 <div>

@@ -17,7 +17,7 @@
     "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "typeRoots": [
-      "./common"
+      "./common/json-typings.d.ts"
     ]
   },
   "exclude": [
