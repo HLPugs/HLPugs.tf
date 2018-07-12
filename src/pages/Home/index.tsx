@@ -8,27 +8,27 @@ import Chat from '../../components/Chat';
 import './style.css';
 
 interface HomeProps {
-  socket: SocketIOClient.Socket;
-  configuration: SiteConfiguration;
-  user: UserScheme;
+    socket: SocketIOClient.Socket;
+    configuration: SiteConfiguration;
+    user: UserScheme;
 }
 
 class Home extends React.Component<HomeProps, {}> {
-  render() {
-    return (
-      <div id="Home">
-        <Header 
-          siteName={this.props.configuration.branding.siteName} 
-          siteSubTitle={this.props.configuration.branding.siteSubTitle}
-          logoPath={this.props.configuration.branding.logoPath} 
-        />
-        <User user={this.props.user} />
-        <Navigation navigationGroup={this.props.configuration.navigation} />
-        <DraftArea socket={this.props.socket} classes={this.props.configuration.classes} />
-        <Chat socket={this.props.socket} />
-      </div>
-    );
-  }
+    render() {
+        return (
+            <div id="Home">
+                <Header 
+                    siteName={this.props.configuration.branding.siteName} 
+                    siteSubTitle={this.props.configuration.branding.siteSubTitle}
+                    logoPath={this.props.configuration.branding.logoPath} 
+                />
+                <User user={this.props.user} />
+                <Navigation navigationGroup={this.props.configuration.navigation} />
+                <DraftArea socket={this.props.socket} classes={this.props.configuration.classes} />
+                <Chat socket={this.props.socket} />
+            </div>
+        );
+    }
 }
 
 export default Home;

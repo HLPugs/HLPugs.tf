@@ -3,6 +3,7 @@ import * as io from 'socket.io-client';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { SiteConfiguration, UserScheme } from '../common/types';
 import Home from '../pages/Home';
+import Banned from '../pages/Banned';
 import './style.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -176,6 +177,16 @@ class App extends React.Component<{}, AppState> {
                 user={this.state.user} 
               />
             } 
+          />
+          <Route
+            exact={true}
+            path="/banned"
+            render={() =>
+              <Banned
+                socket={this.socket}
+                configuration={this.state.configuration}
+              />
+            }
           />
           <Redirect from="*" to="/" />
         </Switch>
