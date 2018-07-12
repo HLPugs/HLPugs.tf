@@ -55,6 +55,7 @@ interface ChatInputProps {
 
 interface ChatInputState {
     pickerToggle: boolean;
+    toggleWaitComplete: boolean;
     autoCompleteIndex: number;
     emojiCompletions: string[];
     mentionCompletions: string[];
@@ -71,6 +72,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 
         this.state = {
             pickerToggle: false,
+            toggleWaitComplete: true,
             autoCompleteIndex: 0,
             emojiCompletions: [],
             mentionCompletions: []
@@ -78,9 +80,22 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
     }
 
     togglePicker = () => {
-        this.setState({
-            pickerToggle: !this.state.pickerToggle
-        });
+        
+        if (this.state.toggleWaitComplete) {
+            this.setState({
+                pickerToggle: !this.state.pickerToggle,
+                toggleWaitComplete: false
+            });
+
+            setTimeout(
+                () => {
+                    this.setState({
+                        toggleWaitComplete: true
+                    });
+                }, 
+                100
+            );
+        }
     }
 
     addEmoji = (emoji: EmojiData) => {
