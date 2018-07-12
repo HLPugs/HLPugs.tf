@@ -101,6 +101,7 @@
 
 .emoji-mart-search {
     margin-top: 6px;
+    margin-bottom: 6px;
     padding: 0 6px;
 }
 .emoji-mart-search input {
@@ -114,10 +115,13 @@
     color: var(--font-color);
     font-family: var(--font);
     outline: 0;
-        transition: border-color .2s ease;
+    transition: border-color .2s ease;
+    box-shadow: var(--paper-1);
+    z-index: 99;
 
     &:focus {
         border-color: var(--color);
+        box-shadow: var(--paper-2);
     }
 }
 
