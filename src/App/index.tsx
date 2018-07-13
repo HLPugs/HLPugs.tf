@@ -19,7 +19,8 @@ import {
   faBullhorn,
   faCheck,
   faTimes,
-  faSmile
+  faSmile,
+  faStar
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -35,7 +36,8 @@ library.add(
   faBullhorn,
   faCheck,
   faTimes,
-  faSmile
+  faSmile,
+  faStar
 );
 
 interface AppState {

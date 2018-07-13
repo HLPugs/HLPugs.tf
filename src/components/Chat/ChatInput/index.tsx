@@ -93,7 +93,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                         toggleWaitComplete: true
                     });
                 }, 
-                100
+                200
             );
         }
     }
@@ -239,6 +239,8 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                 emojiCompletions: [],
                 mentionCompletions: []
             });
+
+            this.messageInput.current.focus();
         }
     }
 
@@ -252,15 +254,15 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                     onChange={this.handleChange}
                     onKeyDown={this.handleKeyPress}
                 />
-                <div id="emojiPickerToggle" onClick={this.togglePicker} >
-                    <FontAwesomeIcon icon="smile" />
-                </div>
-                <AutoComletions 
-                    autoCompleteIndex={this.state.autoCompleteIndex} 
+                <AutoComletions
+                    autoCompleteIndex={this.state.autoCompleteIndex}
                     emojiCompletions={this.state.emojiCompletions}
                     mentionCompletions={this.state.mentionCompletions}
                     completionClick={this.completionClick}
                 />
+                <div id="emojiPickerToggle" onClick={this.togglePicker} >
+                    <FontAwesomeIcon icon="smile" />
+                </div>
                 <div id="emojiPickerHolder">
                     <EmojiPicker 
                         addEmoji={this.addEmoji} 

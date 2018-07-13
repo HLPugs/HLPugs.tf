@@ -1,3 +1,7 @@
+#messageInput:not(:focus) + #autoCompletionHolder:not(:hover) {
+    display: none;
+}
+
 #autoCompletionHolder {
     position: absolute;
     box-sizing: border-box;
