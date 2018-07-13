@@ -80,7 +80,7 @@ class ChatMessage extends React.Component<ChatMessageProps, {}> {
         return (
             <div className="message">
                 <div className="info">
-                    <Link to={`/profile/${this.props.properties.userid}`} className="username">
+                    <Link to={`/profile/${this.props.properties.userid}`} target="blank" className="username">
                         {this.props.properties.username}
                     </Link>
                     <div className="timestamp">
