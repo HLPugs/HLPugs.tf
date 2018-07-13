@@ -2,8 +2,9 @@ import * as config from 'config';
 import * as crypto from 'crypto';
 import * as express from 'express';
 import * as expressSession from 'express-session';
+import * as connect_redis from 'connect-redis';
 // tslint:disable-next-line:variable-name
-const RedisStore = require('connect-redis')(expressSession);
+const RedisStore = connect_redis(expressSession);
 const steam = require('steam-login');
 import * as uuid from 'uuid';
 
