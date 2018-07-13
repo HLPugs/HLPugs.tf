@@ -1,6 +1,10 @@
 {
   "app": {
-
+    "steam": {
+    "apiKey": "api key",
+    "realm": "web.site.name",
+    "verify": "web.site.name/verify"
+  }
   },
   "db": {
     "postgres": {

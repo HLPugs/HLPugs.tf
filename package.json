@@ -14,16 +14,24 @@
 	},
 	"dependencies": {
 		"config": "^1.30.0",
+		"connect-redis": "^3.3.3",
+		"crypto": "^1.0.1",
 		"express": "^4.16.3",
-		"request": "^2.87.0"
+		"express-session": "^1.15.6",
+		"pg": "^7.4.3",
+		"request": "^2.87.0",
+		"steam-login": "^0.1.7",
+		"uuid": "^3.3.2"
 	},
 	"devDependencies": {
 		"@types/chai": "^4.1.4",
-		"@types/express": "^4.16.0",
 		"@types/chai-as-promised": "^7.1.0",
 		"@types/config": "0.0.34",
+		"@types/connect-redis": "0.0.7",
+		"@types/express": "^4.16.0",
 		"@types/mocha": "^5.2.4",
 		"@types/request": "^2.47.1",
+		"@types/uuid": "^3.4.3",
 		"chai": "^4.1.2",
 		"chai-as-promised": "^7.1.1",
 		"mocha": "^5.2.0",
