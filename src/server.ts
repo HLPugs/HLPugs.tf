@@ -1,14 +1,15 @@
 import * as config from 'config';
 import * as crypto from 'crypto';
 import * as express from 'express';
+import { Server } from 'http';
 import * as expressSession from 'express-session';
 import * as connect_redis from 'connect-redis';
 // tslint:disable-next-line:variable-name
 const RedisStore = connect_redis(expressSession);
-const steam = require('steam-login');
+import * as steam from 'steam-login';
 import * as uuid from 'uuid';
 
-import { routing } from './modules';
+import { routing, sockets } from './modules';
 
 const sessionConfig = expressSession({
   genid(req) {
@@ -28,6 +29,10 @@ const sessionConfig = expressSession({
 
 const app: express.Application = express();
 
+const server = new Server(app);
+
+sockets(server, sessionConfig);
+
 app.use(sessionConfig);
 
 app.use(steam.middleware({
@@ -38,4 +43,4 @@ app.use(steam.middleware({
 
 app.use(routing);
 
-app.listen(3001);
+server.listen(3001);
