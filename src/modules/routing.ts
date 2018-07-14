@@ -19,7 +19,9 @@ router.get('/auth', steam.authenticate(), (req: Request, res: Response) => {
 });
 
 router.get('/logout', steam.enforceLogin('/'), (req: Request, res: Response) => {
-
+  delete req.session.steamUser;
+  req.user = null;
+  res.redirect('/');
 });
 
 export const routing: Router = router;
