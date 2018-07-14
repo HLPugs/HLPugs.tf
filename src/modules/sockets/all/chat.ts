@@ -4,7 +4,7 @@ import * as uuid from 'uuid';
 export const chat = (io: Server) => {
   io.on('connection', (socket) => {
     socket.on('sendMessage', (message: string) => {
-      if (message.length) {
+      if (message.length && socket.request.session.steamUser) {
         const messageObject = {
           message,
           username: socket.request.session.steamUser.username, // Placeholder waiting for names

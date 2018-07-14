@@ -1,8 +1,8 @@
 import { Server } from 'socket.io';
 import { chat } from './chat';
-import { punishments } from './punishments';
+import { setup } from './setup';
 
 export const all = (io: Server) => {
   chat(io);
-  punishments(io);
+  setup(io);
 };
