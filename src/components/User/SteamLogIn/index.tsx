@@ -5,7 +5,7 @@ import './style.css';
 class SteamLogIn extends React.Component {
   render() {
     return(
-      <a id="SteamLogIn" href="/authenticate">
+      <a id="SteamLogIn" href={`${window.location.protocol}//${window.location.hostname}:3001/auth`}>
         <FontAwesomeIcon icon={['fab', 'steam-symbol']} />
         <span>Sign in with Steam</span>
       </a>

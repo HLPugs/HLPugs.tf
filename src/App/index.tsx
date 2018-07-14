@@ -41,159 +41,78 @@ library.add(
 );
 
 interface AppState {
-  configuration: SiteConfiguration;
-  user: UserScheme;
+  configuration?: SiteConfiguration;
+  user?: UserScheme;
 }
 
 class App extends React.Component<{}, AppState> {
   
   private socket: SocketIOClient.Socket;
+  private dummyConfiguration: SiteConfiguration;
   
   constructor(props: Object) {
     super(props);
     
-    this.socket = io(window.location.hostname + ':3001');
-    
-    this.state = {
-      configuration: {
-        branding: {
-          siteName: 'HLPugs.tf',
-          siteSubTitle: 'PUG NA HL',
-          logoPath: 'logo.svg'
-        },
-        navigation: [
-          {
-            type: 'tab',
-            tabConfig: {
-              icon: 'gavel',
-              iconPrefix: 'fas',
-              name: 'Rules',
-              link: '/rules',
-              external: false
-            }
-          },
-          {
-            type: 'tab',
-            tabConfig: {
-              icon: 'tachometer-alt',
-              iconPrefix: 'fas',
-              name: 'Overview',
-              link: '/overview',
-              external: false
-            }
-          },
-          {
-            type: 'divider'
-          },
-          {
-            type: 'tab',
-            tabConfig: {
-              icon: 'microphone',
-              iconPrefix: 'fas',
-              name: 'Mumble',
-              link: 'mumble://hlpugs.tf',
-              external: true
-            }
-          },
-          {
-            type: 'tab',
-            tabConfig: {
-              icon: 'discord',
-              iconPrefix: 'fab',
-              name: 'Discord',
-              link: 'https://discord.gg/rwXy3rq',
-              external: true
-            }
-          },
-          {
-            type: 'tab',
-            tabConfig: {
-              icon: 'patreon',
-              iconPrefix: 'fab',
-              name: 'Patreon',
-              link: 'https://patreon.com/hlpugs',
-              external: true
-            }
-          },
-          {
-            type: 'divider'
-          },
-          {
-            type: 'module',
-            moduleConfig: {
-              name: 'Captain',
-              moduleName: 'Captain'
-            }
-          },
-          {
-            type: 'module',
-            moduleConfig: {
-              name: 'Pre-Ready',
-              moduleName: 'PreReady'
-            }
-          }
-        ],
-        classes: [
-          {
-            name: 'Scout',
-            numberPerTeam: 1
-          },
-          {
-            name: 'Demo',
-            numberPerTeam: 1
-          },
-          {
-            name: 'Medic',
-            numberPerTeam: 1
-          },
-          {
-            name: 'Sniper',
-            numberPerTeam: 1
-          },
-          {
-            name: 'Flex',
-            numberPerTeam: 3
-          }
-        ]
+    this.socket = io(`${window.location.protocol}//${window.location.hostname}:3001`);
+
+    this.dummyConfiguration = {
+      branding: {
+        siteName: '',
+        siteSubTitle: '',
+        logoPath: ''
       },
-      user: {
-        loggedIn: true,
-        alias: 'Nicell',
-        avatar: 'test',
-        steamid: '7'
-      }
+      navigation: [],
+      classes: []
     };
+
+    this.socket.on('siteConfiguration', (configuration: SiteConfiguration) => {
+      this.setState({
+        configuration: configuration
+      });
+    });
+
+    this.socket.on('user', (user: UserScheme) => {
+      this.setState({
+        user: user
+      });
+    });
+    
+    this.state = {};
   }
   
   render() {
-    return (
-      <Router>
-        <Switch>
-          <Route 
-            exact={true} 
-            path="/" 
-            render={() => 
-              <Home 
-                socket={this.socket} 
-                configuration={this.state.configuration} 
-                user={this.state.user} 
-              />
-            } 
-          />
-          <Route
-            exact={true}
-            path="/banned"
-            render={() =>
-              <Banned
-                socket={this.socket}
-                configuration={this.state.configuration}
-              />
-            }
-          />
-          <Redirect from="*" to="/" />
-        </Switch>
-      </Router>
-    );
+    if (this.state.configuration && this.state.user) {
+      return (
+        <Router>
+          <Switch>
+            <Route 
+              exact={true} 
+              path="/" 
+              render={() => 
+                <Home 
+                  socket={this.socket} 
+                  configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration} 
+                  user={this.state.user ? this.state.user : {}} 
+                />
+              } 
+            />
+            <Route
+              exact={true}
+              path="/banned"
+              render={() =>
+                <Banned
+                  socket={this.socket}
+                  configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
+                />
+              }
+            />
+            <Redirect from="*" to="/" />
+          </Switch>
+        </Router>
+      );
+    }
+
+    return null;
   }
 }
 

@@ -23,7 +23,7 @@ class UserDropDown extends React.Component<UserDropDownProps, {}> {
           Settings
         </li>
         <li>
-          <a href="/logout">
+          <a href={`${window.location.protocol}//${window.location.hostname}:3001/logout`}>
             <FontAwesomeIcon icon="sign-out-alt" />
             Logout
           </a>
