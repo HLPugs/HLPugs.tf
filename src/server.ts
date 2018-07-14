@@ -11,7 +11,6 @@ import * as uuid from 'uuid';
 import { routing } from './modules';
 
 const sessionConfig = expressSession({
-  store: new RedisStore(config.get('redis')),
   genid(req) {
     return crypto.createHash('sha256')
         .update(uuid.v1())
