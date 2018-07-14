@@ -5,7 +5,7 @@
   background: var(--font-color);
   box-shadow: var(--paper-1);
   flex-shrink: 0;
-  background-size: stretch;
+  background-size: contain;
 }
 
 #userName {

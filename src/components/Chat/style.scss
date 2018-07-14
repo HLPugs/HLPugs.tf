@@ -8,6 +8,7 @@ aside {
     font-size: 14px;
     display: flex;
     flex-direction: column;
+    height: calc(100vh - 56px);
 
     #chatOpener {
         position: absolute;
