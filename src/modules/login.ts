@@ -15,7 +15,7 @@ declare module 'express' {
 export async function loginUser(req: Request): Promise<boolean> {
 
   // Arrange data from login
-  const steamid = req.user.steamid.toString();
+  const steamid = req.user.steamid;
   const avatar = req.user.avatar.medium;
   const ip = req.headers['x-forwarded-for'];
 
