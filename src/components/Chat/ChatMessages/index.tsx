@@ -15,27 +15,33 @@ class ChatMessages extends React.Component<ChatMessagesProps, ChatMessagesState>
     constructor(props: ChatMessagesProps) {
         super(props);
 
+        this.props.socket.on('newMessage', (messageObject: ChatMessageType) => {
+            this.setState({
+                messages: this.state.messages.concat([messageObject])
+            });
+        });
+
         this.state = {
             messages: [
                 {
                     username: 'Nicell',
                     userid: '7',
                     id: '20902692',
-                    timestamp: new Date(),
+                    timestamp: new Date().getTime(),
                     message: 'Pugs? :thinking_face: :thinking_face:'
                 },
                 {
                     username: 'exaflamer1',
                     userid: '8',
                     id: '1509238509',
-                    timestamp: new Date(),
+                    timestamp: new Date().getTime(),
                     message: 'pugs r dead :frowning:'
                 },
                 {
                     username: 'Nicell',
                     userid: '7',
                     id: '18510815',
-                    timestamp: new Date(),
+                    timestamp: new Date().getTime(),
                     message: 'rip :cry:'
                 }
             ]
@@ -46,7 +52,7 @@ class ChatMessages extends React.Component<ChatMessagesProps, ChatMessagesState>
         return (
             <div id="messageList">
                 {this.state.messages.map((message: ChatMessageType) => 
-                    <ChatMessage properties={message} key={message.id} />
+                    <ChatMessage {... message} key={message.id} />
                 )}
             </div>
         );

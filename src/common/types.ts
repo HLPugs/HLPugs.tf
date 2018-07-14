@@ -43,7 +43,7 @@ export interface ChatMessageType {
     username: string;
     userid: string;
     id: string;
-    timestamp: Date;
+    timestamp: number;
     message: string;
 
 }

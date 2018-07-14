@@ -146,13 +146,14 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 
             const fragment: string = tokens[tokens.length - 1];
 
-            if (event.key === 'Enter' && !event.shiftKey && !(fragment.startsWith(':') || fragment.startsWith('@'))) {
+            if (event.key === 'Enter' && !(fragment.startsWith(':') || fragment.startsWith('@'))) {
                 event.preventDefault();
+                if (this.messageInput.current.value.length) {
+                    this.props.socket.emit('sendMessage', this.messageInput.current.value);
 
-                // Submit text to socket
-
-                this.messageInput.current.value = '';
-                this.handleChange();
+                    this.messageInput.current.value = '';
+                    this.handleChange();
+                }
             } else if (fragment.startsWith(':') || fragment.startsWith('@')) {
                 if (event.key === 'Enter' || event.key === 'Tab') {
                     event.preventDefault();
@@ -252,7 +253,8 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                     id="messageInput" 
                     ref={this.messageInput}
                     onChange={this.handleChange}
-                    onKeyDown={this.handleKeyPress}
+                    onKeyDown={this.handleKeyPress} 
+                    maxLength={300}
                 />
                 <AutoComletions
                     autoCompleteIndex={this.state.autoCompleteIndex}
@@ -262,6 +264,12 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                 />
                 <div id="emojiPickerToggle" onClick={this.togglePicker} >
                     <FontAwesomeIcon icon="smile" />
+                </div>
+                <div id="messageCharacterCount">
+                    {
+                        this.messageInput.current ? 
+                            this.messageInput.current.maxLength - this.messageInput.current.value.length : 300
+                    }
                 </div>
                 <div id="emojiPickerHolder">
                     <EmojiPicker 

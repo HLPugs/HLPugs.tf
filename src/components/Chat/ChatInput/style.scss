@@ -47,11 +47,19 @@
         cursor: pointer;
         transition: color .2s ease;
         right: 8px;
-        top: 6px;
+        top: 5px;
 
         &:hover {
             color: var(--font-color);
         }
+    }
+
+    #messageCharacterCount {
+        position: absolute;
+        font-size: 12px;
+        bottom: 7px;
+        right: 8px;
+        color: var(--font-color-secondary);
     }
 
     #emojiPickerHolder {

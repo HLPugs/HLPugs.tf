@@ -5,10 +5,6 @@ import { Emoji } from 'emoji-mart';
 import * as moment from 'moment';
 import './style.css';
 
-interface ChatMessageProps {
-    properties: ChatMessageType;
-}
-
 interface MessageElement {
     name?: string;
     offset?: number;
@@ -16,7 +12,7 @@ interface MessageElement {
     message?: string;
 }
 
-class ChatMessage extends React.Component<ChatMessageProps, {}> {
+class ChatMessage extends React.Component<ChatMessageType, {}> {
     renderMessage = (message: string) => {
         let colonsRegex = new RegExp('(^|\\s)(\:[a-zA-Z0-9-_+]+\:(\:skin-tone-[2-6]\:)?)', 'g');
 
@@ -38,10 +34,7 @@ class ChatMessage extends React.Component<ChatMessageProps, {}> {
         let elements: MessageElement[] = [];
 
         if (!emojis.length) {
-            elements.push({
-                message: message
-            });
-            return elements;
+            return <span>{message}</span>;
         }
 
         for (const emoji of emojis) {
@@ -54,7 +47,7 @@ class ChatMessage extends React.Component<ChatMessageProps, {}> {
                 name: emoji.name
             });
 
-            if (emoji.offset && emoji.length) {
+            if (emoji.offset !== undefined && emoji.length) {
                 lastPos = emoji.offset + emoji.length;
             }
         }
@@ -80,15 +73,15 @@ class ChatMessage extends React.Component<ChatMessageProps, {}> {
         return (
             <div className="message">
                 <div className="info">
-                    <Link to={`/profile/${this.props.properties.userid}`} target="blank" className="username">
-                        {this.props.properties.username}
+                    <Link to={`/profile/${this.props.userid}`} target="blank" className="username">
+                        {this.props.username}
                     </Link>
                     <div className="timestamp">
-                        <span>{moment(this.props.properties.timestamp).format('LT')}</span>
+                        <span>{moment(this.props.timestamp).format('LT')}</span>
                     </div>
                 </div>
                 <div>
-                    {this.renderMessage(this.props.properties.message)}
+                    {this.renderMessage(this.props.message)}
                 </div>
             </div>
         );
