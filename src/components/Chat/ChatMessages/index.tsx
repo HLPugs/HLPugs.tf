@@ -22,6 +22,14 @@ class ChatMessages extends React.Component<ChatMessagesProps, ChatMessagesState>
 
         this.messageList = React.createRef();
 
+        this.props.socket.emit('requestMessageHistory');
+
+        this.props.socket.on('messageHistory', (messageHistory: ChatMessageType[]) => {
+            this.setState({
+                messages: messageHistory
+            });
+        });
+
         this.props.socket.on('newMessage', (messageObject: ChatMessageType) => {
             if (this.messageList.current) {
                 const scrollPosition = this.messageList.current.scrollTop;
@@ -44,29 +52,7 @@ class ChatMessages extends React.Component<ChatMessagesProps, ChatMessagesState>
         });
 
         this.state = {
-            messages: [
-                {
-                    username: 'Nicell',
-                    userid: '7',
-                    id: '20902692',
-                    timestamp: new Date().getTime(),
-                    message: 'Pugs? :thinking_face: :thinking_face:'
-                },
-                {
-                    username: 'exaflamer1',
-                    userid: '8',
-                    id: '1509238509',
-                    timestamp: new Date().getTime(),
-                    message: 'pugs r dead :frowning:'
-                },
-                {
-                    username: 'Nicell',
-                    userid: '7',
-                    id: '18510815',
-                    timestamp: new Date().getTime(),
-                    message: 'rip :cry:'
-                }
-            ],
+            messages: [],
             showNewMessage: false
         };
     }
