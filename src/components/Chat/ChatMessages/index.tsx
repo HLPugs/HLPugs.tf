@@ -1,11 +1,13 @@
 import * as React from 'react';
 import { ChatMessageType } from '../../../common/types';
 import ChatMessage from './ChatMessage';
+import { CustomEmoji } from 'emoji-mart';
 import './style.css';
 import { FontAwesomeIcon } from '../../../../node_modules/@fortawesome/react-fontawesome';
 
 interface ChatMessagesProps {
     socket: SocketIOClient.Socket;
+    customEmojis: CustomEmoji[];
 }
 
 interface ChatMessagesState {
@@ -28,6 +30,8 @@ class ChatMessages extends React.Component<ChatMessagesProps, ChatMessagesState>
             this.setState({
                 messages: messageHistory
             });
+
+            this.scrollToBottom();
         });
 
         this.props.socket.on('newMessage', (messageObject: ChatMessageType) => {
@@ -95,7 +99,7 @@ class ChatMessages extends React.Component<ChatMessagesProps, ChatMessagesState>
             <>
                 <div id="messageList" ref={this.messageList} onScroll={this.handleScroll}>
                     {this.state.messages.map((message: ChatMessageType) => 
-                        <ChatMessage {... message} key={message.id} />
+                        <ChatMessage {... message} key={message.id} customEmojis={this.props.customEmojis}/>
                     )}
                 </div>
                 {this.newMessageIndicator()}

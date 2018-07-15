@@ -1,39 +1,79 @@
 import * as React from 'react';
 import AutoComletions from './AutoCompletions';
 import EmojiPicker from './EmojiPicker';
-import { EmojiData } from 'emoji-mart';
+import { EmojiData, CustomEmoji } from 'emoji-mart';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { CompletionItem } from '../../../common/types';
 import allEmojis from 'emoji-mart/data/all.json';
 import './style.css';
 
 const searchEmojis = (
     fragment: string,
-    input: React.RefObject<HTMLTextAreaElement>
+    input: React.RefObject<HTMLTextAreaElement>,
+    customEmojis: CustomEmoji[]
 ) => {
     const query = fragment.slice(1);
     
     if (fragment.startsWith(':') && query.length > 1) {
-        let completions: string[] = [];
+        let completions: CompletionItem[] = [];
 
-        for (const emoji in allEmojis.emojis) {
-            if (emoji.substring(0, query.length) === query) {
-                completions.push(emoji);
-                
-                if (completions.length >= 8) {
-                    break;
+        const notInCompletions = () => {
+            for (const emoji of completions) {
+                if (emoji.name === query || emoji.customName === query) {
+                    return true;
                 }
+            }
+
+            return false;
+        };
+
+        for (const emoji of customEmojis) {
+            if (completions.length >= 8) {
+                break;
+            }
+
+            if (emoji.short_names[0].substring(0, query.length) === query) {
+                completions.push({
+                    customName: emoji.short_names[0],
+                    url: emoji.imageUrl
+                });
             }
         }
 
-        if (completions.length < 8) {
-            for (const emoji in allEmojis.emojis) {
-                if (emoji.includes(query) && completions.indexOf(emoji) === -1) {
-                    completions.push(emoji);
-
-                    if (completions.length >= 8) {
-                        break;
-                    }
+        for (const emoji in allEmojis.emojis) {
+            if (emoji.substring(0, query.length) === query) {
+                if (completions.length >= 8) {
+                    break;
                 }
+
+                completions.push({
+                    name: emoji
+                });
+            }
+        }
+
+        for (const emoji of customEmojis) {
+            if (completions.length >= 8) {
+                break;
+            }
+
+            if (emoji.short_names[0].includes(query) &&  notInCompletions()) {
+                completions.push({
+                    customName: emoji.short_names[0],
+                    url: emoji.imageUrl
+                });
+            }
+        }
+
+        for (const emoji in allEmojis.emojis) {
+            if (emoji.includes(query) && notInCompletions()) {
+                if (completions.length >= 8) {
+                    break;
+                }
+
+                completions.push({
+                    name: emoji
+                });
             }
         }
 
@@ -52,13 +92,14 @@ const searchEmojis = (
 interface ChatInputProps {
     socket: SocketIOClient.Socket;
     loggedIn?: boolean;
+    customEmojis: CustomEmoji[];
 }
 
 interface ChatInputState {
     pickerToggle: boolean;
     toggleWaitComplete: boolean;
     autoCompleteIndex: number;
-    emojiCompletions: string[];
+    emojiCompletions: CompletionItem[];
     mentionCompletions: string[];
 }
 
@@ -130,7 +171,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
             const fragment: string = tokens[tokens.length - 1];
 
             if (fragment && (fragment.startsWith('@') || fragment.startsWith(':'))) {
-                this.setState(searchEmojis(fragment, this.messageInput));
+                this.setState(searchEmojis(fragment, this.messageInput, this.props.customEmojis));
             } else {
                 this.setState({
                     autoCompleteIndex: 0,
@@ -161,9 +202,13 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                     event.preventDefault();
 
                     if (fragment.startsWith(':') && this.state.emojiCompletions.length) {
+                        const emojiName = this.state.emojiCompletions[this.state.autoCompleteIndex].name ?
+                            this.state.emojiCompletions[this.state.autoCompleteIndex].name : 
+                            this.state.emojiCompletions[this.state.autoCompleteIndex].customName;
+                        
                         this.messageInput.current.value = this.messageInput.current.value.substring(
                             0, this.messageInput.current.value.length - fragment.length
-                        ) + `:${this.state.emojiCompletions[this.state.autoCompleteIndex]}: `;
+                        ) + `:${emojiName}: `;
                     } else if (fragment.startsWith('@') && this.state.mentionCompletions.length) {
                         this.messageInput.current.value = this.messageInput.current.value.substring(
                             0, this.messageInput.current.value.length - fragment.length
@@ -228,9 +273,12 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 
             const fragment: string = tokens[tokens.length - 1];
             if (fragment.startsWith(':') && this.state.emojiCompletions.length) {
+                const emojiName = this.state.emojiCompletions[index].name ?
+                    this.state.emojiCompletions[index].name : this.state.emojiCompletions[index].customName;
+
                 this.messageInput.current.value = this.messageInput.current.value.substring(
                     0, this.messageInput.current.value.length - fragment.length
-                ) + `:${this.state.emojiCompletions[index]}: `;
+                ) + `:${emojiName}: `;
             } else if (fragment.startsWith('@') && this.state.mentionCompletions.length) {
                 this.messageInput.current.value = this.messageInput.current.value.substring(
                     0, this.messageInput.current.value.length - fragment.length
@@ -279,6 +327,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                         addEmoji={this.addEmoji} 
                         handleClickOutside={this.togglePicker} 
                         pickerToggle={this.state.pickerToggle} 
+                        customEmojis={this.props.customEmojis} 
                     />
                 </div>
             </div>

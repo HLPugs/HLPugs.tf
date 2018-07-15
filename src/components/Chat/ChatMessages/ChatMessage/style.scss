@@ -38,3 +38,10 @@
         box-shadow: var(--paper-2);
     }
 }
+
+.customEmoji {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-size: contain;
+}

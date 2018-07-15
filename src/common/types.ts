@@ -52,3 +52,9 @@ export interface PreDraftRequirementType {
     name: string;
     state: boolean;
 }
+
+export interface CompletionItem {
+    name?: string;
+    customName?: string;
+    url?: string;
+}

@@ -2,18 +2,26 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { ChatMessageType } from '../../../../common/types';
 import { Emoji } from 'emoji-mart';
+import allEmojis from 'emoji-mart/data/all.json';
+import { CustomEmoji } from 'emoji-mart';
 import * as moment from 'moment';
 import './style.css';
 
 interface MessageElement {
     name?: string;
+    customName?: string;
+    url?: string;
     offset?: number;
     length?: number;
     message?: string;
 }
 
-class ChatMessage extends React.Component<ChatMessageType, {}> {
-    renderMessage = (message: string) => {
+interface ChatMessageProps {
+    customEmojis: CustomEmoji[];
+}
+
+class ChatMessage extends React.Component<ChatMessageType & ChatMessageProps, {}> {
+    renderMessage = (message: string, id: string) => {
         let colonsRegex = new RegExp('(^|\\s)(\:[a-zA-Z0-9-_+]+\:(\:skin-tone-[2-6]\:)?)', 'g');
 
         let match;
@@ -23,11 +31,24 @@ class ChatMessage extends React.Component<ChatMessageType, {}> {
             let offset: number = match.index + match[1].length;
             let length = name.length;
 
-            emojis.push({
-                name: name,
-                offset: offset,
-                length: length
-            });
+            if (Object.keys(allEmojis.emojis).indexOf(name.slice(1, name.length - 1)) !== -1) {
+                emojis.push({
+                    name: name,
+                    offset: offset,
+                    length: length
+                });
+            } else {
+                for (const emoji of this.props.customEmojis) {
+                    if (`:${emoji.short_names[0]}:` === name) {
+                        emojis.push({
+                            customName: name,
+                            url: emoji.imageUrl,
+                            offset: offset,
+                            length: length
+                        });
+                    }
+                }
+            }
         }
 
         let lastPos = 0;
@@ -43,9 +64,17 @@ class ChatMessage extends React.Component<ChatMessageType, {}> {
                     message: message.substring(lastPos, emoji.offset)
                 });
             }
-            elements.push({
-                name: emoji.name
-            });
+
+            if (emoji.name) {
+                elements.push({
+                    name: emoji.name
+                });
+            } else {
+                elements.push({
+                    customName: emoji.customName,
+                    url: emoji.url
+                });
+            }
 
             if (emoji.offset !== undefined && emoji.length) {
                 lastPos = emoji.offset + emoji.length;
@@ -62,6 +91,16 @@ class ChatMessage extends React.Component<ChatMessageType, {}> {
             if (element.name) {
                 return ( 
                     <Emoji emoji={element.name} size={20} set="twitter" sheetSize={32} tooltip={true} key={index} />
+                );
+            } else if (element.customName) {
+                return (
+                    <span 
+                        title={element.customName.slice(1, element.customName.length - 1)} 
+                        className="emoji-mart-emoji" 
+                        key={index}
+                    >
+                        <span className="customEmoji" style={{backgroundImage: `url(${element.url})`}} />
+                    </span>
                 );
             } else {
                 return <span key={index}>{element.message}</span>;
@@ -81,7 +120,7 @@ class ChatMessage extends React.Component<ChatMessageType, {}> {
                     </div>
                 </div>
                 <div>
-                    {this.renderMessage(this.props.message)}
+                    {this.renderMessage(this.props.message, this.props.id)}
                 </div>
             </div>
         );
