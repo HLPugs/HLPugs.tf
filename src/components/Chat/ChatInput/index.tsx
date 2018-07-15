@@ -147,7 +147,8 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 
             const fragment: string = tokens[tokens.length - 1];
 
-            if (event.key === 'Enter' && !(fragment.startsWith(':') || fragment.startsWith('@'))) {
+            if (event.key === 'Enter' && 
+            !(this.state.emojiCompletions.length || this.state.mentionCompletions.length)) {
                 event.preventDefault();
                 if (this.messageInput.current.value.length) {
                     this.props.socket.emit('sendMessage', this.messageInput.current.value);
@@ -155,7 +156,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                     this.messageInput.current.value = '';
                     this.handleChange();
                 }
-            } else if (fragment.startsWith(':') || fragment.startsWith('@')) {
+            } else if (this.state.emojiCompletions.length || this.state.mentionCompletions.length) {
                 if (event.key === 'Enter' || event.key === 'Tab') {
                     event.preventDefault();
 
