@@ -95,6 +95,15 @@
         }
       ]
     },
+    "customEmojis": [
+      {
+        "name": "HLPugs",
+        "short_names": [
+          "hlpugs"
+        ],
+        "imageUrl": "/img/emojis/hlpugs.png"
+      }
+    ],
     "frontURL": "http://localhost:3000"
   }
   },

@@ -1,4 +1,5 @@
 import { Server } from 'socket.io';
+import * as config from 'config';
 import * as uuid from 'uuid';
 
 interface messageObjectType {
@@ -35,6 +36,10 @@ export const chat = (io: Server) => {
 
     socket.on('requestMessageHistory', () => {
       socket.emit('messageHistory', messageHistory);
+    });
+
+    socket.on('requestCustomEmojis', () => {
+      socket.emit('customEmojis', config.get('app.customEmojis'));
     });
   });
 };
