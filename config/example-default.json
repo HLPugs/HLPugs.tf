@@ -3,7 +3,99 @@
     "steam": {
     "apiKey": "api key",
     "realm": "web.site.name",
-    "verify": "web.site.name/verify"
+    "verify": "web.site.name/verify",
+    "configuration": {
+      "branding": {
+        "siteName": "HLPugs.tf",
+        "siteSubTitle": "PUG NA HL",
+        "logoPath": "logo.svg"
+      },
+      "navigation": [
+        {
+          "type": "tab",
+          "tabConfig": {
+            "icon": "gavel",
+            "iconPrefix": "fas",
+            "name": "Rules",
+            "link": "/rules",
+            "external": false
+          }
+        },
+        {
+          "type": "tab",
+          "tabConfig": {
+            "icon": "tachometer-alt",
+            "iconPrefix": "fas",
+            "name": "Overview",
+            "link": "/overview",
+            "external": false
+          }
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "tab",
+          "tabConfig": {
+            "icon": "microphone",
+            "iconPrefix": "fas",
+            "name": "Mumble",
+            "link": "mumble://hlpugs.tf",
+            "external": true
+          }
+        },
+        {
+          "type": "tab",
+          "tabConfig": {
+            "icon": "discord",
+            "iconPrefix": "fab",
+            "name": "Discord",
+            "link": "https://discord.gg/rwXy3rq",
+            "external": true
+          }
+        },
+        {
+          "type": "divider"
+        },
+        {
+          "type": "module",
+          "moduleConfig": {
+            "name": "Captain",
+            "moduleName": "Captain"
+          }
+        },
+        {
+          "type": "module",
+          "moduleConfig": {
+            "name": "Pre-Ready",
+            "moduleName": "PreReady"
+          }
+        }
+      ],
+      "classes": [
+        {
+          "name": "Scout",
+          "numberPerTeam": 1
+        },
+        {
+          "name": "Demo",
+          "numberPerTeam": 1
+        },
+        {
+          "name": "Medic",
+          "numberPerTeam": 1
+        },
+        {
+          "name": "Sniper",
+          "numberPerTeam": 1
+        },
+        {
+          "name": "Flex",
+          "numberPerTeam": 3
+        }
+      ]
+    },
+    "frontURL": "http://localhost:3000"
   }
   },
   "db": {
