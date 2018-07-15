@@ -51,6 +51,7 @@ const searchEmojis = (
 
 interface ChatInputProps {
     socket: SocketIOClient.Socket;
+    loggedIn?: boolean;
 }
 
 interface ChatInputState {
@@ -249,12 +250,13 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
         return (
             <div id="inputHolder">
                 <textarea 
-                    placeholder="@Support for serious concerns" 
+                    placeholder={this.props.loggedIn ? '@Support for serious concerns' : 'Login to chat!'}
                     id="messageInput" 
                     ref={this.messageInput}
                     onChange={this.handleChange}
                     onKeyDown={this.handleKeyPress} 
                     maxLength={300}
+                    disabled={!this.props.loggedIn}
                 />
                 <AutoComletions
                     autoCompleteIndex={this.state.autoCompleteIndex}
@@ -262,7 +264,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                     mentionCompletions={this.state.mentionCompletions}
                     completionClick={this.completionClick}
                 />
-                <div id="emojiPickerToggle" onClick={this.togglePicker} >
+                <div id="emojiPickerToggle" onClick={this.props.loggedIn ? this.togglePicker : undefined} >
                     <FontAwesomeIcon icon="smile" />
                 </div>
                 <div id="messageCharacterCount">

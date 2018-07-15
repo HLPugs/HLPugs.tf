@@ -1,7 +1,49 @@
 #messageList {
     display: flex;
+    position: relative;
     flex-direction: column;
     flex: 1;
     width: 100%;
     overflow-y: auto;
+
+    &::-webkit-scrollbar {
+        width: 12px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        width: 12px;
+        border-radius: 6px;
+        margin-right: 2px;
+        height: 50px;
+        border: 3px solid var(--background-dark);
+        background: var(--background-light);
+    }
+}
+
+#newMessage {
+    position: absolute;
+    bottom: 56px;
+    right: 0;
+    width: calc(100% - 10px);
+    display: flex;
+    justify-content: center;
+    box-sizing: border-box;
+    border-radius: 4px;
+    align-items: center;
+    cursor: pointer;
+    margin: 5px;
+    padding: 5px;
+    background: var(--color-gradient);
+    box-shadow: var(--paper-2);
+    opacity: 0.8;
+    transition: opacity .2s ease;
+    animation: fade-in .3s;
+
+    svg {
+        padding-right: 10px;
+    }
+
+    &:hover {
+        opacity: 1;
+    }
 }

@@ -20,7 +20,8 @@ import {
   faCheck,
   faTimes,
   faSmile,
-  faStar
+  faStar,
+  faArrowDown
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -37,7 +38,8 @@ library.add(
   faCheck,
   faTimes,
   faSmile,
-  faStar
+  faStar,
+  faArrowDown
 );
 
 interface AppState {

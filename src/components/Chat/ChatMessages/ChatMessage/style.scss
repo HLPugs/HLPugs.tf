@@ -5,6 +5,11 @@
     padding: 10px;
     transition: box-shadow .3s ease;
     border-bottom: solid 1px var(--background);
+    animation: fade-in .2s ease;
+
+    &:last-child {
+        border-bottom: none;
+    }
 
     .info {
         display: flex;

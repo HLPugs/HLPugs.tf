@@ -25,7 +25,7 @@ class Home extends React.Component<HomeProps, {}> {
                 <User user={this.props.user} />
                 <Navigation navigationGroup={this.props.configuration.navigation} />
                 <DraftArea socket={this.props.socket} classes={this.props.configuration.classes} />
-                <Chat socket={this.props.socket} />
+                <Chat socket={this.props.socket} loggedIn={this.props.user.loggedIn} />
             </div>
         );
     }

@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface ChatProps {
     socket: SocketIOClient.Socket;
+    loggedIn?: boolean;
 }
 
 interface ChatState {
@@ -34,7 +35,7 @@ class Chat extends React.Component<ChatProps, ChatState> {
                     <FontAwesomeIcon icon="comments" />
                 </div>
                 <ChatMessages socket={this.props.socket}/>
-                <ChatInput socket={this.props.socket}/>
+                <ChatInput socket={this.props.socket} loggedIn={this.props.loggedIn}/>
             </aside>
         );
     }
