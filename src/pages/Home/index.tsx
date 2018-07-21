@@ -5,6 +5,7 @@ import User from '../../components/User';
 import Navigation from '../../components/Navigation';
 import DraftArea from '../../components/DraftArea';
 import Chat from '../../components/Chat';
+import AliasModal from '../../components/AliasModal';
 import './style.css';
 
 interface HomeProps {
@@ -14,6 +15,14 @@ interface HomeProps {
 }
 
 class Home extends React.Component<HomeProps, {}> {
+    AliasModal = () => {
+        if (!this.props.user.alias && this.props.user.loggedIn) {
+            return <AliasModal socket={this.props.socket} />;
+        }
+        
+        return null;
+    }
+
     render() {
         return (
             <div id="Home">
@@ -26,6 +35,7 @@ class Home extends React.Component<HomeProps, {}> {
                 <Navigation navigationGroup={this.props.configuration.navigation} />
                 <DraftArea socket={this.props.socket} classes={this.props.configuration.classes} />
                 <Chat socket={this.props.socket} loggedIn={this.props.user.loggedIn} />
+                {this.AliasModal()}
             </div>
         );
     }

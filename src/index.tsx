@@ -12,6 +12,7 @@ WebFont.load({
 
 import './style.css';
 import './animations.css';
+import './buttons.css';
 
 ReactDOM.render(
   <App />,
