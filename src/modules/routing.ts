@@ -9,13 +9,13 @@ const router: Router = Router();
 const frontURL: string = config.get('app.frontURL');
 
 router.get('/', (req: Request, res: Response) => {
-  res.send('Hi!');
+  res.redirect(frontURL);
 });
 
 router.get('/verify', steam.verify(), (req: Request & steamUser, res: Response) => {
-  loginUser(req).then((banned) => {
-    banned ? res.redirect('logout?banned=true') : res.redirect(frontURL);
-  }).catch(e => console.log(e));
+  loginUser(req).then(() => {
+    res.redirect('/');
+  }).catch(e => res.send(e.stack));
 });
 
 router.get('/auth', steam.authenticate(), (req: Request & steamUser, res: Response) => {
