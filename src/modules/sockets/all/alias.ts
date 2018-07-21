@@ -18,23 +18,15 @@ export const alias = (io: Server) => {
         values: [alias],
       };
 
-      console.log('checking alias');
-
       await db.query(query).then(async (res) => {
         if (!res.rows[0]) {
-          console.log('submitting alias');
           const query = {
             text: `UPDATE players SET alias = $1 WHERE steamid = $2 AND alias IS NULL RETURNING *`,
             values: [alias, socket.request.session.user.steamid],
           };
 
-          console.log(alias, socket.request.session.user.steamid);
-
           await db.query(query).then((res) => {
-            console.log('setalias');
             if (res.rows[0]) {
-              console.log('sending alias back');
-
               socket.request.session.user.alias = alias;
 
               socket.request.session.save();
