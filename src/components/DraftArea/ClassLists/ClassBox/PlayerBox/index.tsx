@@ -25,7 +25,7 @@ class PlayerBox extends React.Component<PlayerBoxProps, {}> {
 
     render() {
         return  (
-            <Link to={`/profile/${this.props.id}`} target="blank" className="player">
+            <Link to={`/player/${this.props.id}`} target="blank" className="player">
                 <div className="playerIcon" style={{backgroundImage: this.props.profilePicture}} />
                 <div className="playerName">{this.props.name}</div>
                 {this.playerStar()}

@@ -112,7 +112,7 @@ class ChatMessage extends React.Component<ChatMessageType & ChatMessageProps, {}
         return (
             <div className="message">
                 <div className="info">
-                    <Link to={`/profile/${this.props.userid}`} target="blank" className="username">
+                    <Link to={`/player/${this.props.userid}`} target="blank" className="username">
                         {this.props.username}
                     </Link>
                     <div className="timestamp">
