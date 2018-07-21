@@ -11,6 +11,7 @@ export const setup = (io: Server) => {
         alias: socket.request.session.steamUser.username,
         avatar: socket.request.session.steamUser.avatar.medium,
         steamid: socket.request.session.steamUser.steamid,
+        punishments: socket.request.session.user.punishments,
       };
 
       socket.emit('user', user);

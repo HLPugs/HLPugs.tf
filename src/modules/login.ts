@@ -1,5 +1,7 @@
 import { Request } from 'express';
 import db from '../database/db';
+import { getActivePunishments } from './punishments';
+import { player, punishment } from '../common/types';
 
 declare module 'express' {
   export interface Request {
@@ -10,34 +12,43 @@ declare module 'express' {
 /**
  *
  * @param {e.Request} req
- * @returns {Promise<boolean>} true if player is banned
+ * @returns {Promise<void>} Returns once all necessary login queries have completed
  */
-export async function loginUser(req: Request): Promise<Object> {
+export async function loginUser(req: Request): Promise<void> {
 
   // Arrange data from login
-  const ip = req.headers['x-forwarded-for'];
   const steamid = req.user.steamid;
   const avatar = req.user.avatar.medium;
+  const ip = req.headers['x-forwarded-for'];
+
+  // Create template
+  req.session.user = {
+    steamid,
+    avatar,
+    captain: false,
+    alias: '',
+    punishments: {},
+    roles: {},
+  };
 
   // Insert player into database, or at the very least, update their IP if possible
   const query1 = {
-    text: `INSERT INTO players (steamid)
-           VALUES ($1)
-           ON CONFLICT (steamid) DO NOTHING`,
-    values: [steamid],
+    text: `INSERT INTO players (steamid, avatar)
+VALUES ($1, $2)
+ON CONFLICT (steamid) DO UPDATE SET avatar = $2 returning captain, alias, roles`,
+    values: [steamid, avatar],
   };
 
-  // Return whether or not the player signing in is banned after inserting
-  const query2 = {
-    text: `SELECT username, banned, captain FROM players
-           WHERE steamid = $1`,
-    values: [steamid],
-  };
+  // Returns alias, captain and roles
+  const { alias, captain, roles }: player = await db.query(query1)
+      .then(res => res.rows[0]);
 
-  // Returns username, and captain and banned status
-  const { username, captain, banned } = await db.query(query1)
-      .then(() => db.query(query2))
-      .then(result => result.rows[0]);
-
-  return { username, banned, avatar, captain };
+  if (alias !== null) {
+    req.session.roles = roles || {};
+    req.session.captain = captain;
+    await getActivePunishments(steamid)
+      .then((data: punishment[]) => {
+        data.map((x: punishment) => req.session.user.punishments[x.punishment] = x.data);
+      });
+  }
 }
