@@ -17,7 +17,7 @@ export async function postToDiscord(message: string, channel: string, fancy = fa
   const data = {
     url,
   	username,
-	  method: 'POST',
+    method: 'POST',
     body: {
       avatar_url: '',
       content: fancy ? '' : message,

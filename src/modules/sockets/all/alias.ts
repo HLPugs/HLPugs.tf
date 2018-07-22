@@ -12,28 +12,26 @@ export const alias = (io: Server) => {
     socket.on('submitAlias', async (alias: string) => {
       const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
 
-      if (aliasRules.test(alias)) {
-        // Alias passed Regex check
+      if (!aliasRules.test(alias)) return; // Exits function if alias didn't pass Regex check
 
-        const res = await db.query('SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)', [alias]);
-        if (res.rows[0]) return; // Exits function if alias was taken
-        const query = {
-          text: `UPDATE players SET alias = $1 WHERE steamid = $2 AND alias IS NULL RETURNING *`,
-          values: [alias, socket.request.session.user.steamid],
-        };
+      const res = await db.query('SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)', [alias]);
+      if (res.rows[0]) return; // Exits function if alias was taken
+      const query = {
+        text: `UPDATE players SET alias = $1 WHERE steamid = $2 AND alias IS NULL RETURNING *`,
+        values: [alias, socket.request.session.user.steamid],
+      };
 
-        const res2 = await db.query(query);
-        if (!res2.rows[0]) return; // Exits function if alias was not updated
-        socket.request.session.user.alias = alias;
-        socket.request.session.save((err: any) => console.log(err));
-        const user = {
-          loggedIn: true,
-          alias: socket.request.session.user.alias,
-          avatar: socket.request.session.user.avatar,
-          steamid: socket.request.session.user.steamid,
-        };
-        socket.emit('user', user);
-      }
+      const res2 = await db.query(query);
+      if (!res2.rows[0]) return; // Exits function if alias was not updated
+      socket.request.session.user.alias = alias;
+      socket.request.session.save((err: any) => console.log(err));
+      const user = {
+        loggedIn: true,
+        alias: socket.request.session.user.alias,
+        avatar: socket.request.session.user.avatar,
+        steamid: socket.request.session.user.steamid,
+      };
+      socket.emit('user', user);
     });
   });
 };
