@@ -16,8 +16,7 @@ export const alias = (io: Server) => {
         // Alias passed Regex check
 
         const res = await db.query('SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)', [alias]);
-        if (!res.rows[0]) return; // Exits function if alias was taken
-
+        if (res.rows[0]) return; // Exits function if alias was taken
         const query = {
           text: `UPDATE players SET alias = $1 WHERE steamid = $2 AND alias IS NULL RETURNING *`,
           values: [alias, socket.request.session.user.steamid],
@@ -25,7 +24,6 @@ export const alias = (io: Server) => {
 
         const res2 = await db.query(query);
         if (!res2.rows[0]) return; // Exits function if alias was not updated
-
         socket.request.session.user.alias = alias;
         socket.request.session.save((err: any) => console.log(err));
         const user = {
