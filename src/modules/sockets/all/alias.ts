@@ -4,18 +4,17 @@ import db from '../../../database/db';
 export const alias = (io: Server) => {
   io.on('connection', (socket) => {
     socket.on('checkAlias', async (alias: string) => {
-
       const res = await db.query('SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)', [alias]);
       socket.emit('aliasStatus', res.rows[0]);
     });
 
     socket.on('submitAlias', async (alias: string) => {
       const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
-
       if (!aliasRules.test(alias)) return; // Exits function if alias didn't pass Regex check
 
       const res = await db.query('SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)', [alias]);
       if (res.rows[0]) return; // Exits function if alias was taken
+
       const query = {
         text: `UPDATE players SET alias = $1 WHERE steamid = $2 AND alias IS NULL RETURNING *`,
         values: [alias, socket.request.session.user.steamid],
