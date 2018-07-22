@@ -1,7 +1,8 @@
 import { Request } from 'express';
 import db from '../database/db';
 import { getActivePunishments } from './punishments';
-import { player, punishment } from '../common/types';
+import { punishment } from '../common/types';
+import { QueryResult } from 'pg';
 
 declare module 'express' {
   export interface Request {
@@ -12,7 +13,7 @@ declare module 'express' {
 /**
  *
  * @param {e.Request} req
- * @returns {Promise<void>} Returns once all necessary login queries have completed
+ * @returns {Promise<void>} Completes after login data is set in DB and Node
  */
 export async function loginUser(req: Request): Promise<void> {
 
@@ -34,22 +35,22 @@ export async function loginUser(req: Request): Promise<void> {
   // Insert player into database, or at the very least, update their IP if possible
   const query1 = {
     text: `INSERT INTO players (steamid, avatar)
-VALUES ($1, $2)
-ON CONFLICT (steamid) DO UPDATE SET avatar = $2 returning captain, alias, roles`,
+           VALUES ($1, $2)
+           ON CONFLICT (steamid) DO UPDATE SET avatar = $2
+           RETURNING captain, alias, roles`,
     values: [steamid, avatar],
   };
 
   // Returns alias, captain and roles
-  const { alias, captain, roles }: player = await db.query(query1)
-      .then(res => res.rows[0]);
+  const res: QueryResult = await db.query(query1);
+  const { alias, captain, roles } = res.rows[0];
 
+  // If user is new, don't waste time grabbing punishments
   if (alias !== null) {
     req.session.user.alias = alias;
     req.session.user.roles = roles || {};
     req.session.user.captain = captain;
-    await getActivePunishments(steamid)
-      .then((data: punishment[]) => {
-        data.map((x: punishment) => req.session.user.punishments[x.punishment] = x.data);
-      });
+    const punishments = await getActivePunishments(steamid);
+    punishments.map((x: punishment) => req.session.user.punishments[x.punishment] = x.data);
   }
 }
