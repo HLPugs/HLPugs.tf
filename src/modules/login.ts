@@ -44,8 +44,9 @@ ON CONFLICT (steamid) DO UPDATE SET avatar = $2 returning captain, alias, roles`
       .then(res => res.rows[0]);
 
   if (alias !== null) {
-    req.session.roles = roles || {};
-    req.session.captain = captain;
+    req.session.user.alias = alias;
+    req.session.user.roles = roles || {};
+    req.session.user.captain = captain;
     await getActivePunishments(steamid)
       .then((data: punishment[]) => {
         data.map((x: punishment) => req.session.user.punishments[x.punishment] = x.data);

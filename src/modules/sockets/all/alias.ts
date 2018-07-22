@@ -13,36 +13,41 @@ export const alias = (io: Server) => {
     });
 
     socket.on('submitAlias', async (alias: string) => {
-      const query = {
-        text: `SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)`,
-        values: [alias],
-      };
+      const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
 
-      await db.query(query).then(async (res) => {
-        if (!res.rows[0]) {
-          const query = {
-            text: `UPDATE players SET alias = $1 WHERE steamid = $2 AND alias IS NULL RETURNING *`,
-            values: [alias, socket.request.session.user.steamid],
-          };
+      if (aliasRules.test(alias)) {
+        const query = {
+          text: `SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)`,
+          values: [alias],
+        };
 
-          await db.query(query).then((res) => {
-            if (res.rows[0]) {
-              socket.request.session.user.alias = alias;
+        await db.query(query).then(async (res) => {
+          if (!res.rows[0]) {
+            const query = {
+              text:
+                `UPDATE players SET alias = $1 WHERE steamid = $2 AND alias IS NULL RETURNING *`,
+              values: [alias, socket.request.session.user.steamid],
+            };
 
-              socket.request.session.save();
+            await db.query(query).then((res) => {
+              if (res.rows[0]) {
+                socket.request.session.user.alias = alias;
 
-              const user = {
-                loggedIn: true,
-                alias: socket.request.session.user.alias,
-                avatar: socket.request.session.user.avatar,
-                steamid: socket.request.session.user.steamid,
-              };
+                socket.request.session.save();
 
-              socket.emit('user', user);
-            }
-          });
-        }
-      });
+                const user = {
+                  loggedIn: true,
+                  alias: socket.request.session.user.alias,
+                  avatar: socket.request.session.user.avatar,
+                  steamid: socket.request.session.user.steamid,
+                };
+
+                socket.emit('user', user);
+              }
+            });
+          }
+        });
+      }
     });
   });
 };

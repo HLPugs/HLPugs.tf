@@ -5,7 +5,7 @@
 	"scripts": {
 		"start": "npm run serve",
 		"build": "npm run build-ts && npm run tslint",
-		"serve": "node %NODE_DEBUG_OPTION% dist/server.js",
+		"serve": "node dist/server.js",
 		"watch-node": "nodemon dist/server.js",
 		"build-ts": "tsc",
 		"watch-ts": "tsc -w",
