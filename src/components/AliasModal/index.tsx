@@ -40,13 +40,13 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
             },
             500
         );
-    };
+    }
 
     submitAlias = () => {
         if (this.aliasInput.current) {
             this.props.socket.emit('submitAlias', this.aliasInput.current.value);
         }
-    };
+    }
 
     render() {
         return (
