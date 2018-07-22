@@ -8,8 +8,8 @@ export const setup = (io: Server) => {
     if (socket.request.session.user) {
       const user = {
         loggedIn: true,
-        alias: socket.request.session.user.username,
-        avatar: socket.request.session.user.avatar.medium,
+        alias: socket.request.session.user.alias,
+        avatar: socket.request.session.user.avatar,
         steamid: socket.request.session.user.steamid,
         punishments: socket.request.session.user.punishments,
       };
