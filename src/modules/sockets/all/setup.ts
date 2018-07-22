@@ -5,12 +5,12 @@ export const setup = (io: Server) => {
   io.on('connection', (socket) => {
     socket.emit('siteConfiguration', config.get('app.configuration'));
 
-    if (socket.request.session.steamUser) {
+    if (socket.request.session.user) {
       const user = {
         loggedIn: true,
-        alias: socket.request.session.steamUser.username,
-        avatar: socket.request.session.steamUser.avatar.medium,
-        steamid: socket.request.session.steamUser.steamid,
+        alias: socket.request.session.user.username,
+        avatar: socket.request.session.user.avatar.medium,
+        steamid: socket.request.session.user.steamid,
         punishments: socket.request.session.user.punishments,
       };
 
