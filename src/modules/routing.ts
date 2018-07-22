@@ -13,9 +13,9 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.get('/verify', steam.verify(), (req: Request & steamUser, res: Response) => {
-  loginUser(req).then(() => {
-    res.redirect('/');
-  }).catch(e => res.send(e.stack));
+  loginUser(req)
+      .then(() => res.redirect('/'))
+      .catch(e => res.send(e.stack));
 });
 
 router.get('/auth', steam.authenticate(), (req: Request & steamUser, res: Response) => {
