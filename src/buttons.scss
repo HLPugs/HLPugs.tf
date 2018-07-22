@@ -19,4 +19,13 @@
         background: var(--color-gradient-secondary);
         transform: translateY(1px);
     }
+
+    &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+
+        &:hover {
+            box-shadow: var(--paper-1_);
+        }
+    }
 }

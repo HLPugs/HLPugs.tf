@@ -47,14 +47,6 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
             this.props.socket.emit('submitAlias', this.aliasInput.current.value);
         }
     }
-
-    aliasTaken = () => {
-        if (this.state.aliasTaken) {
-            return <span className="aliasTaken">Alias taken!</span>;
-        }
-
-        return null;
-    }
     
     render() {
         return (
@@ -71,9 +63,14 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
                             ref={this.aliasInput}
                             onChange={this.handleInputChange}
                         />
-                        <button className="button-primary" onClick={this.submitAlias}>Set Alias</button>
+                        <button 
+                            className="button-primary" 
+                            onClick={this.submitAlias} 
+                            disabled={this.state.aliasTaken}
+                        >
+                            {this.state.aliasTaken ? 'Alias Taken' : 'Set Alias'}
+                        </button>
                     </div>
-                    {this.aliasTaken()}
                     <span>Alias must be 2-17 characters using only alphanumeric + _</span>
                 </div>
             </div>
