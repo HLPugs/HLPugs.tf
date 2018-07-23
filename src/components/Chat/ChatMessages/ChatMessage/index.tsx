@@ -116,7 +116,7 @@ class ChatMessage extends React.Component<ChatMessageType & ChatMessageProps, {}
                         {this.props.username}
                     </Link>
                     <div className="timestamp">
-                        <span>{moment(this.props.timestamp).format('LT')}</span>
+                        <span>{moment(this.props.timestamp).calendar()}</span>
                     </div>
                 </div>
                 <div>

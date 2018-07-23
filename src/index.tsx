@@ -3,10 +3,17 @@ import * as ReactDOM from 'react-dom';
 import App from './App';
 
 import * as WebFont from 'webfontloader';
+import * as moment from 'moment';
 
 WebFont.load({
   google: {
     families: ['Lato:400,700']
+  }
+});
+
+moment.updateLocale('en', {
+  calendar: {
+    sameDay: 'LT'
   }
 });
 
