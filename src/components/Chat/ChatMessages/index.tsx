@@ -8,6 +8,7 @@ import { FontAwesomeIcon } from '../../../../node_modules/@fortawesome/react-fon
 interface ChatMessagesProps {
     socket: SocketIOClient.Socket;
     customEmojis: CustomEmoji[];
+    steamid?: string;
 }
 
 interface ChatMessagesState {
@@ -42,6 +43,10 @@ class ChatMessages extends React.Component<ChatMessagesProps, ChatMessagesState>
                 this.setState({
                     messages: this.state.messages.concat([messageObject])
                 });
+
+                if (this.props.steamid === messageObject.userid) {
+                    this.scrollToBottom();
+                }
 
                 const newScrollHeight = this.messageList.current.scrollHeight - this.messageList.current.clientHeight;
 

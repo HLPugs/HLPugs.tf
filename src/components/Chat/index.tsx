@@ -4,10 +4,11 @@ import ChatInput from './ChatInput';
 import { CustomEmoji } from 'emoji-mart';
 import './style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { UserScheme } from '../../common/types';
 
 interface ChatProps {
     socket: SocketIOClient.Socket;
-    loggedIn?: boolean;
+    user: UserScheme;
 }
 
 interface ChatState {
@@ -45,10 +46,14 @@ class Chat extends React.Component<ChatProps, ChatState> {
                 <div id="chatOpener" onClick={this.toggleChat}>
                     <FontAwesomeIcon icon="comments" />
                 </div>
-                <ChatMessages socket={this.props.socket} customEmojis={this.state.customEmojis}/>
+                <ChatMessages 
+                    socket={this.props.socket}
+                    customEmojis={this.state.customEmojis}
+                    steamid={this.props.user.steamid}
+                />
                 <ChatInput 
                     socket={this.props.socket} 
-                    loggedIn={this.props.loggedIn} 
+                    loggedIn={this.props.user.loggedIn} 
                     customEmojis={this.state.customEmojis}
                 />
             </aside>
