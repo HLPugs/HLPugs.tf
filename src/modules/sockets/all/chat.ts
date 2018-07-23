@@ -14,7 +14,12 @@ let messageHistory: messageObjectType[] = [];
 
 export const chat = (io: Server) => {
   io.on('connection', (socket) => {
-    socket.on('sendMessage', (message: string) => {
+    socket.on('sendMessage', async (message: string) => {
+      // Make sure session is updated from other sockets' activities
+      await socket.request.session.reload((err: any) => console.log(err));
+
+      if (Date.now() - socket.request.session.lastMessageSentTimestamp < 1000) return;
+
       if (message.length && socket.request.session.user.alias) {
         const messageObject: messageObjectType = {
           message,
@@ -29,6 +34,9 @@ export const chat = (io: Server) => {
         if (messageHistory.length > 100) {
           messageHistory = messageHistory.slice(1);
         }
+
+        socket.request.session.lastMessageSentTimestamp = Date.now();
+        socket.request.session.save((err: any) => console.log(err));
 
         io.emit('newMessage', messageObject);
       }
