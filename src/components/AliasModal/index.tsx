@@ -7,6 +7,7 @@ interface AliasModalProps {
 
 interface AliasModalState {
     aliasTaken: boolean;
+    invalidInput: boolean;
 }
 
 class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
@@ -27,11 +28,18 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
         });
 
         this.state = {
-            aliasTaken: false
+            aliasTaken: false,
+            invalidInput: false
         };
     }
 
     handleInputChange = () => {
+        if (this.aliasInput.current) {
+            this.setState({
+                invalidInput: !this.aliasInput.current.validity.valid
+            });
+        }
+
         this.checkAlias = setTimeout(
             () => {
                 if (this.aliasInput.current) {
@@ -45,6 +53,16 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
     submitAlias = () => {
         if (this.aliasInput.current) {
             this.props.socket.emit('submitAlias', this.aliasInput.current.value);
+        }
+    }
+
+    submitText = () => {
+        if (this.state.invalidInput) {
+            return 'Invalid';
+        } else if (this.state.aliasTaken) {
+            return 'Alias Taken';
+        } else {
+            return 'Set Alias';
         }
     }
 
@@ -62,13 +80,14 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
                             pattern="^[a-zA-Z0-9_]{2,17}$"
                             ref={this.aliasInput}
                             onChange={this.handleInputChange}
+                            autoFocus={true}
                         />
                         <button
                             className="button-primary"
                             onClick={this.submitAlias}
-                            disabled={this.state.aliasTaken}
+                            disabled={this.state.aliasTaken || this.state.invalidInput}
                         >
-                            {this.state.aliasTaken ? 'Alias Taken' : 'Set Alias'}
+                            {this.submitText()}
                         </button>
                     </div>
                     <span>Alias must be 2-17 characters using only alphanumeric + _</span>
