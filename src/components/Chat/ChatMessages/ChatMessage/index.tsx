@@ -119,7 +119,7 @@ class ChatMessage extends React.Component<ChatMessageType & ChatMessageProps, {}
                         <span>{moment(this.props.timestamp).calendar()}</span>
                     </div>
                 </div>
-                <div>
+                <div className="messageContent">
                     {this.renderMessage(this.props.message, this.props.id)}
                 </div>
             </div>
