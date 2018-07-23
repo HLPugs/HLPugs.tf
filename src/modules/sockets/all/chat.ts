@@ -20,7 +20,7 @@ export const chat = (io: Server) => {
 
       if (Date.now() - socket.request.session.lastMessageSentTimestamp < 1000) return;
 
-      if (message.length && socket.request.session.user.alias) {
+      if (message.length && message.length <= 300 && socket.request.session.user.alias) {
         const messageObject: messageObjectType = {
           message,
           username: socket.request.session.user.alias, // Placeholder waiting for names
