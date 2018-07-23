@@ -13,7 +13,7 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
 
     protected checkAlias: number;
 
-    private aliasInput: React.RefObject<HTMLInputElement>;
+    private readonly aliasInput: React.RefObject<HTMLInputElement>;
 
     constructor(props: AliasModalProps) {
         super(props);
@@ -47,25 +47,25 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
             this.props.socket.emit('submitAlias', this.aliasInput.current.value);
         }
     }
-    
+
     render() {
         return (
             <div id="AliasModalHolder">
                 <div id="AliasModal">
                     <span>Choose a <b>permanent</b> alias to continue to the site.</span>
                     <div>
-                        <input 
-                            type="text" 
-                            placeholder="Set your desired alias" 
-                            minLength={2} 
-                            maxLength={17} 
+                        <input
+                            type="text"
+                            placeholder="Set your desired alias"
+                            minLength={2}
+                            maxLength={17}
                             pattern="^[a-zA-Z0-9_]{2,17}$"
                             ref={this.aliasInput}
                             onChange={this.handleInputChange}
                         />
-                        <button 
-                            className="button-primary" 
-                            onClick={this.submitAlias} 
+                        <button
+                            className="button-primary"
+                            onClick={this.submitAlias}
                             disabled={this.state.aliasTaken}
                         >
                             {this.state.aliasTaken ? 'Alias Taken' : 'Set Alias'}
