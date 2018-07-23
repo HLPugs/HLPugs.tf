@@ -101,6 +101,7 @@ interface ChatInputState {
     autoCompleteIndex: number;
     emojiCompletions: CompletionItem[];
     mentionCompletions: string[];
+    lastMessageSentTimestamp: number;
 }
 
 class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
@@ -117,7 +118,8 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
             toggleWaitComplete: true,
             autoCompleteIndex: 0,
             emojiCompletions: [],
-            mentionCompletions: []
+            mentionCompletions: [],
+            lastMessageSentTimestamp: 0
         };
     }
 
@@ -191,8 +193,12 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
             if (event.key === 'Enter' && 
             !(this.state.emojiCompletions.length || this.state.mentionCompletions.length)) {
                 event.preventDefault();
-                if (this.messageInput.current.value.length) {
+                if (this.messageInput.current.value.length && Date.now() - this.state.lastMessageSentTimestamp > 1000) {
                     this.props.socket.emit('sendMessage', this.messageInput.current.value);
+
+                    this.setState({
+                        lastMessageSentTimestamp: Date.now()
+                    });
 
                     this.messageInput.current.value = '';
                     this.handleChange();
