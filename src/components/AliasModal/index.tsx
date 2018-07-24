@@ -40,7 +40,7 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
             });
         }
 
-        this.checkAlias = setTimeout(
+        this.checkAlias = window.setTimeout(
             () => {
                 if (this.aliasInput.current) {
                     this.props.socket.emit('checkAlias', this.aliasInput.current.value);

@@ -131,7 +131,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                 toggleWaitComplete: false
             });
 
-            setTimeout(
+            window.setTimeout(
                 () => {
                     this.setState({
                         toggleWaitComplete: true

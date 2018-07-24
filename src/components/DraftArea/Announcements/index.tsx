@@ -39,7 +39,7 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
             transitioning: true
         });
 
-        setTimeout(
+        window.setTimeout(
             () => { 
                 this.setState({ index: newIndex, transitioning: false }); 
             }, 
