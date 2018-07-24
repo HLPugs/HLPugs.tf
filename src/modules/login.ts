@@ -1,8 +1,9 @@
-import { Request } from 'express';
-import db from '../database/db';
+import { Request }              from 'express';
+import db                       from '../database/db';
 import { getActivePunishments } from './punishments';
-import { punishment } from '../common/types';
-import { QueryResult } from 'pg';
+import { punishment }           from '../common/types';
+import { QueryResult }          from 'pg';
+import logger                   from './logger';
 
 declare module 'express' {
   export interface Request {
@@ -34,7 +35,7 @@ export async function loginUser(req: Request): Promise<void> {
 
   // Insert player into database, or at the very least, update their IP if possible
   const query1 = {
-    text: `INSERT INTO players (steamid, avatar)
+    text: `INSaERT INTO players (steamid, avatar)
            VALUES ($1, $2)
            ON CONFLICT (steamid) DO UPDATE SET avatar = $2
            RETURNING captain, alias, roles`,
@@ -47,6 +48,7 @@ export async function loginUser(req: Request): Promise<void> {
 
   // If user is new, don't waste time grabbing punishments
   if (alias !== null) {
+    logger.info(`Account created for ${steamid}`);
     req.session.user.alias = alias;
     req.session.user.roles = roles || {};
     req.session.user.captain = captain;
