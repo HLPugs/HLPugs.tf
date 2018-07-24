@@ -1,6 +1,6 @@
-import { Server } from 'socket.io';
 import * as config from 'config';
-import * as uuid from 'uuid';
+import * as uuid   from 'uuid';
+import { Server }  from 'socket.io';
 
 interface messageObjectType {
   message: string;

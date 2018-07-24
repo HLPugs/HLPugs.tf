@@ -1,5 +1,5 @@
-import { Server } from 'socket.io';
 import * as config from 'config';
+import { Server }  from 'socket.io';
 
 export const setup = (io: Server) => {
   io.on('connection', (socket) => {

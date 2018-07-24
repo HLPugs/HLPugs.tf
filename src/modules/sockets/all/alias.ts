@@ -1,5 +1,5 @@
+import db         from '../../../database/db';
 import { Server } from 'socket.io';
-import db from '../../../database/db';
 
 export const alias = (io: Server) => {
   io.on('connection', (socket) => {
