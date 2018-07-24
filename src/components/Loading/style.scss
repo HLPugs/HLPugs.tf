@@ -1,0 +1,45 @@
+@keyframes bounce {
+    0% {
+        transform: translateY(0%);
+    }
+    40% {
+        transform: translateY(-100%);
+    }
+    80% {
+        transform: translateY(0%);
+    }
+}
+
+#loadingHolder {
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    animation: fade-in 1s ease 2s normal forwards;
+    position: absolute;
+    z-index: 9999;
+
+    #loadingDots {
+        display: flex;
+
+        .loadingDot {
+            background: var(--color-gradient);
+            box-shadow: var(--paper-1);
+            padding: 10px;
+            margin: 10px;
+            background-clip: padding-box;
+            border-radius: 50%;
+            animation: bounce 1s cubic-bezier(.5,0,.5,1) infinite;
+        }
+    }
+
+    #loadingDescription {
+        font-size: 24px;
+        color: var(--font-color);
+        padding-top: 10px;
+    }
+}

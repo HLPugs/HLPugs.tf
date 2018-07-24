@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { SiteConfiguration, UserScheme } from '../common/types';
 import Home from '../pages/Home';
 import Banned from '../pages/Banned';
+import Loading from '../components/Loading';
 import './style.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -45,6 +46,7 @@ library.add(
 interface AppState {
   configuration?: SiteConfiguration;
   user?: UserScheme;
+  disconnected: boolean;
 }
 
 class App extends React.Component<{}, AppState> {
@@ -78,43 +80,94 @@ class App extends React.Component<{}, AppState> {
         user: user
       });
     });
+
+    this.socket.on('disconnect', () => {
+      this.setState({
+        disconnected: true
+      });
+    });
+
+    this.socket.on('reconnect', () => {
+      this.setState({
+        disconnected: false
+      });
+    });
     
-    this.state = {};
+    this.state = {
+      disconnected: false
+    };
+  }
+
+  reconnectMessage = () => {
+    if (this.state.disconnected) {
+      return (
+        <Loading
+          loadingMessages={[
+            {
+              message: 'Reconnecting to Server',
+              timeout: 0
+            },
+            {
+              message: 'Server may be experiencing issues. Contact site admins for help.',
+              timeout: 10
+            }
+          ]}
+        />
+      );
+    }
+
+    return null;
   }
   
   render() {
     if (this.state.configuration && this.state.user) {
       return (
-        <Router>
-          <Switch>
-            <Route 
-              exact={true} 
-              path="/" 
-              render={() => 
-                <Home 
-                  socket={this.socket} 
-                  configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration} 
-                  user={this.state.user ? this.state.user : {}} 
-                />
-              } 
-            />
-            <Route
-              exact={true}
-              path="/banned"
-              render={() =>
-                <Banned
-                  socket={this.socket}
-                  configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
-                />
-              }
-            />
-            <Redirect from="*" to="/" />
-          </Switch>
-        </Router>
+        <>
+          {this.reconnectMessage()}
+          <Router>
+            <Switch>
+              <Route 
+                exact={true} 
+                path="/" 
+                render={() => 
+                  <Home 
+                    socket={this.socket} 
+                    configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration} 
+                    user={this.state.user ? this.state.user : {}} 
+                  />
+                } 
+              />
+              <Route
+                exact={true}
+                path="/banned"
+                render={() =>
+                  <Banned
+                    socket={this.socket}
+                    configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
+                  />
+                }
+              />
+              <Redirect from="*" to="/" />
+            </Switch>
+          </Router>
+        </>
       );
     }
 
-    return null;
+    return (
+      <Loading 
+        loadingMessages={[
+          {
+            message: 'Connecting to Server',
+            timeout: 0
+          },
+          {
+            message: 'Server may be experiencing issues. Contact site admins for help.',
+            timeout: 10
+          }
+        ]}
+      />
+    );
   }
 }
 
