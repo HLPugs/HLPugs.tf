@@ -2,8 +2,6 @@
 
 Front end for the Captain Draft & Mix PUG Service under [HLPugs.tf](https://hlpugs.tf). The goal of this project is to create a tool for Captain Draft & Mix PUGs in Team Fortress 2 that is customizable and extendable.
 
-This front end is written using React + Typescript. [`create-react-app`](https://github.com/facebook/create-react-app) along with [`react-scripts-ts`](https://github.com/wmonk/create-react-app-typescript) were used to bootstrap this project. [Socket.IO](https://socket.io) is being used for all communications with the back end.
-
 ## Getting Started
 
 ### Prerequisites
@@ -37,8 +35,20 @@ After customizing/developing your changes, you can deploy Payload to a static we
 1. Run `npm run build` to create the static files necessary
 2. Add these files to your static host such as [NGINX](https://www.nginx.com/)
 
+## Built With
+- [React](https://reactjs.org) ([React TS Scripts](https://github.com/wmonk/create-react-app-typescript)) - User interface library
+- [Typescript](https://www.typescriptlang.org/) - Type system
+- [Socket.io](https://socket.io) - Back end communications
+- [Emoji Mart](https://github.com/missive/emoji-mart) - Emoji picker
+
+## Authors
+- **Nicell** - Main Developer and Designer
+
+See the [contributors](https://github.com/HLPugs/Payload/contributors) page for more people who've helped with the project.
+
 ## License
 This projcet is licensed under the MIT License. See [LICENSE.md](LICENSE.md) fir details.
 
 ## Acknowledgements
 - Sickday and Qixalite for the [TF2 Class Icons](https://github.com/Qixalite/tf2-classfont)
+- [erynn](https://github.com/erynnb) for helping with technical questions when building the legacy version of HLPugs.tf
