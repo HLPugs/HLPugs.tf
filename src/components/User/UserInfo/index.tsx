@@ -9,12 +9,12 @@ interface UserInfoProps {
 class UserInfo extends React.Component<UserInfoProps, {}> {
   render() {
     return (
-      <>
+      <div id="userInfo">
         <div id="userIcon" style={{backgroundImage: `url(${this.props.avatar})`}} />
         <div id="userName">
           {this.props.alias}
         </div>
-      </>
+      </div>
     );
   }
 }

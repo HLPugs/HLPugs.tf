@@ -1,17 +1,24 @@
-#userIcon {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: var(--font-color);
-  box-shadow: var(--paper-1);
-  flex-shrink: 0;
-  background-size: contain;
-}
-
-#userName {
-  font-size: 20px;
+#userInfo {
   overflow: hidden;
-  text-overflow: ellipsis;
-  padding: 5px 10px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+
+  #userIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--font-color);
+    box-shadow: var(--paper-1);
+    flex-shrink: 0;
+    background-size: contain;
+    margin-left: 5px;
+  }
+
+  #userName {
+    font-size: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 5px 10px;
+    text-align: center;
+  }
 }
