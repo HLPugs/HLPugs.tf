@@ -37,6 +37,15 @@
             &.cyclingAnnouncements {
                 opacity: 0;
             }
+
+            a {
+                color: var(--color);
+                text-decoration: none;
+
+                &:hover {
+                    text-decoration: underline;
+                }
+            }
         }
     }
 }

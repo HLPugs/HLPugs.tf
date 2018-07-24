@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Linkify from 'react-linkify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './style.css';
 
@@ -58,7 +59,9 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
                 </div>
                 <div id="announcements">
                     <span className={this.state.transitioning ? 'cyclingAnnouncements' : ''}>
-                        {this.state.announcements[this.state.index]}
+                        <Linkify properties={{ target: 'blank' }}>
+                            {this.state.announcements[this.state.index]}
+                        </Linkify>
                     </span>
                 </div>
             </div>

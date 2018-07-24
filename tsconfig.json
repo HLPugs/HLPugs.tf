@@ -15,10 +15,7 @@
     "noImplicitAny": true,
     "strictNullChecks": true,
     "suppressImplicitAnyIndexErrors": true,
-    "noUnusedLocals": true,
-    "typeRoots": [
-      "./common/json-typings.d.ts"
-    ]
+    "noUnusedLocals": true
   },
   "exclude": [
     "node_modules",

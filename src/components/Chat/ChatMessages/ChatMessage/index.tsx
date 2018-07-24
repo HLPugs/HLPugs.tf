@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import Linkify from 'react-linkify';
 import { ChatMessageType } from '../../../../common/types';
 import { Emoji } from 'emoji-mart';
 import allEmojis from 'emoji-mart/data/all.json';
@@ -120,7 +121,9 @@ class ChatMessage extends React.Component<ChatMessageType & ChatMessageProps, {}
                     </div>
                 </div>
                 <div className="messageContent">
-                    {this.renderMessage(this.props.message, this.props.id)}
+                    <Linkify properties={{ target: 'blank' }}>
+                        {this.renderMessage(this.props.message, this.props.id)}
+                    </Linkify>
                 </div>
             </div>
         );
