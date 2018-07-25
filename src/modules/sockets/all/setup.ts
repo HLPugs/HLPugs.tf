@@ -3,13 +3,6 @@ import { Server }  from 'socket.io';
 
 export const setup = (io: Server) => {
   io.on('connection', (socket) => {
-
-    // Add new socket to session socket list
-    if (socket.request.session.sockets !== undefined) {
-      socket.request.session.sockets.push(socket.id);
-      socket.request.session.save((err: any) => console.log(err));
-    }
-
     socket.emit('siteConfiguration', config.get('app.configuration'));
 
     if (socket.request.session.err) {
@@ -29,6 +22,14 @@ export const setup = (io: Server) => {
     } else {
       socket.emit('user', { loggedIn: false });
     }
+
+    socket.on('home', () => {
+      // Add new socket to session socket list
+      if (socket.request.session.sockets !== undefined) {
+        socket.request.session.sockets.push(socket.id);
+        socket.request.session.save((err: any) => console.log(err));
+      }
+    });
 
     socket.on('disconnect', () => {
       if (socket.request.session.sockets !== undefined) {
