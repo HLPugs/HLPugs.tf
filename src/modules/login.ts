@@ -32,6 +32,9 @@ export async function loginUser(req: Request): Promise<void> {
     roles: {},
   };
 
+  // Create sockets list
+  req.session.sockets = [];
+
   // Insert player into database, or at the very least, update their IP if possible
   const query1 = {
     text: `INSERT INTO players (steamid, avatar)

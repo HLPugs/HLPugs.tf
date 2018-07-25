@@ -3,6 +3,13 @@ import * as config from 'config';
 
 export const setup = (io: Server) => {
   io.on('connection', (socket) => {
+
+    // Add new socket to session socket list
+    if (socket.request.session.sockets !== undefined) {
+      socket.request.session.sockets.push(socket.id);
+      socket.request.session.save((err: any) => console.log(err));
+    }
+
     socket.emit('siteConfiguration', config.get('app.configuration'));
 
     if (socket.request.session.user) {
@@ -18,5 +25,20 @@ export const setup = (io: Server) => {
     } else {
       socket.emit('user', { loggedIn: false });
     }
+
+    socket.on('disconnect', () => {
+      if (socket.request.session.sockets !== undefined) {
+        const socketIndex = socket.request.session.sockets.indexOf(socket.id);
+
+        if (socketIndex > -1) {
+          socket.request.session.sockets.splice(socketIndex, 1);
+          socket.request.session.save((err: any) => console.log(err));
+
+          if (socket.request.session.sockets.length === 0) {
+            // TODO: remove user from all class lists and other items since they are no longer here
+          }
+        }
+      }
+    });
   });
 };
