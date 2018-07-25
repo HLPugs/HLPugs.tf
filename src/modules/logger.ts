@@ -9,9 +9,19 @@ const logDir = path.join(config.get('winston.logDirectory'), '/');
 if (!fs.existsSync(logDir)) {
   fs.mkdirSync(logDir); // Create log directory
 }
+
+const format = winston.format.combine(
+	winston.format.colorize({all: true}),
+	winston.format.simple(),
+	winston.format.timestamp({
+	  format: 'YYYY-MM-DD HH:mm:ss'
+	}),
+);
+
+// TODO Setup proper file structures (/info/draft.log etc.)
 const logger = winston.createLogger({
   level: 'info',
-  format: winston.format.json(),
+  format: format,
   transports: [
 	//
 	// - Write to all logs with level `info` and below to `combined.log`
@@ -19,13 +29,8 @@ const logger = winston.createLogger({
 	//
 	new winston.transports.File({ filename: path.join(logDir, 'error.log') }),
 	new winston.transports.File({ filename: path.join(logDir, 'combined.log') }),
-  ]
+  ],
 });
-
-winston.format.combine(
-	winston.format.colorize(),
-	winston.format.json(),
-);
 
 //
 // If we're not in production then log to the `console` with the format:
@@ -33,7 +38,7 @@ winston.format.combine(
 //
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
-	format: winston.format.simple(),
+	format
   }));
 }
 
