@@ -25,18 +25,22 @@ export const alias = (io: Server) => {
       if (!res2.rows[0]) return; // Exits function if alias didn't update in the database
       socket.request.session.user.alias = alias;
       socket.request.session.save((err: any) => console.log(err));
-      
+
       const user = {
         loggedIn: true,
         alias: socket.request.session.user.alias,
         avatar: socket.request.session.user.avatar,
         steamid: socket.request.session.user.steamid,
       };
-      
+
       socket.emit('user', user);
-      
-	  // Log account creation
-	  logger.log('info',`${alias} created an account`, {steamid: socket.request.session.user.steamid});
+
+      // Log account creation
+      logger.log(
+        'info',
+        `${alias} created an account`,
+        { steamid: socket.request.session.user.steamid },
+      );
     });
   });
 };

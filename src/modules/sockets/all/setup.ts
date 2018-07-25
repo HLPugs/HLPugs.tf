@@ -11,10 +11,10 @@ export const setup = (io: Server) => {
     }
 
     socket.emit('siteConfiguration', config.get('app.configuration'));
-    
+
     if (socket.request.session.err) {
-    	socket.emit('serverError', socket.request.session.err)
-	}
+    	socket.emit('serverError', socket.request.session.err);
+	  }
 
     if (socket.request.session.user) {
       const user = {
@@ -24,7 +24,7 @@ export const setup = (io: Server) => {
         steamid: socket.request.session.user.steamid,
         punishments: socket.request.session.user.punishments,
       };
-      
+
       socket.emit('user', user);
     } else {
       socket.emit('user', { loggedIn: false });
