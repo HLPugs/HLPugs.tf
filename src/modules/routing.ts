@@ -3,6 +3,7 @@ import * as config                   from 'config';
 import { steamUser }                 from '../common/types';
 import * as steam                    from 'steam-login';
 import { loginUser }                 from './login';
+import handleError                   from './errorHandler';
 
 
 const router: Router = Router();
@@ -16,7 +17,7 @@ router.get('/', (req: Request, res: Response) => {
 router.get('/verify', steam.verify(), (req: Request & steamUser, res: Response) => {
   loginUser(req)
       .then(() => res.redirect('/'))
-      .catch(e => { throw new Error(e);  });
+      .catch(e => { handleError(e); });
 });
 
 router.get('/auth', steam.authenticate(), (req: Request & steamUser, res: Response) => {
