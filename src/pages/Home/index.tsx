@@ -19,6 +19,9 @@ class Home extends React.Component<HomeProps, {}> {
         if (!this.props.user.alias && this.props.user.loggedIn) {
             return <AliasModal socket={this.props.socket} />;
         }
+
+        // Tell server that this socket connection is on the homepage
+        this.props.socket.emit('home');
         
         return null;
     }
