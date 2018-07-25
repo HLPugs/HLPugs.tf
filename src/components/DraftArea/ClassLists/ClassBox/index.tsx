@@ -18,8 +18,14 @@ class ClassBox extends React.Component<ClassBoxProps, {}> {
             <div className="tfclass">
                 <div className="classHeader">
                     <span className="classIcon"><ClassIcon name={this.props.properties.name} /></span>
+                    <span/>
                     <span className="className">{this.props.properties.name}</span>
-                    <span className="count">0/{this.props.properties.numberPerTeam * 2}</span>
+                    <span className="count">
+                        <span className="added">0</span>
+                        /
+                        <span className="needed">{this.props.properties.numberPerTeam * 2}</span>
+                    </span>
+                    <div className="classCheckbox"/>
                 </div>
                 <div className="playerList" />
             </div>

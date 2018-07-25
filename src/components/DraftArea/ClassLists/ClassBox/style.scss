@@ -29,7 +29,7 @@
             font-size: 18px;
 
             &.classIcon {
-                padding-left: 10px;
+                padding-left: 3px;
                 position: relative;
                 top: 1px;
 
@@ -40,7 +40,72 @@
             }
 
             &.count {
-                padding-right: 10px;
+                display: flex;
+                flex-shrink: 1;
+
+                .added {
+                    font-size: 12px;
+                    align-self: flex-start;
+                }
+
+                .needed {
+                    font-size: 12px;
+                    align-self: flex-end;
+                }
+            }
+        }
+
+        .classCheckbox {
+            width: 24px;
+            height: 24px;
+            margin-right: 6px;
+            border-radius: 4px;
+            box-shadow: var(--paper-1);
+            background: var(--font-color);
+            cursor: pointer;
+            overflow: hidden;
+            transition: all .2s ease;
+            flex-shrink: 0;
+
+            &:hover {
+                box-shadow: var(--paper-2);
+            }
+            
+            &:active {
+                background: var(--font-color-secondary);
+            }
+            
+            &.checked {
+                background: var(--font-color-secondary);
+                
+                &:active {
+                    background: var(--font-color-secondary);
+                }
+
+                &:hover {
+                    box-shadow: var(--paper-2);
+                }
+            }
+            
+            &.checked:after {
+                transform: rotate(45deg) translate(0, 0);
+                opacity: 1;
+            }
+            
+            &:after {
+                content: '';
+                display: block;
+                position: relative;
+                transform: rotate(45deg) translate(154%, 88%);
+                width: 5px;
+                height: 11px;
+                border-right: solid 3px;
+                border-bottom: solid 3px;
+                border-color: var(--color);
+                left: 8px;
+                top: 3px;
+                opacity: 0;
+                transition: all .2s ease;
             }
         }
     }
