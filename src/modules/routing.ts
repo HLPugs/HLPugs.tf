@@ -1,8 +1,10 @@
 import { Router, Request, Response } from 'express';
-import * as config from 'config';
-import { steamUser } from '../common/types';
-import { loginUser } from './login';
-import * as steam from 'steam-login';
+import * as config                   from 'config';
+import { steamUser }                 from '../common/types';
+import * as steam                    from 'steam-login';
+import { loginUser }                 from './login';
+import handleError                   from './errorHandler';
+
 
 const router: Router = Router();
 
@@ -15,7 +17,7 @@ router.get('/', (req: Request, res: Response) => {
 router.get('/verify', steam.verify(), (req: Request & steamUser, res: Response) => {
   loginUser(req)
       .then(() => res.redirect('/'))
-      .catch(e => res.send(e.stack));
+      .catch(e => { handleError(e); });
 });
 
 router.get('/auth', steam.authenticate(), (req: Request & steamUser, res: Response) => {

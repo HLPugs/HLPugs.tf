@@ -1,15 +1,15 @@
-import * as config from 'config';
-import * as crypto from 'crypto';
-import * as express from 'express';
-import { Server } from 'http';
-import * as expressSession from 'express-session';
-import * as connect_redis from 'connect-redis';
-// tslint:disable-next-line:variable-name
-const RedisStore = connect_redis(expressSession);
-import * as steam from 'steam-login';
-import * as uuid from 'uuid';
+import * as config                         from 'config';
+import * as crypto                         from 'crypto';
+import * as connect_redis                  from 'connect-redis';
+import * as express                        from 'express';
+import * as expressSession                 from 'express-session';
+import * as steam                          from 'steam-login';
+import * as uuid                           from 'uuid';
+import { Server }                          from 'http';
+import { routing, sockets }                from './modules';
+import handleError                         from './modules/errorHandler';
 
-import { routing, sockets } from './modules';
+const RedisStore = connect_redis(expressSession);
 
 const sessionConfig = expressSession({
   genid(req) {
@@ -42,5 +42,21 @@ app.use(steam.middleware({
 }));
 
 app.use(routing);
+
+// Error handling middleware
+app.use(async (e: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  await handleError(e);
+  next(e);
+});
+
+process.on('uncaughtException', (e) => {
+  	// TODO Pass relevant data to handleError
+  	handleError(e);
+  	process.exit(1);
+});
+
+process.on('unhandledRejection', (reason, p) => {
+  throw reason;
+});
 
 server.listen(3001);

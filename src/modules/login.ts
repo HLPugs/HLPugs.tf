@@ -1,8 +1,9 @@
-import { Request } from 'express';
-import db from '../database/db';
+import { Request }              from 'express';
+import db                       from '../database/db';
 import { getActivePunishments } from './punishments';
-import { punishment } from '../common/types';
-import { QueryResult } from 'pg';
+import { punishment }           from '../common/types';
+import { QueryResult }          from 'pg';
+import logger                   from './logger';
 
 declare module 'express' {
   export interface Request {
@@ -44,16 +45,22 @@ export async function loginUser(req: Request): Promise<void> {
     values: [steamid, avatar],
   };
 
-  // Returns alias, captain and roles
-  const res: QueryResult = await db.query(query1);
-  const { alias, captain, roles } = res.rows[0];
+  	// Returns alias, captain and roles
+  	const res: QueryResult = await db.query(query1);
+  	const { alias, captain, roles } = res.rows[0];
 
-  // If user is new, don't waste time grabbing punishments
-  if (alias !== null) {
-    req.session.user.alias = alias;
-    req.session.user.roles = roles || {};
-    req.session.user.captain = captain;
-    const punishments = await getActivePunishments(steamid);
-    punishments.map((x: punishment) => req.session.user.punishments[x.punishment] = x.data);
-  }
+	  // Only spend time grabbing punishments if user exists
+	  if (alias !== null) {
+	    // Set player's session
+	    req.session.user.alias = alias;
+    	req.session.user.roles = roles || {};
+	    req.session.user.captain = captain;
+	    
+	    // Fetch player's punishments
+	    const punishments = await getActivePunishments(steamid);
+	    punishments.map((x: punishment) => req.session.user.punishments[x.punishment] = x.data);
+	    
+	    // Log the login
+	    logger.info(`${alias} logged in`, {steamid});
+	  }
 }
