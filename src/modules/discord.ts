@@ -31,7 +31,7 @@ export async function postToDiscord(message: string, channel: string, fancy = fa
   try {
   await request(data);
   } catch (e) {
-    handleError(e, true, {message, channel});
+    handleError(e, {message, channel});
   }
   return 'successful';
 }
