@@ -1,5 +1,5 @@
 import * as React from 'react';
-import AutoComletions from './AutoCompletions';
+import AutoCompletions from './AutoCompletions';
 import EmojiPicker from './EmojiPicker';
 import { EmojiData, CustomEmoji } from 'emoji-mart';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -313,7 +313,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                     maxLength={300}
                     disabled={!this.props.loggedIn}
                 />
-                <AutoComletions
+                <AutoCompletions
                     autoCompleteIndex={this.state.autoCompleteIndex}
                     emojiCompletions={this.state.emojiCompletions}
                     mentionCompletions={this.state.mentionCompletions}
