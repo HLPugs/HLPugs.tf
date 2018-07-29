@@ -7,6 +7,7 @@ nav {
     flex-direction: column;
     justify-content: flex-start;
     box-shadow: var(--paper-3);
+    z-index: 1;
 }
 
 @media (max-width: 256 + $position-count * 200 + px) {

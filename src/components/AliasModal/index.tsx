@@ -83,7 +83,7 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
                             autoFocus={true}
                         />
                         <button
-                            className="button-primary"
+                            className="button"
                             onClick={this.submitAlias}
                             disabled={this.state.aliasTaken || this.state.invalidInput}
                         >

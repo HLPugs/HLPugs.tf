@@ -6,6 +6,7 @@ import Navigation from '../../components/Navigation';
 import DraftArea from '../../components/DraftArea';
 import Chat from '../../components/Chat';
 import AliasModal from '../../components/AliasModal';
+import Settings from '../../components/Settings';
 import './style.css';
 
 interface HomeProps {
@@ -14,7 +15,19 @@ interface HomeProps {
     user: UserScheme;
 }
 
-class Home extends React.Component<HomeProps, {}> {
+interface HomeState {
+    settingsOpen: boolean;
+}
+
+class Home extends React.Component<HomeProps, HomeState> {
+    constructor(props: HomeProps) {
+        super(props);
+
+        this.state = {
+            settingsOpen: false
+        };
+    }
+
     AliasModal = () => {
         if (!this.props.user.alias && this.props.user.loggedIn) {
             return <AliasModal socket={this.props.socket} />;
@@ -26,6 +39,12 @@ class Home extends React.Component<HomeProps, {}> {
         return null;
     }
 
+    toggleSettings = () => {
+        this.setState({
+            settingsOpen: !this.state.settingsOpen
+        });
+    }
+
     render() {
         return (
             <div id="Home">
@@ -34,10 +53,16 @@ class Home extends React.Component<HomeProps, {}> {
                     siteSubTitle={this.props.configuration.branding.siteSubTitle}
                     logoPath={this.props.configuration.branding.logoPath} 
                 />
-                <User user={this.props.user} />
+                <User user={this.props.user} settingsOnClick={this.toggleSettings} />
                 <Navigation navigationGroup={this.props.configuration.navigation} />
                 <DraftArea socket={this.props.socket} classes={this.props.configuration.classes} />
                 <Chat socket={this.props.socket} user={this.props.user} />
+                <Settings
+                    visibility={this.state.settingsOpen}
+                    socket={this.props.socket}
+                    classes={this.props.configuration.classes}
+                    settingsOnClick={this.toggleSettings}
+                />
                 {this.AliasModal()}
             </div>
         );

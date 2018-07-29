@@ -20,6 +20,7 @@ moment.updateLocale('en', {
 import './style.css';
 import './animations.css';
 import './buttons.css';
+import './formElements.css';
 
 ReactDOM.render(
   <App />,

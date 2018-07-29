@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface UserDropDownProps {
   steamid?: string;
+  settingsOnClick: Function;
 }
 
 class UserDropDown extends React.Component<UserDropDownProps, {}> {
@@ -18,7 +19,7 @@ class UserDropDown extends React.Component<UserDropDownProps, {}> {
             Profile
           </Link>
         </li>
-        <li>
+        <li onClick={() => this.props.settingsOnClick()}>
           <FontAwesomeIcon icon="cog" />
           Settings
         </li>

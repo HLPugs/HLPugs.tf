@@ -1,4 +1,4 @@
-.button-primary {
+.button {
     border-radius: 4px;
     border: none;
     background: var(--color-gradient);
@@ -9,6 +9,7 @@
     padding: 5px 10px;
     font-family: var(--font);
     transition: all .2s ease;
+    font-weight: 700;
 
     &:hover {
         box-shadow: var(--paper-2);
@@ -28,4 +29,25 @@
             box-shadow: var(--paper-1_);
         }
     }
+}
+
+.button-green {
+    background: #00e676;
+
+    &:active {
+        background: #00c853;
+    }
+}
+
+.button-secondary {
+    background: var(--grey);
+
+    &:active {
+        background: var(--grey-dark);
+    }
+}
+
+.button-big {
+    font-size: 18px;
+    padding: 8px 16px;
 }
