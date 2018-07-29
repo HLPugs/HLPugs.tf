@@ -2,7 +2,7 @@ import { Team } from './team';
 
 /**
  * Describes a pug match.
- * @typedef Pug
+ * @typedef pug
  * @property {number} id - The pug's unique id.
  * @property {string} map - The map played in the pug.
  * @property {number} winningTeam - The index of the team that won in the teams array.
@@ -10,7 +10,7 @@ import { Team } from './team';
  * @property {number|null} logsID - The logs.tf unique log id, if any.
  * @property {Team[]} teams - The array of teams that played in the pug.
  */
-export class Pug {
+export class pug {
   id: number;
   map: string;
   winningTeam: number;
@@ -19,7 +19,7 @@ export class Pug {
   teams: Team[];
 
     /**
-     * Creates a new Pug object.
+     * Creates a new pug object.
      * @param {number} id - The pug's unique ID.
      * @param {string} map - The map that was/is being played in the pug.
      * @param {Team[]} teams - The 2 teams participating in the pug.
@@ -40,9 +40,9 @@ export class Pug {
      * Ends the pug.
      * @param {number} winner - The index of the winner in the teams array.
      * @param {number} logsID - The logs.tf unique log id, if any.
-     * @returns {Pug} - The Pug object.
+     * @returns {pug} - The pug object.
      */
-  end(winner: number, logsID: number): Pug {
+  end(winner: number, logsID: number): pug {
     this.winningTeam = winner;
     this.logsID = logsID;
     return this;

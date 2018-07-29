@@ -1,11 +1,11 @@
-import * as config          from 'config';
-import * as crypto          from 'crypto';
-import * as connect_redis   from 'connect-redis';
-import * as express         from 'express';
-import * as expressSession  from 'express-session';
-import * as steam           from 'steam-login';
-import * as uuid            from 'uuid';
-import { Server }           from 'http';
+import * as config                       from 'config';
+import * as crypto                       from 'crypto';
+import * as connect_redis                from 'connect-redis';
+import * as express                      from 'express';
+import * as expressSession               from 'express-session';
+import * as steam                        from 'steam-login';
+import * as uuid                         from 'uuid';
+import { Server }                        from 'http';
 import { routing, sockets, handleError } from './modules';
 
 const RedisStore = connect_redis(expressSession);

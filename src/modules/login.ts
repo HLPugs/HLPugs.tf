@@ -3,8 +3,8 @@ import db                       from '../database/db';
 import { getActivePunishments } from './punishments';
 import { QueryResult }          from 'pg';
 import logger                   from './logger';
-import { Player }               from './structures/player';
-import { Punishment }           from './structures/punishment';
+import { player }               from '../structures/player';
+import { punishment }           from '../structures/punishment';
 
 declare module 'express' {
   export interface Request {
@@ -25,9 +25,10 @@ export async function loginUser(req: Request): Promise<void> {
   const ip = req.headers['x-forwarded-for'];
 
   // Create template
-  req.session.user = new Player(steamid, avatar);
+  req.session.user = new player(steamid, avatar);
 
-  // Insert player into database, or at the very least, update their IP if possible
+  // Insert player into database, or at the very least, update their IP
+  // TODO Insert / Update IP
   const query1 = {
     text: `INSERT INTO players (steamid, avatar)
            VALUES ($1, $2)
@@ -36,20 +37,20 @@ export async function loginUser(req: Request): Promise<void> {
     values: [steamid, avatar],
   };
 
-  	// Retrieve
+  	// Retrieve alias, captain and roles
   	const res: QueryResult = await db.query(query1);
   	const { alias, captain, roles } = res.rows[0];
 
 	  // Only spend time grabbing punishments if user exists
 	  if (alias !== null) {
 	    // Set player's session
-	    req.session.user.alias = alias;
-    	req.session.user.roles = roles || {};
-	    req.session.user.captain = captain;
+	    req.session.user.alias     = alias;
+    	req.session.user.roles     = roles;
+	    req.session.user.isCaptain = captain;
 
 	    // Fetch player's punishments
 	    const punishments = await getActivePunishments(steamid);
-	    punishments.map((x: Punishment) => req.session.user.punishments[x.punishment] = x.data);
+	    punishments.map((x: punishment) => req.session.user.punishments[x.punishment] = x.data);
 
 	    // Log the login
 	    logger.info(`${alias} logged in`, { steamid });

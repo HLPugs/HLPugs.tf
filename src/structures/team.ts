@@ -1,5 +1,5 @@
-import { Player }    from './player';
-import { PlayerMap } from './playerMap';
+import { player }           from './player';
+import { playerTFClassMap } from './playerTFClassMap';
 
 /**
  * @typedef TeamColor
@@ -9,25 +9,27 @@ export type TeamColor = string | number;
 /**
  * Describes a team.
  * @typedef Team
- * @property {Player} captain - The team's captain.
+ * @property {player} captain - The team's captain.
  * @property {number} score - The team's score.
  * @property {TeamColor} color - The team's color. Either RED or BLU.
- * @property {PlayerMap} classes - A PlayerMap that matches players to their respective classes.
+ * @property {playerTFClassMap} classes - A {@Link PlayerTFClassMap} that matches
+ * players to their respective classes.
  */
 export class Team {
-  captain: Player;
+  captain: player;
   score: number;
   color: TeamColor;
-  classes: PlayerMap;
+  classes: playerTFClassMap;
 
     /**
      * Creates a new Team object.
-     * @param {Player} captain - The team's captain.
+     * @param {player} captain - The team's captain.
      * @param {TeamColor} color - The team's color. Either RED or BLU.
-     * @param {PlayerMap} classes - A PlayerMap that matches players to their respective classes.
+     * @param {playerTFClassMap} classes - A playerTFClassMap that matches players to their
+     *     respective classes.
      * @param {number} [score=0] - The team's score.
      */
-  constructor(captain: Player, color: TeamColor, classes: PlayerMap, score = 0) {
+  constructor(captain: player, color: TeamColor, classes: playerTFClassMap, score: number = 0) {
     this.captain = captain;
     this.score = score;
     this.color = color;
@@ -46,8 +48,11 @@ export class Team {
         case 1: return 'BLU';
         default: return false;
       }
-    } else if (input.match(/red/i)) return 'RED';
-    else if (input.match(/blu/i)) return 'BLU';
-    else return false;
+    }
+    if (input.match(/red/i)) return 'RED';
+    if (input.match(/blu/i)) return 'BLU';
+
+    // Return false if above cases did not match
+    return false;
   }
 }

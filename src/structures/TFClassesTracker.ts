@@ -12,13 +12,13 @@
  * @property {number} spy
  */
 export class TFClassesTracker {
-    scout: number = 0;
-    soldier: number = 0;
-    pyro: number = 0;
-    demoman: number = 0;
-    engineer: number = 0;
-    heavy: number = 0;
-    medic: number = 0;
-    sniper: number = 0;
-    spy: number = 0;
+  scout: number = 0;
+  soldier: number = 0;
+  pyro: number = 0;
+  demoman: number = 0;
+  engineer: number = 0;
+  heavy: number = 0;
+  medic: number = 0;
+  sniper: number = 0;
+  spy: number = 0;
 }
