@@ -1,7 +1,6 @@
-import * as config  from 'config';
-import * as request from 'request';
-import handleError  from './errorHandler';
-
+import * as config                   from 'config';
+import * as request                  from 'request';
+import { handleError }               from './errorHandler';
 
 /**
  * Posts a string to the HLPugs.tf Discord server as a webhook message.
@@ -27,11 +26,11 @@ export async function postToDiscord(message: string, channel: string, fancy = fa
     },
     json: true,
   };
-  
+
   try {
-  await request(data);
+    await request(data);
   } catch (e) {
-    handleError(e, true, {message, channel});
+    handleError(e, { message, channel });
   }
   return 'successful';
 }

@@ -1,9 +1,10 @@
 import { Request }              from 'express';
 import db                       from '../database/db';
 import { getActivePunishments } from './punishments';
-import { punishment }           from '../common/types';
 import { QueryResult }          from 'pg';
 import logger                   from './logger';
+import { player }               from '../structures/player';
+import { punishment }           from '../structures/punishment';
 
 declare module 'express' {
   export interface Request {
@@ -24,19 +25,10 @@ export async function loginUser(req: Request): Promise<void> {
   const ip = req.headers['x-forwarded-for'];
 
   // Create template
-  req.session.user = {
-    steamid,
-    avatar,
-    captain: false,
-    alias: '',
-    punishments: {},
-    roles: {},
-  };
+  req.session.user = new player(steamid, avatar);
 
-  // Create sockets list
-  req.session.sockets = [];
-
-  // Insert player into database, or at the very least, update their IP if possible
+  // Insert player into database, or at the very least, update their IP
+  // TODO Insert / Update IP
   const query1 = {
     text: `INSERT INTO players (steamid, avatar)
            VALUES ($1, $2)
@@ -45,16 +37,16 @@ export async function loginUser(req: Request): Promise<void> {
     values: [steamid, avatar],
   };
 
-  	// Returns alias, captain and roles
+  	// Retrieve alias, captain and roles
   	const res: QueryResult = await db.query(query1);
   	const { alias, captain, roles } = res.rows[0];
 
 	  // Only spend time grabbing punishments if user exists
 	  if (alias !== null) {
 	    // Set player's session
-	    req.session.user.alias = alias;
-    	req.session.user.roles = roles || {};
-	    req.session.user.captain = captain;
+	    req.session.user.alias     = alias;
+    	req.session.user.roles     = roles;
+	    req.session.user.isCaptain = captain;
 
 	    // Fetch player's punishments
 	    const punishments = await getActivePunishments(steamid);

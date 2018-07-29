@@ -11,24 +11,24 @@ if (!fs.existsSync(logDir)) {
 }
 
 const format = winston.format.combine(
-	winston.format.colorize({all: true}),
+	winston.format.colorize({ all: true }),
 	winston.format.simple(),
 	winston.format.timestamp({
-	  format: 'YYYY-MM-DD HH:mm:ss'
-	}),
+	  format: 'YYYY-MM-DD HH:mm:ss',
+}),
 );
 
 // TODO Setup proper file structures (/info/draft.log etc.)
 const logger = winston.createLogger({
+  format,
   level: 'info',
-  format: format,
   transports: [
 	//
 	// - Write to all logs with level `info` and below to `combined.log`
 	// - Write all logs error (and below) to `error.log`.
 	//
-	new winston.transports.File({ filename: path.join(logDir, 'error.log') }),
-	new winston.transports.File({ filename: path.join(logDir, 'combined.log') }),
+    new winston.transports.File({ filename: path.join(logDir, 'error.log') }),
+    new winston.transports.File({ filename: path.join(logDir, 'combined.log') }),
   ],
 });
 
@@ -38,7 +38,7 @@ const logger = winston.createLogger({
 //
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
-	format
+    format,
   }));
 }
 

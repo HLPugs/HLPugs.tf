@@ -1,6 +1,6 @@
-import { punishment }  from '../common/types';
 import { QueryResult } from 'pg';
 import db              from '../database/db';
+import { punishment }  from '../structures/punishment';
 
 /**
  * Retrieves the most recent active punishment of a player
