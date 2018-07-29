@@ -1,13 +1,12 @@
-import * as config                         from 'config';
-import * as crypto                         from 'crypto';
-import * as connect_redis                  from 'connect-redis';
-import * as express                        from 'express';
-import * as expressSession                 from 'express-session';
-import * as steam                          from 'steam-login';
-import * as uuid                           from 'uuid';
-import { Server }                          from 'http';
-import { routing, sockets }                from './modules';
-import handleError                         from './modules/errorHandler';
+import * as config          from 'config';
+import * as crypto          from 'crypto';
+import * as connect_redis   from 'connect-redis';
+import * as express         from 'express';
+import * as expressSession  from 'express-session';
+import * as steam           from 'steam-login';
+import * as uuid            from 'uuid';
+import { Server }           from 'http';
+import { routing, sockets, handleError } from './modules';
 
 const RedisStore = connect_redis(expressSession);
 
@@ -44,6 +43,7 @@ app.use(steam.middleware({
 app.use(routing);
 
 // Error handling middleware
+// tslint:disable-next-line:max-line-length
 app.use(async (e: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
   await handleError(e);
   next(e);

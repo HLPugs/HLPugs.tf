@@ -1,9 +1,10 @@
 import { Request }              from 'express';
 import db                       from '../database/db';
 import { getActivePunishments } from './punishments';
-import { punishment }           from '../common/types';
 import { QueryResult }          from 'pg';
 import logger                   from './logger';
+import { Player }               from './structures/player';
+import { Punishment }           from './structures/punishment';
 
 declare module 'express' {
   export interface Request {
@@ -24,14 +25,7 @@ export async function loginUser(req: Request): Promise<void> {
   const ip = req.headers['x-forwarded-for'];
 
   // Create template
-  req.session.user = {
-    steamid,
-    avatar,
-    captain: false,
-    alias: '',
-    punishments: {},
-    roles: {},
-  };
+  req.session.user = new Player(steamid, avatar);
 
   // Insert player into database, or at the very least, update their IP if possible
   const query1 = {
@@ -42,7 +36,7 @@ export async function loginUser(req: Request): Promise<void> {
     values: [steamid, avatar],
   };
 
-  	// Returns alias, captain and roles
+  	// Retrieve
   	const res: QueryResult = await db.query(query1);
   	const { alias, captain, roles } = res.rows[0];
 
@@ -52,12 +46,12 @@ export async function loginUser(req: Request): Promise<void> {
 	    req.session.user.alias = alias;
     	req.session.user.roles = roles || {};
 	    req.session.user.captain = captain;
-	    
+
 	    // Fetch player's punishments
 	    const punishments = await getActivePunishments(steamid);
-	    punishments.map((x: punishment) => req.session.user.punishments[x.punishment] = x.data);
-	    
+	    punishments.map((x: Punishment) => req.session.user.punishments[x.punishment] = x.data);
+
 	    // Log the login
-	    logger.info(`${alias} logged in`, {steamid});
+	    logger.info(`${alias} logged in`, { steamid });
 	  }
 }

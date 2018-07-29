@@ -31,23 +31,3 @@ export interface steamUserAPI {
     locstatecode: string;
   };
 }
-
-export interface punishment{
-  punishment: string;
-  data: {
-    expiration: string,
-    issued_on: string,
-    creator: string,
-    steamid: string,
-    reason: string,
-  };
-}
-
-export interface player {
-  steamid: string;
-  avatar: string;
-  captain: boolean;
-  roles: object;
-  punishments: boolean;
-  alias: string;
-}
