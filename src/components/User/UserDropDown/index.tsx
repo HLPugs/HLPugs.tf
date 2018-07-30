@@ -14,7 +14,7 @@ class UserDropDown extends React.Component<UserDropDownProps, {}> {
     return(
       <ul id="UserDropDown">
         <li>
-          <Link to={`/player/${this.props.steamid}`}>
+          <Link target="blank" to={`/player/${this.props.steamid}`}>
             <FontAwesomeIcon icon="user"/>
             Profile
           </Link>

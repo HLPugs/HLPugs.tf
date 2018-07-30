@@ -62,6 +62,7 @@ class Home extends React.Component<HomeProps, HomeState> {
                     socket={this.props.socket}
                     classes={this.props.configuration.classes}
                     settingsOnClick={this.toggleSettings}
+                    userAlias={this.props.user.alias}
                 />
                 {this.AliasModal()}
             </div>
