@@ -1,9 +1,9 @@
 import { Router, Request, Response } from 'express';
 import * as config                   from 'config';
-import { steamUser }                 from '../common/types';
 import * as steam                    from 'steam-login';
 import { loginUser }                 from './login';
 import { handleError }               from './errorHandler';
+import { steamUser }                 from '../structures/steamUser';
 
 const router: Router = Router();
 

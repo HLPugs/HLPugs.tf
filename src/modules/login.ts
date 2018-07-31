@@ -15,7 +15,7 @@ declare module 'express' {
 /**
  *
  * @param {e.Request} req
- * @returns {Promise<void>} Completes after login data is set in DB and Node
+ * @returns {Promise<void>} Completes after necessary login data is set in the database and session
  */
 export async function loginUser(req: Request): Promise<void> {
 
@@ -24,12 +24,12 @@ export async function loginUser(req: Request): Promise<void> {
   const avatar = req.user.avatar.medium;
   const ip = req.headers['x-forwarded-for'];
 
-  // Create template
+  // Assign the player's session as an instance of player
   req.session.user = new player(steamid, avatar);
 
   // Insert player into database, or at the very least, update their IP
   // TODO Insert / Update IP
-  const query1 = {
+  const query = {
     text: `INSERT INTO players (steamid, avatar)
            VALUES ($1, $2)
            ON CONFLICT (steamid) DO UPDATE SET avatar = $2
@@ -38,12 +38,12 @@ export async function loginUser(req: Request): Promise<void> {
   };
 
   	// Retrieve alias, captain and roles
-  	const res: QueryResult = await db.query(query1);
+  	const res: QueryResult = await db.query(query);
   	const { alias, captain, roles } = res.rows[0];
 
 	  // Only spend time grabbing punishments if user exists
 	  if (alias !== null) {
-	    // Set player's session
+	    // Set player'announcements session
 	    req.session.user.alias     = alias;
     	req.session.user.roles     = roles;
 	    req.session.user.isCaptain = captain;

@@ -5,9 +5,9 @@ import { punishment }       from './punishment';
 /**
  * Describes a player.
  * @typedef player
- * @property {string} steamid - The player's SteamID.
- * @property {URL} avatar - The link to the player's Steam avatar
- * @property {string} alias - The player's unique custom alias on the site.
+ * @property {string} steamid - The player'announcements SteamID.
+ * @property {URL} avatar - The link to the player'announcements Steam avatar
+ * @property {string} alias - The player'announcements unique custom alias on the site.
  * @property {number} pugs - The number of pugs the player has played.
  * @property {number} wins - The number of pugs the player has won.
  * @property {number} losses - The number of pugs the player has lost.
@@ -34,9 +34,9 @@ export class player {
 
   /**
    * Creates a new player object.
-   * @param {string} steamid - The player's SteamID
-   * @param {URL} avatar - The link to the player's Steam avatar.
-   * @param {string} alias The player's unique custom alias on the site
+   * @param {string} steamid - The player'announcements SteamID
+   * @param {URL} avatar - The link to the player'announcements Steam avatar.
+   * @param {string} alias The player'announcements unique custom alias on the site
    */
   constructor(steamid: string, avatar: URL, alias?: string) {
     this.steamid = steamid;

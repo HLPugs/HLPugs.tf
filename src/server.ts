@@ -8,9 +8,12 @@ import * as uuid                         from 'uuid';
 import { Server }                        from 'http';
 import { routing, sockets, handleError } from './modules';
 
-const RedisStore = connect_redis(expressSession);
+export const store = process.env.NODE_ENV === 'production' ?
+	connect_redis(expressSession) :
+	new expressSession.MemoryStore();
 
 const sessionConfig = expressSession({
+  store,
   genid(req) {
     return crypto.createHash('sha256')
         .update(uuid.v1())

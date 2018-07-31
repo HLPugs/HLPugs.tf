@@ -9,7 +9,7 @@ import { punishment }  from '../structures/punishment';
  */
 export async function getActivePunishments(steamid: string): Promise<punishment[]> {
 
-  // Retrieve punishment reason, expiration, creator's SteamID and avatar for all active punishments
+  // Retrieve punishment reason, expiration, and creator's SteamID and avatar for all active punishments
   const query = {
     text: `SELECT
     punishment

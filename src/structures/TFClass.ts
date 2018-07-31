@@ -6,8 +6,8 @@ export type TFClassReadable = string | number;
 /**
  * Describes a TF2 class.
  * @typedef TFClass
- * @property {number} id - The class's unique ID.
- * @property {string} name - The class's unique name.
+ * @property {number} id - The class'announcements unique ID.
+ * @property {string} name - The class'announcements unique name.
  */
 export class TFClass {
   id: number;

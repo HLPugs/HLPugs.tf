@@ -3,7 +3,7 @@ import { Team } from './team';
 /**
  * Describes a pug match.
  * @typedef pug
- * @property {number} id - The pug's unique id.
+ * @property {number} id - The pug'announcements unique id.
  * @property {string} map - The map played in the pug.
  * @property {number} winningTeam - The index of the team that won in the teams array.
  * @property {Date} timestamp - The timestamp of when the pug was started.
@@ -20,7 +20,7 @@ export class pug {
 
     /**
      * Creates a new pug object.
-     * @param {number} id - The pug's unique ID.
+     * @param {number} id - The pug'announcements unique ID.
      * @param {string} map - The map that was/is being played in the pug.
      * @param {Team[]} teams - The 2 teams participating in the pug.
      */
