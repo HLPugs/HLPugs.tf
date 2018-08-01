@@ -42,7 +42,8 @@ After customizing/developing your changes, you can deploy Payload to a static we
 - [Emoji Mart](https://github.com/missive/emoji-mart) - Emoji picker
 
 ## Authors
-- **Nicell** - Main Developer and Designer
+- [**Nicell**](https://github.com/nicell) - Main Developer and Designer
+- [**Kala**](https://github.com/kalasalad) - UI/UX Contributor
 
 See the [contributors](https://github.com/HLPugs/Payload/contributors) page for more people who've helped with the project.
 
