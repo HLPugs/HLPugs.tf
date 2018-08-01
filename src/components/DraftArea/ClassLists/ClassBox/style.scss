@@ -24,12 +24,13 @@
         align-items: center;
         justify-content: space-between;
         border-radius: 4px 4px 0px 0px;
+        padding-left: 3px;
+        padding-right: 6px;
 
         span {
             font-size: 18px;
 
             &.classIcon {
-                padding-left: 3px;
                 position: relative;
                 top: 1px;
 
@@ -58,7 +59,6 @@
         .classCheckbox {
             width: 22px;
             height: 22px;
-            margin-right: 6px;
             border-radius: 4px;
             box-shadow: var(--paper-1);
             background: var(--font-color);
@@ -66,6 +66,7 @@
             overflow: hidden;
             transition: all .2s ease;
             flex-shrink: 0;
+            user-select: none;
 
             &:hover {
                 box-shadow: var(--paper-2);

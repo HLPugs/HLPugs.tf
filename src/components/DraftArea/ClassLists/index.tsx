@@ -6,6 +6,7 @@ import './style.css';
 interface ClassListsProps {
   socket: SocketIOClient.Socket;
   classes: TfClass[];
+  steamid?: string;
 }
 
 class DraftArea extends React.Component<ClassListsProps, {}> {
@@ -13,7 +14,7 @@ class DraftArea extends React.Component<ClassListsProps, {}> {
     return (
       <div id="classList">
         {this.props.classes.map((tfclass: TfClass) => 
-          <ClassBox properties={tfclass} key={tfclass.name} socket={this.props.socket} />
+          <ClassBox properties={tfclass} key={tfclass.name} socket={this.props.socket} steamid={this.props.steamid} />
         )}
       </div>
     );

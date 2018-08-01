@@ -17,7 +17,10 @@ class User extends React.Component<UserProps, {}> {
       return (
         <div id="User">
           <UserInfo alias={this.props.user.alias} avatar={this.props.user.avatar} />
-          <UserDropDown steamid={this.props.user.steamid} settingsOnClick={this.props.settingsOnClick} />
+          <UserDropDown
+            steamid={this.props.user.steamid}
+            settingsOnClick={this.props.settingsOnClick}
+          />
         </div>
       );
     } else if (this.props.user.loggedIn === false) {
