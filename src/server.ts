@@ -10,7 +10,7 @@ import { routing, sockets, handleError } from './modules';
 
 export const store = process.env.NODE_ENV === 'production' ?
 	connect_redis(expressSession) :
-	new expressSession.MemoryStore();
+  new expressSession.MemoryStore();
 
 const sessionConfig = expressSession({
   store,
@@ -53,9 +53,9 @@ app.use(async (e: Error, req: express.Request, res: express.Response, next: expr
 });
 
 process.on('uncaughtException', (e) => {
-  	// TODO Pass relevant data to handleError
-  	handleError(e);
-  	process.exit(1);
+  // TODO Pass relevant data to handleError
+  handleError(e);
+  process.exit(1);
 });
 
 process.on('unhandledRejection', (reason, p) => {

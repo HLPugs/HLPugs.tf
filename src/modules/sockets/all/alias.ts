@@ -24,7 +24,7 @@ export const alias = (io: Server) => {
       const res2 = await db.query(query);
       if (!res2.rows[0]) return; // Exits function if alias didn't update in the database
       socket.request.session.user.alias = alias;
-      socket.request.session.save((err: any) => console.log(err));
+      socket.request.session.save((err: any) => err ? console.log(err) : null);
 
       const user = {
         loggedIn: true,

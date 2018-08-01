@@ -120,5 +120,8 @@
       "webhooks": {
         "channel-name": "webhook-url"
     }
+  },
+  "winston": {
+    "logDirectory": "src/logs"
   }
 }

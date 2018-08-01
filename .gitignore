@@ -5,7 +5,7 @@ dist/**/*
 node_modules
 
 # Don't expose sensitive data
-/config/default.json
+config/default.json
 
 # Webstorm files
 .idea
@@ -14,4 +14,7 @@ node_modules
 /.vs/
 
 # Logs
-/logs/*
+src/logs/*
+
+# Keep Logs folder
+!src/logs/.gitkeep

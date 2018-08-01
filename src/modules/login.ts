@@ -26,6 +26,7 @@ export async function loginUser(req: Request): Promise<void> {
 
   // Assign the player's session as an instance of player
   req.session.user = new player(steamid, avatar);
+  req.session.sockets = [];
 
   // Insert player into database, or at the very least, update their IP
   // TODO Insert / Update IP
@@ -37,22 +38,22 @@ export async function loginUser(req: Request): Promise<void> {
     values: [steamid, avatar],
   };
 
-  	// Retrieve alias, captain and roles
-  	const res: QueryResult = await db.query(query);
-  	const { alias, captain, roles } = res.rows[0];
+  // Retrieve alias, captain and roles
+  const res: QueryResult = await db.query(query);
+  const { alias, captain, roles } = res.rows[0];
 
-	  // Only spend time grabbing punishments if user exists
-	  if (alias !== null) {
-	    // Set player'announcements session
-	    req.session.user.alias     = alias;
-    	req.session.user.roles     = roles;
-	    req.session.user.isCaptain = captain;
+  // Only spend time grabbing punishments if user exists
+  if (alias !== null) {
+    // Set player'announcements session
+    req.session.user.alias     = alias;
+    req.session.user.roles     = roles;
+    req.session.user.isCaptain = captain;
 
-	    // Fetch player's punishments
-	    const punishments = await getActivePunishments(steamid);
-	    punishments.map((x: punishment) => req.session.user.punishments[x.punishment] = x.data);
+    // Fetch player's punishments
+    const punishments = await getActivePunishments(steamid);
+    punishments.map((x: punishment) => req.session.user.punishments[x.punishment] = x.data);
 
-	    // Log the login
-	    logger.info(`${alias} logged in`, { steamid });
-	  }
+    // Log the login
+    logger.info(`${alias} logged in`, { steamid });
+  }
 }
