@@ -8,6 +8,7 @@ import './style.css';
 interface DraftAreaProps {
   socket: SocketIOClient.Socket;
   classes: TfClass[];
+  steamid?: string;
 }
 
 class DraftArea extends React.Component<DraftAreaProps, {}> {
@@ -16,7 +17,7 @@ class DraftArea extends React.Component<DraftAreaProps, {}> {
       <main>
         <Announcements socket={this.props.socket} />
         <DraftState socket={this.props.socket} />
-        <ClassLists classes={this.props.classes} socket={this.props.socket} />
+        <ClassLists classes={this.props.classes} socket={this.props.socket} steamid={this.props.steamid} />
       </main>
     );
   }

@@ -9,6 +9,7 @@ interface SettingsProps {
     visibility: boolean;
     settingsOnClick: Function;
     classes: TfClass[];
+    userAlias?: string;
 }
 
 class Settings extends React.Component<SettingsProps, {}> {
@@ -73,6 +74,17 @@ class Settings extends React.Component<SettingsProps, {}> {
                                 <span className="hintText">
                                     Changes sounds that play on the site such as during ready-up phase, etc.
                                 </span>
+                            </div>
+                        </div>
+                        <div className="settingsSection">
+                            <div className="settingsTitle">
+                                Chat
+                            </div>
+                            <div className="settingsBody">
+                                <input id="chatPings" type="checkbox" />
+                                <label htmlFor="chatPings">
+                                    Enable chat notifications when someone types @{this.props.userAlias}
+                                </label>
                             </div>
                         </div>
                         <div className="settingsButtons">

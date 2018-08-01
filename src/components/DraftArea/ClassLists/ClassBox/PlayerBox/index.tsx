@@ -2,34 +2,29 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './style.css';
+import { PlayerDataConsumer } from '../../../../../pages/Home';
 
 interface PlayerBoxProps {
-    name: string;
-    profilePicture: string;
-    captain: boolean;
-    id: string;
+    steamid: string;
 }
 
 class PlayerBox extends React.Component<PlayerBoxProps, {}> {
-    playerStar = () => {
-        if (this.props.captain) {
-            return (
-                <div className="captainStar">
-                    <FontAwesomeIcon icon="star" />
-                </div>
-            );
-        }
-
-        return null;
-    }
-
     render() {
         return  (
-            <Link to={`/player/${this.props.id}`} target="blank" className="player">
-                <div className="playerIcon" style={{backgroundImage: this.props.profilePicture}} />
-                <div className="playerName">{this.props.name}</div>
-                {this.playerStar()}
-            </Link>
+            <PlayerDataConsumer>
+                {playerData => playerData && (
+                    <Link to={`/player/${this.props.steamid}`} target="blank" className="player">
+                        <div
+                            className="playerIcon"
+                            style={{ backgroundImage: `url(${playerData[this.props.steamid].avatar})`}}
+                        />
+                        <div className="playerName">{playerData[this.props.steamid].alias}</div>
+                        <div className="captainStar">
+                            <FontAwesomeIcon icon="star" />
+                        </div>
+                    </Link>
+                )}
+            </PlayerDataConsumer>
         );
     }
 }
