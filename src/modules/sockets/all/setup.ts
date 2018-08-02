@@ -1,6 +1,7 @@
-import * as config from 'config';
-import { Server }  from 'socket.io';
-import * as playerMap from '../../playerMap';
+import * as config      from 'config';
+import { Server }       from 'socket.io';
+import * as playerMap   from '../../playerMap';
+import { DraftTFClass } from '../../../structures/draftClassList';
 
 export const setup = (io: Server) => {
   io.on('connection', async (socket) => {
@@ -32,7 +33,9 @@ export const setup = (io: Server) => {
       // Add new socket to session socket list
       if (socket.request.session.sockets !== undefined) {
         socket.request.session.sockets.push(socket.id);
-        socket.request.session.save((err: any) => err ? console.log(err) : null);
+        socket.request.session.save((e: any) => {
+		  if (e) throw e;
+        });
         if (socket.request.session.sockets.length === 1) {
           playerMap.addPlayer(socket.request.session.id, socket.request.session.user.steamid);
           socket.emit('addPlayerToData', await playerMap.getPlayer(socket.request.session.user.steamid));
@@ -42,32 +45,26 @@ export const setup = (io: Server) => {
 
     socket.on('disconnect', () => {
       if (socket.request.session && socket.request.session.sockets !== undefined) {
-        socket.request.session.reload((err: any) => {
-          err ? console.log(err) : null;
+        socket.request.session.reload((e: any) => {
+          if (e !== undefined) throw e;
 
           const socketIndex = socket.request.session.sockets.indexOf(socket.id);
 
           if (socketIndex >= 0) {
             socket.request.session.sockets.splice(socketIndex, 1);
-            socket.request.session.save((err: any) => err ? console.log(err) : null);
+            socket.request.session.save((e: Error) => { if (e !== undefined) { throw e; } });
 
             if (socket.request.session.sockets.length === 0) {
               // TODO: remove user from all class lists
               playerMap.removePlayer(socket.request.session.user.steamid);
               socket.emit('removePlayerFromData', socket.request.session.user.steamid);
 
-              interface TfClass {
-                name: string;
-                amountPerTeam: number;
-              }
+              playerMap.removePlayerAllDraftTFClasses(socket.request.session.user.steamid);
 
-              playerMap.removePlayerAllTfClasses(socket.request.session.user.steamid);
-
-              const tfClasses: TfClass[] = config.get('app.configuration.classes');
-
-              for (const tfClass of tfClasses) {
-                io.emit('removeFromTfClass', tfClass.name, socket.request.session.user.steamid);
-              }
+              const draftTFClasses: DraftTFClass[] = config.get('app.configuration.classes');
+              draftTFClasses.map((draftTFClass) => {
+                io.emit('removeFromDraftTFClass', draftTFClass, socket.request.session.user.steamid);
+			  });
             }
           }
         });

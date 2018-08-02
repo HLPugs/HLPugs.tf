@@ -1,7 +1,7 @@
 import { player } from './player';
 
 /**
- * An object that maps {@link player} objects to a {@link TFClass} name.
+ * An object that maps {@link player} objects to a {@link draftTFClass} name.
  * @typedef playerTFClassMap
  */
 export class playerTFClassMap {

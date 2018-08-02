@@ -17,7 +17,7 @@ declare module 'express' {
  * @param {e.Request} req
  * @returns {Promise<void>} Completes after necessary login data is set in the database and session
  */
-export async function loginUser(req: Request): Promise<void> {
+export const loginUser = async(req: Request): Promise<void> => {
 
   // Arrange data from login
   const steamid = req.user.steamid;
@@ -56,4 +56,4 @@ export async function loginUser(req: Request): Promise<void> {
     // Log the login
     logger.info(`${alias} logged in`, { steamid });
   }
-}
+};

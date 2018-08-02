@@ -7,7 +7,7 @@ import { punishment }  from '../structures/punishment';
  * @param {string} steamid The player to request the punishment information from
  * @returns {Promise<object>} Ban reason, expiration, and creator's SteamID and steam avatar
  */
-export async function getActivePunishments(steamid: string): Promise<punishment[]> {
+export const getActivePunishments = async(steamid: string): Promise<punishment[]> => {
 
   // Retrieve punishment reason, expiration, and creator's SteamID and avatar for all active punishments
   const query = {
@@ -39,4 +39,4 @@ export async function getActivePunishments(steamid: string): Promise<punishment[
 
   // Exclude inactive punishments
   return punishments.filter((x: punishment) => new Date(x.data.expiration) > new Date());
-}
+};

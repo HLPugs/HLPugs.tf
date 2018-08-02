@@ -9,9 +9,9 @@ export type TeamColor = string | number;
 /**
  * Describes a team.
  * @typedef Team
- * @property {player} captain - The team'announcements captain.
- * @property {number} score - The team'announcements score.
- * @property {TeamColor} color - The team'announcements color. Either RED or BLU.
+ * @property {player} captain - The team's captain.
+ * @property {number} score - The team's score.
+ * @property {TeamColor} color - The team's color. Either RED or BLU.
  * @property {playerTFClassMap} classes - A {@Link PlayerTFClassMap} that matches
  * players to their respective classes.
  */
@@ -23,11 +23,11 @@ export class Team {
 
     /**
      * Creates a new Team object.
-     * @param {player} captain - The team'announcements captain.
-     * @param {TeamColor} color - The team'announcements color. Either RED or BLU.
+     * @param {player} captain - The team's captain.
+     * @param {TeamColor} color - The team's color. Either RED or BLU.
      * @param {playerTFClassMap} classes - A playerTFClassMap that matches players to their
      *     respective classes.
-     * @param {number} [score=0] - The team'announcements score.
+     * @param {number} [score=0] - The team's score.
      */
   constructor(captain: player, color: TeamColor, classes: playerTFClassMap, score: number = 0) {
     this.captain = captain;

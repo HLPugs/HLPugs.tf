@@ -1,7 +1,8 @@
-import { store }  from '../server';
-import { player } from '../structures/player';
-import * as config from 'config';
-import { resolve } from 'url';
+import { store }                          from '../server';
+import * as config                        from 'config';
+import { DraftTFClass, DraftTFClassList } from '../structures/draftClassList';
+import { player }                         from '../structures/player';
+import logger                             from './logger';
 
 /**
  * @module playerMap
@@ -9,24 +10,29 @@ import { resolve } from 'url';
  * in a collection referenced by their SteamID
  */
 
+// Declare player map and draft class list
 const players = new Map<string, string>();
+const draftTFClassLists = new Map<DraftTFClass, string[]>();
+
+// Load the gamemode-specific class configuration
+const draftTFClasses: DraftTFClassList[] = config.get('app.configuration.classes');
+
+// Empty out every class in the draft class list
+draftTFClasses.map(draftTFClass => draftTFClassLists.set(draftTFClass.name, []));
 
 /**
- * Retrieves a session ID from the map using a class.
+ * Retrieves a session ID from the map using a SteamID.
  * @param {string} steamid - The player to retrieve.
- * @returns {string} - The player that was found, or false if not any.
+ * @returns {Promise<player>} - The {@Link player}.
  */
-export const getPlayer = (steamid: string) => {
+export const getPlayer = (steamid: string): Promise<player> => {
   return new Promise((resolve) => {
     if (!players.has(steamid)) {
-      throw new Error(`Player (${steamid}) was requested from the player map but was not found`);
+      logger.warn(`Player (${steamid}) was requested from the player map but was not found`);
     }
     const sessionid = players.get(steamid);
     store.get(sessionid, (err, session) => {
-      if (err) {
-        throw err;
-      }
-
+      if (err) throw err;
       resolve(session.user);
     });
   });
@@ -61,45 +67,54 @@ export const getAllPlayers = () => {
   });
 };
 
-// Begin TFClass items
-
-interface TfClassLists {
-  [prop: string]: string[];
-}
-
-interface TfClass {
-  name: string;
-  amountPerTeam: number;
-}
-
-const tfClassLists: TfClassLists = {};
-
-const tfClasses: TfClass[] = config.get('app.configuration.classes');
-
-for (const tfClass of tfClasses) {
-  tfClassLists[tfClass.name] = [];
-}
-
-export const addPlayerTfClass = (steamid: string, tfClass: string) => {
-  if (tfClassLists[tfClass].indexOf(steamid) === -1) {
-    tfClassLists[tfClass].push(steamid);
+/**
+ * Adds a player to a class
+ * @param {string} steamid - The SteamID of the player to add
+ * @param {string} draftTFClass - The class to be added on
+ */
+export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: DraftTFClass) => {
+  // Ensure player isn't already added up to the class
+  if (draftTFClassLists.get(draftTFClass).indexOf(steamid) === -1) {
+    draftTFClassLists.get(draftTFClass).push(steamid);
+    const player: player = await getPlayer(steamid);
+    logger.info(`${player.alias} added to ${draftTFClass}!`);
   }
 };
 
-export const removePlayerTfClass = (steamid: string, tfClass: string) => {
-  const indexOfPlayer = tfClassLists[tfClass].indexOf(steamid);
+/**
+ * Removes a player from a class
+ * @param {string} steamid - The SteamID of the player to remove
+ * @param {string} draftTFClass - The class to be removed from
+ */
+export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: DraftTFClass) => {
+  logger.info(`removed removed from ${draftTFClass}`);
+  const indexOfPlayer = draftTFClassLists
+	  .get(draftTFClass)
+	  .indexOf(steamid);
 
   if (indexOfPlayer >= 0) {
-    tfClassLists[tfClass].splice(indexOfPlayer, 1);
+    draftTFClassLists
+		.get(draftTFClass)
+		.splice(indexOfPlayer, 1);
+
+    const player: player = await getPlayer(steamid);
+    logger.info(`${player.alias} removed from ${draftTFClass}`);
   }
 };
 
-export const removePlayerAllTfClasses = (steamid: string) => {
-  for (const tfClass of tfClasses) {
-    removePlayerTfClass(steamid, tfClass.name);
-  }
+/**
+ * Removes a player from all classes
+ * @param {string} steamid - The SteamID of the player to be removed from all classes
+ */
+export const removePlayerAllDraftTFClasses = (steamid: string) => {
+  draftTFClasses.map(draftTFClassList => removePlayerDraftTFClass(steamid, draftTFClassList.name));
 };
 
-export const getAllPlayersTfClass = (tfClass: string) => {
-  return tfClassLists[tfClass];
+/**
+ * Returns every player added to a class
+ * @param {DraftTFClass} draftTFClass
+ * @returns {string[]} An array of the added players SteamIDs as strings
+ */
+export const getAllPlayersDraftTFClass = (draftTFClass: DraftTFClass): string[] => {
+  return draftTFClassLists.get(draftTFClass);
 };
