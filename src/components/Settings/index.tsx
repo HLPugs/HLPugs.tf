@@ -1,14 +1,14 @@
-import * as React from 'react';
+import * as React                         from 'react';
 import './style.css';
-import { TfClass } from '../../common/types';
-import ClassIcon from '../ClassIcon';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { DraftTFClassList }               from '../../common/types';
+import ClassIcon                          from '../ClassIcon';
+import { FontAwesomeIcon }                from '@fortawesome/react-fontawesome';
 
 interface SettingsProps {
     socket: SocketIOClient.Socket;
     visibility: boolean;
     settingsOnClick: Function;
-    classes: TfClass[];
+    classes: DraftTFClassList[];
     userAlias?: string;
 }
 
@@ -34,11 +34,11 @@ class Settings extends React.Component<SettingsProps, {}> {
                             </div>
                             <div className="settingsBody">
                                 <div className="favClassesHolder">
-                                    {this.props.classes.map((tfclass: TfClass, index) => {
+                                    {this.props.classes.map((tfclass: DraftTFClassList, index) => {
                                         return (
                                             <div className="favClass" key={index}>
                                                 <ClassIcon name={tfclass.name} />
-                                                <label htmlFor={`${tfclass.name}Check`}>{tfclass.name}</label>
+                                                <label htmlFor={`${tfclass}Check`}>{tfclass.name}</label>
                                                 <input id={`${tfclass.name}Check`} type="checkbox" />
                                                 <label htmlFor={`${tfclass.name}Check`} />
                                             </div>

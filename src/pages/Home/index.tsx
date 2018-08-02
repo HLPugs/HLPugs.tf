@@ -95,10 +95,10 @@ class Home extends React.Component<HomeProps, HomeState> {
         return (
             <div id="Home">
                 <PlayerDataProvider value={this.state.playerData}>
-                    <Header 
-                        siteName={this.props.configuration.branding.siteName} 
+                    <Header
+                        siteName={this.props.configuration.branding.siteName}
                         siteSubTitle={this.props.configuration.branding.siteSubTitle}
-                        logoPath={this.props.configuration.branding.logoPath} 
+                        logoPath={this.props.configuration.branding.logoPath}
                     />
                     <User user={this.props.user} settingsOnClick={this.toggleSettings} />
                     <Navigation navigationGroup={this.props.configuration.navigation} />

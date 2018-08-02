@@ -1,13 +1,13 @@
-import * as React from 'react';
-import ClassLists from './ClassLists';
-import DraftState from './DraftState';
-import Announcements from './Announcements';
-import { TfClass } from '../../common/types';
+import * as React                         from 'react';
+import ClassLists                         from './ClassLists';
+import DraftState                         from './DraftState';
+import Announcements                      from './Announcements';
+import { DraftTFClassList }               from '../../common/types';
 import './style.css';
 
 interface DraftAreaProps {
   socket: SocketIOClient.Socket;
-  classes: TfClass[];
+  classes: DraftTFClassList[];
   steamid?: string;
 }
 

@@ -41,17 +41,17 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
         });
 
         window.setTimeout(
-            () => { 
-                this.setState({ index: newIndex, transitioning: false }); 
-            }, 
+            () => {
+                this.setState({ index: newIndex, transitioning: false });
+            },
             250
         );
     }
 
     render() {
         return (
-            <div 
-                id="announcementsHolder" 
+            <div
+                id="announcementsHolder"
                 onClick={() => {this.cycleAnnouncements(); clearInterval(this.announcementsTimer); }}
             >
                 <div id="announcementIcon">

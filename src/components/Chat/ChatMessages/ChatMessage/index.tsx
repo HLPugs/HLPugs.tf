@@ -23,7 +23,7 @@ interface ChatMessageProps {
 
 class ChatMessage extends React.Component<ChatMessageType & ChatMessageProps, {}> {
     renderMessage = (message: string, id: string) => {
-        let colonsRegex = new RegExp('(^|\\s)(\:[a-zA-Z0-9-_+]+\:(\:skin-tone-[2-6]\:)?)', 'g');
+        let colonsRegex = new RegExp('(^|\\announcements)(\:[a-zA-Z0-9-_+]+\:(\:skin-tone-[2-6]\:)?)', 'g');
 
         let match;
         let emojis: MessageElement[] = [];
@@ -90,14 +90,14 @@ class ChatMessage extends React.Component<ChatMessageType & ChatMessageProps, {}
 
         return elements.map((element: MessageElement, index: number) => {
             if (element.name) {
-                return ( 
+                return (
                     <Emoji emoji={element.name} size={20} set="twitter" sheetSize={32} tooltip={true} key={index} />
                 );
             } else if (element.customName) {
                 return (
-                    <span 
-                        title={element.customName.slice(1, element.customName.length - 1)} 
-                        className="emoji-mart-emoji" 
+                    <span
+                        title={element.customName.slice(1, element.customName.length - 1)}
+                        className="emoji-mart-emoji"
                         key={index}
                     >
                         <span className="customEmoji" style={{backgroundImage: `url(${element.url})`}} />
