@@ -2,52 +2,58 @@ import * as React from 'react';
 import './style.css';
 
 interface LoadingMessage {
-    message: string;
-    timeout: number;
+  message: string;
+  timeout: number;
 }
 
 interface LoadingProps {
-    loadingMessages: LoadingMessage[];
+  loadingMessages: LoadingMessage[];
 }
 
 interface LoadingState {
-    loadingMessage: string;
+  loadingMessage: string;
 }
 
 class Loading extends React.Component<LoadingProps, LoadingState> {
-    constructor(props: LoadingProps) {
-        super(props);
+  messageTimeouts: number[];
 
-        for (const loadingMessage of this.props.loadingMessages) {
-            setTimeout(
-                () => {
-                    this.setState({
-                        loadingMessage: loadingMessage.message
-                    });
-                },
-                loadingMessage.timeout * 1000
-            );
-        }
+  constructor(props: LoadingProps) {
+    super(props);
 
-        this.state = {
-            loadingMessage: ''
-        };
-    }
+    this.messageTimeouts = this.props.loadingMessages.map(loadingMessage =>
+      window.setTimeout(
+        () => {
+          this.setState({
+            loadingMessage: loadingMessage.message
+          });
+        },
+        loadingMessage.timeout * 1000
+      )
+    );
 
-    render() {
-        return (
-            <div id="loadingHolder">
-                <div id="loadingDots">
-                    <div className="loadingDot"/>
-                    <div className="loadingDot" style={{ animationDelay: '.1s' }}/>
-                    <div className="loadingDot" style={{ animationDelay: '.2s' }} />
-                </div>
-                <div id="loadingDescription">
-                    {this.state.loadingMessage}
-                </div>
-            </div>
-        );
-    }
+    this.state = {
+      loadingMessage: ''
+    };
+  }
+
+  componentWillUnmount() {
+    this.messageTimeouts.forEach(clearTimeout);
+  }
+
+  render() {
+    return (
+      <div id="loadingHolder">
+        <div id="loadingDots">
+          <div className="loadingDot" />
+          <div className="loadingDot" style={{ animationDelay: '.1s' }} />
+          <div className="loadingDot" style={{ animationDelay: '.2s' }} />
+        </div>
+        <div id="loadingDescription">
+          {this.state.loadingMessage}
+        </div>
+      </div>
+    );
+  }
 }
 
 export default Loading;

@@ -24,3 +24,6 @@ yarn-error.log*
 
 # Jetbrains IDEs
 .idea/
+
+# VSCode Workspace files
+.vscode/

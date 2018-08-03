@@ -6,10 +6,7 @@ import './style.css';
 
 class HeaderBranding extends React.Component<SiteBranding, {}> {
   render() {
-    
-    if (!this.props.siteName || !this.props.siteSubTitle) {
-      return null;
-    }
+    if (!this.props.siteName || !this.props.siteSubTitle) { return null; }
     
     return (
       <div id="HeaderBranding">
