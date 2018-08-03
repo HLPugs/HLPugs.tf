@@ -15,15 +15,15 @@ const SearchEmojis = (fragment: string, input: React.RefObject<HTMLTextAreaEleme
         };
     }
 
-    const customExact: CompletionItem[] = customEmojis
-    .filter(e => e.short_names[0].substring(0, query.length) === query)
-        .map(e => (
-            {
-                customName: e.short_names[0],
-                url: e.imageUrl,
-            }
-        )
-    );
+    const customExact: CompletionItem[] = 
+        customEmojis.filter(e => e.short_names[0].substring(0, query.length) === query)
+            .map(e => (
+                {
+                    customName: e.short_names[0],
+                    url: e.imageUrl,
+                }
+            )
+        );
 
     const allExact: CompletionItem[] = allEmojisList.filter((e: string) => e.substring(0, query.length) === query)
         .map((e: string) => ({ name: e })
