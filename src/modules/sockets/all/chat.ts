@@ -14,9 +14,9 @@ let messageHistory: messageObjectType[] = [];
 
 export const chat = (io: Server) => {
   io.on('connection', (socket) => {
-    socket.on('sendMessage', async (message: string) => {
+    socket.on('sendMessage', (message: string) => {
       // Make sure session is updated from other sockets' activities
-      await socket.request.session.reload((err: any) => {
+      socket.request.session.reload((err: any) => {
         err ? console.log(err) : null;
 
         if (Date.now() - socket.request.session.lastMessageSentTimestamp < 1000) return;
@@ -24,7 +24,7 @@ export const chat = (io: Server) => {
         if (message.length && message.length <= 300 && socket.request.session.user.alias) {
           const messageObject: messageObjectType = {
             message,
-            username: socket.request.session.user.alias, // Placeholder waiting for names
+            username: socket.request.session.user.alias,
             userid: socket.request.session.user.steamid,
             id: uuid(),
             timestamp: new Date().getTime(),

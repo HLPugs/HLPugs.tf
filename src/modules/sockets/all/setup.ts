@@ -64,7 +64,7 @@ export const setup = (io: Server) => {
               const draftTFClasses: DraftTFClass[] = config.get('app.configuration.classes');
               draftTFClasses.map((draftTFClass) => {
                 io.emit('removeFromDraftTFClass', draftTFClass, socket.request.session.user.steamid);
-			  });
+			        });
             }
           }
         });
