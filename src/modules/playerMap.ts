@@ -87,7 +87,6 @@ export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: Draft
  * @param {string} draftTFClass - The class to be removed from
  */
 export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: DraftTFClass) => {
-  logger.info(`removed removed from ${draftTFClass}`);
   const indexOfPlayer = draftTFClassLists
 	  .get(draftTFClass)
 	  .indexOf(steamid);
