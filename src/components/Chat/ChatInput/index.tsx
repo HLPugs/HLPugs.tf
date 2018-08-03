@@ -41,180 +41,154 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
         };
     }
 
-    togglePicker = () => {
-        if (this.state.toggleWaitComplete) {
-            this.setState({
-                pickerToggle: !this.state.pickerToggle,
-                toggleWaitComplete: false
-            });
+    addEmoji = (emoji: EmojiData) => {
+        if (!this.messageInput.current) { return; }
 
-            window.setTimeout(
-                () => {
-                    this.setState({
-                        toggleWaitComplete: true
-                    });
-                }, 
-                200
-            );
+        let prefix = '';
+
+        if (this.messageInput.current.value) {
+            if (this.messageInput.current.value.substring(this.messageInput.current.value.length - 1) !== ' ') {
+                // if last character in message isn't a space, put one before the emoji
+                prefix = ' ';
+            }
         }
+
+        this.messageInput.current.value += `${prefix}${emoji.colons} `;
+
+        this.handleChange();
+
+        this.setState({
+            pickerToggle: false
+        });
+
+        this.messageInput.current.focus();
     }
 
-    addEmoji = (emoji: EmojiData) => {
-        if (this.messageInput.current) {
-            let prefix = '';
+    executeCompletion = (index: number) => {
+        if (!this.messageInput.current) { return; }
 
-            if (this.messageInput.current.value) {
-                if (this.messageInput.current.value.substring(this.messageInput.current.value.length - 1) !== ' ') {
-                    // if last character in message isn't a space, put one before the emoji
-                    prefix = ' ';
-                }
-            }
+        const tokens: string[] = this.messageInput.current.value.split(/\s/g);
+        const fragment: string = tokens[tokens.length - 1];
+        const messagePartial = this.messageInput.current.value.substring(
+            0, this.messageInput.current.value.length - fragment.length);
+        let completion = '';
 
-            this.messageInput.current.value += `${prefix}${emoji.colons} `;
-
-            this.handleChange();
-
-            this.setState({
-                pickerToggle: false
-            });
-
-            this.messageInput.current.focus();
+        if (fragment.startsWith(':') && this.state.emojiCompletions.length) {
+            const emojiName = this.state.emojiCompletions[index].name ?
+                this.state.emojiCompletions[index].name : this.state.emojiCompletions[index].customName;
+            completion = `:${emojiName}: `;
+        } else if (fragment.startsWith('@') && this.state.mentionCompletions.length) {
+            completion = `@${this.state.mentionCompletions[index]} `;
         }
+
+        this.messageInput.current.value = `${messagePartial}${completion}`;
+
+        this.setState({
+            autoCompleteIndex: 0,
+            emojiCompletions: [],
+            mentionCompletions: []
+        });
+
+        this.messageInput.current.focus();
     }
 
     handleChange = () => {
-        if (this.messageInput.current) {
-            const tokens: string[] = this.messageInput.current.value.split(/\s/g);
+        if (!this.messageInput.current) { return; }
 
-            const fragment: string = tokens[tokens.length - 1];
+        const tokens: string[] = this.messageInput.current.value.split(/\s/g);
 
-            if (fragment && (fragment.startsWith('@') || fragment.startsWith(':'))) {
-                this.setState(SearchEmojis(fragment, this.messageInput, this.props.customEmojis));
-            } else {
-                this.setState({
-                    autoCompleteIndex: 0,
-                    emojiCompletions: [],
-                    mentionCompletions: []
-                });
-            }
-        }
-    }
+        const fragment: string = tokens[tokens.length - 1];
 
-    handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-        if (this.messageInput.current) {
-            const tokens: string[] = this.messageInput.current.value.split(/\s/g);
-
-            const fragment: string = tokens[tokens.length - 1];
-
-            if (event.key === 'Enter' && 
-            !(this.state.emojiCompletions.length || this.state.mentionCompletions.length)) {
-                event.preventDefault();
-                if (this.messageInput.current.value.length && Date.now() - this.state.lastMessageSentTimestamp > 1000) {
-                    this.props.socket.emit('sendMessage', this.messageInput.current.value);
-
-                    this.setState({
-                        lastMessageSentTimestamp: Date.now()
-                    });
-
-                    this.messageInput.current.value = '';
-                    this.handleChange();
-                }
-            } else if (this.state.emojiCompletions.length || this.state.mentionCompletions.length) {
-                if (event.key === 'Enter' || event.key === 'Tab') {
-                    event.preventDefault();
-
-                    if (fragment.startsWith(':') && this.state.emojiCompletions.length) {
-                        const emojiName = this.state.emojiCompletions[this.state.autoCompleteIndex].name ?
-                            this.state.emojiCompletions[this.state.autoCompleteIndex].name : 
-                            this.state.emojiCompletions[this.state.autoCompleteIndex].customName;
-                        
-                        this.messageInput.current.value = this.messageInput.current.value.substring(
-                            0, this.messageInput.current.value.length - fragment.length
-                        ) + `:${emojiName}: `;
-                    } else if (fragment.startsWith('@') && this.state.mentionCompletions.length) {
-                        this.messageInput.current.value = this.messageInput.current.value.substring(
-                            0, this.messageInput.current.value.length - fragment.length
-                        ) + `:${this.state.mentionCompletions[this.state.autoCompleteIndex]}: `;
-                    }
-
-                    this.setState({
-                        autoCompleteIndex: 0,
-                        emojiCompletions: [],
-                        mentionCompletions: []
-                    });
-                } else if (event.key === 'ArrowUp') {
-                    event.preventDefault();
-
-                    if (this.state.autoCompleteIndex === 0) {
-                        if (fragment.startsWith(':')) {
-                            this.setState({
-                                autoCompleteIndex: this.state.emojiCompletions.length - 1
-                            });
-                        } else if (fragment.startsWith('@')) {
-                            this.setState({
-                                autoCompleteIndex: this.state.mentionCompletions.length - 1
-                            });
-                        }
-                    } else {
-                        this.setState({
-                            autoCompleteIndex: this.state.autoCompleteIndex - 1
-                        });
-                    }
-                } else if (event.key === 'ArrowDown') {
-                    event.preventDefault();
-
-                    if (fragment.startsWith(':')) {
-                        if (this.state.autoCompleteIndex === this.state.emojiCompletions.length - 1) {
-                            this.setState({
-                                autoCompleteIndex: 0
-                            });
-                        } else {
-                            this.setState({
-                                autoCompleteIndex: this.state.autoCompleteIndex + 1
-                            });
-                        }
-                    } else if (fragment.startsWith('@')) {
-                        if (this.state.autoCompleteIndex === this.state.mentionCompletions.length - 1) {
-                            this.setState({
-                                autoCompleteIndex: 0
-                            });
-                        } else {
-                            this.setState({
-                                autoCompleteIndex: this.state.autoCompleteIndex + 1
-                            });
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    completionClick = (index: number) => {
-        if (this.messageInput.current) {
-            const tokens: string[] = this.messageInput.current.value.split(/\s/g);
-            const fragment: string = tokens[tokens.length - 1];
-            const messagePartial = this.messageInput.current.value.substring(
-                0, this.messageInput.current.value.length - fragment.length);
-            let completion = '';
-
-            if (fragment.startsWith(':') && this.state.emojiCompletions.length) {
-                const emojiName = this.state.emojiCompletions[index].name ?
-                    this.state.emojiCompletions[index].name : this.state.emojiCompletions[index].customName;
-                completion = `:${emojiName}: `;
-            } else if (fragment.startsWith('@') && this.state.mentionCompletions.length) {
-                completion = `@${this.state.mentionCompletions[index]} `;
-            }
-
-            this.messageInput.current.value = `${messagePartial}${completion}`;
-
+        if (fragment && (fragment.startsWith('@') || fragment.startsWith(':'))) {
+            this.setState(SearchEmojis(fragment, this.messageInput, this.props.customEmojis));
+        } else {
             this.setState({
                 autoCompleteIndex: 0,
                 emojiCompletions: [],
                 mentionCompletions: []
             });
-
-            this.messageInput.current.focus();
         }
+    }
+
+    handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (!this.messageInput.current) { return; }
+
+        const tokens: string[] = this.messageInput.current.value.split(/\s/g);
+
+        const fragment: string = tokens[tokens.length - 1];
+
+        if (this.state.emojiCompletions.length || this.state.mentionCompletions.length) {
+            // If completions are active
+            if (event.key === 'Enter' || event.key === 'Tab') {
+                // Execute current completion
+                event.preventDefault();
+                this.executeCompletion(this.state.autoCompleteIndex);
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+
+                this.shiftCompletionIndex(fragment, -1);
+            } else if (event.key === 'ArrowDown') {
+                event.preventDefault();
+
+                this.shiftCompletionIndex(fragment, 1);
+            }
+        } else if (event.key === 'Enter') {
+            event.preventDefault();
+
+            this.sendMessage();
+        }
+    }
+
+    sendMessage = () => {
+        if (!this.messageInput.current) { return; }
+
+        if (this.messageInput.current.value.length && Date.now() - this.state.lastMessageSentTimestamp > 1000) {
+            this.props.socket.emit('sendMessage', this.messageInput.current.value);
+
+            this.setState({
+                lastMessageSentTimestamp: Date.now()
+            });
+
+            this.messageInput.current.value = '';
+            this.handleChange();
+        }
+    }
+
+    shiftCompletionIndex = (fragment: string, delta: number) => {
+        const newIndex = this.state.autoCompleteIndex + delta;
+        const completionsLength = Math.max(this.state.emojiCompletions.length, this.state.mentionCompletions.length);
+
+        if (newIndex < 0) {
+            this.setState({
+                autoCompleteIndex: completionsLength + newIndex
+            });
+        } else if (newIndex >= completionsLength) {
+            this.setState({
+                autoCompleteIndex: newIndex - completionsLength
+            });
+        } else {
+            this.setState({
+                autoCompleteIndex: newIndex
+            });
+        }
+    }
+
+    togglePicker = () => {
+        if (!this.state.toggleWaitComplete) { return; }
+
+        this.setState({
+            pickerToggle: !this.state.pickerToggle,
+            toggleWaitComplete: false
+        });
+
+        window.setTimeout(
+            () => {
+                this.setState({
+                    toggleWaitComplete: true
+                });
+            },
+            200
+        );
     }
 
     render() {
@@ -233,7 +207,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
                     autoCompleteIndex={this.state.autoCompleteIndex}
                     emojiCompletions={this.state.emojiCompletions}
                     mentionCompletions={this.state.mentionCompletions}
-                    completionClick={this.completionClick}
+                    completionClick={this.executeCompletion}
                 />
                 <div id="emojiPickerToggle" onClick={this.props.loggedIn ? this.togglePicker : undefined} >
                     <FontAwesomeIcon icon="smile" />
