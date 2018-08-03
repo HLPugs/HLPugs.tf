@@ -2,15 +2,7 @@ import allEmojis from 'emoji-mart/data/all.json';
 import { CustomEmoji } from 'emoji-mart';
 import { CompletionItem } from '../../../common/types';
 
-const notInCompletions = (query: string, completions: CompletionItem[]) => {
-    for (const emoji of completions) {
-        if (emoji.name === query || emoji.customName === query) {
-            return true;
-        }
-    }
-
-    return false;
-};
+const allEmojisList = Object.keys(allEmojis.emojis);
 
 const SearchEmojis = (fragment: string, input: React.RefObject<HTMLTextAreaElement>, customEmojis: CustomEmoji[]) => {
     const query = fragment.slice(1);
@@ -23,57 +15,46 @@ const SearchEmojis = (fragment: string, input: React.RefObject<HTMLTextAreaEleme
         };
     }
 
-    const completions: CompletionItem[] = [];
+    const customExact: CompletionItem[] = customEmojis
+    .filter(e => e.short_names[0].substring(0, query.length) === query)
+        .map(e => (
+            {
+                customName: e.short_names[0],
+                url: e.imageUrl,
+            }
+        )
+    );
 
-    // Add CUSTOM emojis where BEGINNING MATCHES query
-    for (const emoji of customEmojis) {
-        if (completions.length >= 8) { break; }
+    const allExact: CompletionItem[] = allEmojisList.filter((e: string) => e.substring(0, query.length) === query)
+        .map((e: string) => ({ name: e })
+    );
 
-        if (emoji.short_names[0].substring(0, query.length) === query) {
-            completions.push({
-                customName: emoji.short_names[0],
-                url: emoji.imageUrl
-            });
+    const exactCompletions: CompletionItem[] = customExact.concat(allExact);
+
+    const customAny: CompletionItem[] = customEmojis.filter(e => e.short_names[0].includes(query)).map(e => (
+        {
+            customName: e.short_names[0],
+            url: e.imageUrl,
         }
-    }
+    ));
 
-    // Add BASE emojis where BEGINNING MATCHES query
-    for (const emoji in allEmojis.emojis) {
-        if (emoji.substring(0, query.length) === query) {
-            if (completions.length >= 8) { break; }
+    const allAny: CompletionItem[] = allEmojisList.filter((e: string) => e.includes(query))
+        .map((e: string) => ({ name: e })
+    );
 
-            completions.push({
-                name: emoji
-            });
-        }
-    }
+    const anyCompletions: CompletionItem[] = customAny.concat(allAny);
 
-    // Add CUSTOM emojis where ANY SECTION MATCHES query
-    for (const emoji of customEmojis) {
-        if (completions.length >= 8) { break; }
+    const notInCompletions = (completion: CompletionItem) => {
+        return !exactCompletions.some(e => e.name === completion.name || e.customName === completion.customName);
+    };
 
-        if (emoji.short_names[0].includes(query) && notInCompletions(query, completions)) {
-            completions.push({
-                customName: emoji.short_names[0],
-                url: emoji.imageUrl
-            });
-        }
-    }
-
-    // Add BASE emojis where ANY SECTION MATCHES query
-    for (const emoji in allEmojis.emojis) {
-        if (emoji.includes(query) && notInCompletions(query, completions)) {
-            if (completions.length >= 8) { break; }
-
-            completions.push({
-                name: emoji
-            });
-        }
-    }
+    const finalCompletions = exactCompletions.concat(anyCompletions
+        .filter(e => notInCompletions(e))
+    ).slice(0, 8);
 
     return {
         autoCompleteIndex: 0,
-        emojiCompletions: completions
+        emojiCompletions: finalCompletions,
     };
 };
 
