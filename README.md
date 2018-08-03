@@ -30,8 +30,8 @@ If you do not want the constant building, you can always build manually and run 
 This section is a definite work in progress. Deployment instructions including databases, Payload, NGINX, and more should be better explained in the future.
 
 ## Built With
-- [Typescript] - Type system
-- [Express] - Route handler
+- [Typescript](https://www.typescriptlang.org/) - Type system
+- [Express](https://expressjs.com/) - Route handler
 - [Socket.io](https://socket.io) - Front end communications
 
 ... and much more.
