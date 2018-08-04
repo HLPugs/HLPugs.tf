@@ -20,7 +20,7 @@ import { punishment }       from './punishment';
 export class player {
   steamid: string;
   alias: string          = undefined;
-  avatar: URL;
+  avatar: string;
   pugs: number           = 0;
   totalWins: number      = 0;
   losses: number         = 0;
@@ -38,7 +38,7 @@ export class player {
    * @param {URL} avatar - The link to the player'announcements Steam avatar.
    * @param {string} alias The player'announcements unique custom alias on the site
    */
-  constructor(steamid: string, avatar: URL, alias?: string) {
+  constructor(steamid: string, avatar: string, alias?: string) {
     this.steamid = steamid;
     this.avatar = avatar;
     this.alias = alias || undefined;

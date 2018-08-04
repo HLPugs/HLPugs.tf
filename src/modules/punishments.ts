@@ -32,7 +32,6 @@ export const getActivePunishments = async(steamid: string): Promise<punishment[]
   r = 1`,
     values: [steamid],
   };
-  // TODO exclude inactive punishments in query, not in node
 
   const res: QueryResult = await db.query(query);
   const punishments = res.rows;

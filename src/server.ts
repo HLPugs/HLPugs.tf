@@ -1,3 +1,8 @@
+// Load environment variables
+// @ts-ignore
+import * as dotenv                       from 'dotenv';
+dotenv.config();
+
 import * as config                       from 'config';
 import * as crypto                       from 'crypto';
 import * as connect_redis                from 'connect-redis';
