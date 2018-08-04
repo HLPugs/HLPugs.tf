@@ -23,7 +23,7 @@ interface ChatMessageProps {
 
 class ChatMessage extends React.Component<ChatMessageType & ChatMessageProps, {}> {
   renderMessage = (message: string, id: string) => {
-    const colonsRegex = new RegExp('(^|\\announcements)(\:[a-zA-Z0-9-_+]+\:(\:skin-tone-[2-6]\:)?)', 'g');
+    const colonsRegex = new RegExp('(^|\\s)(\:[a-zA-Z0-9-_+]+\:(\:skin-tone-[2-6]\:)?)', 'g');
 
     let match;
     const emojis: MessageElement[] = [];
