@@ -40,20 +40,19 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
   }
 
   cycleAnnouncements = () => {
-    if (this.state.announcements.length > 0) {
-    
-    const newIndex: number = this.state.index + 1 === this.state.announcements.length ? 0 : this.state.index + 1;
+    if (this.state.announcements.length > 1) {
+      const newIndex: number = this.state.index + 1 === this.state.announcements.length ? 0 : this.state.index + 1;
 
-    this.setState({
-      transitioning: true
-    });
+      this.setState({
+        transitioning: true
+      });
 
-    window.setTimeout(
-      () => {
-        this.setState({ index: newIndex, transitioning: false });
-      },
-      250
-    );
+      window.setTimeout(
+        () => {
+          this.setState({ index: newIndex, transitioning: false });
+        },
+        250
+      );
     }
   }
 
@@ -69,9 +68,7 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
         <div id="announcements">
           <span className={this.state.transitioning ? 'cyclingAnnouncements' : ''}>
             <Linkify properties={{ target: 'blank' }}>
-              {
-                this.state.announcements[this.state.index].content
-              }
+              {this.state.announcements[this.state.index].content}
             </Linkify>
           </span>
         </div>
