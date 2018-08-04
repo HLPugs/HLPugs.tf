@@ -34,7 +34,7 @@ export const setup = (io: Server) => {
       if (socket.request.session.sockets !== undefined) {
         socket.request.session.sockets.push(socket.id);
         socket.request.session.save((e: any) => {
-		  if (e) throw e;
+		      if (e) throw e;
         });
         if (socket.request.session.sockets.length === 1) {
           playerMap.addPlayer(socket.request.session.id, socket.request.session.user.steamid);
@@ -44,31 +44,31 @@ export const setup = (io: Server) => {
     });
 
     socket.on('disconnect', () => {
-      if (socket.request.session && socket.request.session.sockets !== undefined) {
-        socket.request.session.reload((e: any) => {
-          if (e !== undefined) throw e;
+      if (!socket.request.session || socket.request.session.sockets === undefined) return;
 
-          const socketIndex = socket.request.session.sockets.indexOf(socket.id);
+      socket.request.session.reload((e: any) => {
+        if (e !== undefined) throw e;
 
-          if (socketIndex >= 0) {
-            socket.request.session.sockets.splice(socketIndex, 1);
-            socket.request.session.save((e: Error) => { if (e !== undefined) { throw e; } });
+        const socketIndex = socket.request.session.sockets.indexOf(socket.id);
 
-            if (socket.request.session.sockets.length === 0) {
-              // TODO: remove user from all class lists
-              playerMap.removePlayer(socket.request.session.user.steamid);
-              socket.emit('removePlayerFromData', socket.request.session.user.steamid);
+        if (socketIndex >= 0) {
+          socket.request.session.sockets.splice(socketIndex, 1);
+          socket.request.session.save((e: Error) => { if (e !== undefined) { throw e; } });
 
-              playerMap.removePlayerAllDraftTFClasses(socket.request.session.user.steamid);
+          if (socket.request.session.sockets.length === 0) {
+            // TODO: remove user from all class lists
+            playerMap.removePlayer(socket.request.session.user.steamid);
+            socket.emit('removePlayerFromData', socket.request.session.user.steamid);
 
-              const draftTFClasses: DraftTFClass[] = config.get('app.configuration.classes');
-              draftTFClasses.map((draftTFClass) => {
-                io.emit('removeFromDraftTFClass', draftTFClass, socket.request.session.user.steamid);
-			        });
-            }
+            playerMap.removePlayerAllDraftTFClasses(socket.request.session.user.steamid);
+
+            const draftTFClasses: DraftTFClass[] = config.get('app.configuration.classes');
+            draftTFClasses.map((draftTFClass) => {
+              io.emit('removeFromDraftTFClass', draftTFClass, socket.request.session.user.steamid);
+            });
           }
-        });
-      }
+        }
+      });
     });
   });
 };
