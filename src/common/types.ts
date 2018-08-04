@@ -62,3 +62,17 @@ export interface CompletionItem {
   customName?: string;
   url?: string;
 }
+
+export type region = 'na' | 'eu' | 'all';
+
+export interface BasicAnnouncement {
+  content: string;
+  priority: boolean;
+}
+
+export interface FullAnnouncement extends BasicAnnouncement {
+  id: number;
+  region: region;
+  creator: string;
+  timestamp: Date;
+}
