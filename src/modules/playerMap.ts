@@ -1,8 +1,10 @@
-import { store }                          from '../server';
+import { app, store }                     from '../server';
 import * as config                        from 'config';
 import { DraftTFClass, DraftTFClassList } from '../structures/draftClassList';
 import { player }                         from '../structures/player';
 import logger                             from './logger';
+import * as crypto                        from 'crypto';
+import * as uuid                          from 'uuid';
 
 /**
  * @module playerMap
@@ -17,7 +19,7 @@ const draftTFClassLists = new Map<DraftTFClass, string[]>();
 // Load the gamemode-specific class configuration
 const draftTFClasses: DraftTFClassList[] = config.get('app.configuration.classes');
 
-// Empty out every class in the draft class list
+// Empty out every player in the draft class list
 draftTFClasses.map(draftTFClass => draftTFClassLists.set(draftTFClass.name, []));
 
 /**
@@ -44,6 +46,30 @@ export const getPlayer = (steamid: string): Promise<player> => {
  * @param {string} steamid - The SteamID that references the session ID.
  */
 export const addPlayer = (sessionid: string, steamid: string) => players.set(steamid, sessionid);
+
+/**
+ *  Adds a fake session to the player map. ( FOR DEBUGGING USE ONLY )
+ * @param {string} steamid - The fake SteamID to add
+ * @return {Promise<void>} - Resolves once the player is successfully added
+ */
+export function addFakePlayer(steamid: string): Promise<void> {
+  return new Promise(((resolve, reject) => {
+
+    const sessionID = crypto.createHash('sha256')
+        .update(uuid.v1())
+        .update(crypto.randomBytes(256))
+        .digest('hex');
+
+    const session = { user: new player(steamid, '', '') };
+
+    // @ts-ignore
+    store.set(sessionID, session, (err) => {
+      if (err) reject(err);
+      addPlayer(sessionID, steamid);
+      resolve();
+    });
+  }));
+}
 
 /**
  * Removes a player from the player map

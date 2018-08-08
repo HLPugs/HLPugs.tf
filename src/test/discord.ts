@@ -10,13 +10,10 @@ describe('postToDiscord', () => {
   });
 
   it('should post a non-fancy message to a Discord channel', () => {
-    expect(postToDiscord('a regular test message', 'site-status'))
+    expect(postToDiscord('Test', 'site-status'))
         .to.eventually.equal('successful');
   });
-  it('should post a fancy message to a Discord channel', () => {
-    expect(postToDiscord('a fancy test message', 'site-status', true))
-        .to.eventually.equal('successful');
-  });
+
   it('should fail when a wrong webhook is passed', () => {
     expect(postToDiscord('a random message', 'Non-existent channel name'))
         .to.eventually.be.rejected;

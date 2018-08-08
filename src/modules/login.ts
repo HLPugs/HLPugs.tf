@@ -46,7 +46,7 @@ export const loginUser = async(req: Request): Promise<void> => {
   if (alias !== null) {
     // Set player'announcements session
     req.session.user.alias     = alias;
-    req.session.user.roles     = roles;
+    await req.session.user.addRoles(roles);
     req.session.user.isCaptain = captain;
 
     // Fetch player's punishments
