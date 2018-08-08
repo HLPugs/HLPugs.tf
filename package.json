@@ -9,7 +9,7 @@
 		"watch-node": "nodemon dist/server.js",
 		"build-ts": "tsc -p tsconfig.json",
 		"watch-ts": "tsc -w",
-		"test": "./node_modules/.bin/mocha/ -r ts-node/register src/test/*/*.ts",
+		"test": "./node_modules/.bin/mocha/ -r ts-node/register src/test/*.ts",
 		"tslint": "tslint -c tslint.json -p tsconfig.json"
 	},
 	"dependencies": {
