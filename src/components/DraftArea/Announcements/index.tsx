@@ -57,6 +57,7 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
   }
 
   render() {
+  if (this.state.announcements.length) {
     return (
       <div
         id="announcementsHolder"
@@ -74,7 +75,10 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
         </div>
       </div>
     );
+  } else {
+    return null;
   }
+}
 }
 
 export default Announcements;
