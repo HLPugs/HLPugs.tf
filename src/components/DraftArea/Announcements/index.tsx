@@ -24,7 +24,7 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
     this.props.socket.emit('loadAnnouncements');
     
     this.props.socket.on('receiveAnnouncements', (announcements: BasicAnnouncement[]) => {
-      this.setState({ announcements });
+        this.setState({ announcements });
     });
 
     this.announcementsTimer = window.setInterval(this.cycleAnnouncements, 15000);
