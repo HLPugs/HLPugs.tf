@@ -209,7 +209,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
           completionClick={this.executeCompletion}
         />
         <div id="emojiPickerToggle" onClick={this.props.loggedIn ? this.togglePicker : undefined} >
-          <FontAwesomeIcon icon="smile" />
+          <FontAwesomeIcon icon="grin-alt" />
         </div>
         <div id="messageCharacterCount">
           {

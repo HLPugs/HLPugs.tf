@@ -20,7 +20,7 @@ import {
   faBullhorn,
   faCheck,
   faTimes,
-  faSmile,
+  faGrinAlt,
   faStar,
   faArrowDown
 } from '@fortawesome/free-solid-svg-icons';
@@ -38,7 +38,7 @@ library.add(
   faBullhorn,
   faCheck,
   faTimes,
-  faSmile,
+  faGrinAlt,
   faStar,
   faArrowDown
 );
