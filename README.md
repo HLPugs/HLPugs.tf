@@ -11,7 +11,7 @@ Front end for the Captain Draft & Mix PUG Service under [HLPugs.tf](https://hlpu
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/en/download/)
-- [npm](https://www.npmjs.com/get-npm) (this is comes with Node.js now)
+- [npm](https://www.npmjs.com/get-npm) (this comes with Node.js now)
 - TypeScript installed: Run `npm i -g typescript` from a command prompt
 - [Intel](https://github.com/HLPugs/Intel) - The accompanying back end to Payload
 
