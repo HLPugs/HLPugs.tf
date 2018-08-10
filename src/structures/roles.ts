@@ -1,3 +1,3 @@
-export type role = 'developer' | 'patron' | 'voiceActor';
+export type Role = 'developer' | 'patron' | 'voiceActor';
 
-export type staffRole = 'admin' | 'mod' | 'headAdmin';
+export type StaffRole = 'admin' | 'mod' | 'headAdmin';

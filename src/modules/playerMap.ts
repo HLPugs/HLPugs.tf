@@ -1,4 +1,4 @@
-import { app, store }                     from '../server';
+import { store }                          from '../server';
 import * as config                        from 'config';
 import { DraftTFClass, DraftTFClassList } from '../structures/draftClassList';
 import { player }                         from '../structures/player';
