@@ -5,7 +5,7 @@ Back end for the Captain Draft & Mix PUG Service under [HLPugs.tf](https://hlpug
 
 ### Prerequisites
 - [Node.js](https://nodejs.org/en/download/)
-- [npm](https://www.npmjs.com/get-npm) (this is comes with Node.js now)
+- [npm](https://www.npmjs.com/get-npm) (this comes with Node.js now)
 - TypeScript installed: Run `npm i -g typescript` from a command prompt
 - (Optional) [Payload](https://github.com/HLPugs/Payload) - The accompanying front end to Intel
 
@@ -21,7 +21,7 @@ These two commands combined will let you develop very quickly. The Node instance
 
 If you do not want the constant building, you can always build manually and run as such:
 1. Run `npm run build-ts`
-2. Run `npm run start`
+2. Run `npm start`
 
 ## Deployment
 1. Run `npm run build`
@@ -43,7 +43,7 @@ This section is a definite work in progress. Deployment instructions including d
 See the [contributors](https://github.com/HLPugs/Payload/contributors) page for more people who've helped with the project.
 
 ## License
-This projcet is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for details.
+This project is licensed under the MIT License. See [LICENSE.md](LICENSE) for details.
 
 ## Acknowledgements
 - [erynn](https://github.com/erynnb) for helping with technical questions when building the legacy version of HLPugs.tf

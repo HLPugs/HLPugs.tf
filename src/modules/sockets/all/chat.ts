@@ -10,7 +10,7 @@ interface messageObjectType {
   timestamp: number;
 }
 
-let messageHistory: messageObjectType[] = [];
+const messageHistory: messageObjectType[] = [];
 
 export const chat = (io: Server) => {
   io.on('connection', (socket) => {
@@ -33,7 +33,7 @@ export const chat = (io: Server) => {
           messageHistory.push(messageObject);
 
           if (messageHistory.length > 100) {
-            messageHistory = messageHistory.slice(1);
+            messageHistory.shift();
           }
 
           socket.request.session.lastMessageSentTimestamp = Date.now();
