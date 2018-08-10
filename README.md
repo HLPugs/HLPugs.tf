@@ -53,7 +53,7 @@ After customizing/developing your changes, you can deploy Payload to a static we
 See the [contributors](https://github.com/HLPugs/Payload/contributors) page for more people who've helped with the project.
 
 ## License
-This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for details.
+This project is licensed under the MIT License. See [LICENSE.md](LICENSE) for details.
 
 ## Acknowledgements
 - Sickday and Qixalite for the [TF2 Class Icons](https://github.com/Qixalite/tf2-classfont)
