@@ -39,7 +39,7 @@ const app: express.Application = express();
 const server = new Server(app);
 
 // npm run test fails without this setTimeout. It is unknown why this is.
-setTimeout(() => sockets(server, sessionConfig));
+setTimeout(() => sockets(server, sessionConfig), 1);
 
 app.use(sessionConfig);
 
