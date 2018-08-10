@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@fortawesome/fontawesome-svg-core": "^1.2.0-14",
-    "@fortawesome/free-brands-svg-icons": "^5.1.0-11",
-    "@fortawesome/free-solid-svg-icons": "^5.1.0-11",
-    "@fortawesome/react-fontawesome": "0.1.0-11",
+    "@fortawesome/fontawesome-svg-core": "^1.2.2",
+    "@fortawesome/free-brands-svg-icons": "^5.2.0",
+    "@fortawesome/free-regular-svg-icons": "^5.2.0",
+    "@fortawesome/free-solid-svg-icons": "^5.2.0",
+    "@fortawesome/react-fontawesome": "0.1.1",
     "@types/emoji-mart": "^2.2.1",
     "@types/react-onclickoutside": "^6.0.3",
     "@types/react-router": "^4.0.23",
@@ -23,6 +24,7 @@
     "react-router-dom": "^4.2.2",
     "react-scripts-ts": "2.16.0",
     "socket.io-client": "^2.0.4",
+    "source-map-explorer": "^1.5.0",
     "webfontloader": "^1.6.28"
   },
   "scripts": {
@@ -30,6 +32,7 @@
     "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "start": "npm run build-css && react-scripts-ts start",
     "build": "npm run build-css && react-scripts-ts build",
+    "analyze": "source-map-explorer build/static/js/main.*",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject"
   },
