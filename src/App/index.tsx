@@ -5,7 +5,6 @@ import { SiteConfiguration, UserScheme } from '../common/types';
 import Home from '../pages/Home';
 import Banned from '../pages/Banned';
 import Loading from '../components/Loading';
-import './style.css';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSteamSymbol, faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
