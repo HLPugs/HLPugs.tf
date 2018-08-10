@@ -43,7 +43,7 @@ This section is a definite work in progress. Deployment instructions including d
 See the [contributors](https://github.com/HLPugs/Payload/contributors) page for more people who've helped with the project.
 
 ## License
-This project is licensed under the MIT License. See [LICENSE.md](LICENSE.md) for details.
+This project is licensed under the MIT License. See [LICENSE.md](LICENSE) for details.
 
 ## Acknowledgements
 - [erynn](https://github.com/erynnb) for helping with technical questions when building the legacy version of HLPugs.tf
