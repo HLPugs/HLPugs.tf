@@ -18,7 +18,7 @@ const draftTFClassLists = new Map<DraftTFClass, string[]>();
 const draftTFClasses: DraftTFClassList[] = config.get('app.configuration.classes');
 
 // Empty out every class in the draft class list
-draftTFClasses.map(draftTFClass => draftTFClassLists.set(draftTFClass.name, []));
+draftTFClasses.forEach(draftTFClass => draftTFClassLists.set(draftTFClass.name, []));
 
 /**
  * Retrieves a session ID from the map using a SteamID.
@@ -106,7 +106,7 @@ export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: Dr
  * @param {string} steamid - The SteamID of the player to be removed from all classes
  */
 export const removePlayerAllDraftTFClasses = (steamid: string) => {
-  draftTFClasses.map(draftTFClassList => removePlayerDraftTFClass(steamid, draftTFClassList.name));
+  draftTFClasses.forEach(draftTFClassList => removePlayerDraftTFClass(steamid, draftTFClassList.name));
 };
 
 /**

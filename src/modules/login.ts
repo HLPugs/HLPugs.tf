@@ -51,7 +51,7 @@ export const loginUser = async(req: Request): Promise<void> => {
 
     // Fetch player's punishments
     const punishments = await getActivePunishments(steamid);
-    punishments.map((x: punishment) => req.session.user.punishments[x.punishment] = x.data);
+    punishments.forEach((x: punishment) => req.session.user.punishments[x.punishment] = x.data);
 
     // Log the login
     logger.info(`${alias} logged in`, { steamid });
