@@ -83,7 +83,7 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
       <div className="tfclass">
         <div className="classHeader">
           <span className="classIcon"><ClassIcon name={this.props.properties.name} /></span>
-          <span />
+          <span/>
           <span className="className">{this.props.properties.name}</span>
           <span className="count">
             <span className="added">{this.state.players.length}</span>
