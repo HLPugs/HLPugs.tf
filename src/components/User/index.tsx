@@ -10,7 +10,7 @@ interface UserProps {
   settingsOnClick: Function;
 }
 
-class User extends React.Component<UserProps, {}> {
+class User extends React.PureComponent<UserProps, {}> {
   
   render() {
     if (this.props.user.loggedIn) {

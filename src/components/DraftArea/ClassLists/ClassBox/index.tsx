@@ -87,8 +87,8 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
           <span className="className">{this.props.properties.name}</span>
           <span className="count">
             <span className="added">{this.state.players.length}</span>
-            /
-                        <span className="needed">{this.props.properties.numberPerTeam * 2}</span>
+            <span>/</span>
+            <span className="needed">{this.props.properties.numberPerTeam * 2}</span>
           </span>
           {this.checkbox()}
         </div>

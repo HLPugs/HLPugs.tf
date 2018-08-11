@@ -14,7 +14,7 @@ interface LoadingState {
   loadingMessage: string;
 }
 
-class Loading extends React.Component<LoadingProps, LoadingState> {
+class Loading extends React.PureComponent<LoadingProps, LoadingState> {
   messageTimeouts: number[];
 
   constructor(props: LoadingProps) {

@@ -12,7 +12,7 @@ interface SettingsProps {
   userAlias?: string;
 }
 
-class Settings extends React.Component<SettingsProps, {}> {
+class Settings extends React.PureComponent<SettingsProps, {}> {
   savePress = () => {
     // TODO: tell socket to update settings
 

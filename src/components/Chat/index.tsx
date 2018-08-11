@@ -16,7 +16,7 @@ interface ChatState {
   customEmojis: CustomEmoji[];
 }
 
-class Chat extends React.Component<ChatProps, ChatState> {
+class Chat extends React.PureComponent<ChatProps, ChatState> {
   constructor(props: ChatProps) {
     super(props);
 

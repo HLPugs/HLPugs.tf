@@ -4,7 +4,7 @@ import HeaderBranding from './HeaderBranding';
 import HeaderBackground from './HeaderBackground';
 import './style.css';
 
-class Header extends React.Component<SiteBranding, {}> {
+class Header extends React.PureComponent<SiteBranding, {}> {
   render() {
     return(
       <header>

@@ -11,7 +11,7 @@ interface DraftAreaProps {
   steamid?: string;
 }
 
-class DraftArea extends React.Component<DraftAreaProps, {}> {
+class DraftArea extends React.PureComponent<DraftAreaProps, {}> {
   render() {
     return (
       <main>
