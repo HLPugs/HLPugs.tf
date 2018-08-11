@@ -56,15 +56,15 @@ export const setup = (io: Server) => {
           socket.request.session.save((e: Error) => { if (e !== undefined) { throw e; } });
 
           if (socket.request.session.sockets.length === 0) {
-            playerMap.removePlayer(socket.request.session.user.steamid);
-            io.emit('removePlayerFromData', socket.request.session.user.steamid);
-
             playerMap.removePlayerAllDraftTFClasses(socket.request.session.user.steamid);
 
             const draftTFClasses: DraftTFClass[] = config.get('app.configuration.classes');
             draftTFClasses.forEach((draftTFClass) => {
               io.emit('removeFromDraftTFClass', draftTFClass, socket.request.session.user.steamid);
             });
+
+            playerMap.removePlayer(socket.request.session.user.steamid);
+            io.emit('removePlayerFromData', socket.request.session.user.steamid);
           }
         }
       });
