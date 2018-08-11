@@ -4,13 +4,14 @@
     margin-right: var(--draft-area-spacing);
     margin-top: var(--draft-area-spacing);
     width: 100%;
-    min-height: 72px;
+    min-height: 76px;
     box-shadow: var(--paper-2);
     border-radius: 4px;
     background: var(--background-light);
     display: flex;
     flex-direction: column;
     min-width: 0;
+    align-self: flex-start;
 
     &:first-child {
         margin-left: var(--draft-area-spacing);
@@ -77,7 +78,7 @@
             }
             
             &.checked {
-                background: var(--font-color);
+                background: var(--color-light);
                 
                 &:active {
                     background: var(--font-color-secondary);
@@ -102,7 +103,7 @@
                 height: 11px;
                 border-right: solid 3px;
                 border-bottom: solid 3px;
-                border-color: var(--color);
+                border-color: var(--font-color);
                 left: 7px;
                 top: 2px;
                 opacity: 0;

@@ -87,7 +87,7 @@ input[type="checkbox"] {
   }
 
   &:checked + label:before {
-    background: var(--font-color);
+    background: var(--color-light);
   }
 
   &:checked:active + label:before {
@@ -103,7 +103,7 @@ input[type="checkbox"] {
     height: 11px;
     border-right: solid 3px;
     border-bottom: solid 3px;
-    border-color: var(--color);
+    border-color: var(--font-color);
     left: 7px;
     top: 2px;
     opacity: 0;
