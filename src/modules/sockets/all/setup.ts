@@ -38,7 +38,7 @@ export const setup = (io: Server) => {
         });
         if (socket.request.session.sockets.length === 1) {
           playerMap.addPlayer(socket.request.session.id, socket.request.session.user.steamid);
-          socket.emit('addPlayerToData', await playerMap.getPlayer(socket.request.session.user.steamid));
+          io.emit('addPlayerToData', await playerMap.getPlayer(socket.request.session.user.steamid));
         }
       }
     });
@@ -56,14 +56,13 @@ export const setup = (io: Server) => {
           socket.request.session.save((e: Error) => { if (e !== undefined) { throw e; } });
 
           if (socket.request.session.sockets.length === 0) {
-            // TODO: remove user from all class lists
             playerMap.removePlayer(socket.request.session.user.steamid);
-            socket.emit('removePlayerFromData', socket.request.session.user.steamid);
+            io.emit('removePlayerFromData', socket.request.session.user.steamid);
 
             playerMap.removePlayerAllDraftTFClasses(socket.request.session.user.steamid);
 
             const draftTFClasses: DraftTFClass[] = config.get('app.configuration.classes');
-            draftTFClasses.map((draftTFClass) => {
+            draftTFClasses.forEach((draftTFClass) => {
               io.emit('removeFromDraftTFClass', draftTFClass, socket.request.session.user.steamid);
             });
           }
