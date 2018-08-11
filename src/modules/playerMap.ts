@@ -33,7 +33,7 @@ export const getPlayer = (steamid: string): Promise<player> => {
     const sessionid = players.get(steamid);
     store.get(sessionid, (err, session) => {
       if (err) throw err;
-      resolve(session.user);
+      session ? resolve(session.user) : resolve(null);
     });
   });
 };
