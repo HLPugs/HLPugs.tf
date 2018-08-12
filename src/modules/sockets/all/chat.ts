@@ -61,9 +61,11 @@ export const chat = (io: Server) => {
 };
 
 const cleanWord = (word: string) => {
-  const whitelisted = whitelistWords.some(whitelistedWord => word.includes(whitelistedWord));
+  const tempWord = word;
 
-  const wordNotClean = blacklistWords.some(blacklistedWord => word.includes(blacklistedWord) && !whitelisted);
+  whitelistWords.forEach(whitelistedWord => tempWord.replace(new RegExp(whitelistedWord, 'gi'), ''));
+
+  const wordNotClean = blacklistWords.some(blacklistedWord => tempWord.toLowerCase().includes(blacklistedWord));
 
   return wordNotClean ? '*'.repeat(word.length) : word;
 };
