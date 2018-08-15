@@ -10,6 +10,10 @@ interface messageObjectType {
   timestamp: number;
 }
 
+// TODO: Find a better home for these where they're easily updated (database? config file?).
+const blacklistWords = ['te'];
+const whitelistWords = ['test'];
+
 const messageHistory: messageObjectType[] = [];
 
 export const chat = (io: Server) => {
@@ -19,11 +23,13 @@ export const chat = (io: Server) => {
       socket.request.session.reload((err: any) => {
         err ? console.log(err) : null;
 
+        const cleanedMessage = message.split(' ').map(w => cleanWord(w)).join(' ');
+
         if (Date.now() - socket.request.session.lastMessageSentTimestamp < 1000) return;
 
-        if (message.length && message.length <= 300 && socket.request.session.user.alias) {
+        if (cleanedMessage.length && cleanedMessage.length <= 300 && socket.request.session.user.alias) {
           const messageObject: messageObjectType = {
-            message,
+            message: cleanedMessage,
             username: socket.request.session.user.alias,
             userid: socket.request.session.user.steamid,
             id: uuid(),
@@ -52,4 +58,14 @@ export const chat = (io: Server) => {
       socket.emit('customEmojis', config.get('app.customEmojis'));
     });
   });
+};
+
+const cleanWord = (word: string) => {
+  const tempWord = word;
+
+  whitelistWords.forEach(whitelistedWord => tempWord.replace(new RegExp(whitelistedWord, 'gi'), ''));
+
+  const wordNotClean = blacklistWords.some(blacklistedWord => tempWord.toLowerCase().includes(blacklistedWord));
+
+  return wordNotClean ? '*'.repeat(word.length) : word;
 };
