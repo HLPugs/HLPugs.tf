@@ -15,7 +15,7 @@ describe('Roles', () => {
 
   it('should give a Player a patron role', async () => {
     const player = await getPlayer('EpicGamer');
-    await player.addRole('patron');
+    await player.addRoles(['patron']);
     expect(player.roles).to.contain('patron');
   });
 
@@ -27,13 +27,13 @@ describe('Roles', () => {
 
   it('should give a Player the admin role', async() => {
     const player = await getPlayer('EpicGamer');
-    await player.addRole('admin');
+    await player.addRoles(['admin']);
     expect(player.staffRole).to.equal('admin');
   });
 
   it('should remove a Player\'s staff role', async() => {
     const player = await getPlayer('EpicGamer');
-    await player.addRole('admin');
+    await player.addRoles(['admin']);
     await player.removeRole('admin');
     expect(player.staffRole).to.not.equal('admin');
   });
