@@ -1,7 +1,7 @@
 import { store }                          from '../server';
 import * as config                        from 'config';
-import { DraftTFClass, DraftTFClassList } from 'DraftClassList.ts';
-import { player }                         from 'Player.ts';
+import { DraftTFClass, DraftTFClassList } from '../structures/DraftClassList';
+import { Player }                         from '../structures/Player';
 import logger                             from './logger';
 import * as crypto                        from 'crypto';
 import * as uuid                          from 'uuid';
@@ -27,7 +27,7 @@ draftTFClasses.forEach(draftTFClass => draftTFClassLists.set(draftTFClass.name, 
  * @param {string} steamid - The Player to retrieve.
  * @returns {Promise<player>} - The {@Link Player}.
  */
-export const getPlayer = (steamid: string): Promise<player> => {
+export const getPlayer = (steamid: string): Promise<Player> => {
   return new Promise((resolve) => {
     if (!players.has(steamid)) {
       logger.warn(`Player (${steamid}) was requested from the player map but was not found`);
@@ -60,7 +60,7 @@ export function addFakePlayer(steamid: string): Promise<void> {
         .update(crypto.randomBytes(256))
         .digest('hex');
 
-    const session = { user: new player(steamid, '', '') };
+    const session = { user: new Player(steamid, '', '') };
 
     // @ts-ignore
     store.set(sessionID, session, (err) => {
@@ -102,7 +102,7 @@ export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: Draft
   // Ensure Player isn't already added up to the class
   if (draftTFClassLists.get(draftTFClass).indexOf(steamid) === -1) {
     draftTFClassLists.get(draftTFClass).push(steamid);
-    const player: player = await getPlayer(steamid);
+    const player: Player = await getPlayer(steamid);
     logger.info(`${player.alias} added to ${draftTFClass}!`);
   }
 };
@@ -122,7 +122,7 @@ export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: Dr
 		.get(draftTFClass)
 		.splice(indexOfPlayer, 1);
 
-    const player: player = await getPlayer(steamid);
+    const player: Player = await getPlayer(steamid);
     logger.info(`${player.alias} removed from ${draftTFClass}`);
   }
 };
