@@ -21,7 +21,7 @@ interface ChatMessageProps {
   customEmojis: CustomEmoji[];
 }
 
-class ChatMessage extends React.Component<ChatMessageType & ChatMessageProps, {}> {
+class ChatMessage extends React.PureComponent<ChatMessageType & ChatMessageProps, {}> {
   renderMessage = (message: string, id: string) => {
     const colonsRegex = new RegExp('(^|\\s)(\:[a-zA-Z0-9-_+]+\:(\:skin-tone-[2-6]\:)?)', 'g');
 

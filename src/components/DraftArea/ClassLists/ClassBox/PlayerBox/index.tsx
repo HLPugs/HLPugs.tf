@@ -8,7 +8,7 @@ interface PlayerBoxProps {
   steamid: string;
 }
 
-class PlayerBox extends React.Component<PlayerBoxProps, {}> {
+class PlayerBox extends React.PureComponent<PlayerBoxProps, {}> {
   render() {
     return (
       <PlayerDataConsumer>

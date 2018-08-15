@@ -1,7 +1,7 @@
 @import '../../../../../sassVariables.scss';
 
 .player {
-    height: 36px;
+    height: 40px;
     display: flex;
     align-items: center;
     transition: all .2s ease;
@@ -22,9 +22,9 @@
     .playerIcon {
         background: var(--font-color);
         box-shadow: var(--paper-1);
-        border-radius: 50%;
-        height: 28px;
-        width: 28px;
+        border-radius: 4px;
+        height: 32px;
+        width: 32px;
         margin-right: 4px;
         flex-shrink: 0;
         background-size: contain;
@@ -36,6 +36,7 @@
         overflow: hidden;
         white-space: nowrap;
         width: 100%;
+        line-height: 1;
     }
 
     .captainStar {

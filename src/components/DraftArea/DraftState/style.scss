@@ -1,6 +1,6 @@
 #draftState {
     height: 8px;
-    margin: 7px;
+    margin: var(--draft-area-spacing);
     background: var(--background-light);
     margin-bottom: 0px;
     display: flex;

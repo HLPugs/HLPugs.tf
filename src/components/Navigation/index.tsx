@@ -7,7 +7,7 @@ interface NavigationProps {
   navigationGroup: NavItem[];
 }
 
-class Navigation extends React.Component<NavigationProps, {}> {
+class Navigation extends React.PureComponent<NavigationProps, {}> {
   render() {
     return (
       <nav>

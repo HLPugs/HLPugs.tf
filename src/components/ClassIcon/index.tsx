@@ -19,7 +19,7 @@ const Icons = {
 };
 // tslint:enable:max-line-length
 
-class ClassIcon extends React.Component<ClassIconProps, {}> {
+class ClassIcon extends React.PureComponent<ClassIconProps, {}> {
   render() {
     return Icons[this.props.name];
   }
