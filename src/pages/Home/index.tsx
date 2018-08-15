@@ -75,6 +75,10 @@ class Home extends React.Component<HomeProps, HomeState> {
 
     // Tell server that this socket connection is on the homepage
     this.props.socket.emit('home');
+
+    this.props.socket.on('reconnect', () => {
+      this.props.socket.emit('home');
+    });
   }
 
   AliasModal = () => {
