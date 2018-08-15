@@ -1,37 +1,37 @@
-import { player } from './player';
+import { Player } from './Player';
 
 /**
- * An object that maps {@link player} objects to a {@link draftTFClass} name.
- * @typedef playerTFClassMap
+ * An object that maps {@link Player} objects to a {@link DraftTFClass} name.
+ * @typedef PlayerTFClassMap
  */
-export class playerTFClassMap {
-  private items: { [key: string]: player };
+export class PlayerTFClassMap {
+  private items: { [key: string]: Player };
 
     /**
-     * Creates a new empty playerTFClassMap.
+     * Creates a new empty PlayerTFClassMap.
      */
   constructor() {
     this.items = {};
   }
 
     /**
-     * Adds a new (@link player) to the map.
-     * @param {player} player - The player to add.
-     * @param {string} playerClass - The class to match the player with.
-     * @returns {boolean} - Whether or not the player was successfully added to the map.
+     * Adds a new (@link Player) to the map.
+     * @param {Player} player - The Player to add.
+     * @param {string} playerClass - The class to match the Player with.
+     * @returns {boolean} - Whether or not the Player was successfully added to the map.
      */
-  add(player: player, playerClass: string): boolean {
+  add(player: Player, playerClass: string): boolean {
     if (playerClass in this.items) return false;
     this.items[playerClass] = player;
     return true;
   }
 
     /**
-     * Retrieves a player from the map using a class.
+     * Retrieves a Player from the map using a class.
      * @param {string} playerClass - The class to retrieve.
-     * @returns {player|false} - The player that was found, or false if not any.
+     * @returns {Player|false} - The Player that was found, or false if not any.
      */
-  get(playerClass: string): player | false {
+  get(playerClass: string): Player | false {
     if (!(playerClass in this.items)) return false;
     return this.items[playerClass];
   }
