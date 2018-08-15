@@ -5,19 +5,14 @@ import { QueryResult }          from 'pg';
 import logger                   from './logger';
 import { Player }               from '../structures/Player';
 import { Punishment }           from '../structures/Punishment';
-
-declare module 'express' {
-  export interface Request {
-    user: any;
-  }
-}
+import { SteamRequest }         from 'steam-login';
 
 /**
  *
  * @param {e.Request} req
  * @returns {Promise<void>} Completes after necessary login data is set in the database and session
  */
-export const loginUser = async(req: Request): Promise<void> => {
+export const loginUser = async(req: SteamRequest): Promise<void> => {
 
   // Arrange data from login
   const steamid = req.user.steamid;
