@@ -23,7 +23,7 @@ class EmojiPicker extends React.Component<EmojiPickerProps & InjectedOnClickOutP
         custom={this.props.customEmojis}
         set="twitter"
         perLine={7}
-        color="#03a9f4"
+        color="var(--color)"
         sheetSize={32}
         autoFocus={true}
         emojiTooltip={false}
