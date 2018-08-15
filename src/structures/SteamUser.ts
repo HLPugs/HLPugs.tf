@@ -1,4 +1,4 @@
-export interface steamUser {
+export interface SteamUser {
   steamUser: {
     steamid: string;
     username: string;

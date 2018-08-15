@@ -1,16 +1,16 @@
-import { Team } from './team';
+import { Team } from './Team';
 
 /**
- * Describes a pug match.
- * @typedef pug
- * @property {number} id - The pug'announcements unique id.
- * @property {string} map - The map played in the pug.
+ * Describes a Pug match.
+ * @typedef Pug
+ * @property {number} id - The Pug'announcements unique id.
+ * @property {string} map - The map played in the Pug.
  * @property {number} winningTeam - The index of the team that won in the teams array.
- * @property {Date} timestamp - The timestamp of when the pug was started.
+ * @property {Date} timestamp - The timestamp of when the Pug was started.
  * @property {number|null} logsID - The logs.tf unique log id, if any.
- * @property {Team[]} teams - The array of teams that played in the pug.
+ * @property {Team[]} teams - The array of teams that played in the Pug.
  */
-export class pug {
+export class Pug {
   id: number;
   map: string;
   winningTeam: number;
@@ -19,10 +19,10 @@ export class pug {
   teams: Team[];
 
     /**
-     * Creates a new pug object.
-     * @param {number} id - The pug'announcements unique ID.
-     * @param {string} map - The map that was/is being played in the pug.
-     * @param {Team[]} teams - The 2 teams participating in the pug.
+     * Creates a new Pug object.
+     * @param {number} id - The Pug'announcements unique ID.
+     * @param {string} map - The map that was/is being played in the Pug.
+     * @param {Team[]} teams - The 2 teams participating in the Pug.
      */
   constructor(id: number, map: string, teams: Team[]) {
 	  if (Team.length !== 2) {
@@ -37,12 +37,12 @@ export class pug {
   }
 
     /**
-     * Ends the pug.
+     * Ends the Pug.
      * @param {number} winner - The index of the winner in the teams array.
      * @param {number} logsID - The logs.tf unique log id, if any.
-     * @returns {pug} - The pug object.
+     * @returns {Pug} - The Pug object.
      */
-  end(winner: number, logsID: number): pug {
+  end(winner: number, logsID: number): Pug {
     this.winningTeam = winner;
     this.logsID = logsID;
     return this;

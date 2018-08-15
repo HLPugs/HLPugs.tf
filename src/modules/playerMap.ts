@@ -1,18 +1,18 @@
 import { store }                          from '../server';
 import * as config                        from 'config';
-import { DraftTFClass, DraftTFClassList } from '../structures/draftClassList';
-import { player }                         from '../structures/player';
+import { DraftTFClass, DraftTFClassList } from 'DraftClassList.ts';
+import { player }                         from 'Player.ts';
 import logger                             from './logger';
 import * as crypto                        from 'crypto';
 import * as uuid                          from 'uuid';
 
 /**
  * @module playerMap
- * A module that enables the retrieval, setting and deletion of a {@Link player}
+ * A module that enables the retrieval, setting and deletion of a {@Link Player}
  * in a collection referenced by their SteamID
  */
 
-// Declare player map and draft class list
+// Declare Player map and draft class list
 const players = new Map<string, string>();
 const draftTFClassLists = new Map<DraftTFClass, string[]>();
 
@@ -24,8 +24,8 @@ draftTFClasses.forEach(draftTFClass => draftTFClassLists.set(draftTFClass.name, 
 
 /**
  * Retrieves a session ID from the map using a SteamID.
- * @param {string} steamid - The player to retrieve.
- * @returns {Promise<player>} - The {@Link player}.
+ * @param {string} steamid - The Player to retrieve.
+ * @returns {Promise<player>} - The {@Link Player}.
  */
 export const getPlayer = (steamid: string): Promise<player> => {
   return new Promise((resolve) => {
@@ -41,16 +41,16 @@ export const getPlayer = (steamid: string): Promise<player> => {
 };
 
 /**
- * Adds or updates a session ID in the player map.
- * @param {string} sessionid - The player's sessionid to add (or update if existing).
+ * Adds or updates a session ID in the Player map.
+ * @param {string} sessionid - The Player's sessionid to add (or update if existing).
  * @param {string} steamid - The SteamID that references the session ID.
  */
 export const addPlayer = (sessionid: string, steamid: string) => players.set(steamid, sessionid);
 
 /**
- *  Adds a fake session to the player map. ( FOR DEBUGGING USE ONLY )
+ *  Adds a fake session to the Player map. ( FOR DEBUGGING USE ONLY )
  * @param {string} steamid - The fake SteamID to add
- * @return {Promise<void>} - Resolves once the player is successfully added
+ * @return {Promise<void>} - Resolves once the Player is successfully added
  */
 export function addFakePlayer(steamid: string): Promise<void> {
   return new Promise(((resolve, reject) => {
@@ -72,7 +72,7 @@ export function addFakePlayer(steamid: string): Promise<void> {
 }
 
 /**
- * Removes a player from the player map
+ * Removes a Player from the Player map
  * @param {string} steamid - The SteamID to remove.
 */
 export const removePlayer = (steamid: string) => players.delete(steamid);
@@ -83,7 +83,7 @@ export const removePlayer = (steamid: string) => players.delete(steamid);
 export const removeAllPlayers = () => players.clear();
 
 /**
- * Returns all players as an array of {@Link player}'s
+ * Returns all players as an array of {@Link Player}'s
  */
 export const getAllPlayers = () => {
   return new Promise(async (resolve) => {
@@ -94,12 +94,12 @@ export const getAllPlayers = () => {
 };
 
 /**
- * Adds a player to a class
- * @param {string} steamid - The SteamID of the player to add
+ * Adds a Player to a class
+ * @param {string} steamid - The SteamID of the Player to add
  * @param {string} draftTFClass - The class to be added on
  */
 export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: DraftTFClass) => {
-  // Ensure player isn't already added up to the class
+  // Ensure Player isn't already added up to the class
   if (draftTFClassLists.get(draftTFClass).indexOf(steamid) === -1) {
     draftTFClassLists.get(draftTFClass).push(steamid);
     const player: player = await getPlayer(steamid);
@@ -108,8 +108,8 @@ export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: Draft
 };
 
 /**
- * Removes a player from a class
- * @param {string} steamid - The SteamID of the player to remove
+ * Removes a Player from a class
+ * @param {string} steamid - The SteamID of the Player to remove
  * @param {string} draftTFClass - The class to be removed from
  */
 export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: DraftTFClass) => {
@@ -128,15 +128,15 @@ export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: Dr
 };
 
 /**
- * Removes a player from all classes
- * @param {string} steamid - The SteamID of the player to be removed from all classes
+ * Removes a Player from all classes
+ * @param {string} steamid - The SteamID of the Player to be removed from all classes
  */
 export const removePlayerAllDraftTFClasses = (steamid: string) => {
   draftTFClasses.forEach(draftTFClassList => removePlayerDraftTFClass(steamid, draftTFClassList.name));
 };
 
 /**
- * Returns every player added to a class
+ * Returns every Player added to a class
  * @param {DraftTFClass} draftTFClass
  * @returns {string[]} An array of the added players SteamIDs as strings
  */

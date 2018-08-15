@@ -1,5 +1,5 @@
 import { Server }       from 'socket.io';
-import { DraftTFClass } from '../../../structures/draftClassList';
+import { DraftTFClass } from '../../../structures/DraftClassList';
 import * as playerMap   from '../../playerMap';
 
 export const classLists = (io: Server) => {

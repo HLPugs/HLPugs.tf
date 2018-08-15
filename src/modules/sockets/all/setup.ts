@@ -1,7 +1,7 @@
 import * as config      from 'config';
 import { Server }       from 'socket.io';
 import * as playerMap   from '../../playerMap';
-import { DraftTFClass } from '../../../structures/draftClassList';
+import { DraftTFClass } from '../../../structures/DraftClassList';
 
 export const setup = (io: Server) => {
   io.on('connection', async (socket) => {

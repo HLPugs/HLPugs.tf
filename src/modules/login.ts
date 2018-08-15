@@ -3,8 +3,8 @@ import db                       from '../database/db';
 import { getActivePunishments } from './punishments';
 import { QueryResult }          from 'pg';
 import logger                   from './logger';
-import { player }               from '../structures/player';
-import { punishment }           from '../structures/punishment';
+import { Player }               from '../structures/Player';
+import { Punishment }           from '../structures/Punishment';
 
 declare module 'express' {
   export interface Request {
@@ -24,11 +24,11 @@ export const loginUser = async(req: Request): Promise<void> => {
   const avatar = req.user.avatar.medium;
   const ip = req.headers['x-forwarded-for'];
 
-  // Assign the player's session as an instance of player
-  req.session.user = new player(steamid, avatar);
+  // Assign the Player's session as an instance of Player
+  req.session.user = new Player(steamid, avatar);
   req.session.sockets = [];
 
-  // Insert player into database, or at the very least, update their IP
+  // Insert Player into database, or at the very least, update their IP
   // TODO Insert / Update IP
   const query = {
     text: `INSERT INTO players (steamid, avatar)
@@ -44,14 +44,14 @@ export const loginUser = async(req: Request): Promise<void> => {
 
   // Only spend time grabbing punishments if user exists
   if (alias !== null) {
-    // Set player'announcements session
+    // Set Player'announcements session
     req.session.user.alias     = alias;
-    await req.session.user.addRoles(roles);
+    req.session.user.get(roles);
     req.session.user.isCaptain = captain;
 
-    // Fetch player's punishments
+    // Fetch Player's punishments
     const punishments = await getActivePunishments(steamid);
-    punishments.forEach((x: punishment) => req.session.user.punishments[x.punishment] = x.data);
+    punishments.forEach((x: Punishment) => req.session.user.punishments[x.punishment] = x.data);
 
     // Log the login
     logger.info(`${alias} logged in`, { steamid });

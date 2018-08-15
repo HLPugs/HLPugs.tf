@@ -1,4 +1,4 @@
-export interface steamUserAPI {
+export interface SteamUserAPI {
   steamUserAPI: {
     steamid: string;
     communityvisibilitystate: number;

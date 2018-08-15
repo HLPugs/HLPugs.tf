@@ -3,7 +3,7 @@ import * as config                   from 'config';
 import * as steam                    from 'steam-login';
 import { loginUser }                 from './login';
 import { handleError }               from './errorHandler';
-import { steamUser }                 from '../structures/steamUser';
+import { steamUser }                 from 'SteamUser.ts';
 
 const router: Router = Router();
 

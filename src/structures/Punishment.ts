@@ -1,7 +1,7 @@
 /**
  *
  */
-export interface punishment {
+export interface Punishment {
   punishment: string;
   data: {
     expiration: string,

@@ -13,32 +13,32 @@ describe('Roles', () => {
     db.query(query);
   });
 
-  it('should give a player a patron role', async () => {
+  it('should give a Player a patron role', async () => {
     const player = await getPlayer('EpicGamer');
     await player.addRole('patron');
     expect(player.roles).to.contain('patron');
   });
 
-  it('should remove a player\'s patron role', async () => {
+  it('should remove a Player\'s patron role', async () => {
     const player = await getPlayer('EpicGamer');
     await player.removeRole('patron');
     expect(player.roles).to.not.contain('patron');
   });
 
-  it('should give a player the admin role', async() => {
+  it('should give a Player the admin role', async() => {
     const player = await getPlayer('EpicGamer');
     await player.addRole('admin');
     expect(player.staffRole).to.equal('admin');
   });
 
-  it('should remove a player\'s staff role', async() => {
+  it('should remove a Player\'s staff role', async() => {
     const player = await getPlayer('EpicGamer');
     await player.addRole('admin');
     await player.removeRole('admin');
     expect(player.staffRole).to.not.equal('admin');
   });
 
-  it('should make the player a league admin', async() => {
+  it('should make the Player a league admin', async() => {
     const player = await getPlayer('EpicGamer');
     await player.setLeagueAdminStatus(true);
     expect(player.isLeagueAdmin).to.equal(true);

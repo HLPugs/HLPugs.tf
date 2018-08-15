@@ -1,5 +1,5 @@
-import { player }           from './player';
-import { playerTFClassMap } from './playerTFClassMap';
+import { Player }           from './Player';
+import { PlayerTFClassMap } from './PlayerTFClassMap';
 
 /**
  * @typedef TeamColor
@@ -9,27 +9,27 @@ export type TeamColor = string | number;
 /**
  * Describes a team.
  * @typedef Team
- * @property {player} captain - The team's captain.
+ * @property {Player} captain - The team's captain.
  * @property {number} score - The team's score.
  * @property {TeamColor} color - The team's color. Either RED or BLU.
- * @property {playerTFClassMap} classes - A {@Link PlayerTFClassMap} that matches
+ * @property {PlayerTFClassMap} classes - A {@Link PlayerTFClassMap} that matches
  * players to their respective classes.
  */
 export class Team {
-  captain: player;
+  captain: Player;
   score: number;
   color: TeamColor;
-  classes: playerTFClassMap;
+  classes: PlayerTFClassMap;
 
     /**
      * Creates a new Team object.
-     * @param {player} captain - The team's captain.
+     * @param {Player} captain - The team's captain.
      * @param {TeamColor} color - The team's color. Either RED or BLU.
-     * @param {playerTFClassMap} classes - A playerTFClassMap that matches players to their
+     * @param {PlayerTFClassMap} classes - A PlayerTFClassMap that matches players to their
      *     respective classes.
      * @param {number} [score=0] - The team's score.
      */
-  constructor(captain: player, color: TeamColor, classes: playerTFClassMap, score: number = 0) {
+  constructor(captain: Player, color: TeamColor, classes: PlayerTFClassMap, score: number = 0) {
     this.captain = captain;
     this.score = score;
     this.color = color;
