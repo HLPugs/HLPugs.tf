@@ -13,7 +13,7 @@
 #loadingHolder {
     width: 100vw;
     height: 100vh;
-    background: rgba(0,0,0,0.8);
+    background: var(--background-modal);
     display: flex;
     justify-content: center;
     flex-direction: column;

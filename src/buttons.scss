@@ -32,10 +32,10 @@
 }
 
 .button-green {
-  background: #00e676;
+  background: hsl(150, 100%, 45%);
 
   &:active {
-    background: #00c853;
+    background: hsl(145, 100%, 40%);
   }
 }
 

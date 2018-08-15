@@ -3,7 +3,7 @@
     display: flex;
     width: 100vw;
     height: 100vh;
-    background: rgba(0,0,0,0.8);
+    background: var(--background-modal);
     justify-content: center;
     align-items: center;
     animation: fade-in .3s ease;
