@@ -4,8 +4,8 @@ import { CompletionItem } from '../../../common/types';
 
 const allEmojisList = Object.keys(allEmojis.emojis);
 
-const SearchEmojis = (fragment: string, input: React.RefObject<HTMLTextAreaElement>, customEmojis: CustomEmoji[]) => {
-    const query = fragment.slice(1);
+const SearchEmojis = (fragment: string, customEmojis: CustomEmoji[]) => {
+    const query = fragment.slice(1).toLowerCase();
 
     if (!fragment.startsWith(':') || query.length <= 1) {
         // If query is only 1 character or isn't actually a emoji search, return with blank
@@ -58,4 +58,21 @@ const SearchEmojis = (fragment: string, input: React.RefObject<HTMLTextAreaEleme
     };
 };
 
-export default SearchEmojis;
+const SearchMentions = (fragment: string, mentions: string[]) => {
+    const query = fragment.slice(1).toLowerCase();
+
+    const exactMentions = mentions.filter(m => m.toLowerCase().substring(0, query.length) === query);
+
+    const anyMentions = mentions.filter(m => m.toLowerCase().includes(query));
+
+    const mentionCompletions = exactMentions.concat(anyMentions
+        .filter(m => exactMentions.indexOf(m) === -1)
+    ).slice(0, 8);
+
+    return {
+        autoCompleteIndex: 0,
+        mentionCompletions: mentionCompletions
+    };
+};
+
+export { SearchEmojis, SearchMentions };
