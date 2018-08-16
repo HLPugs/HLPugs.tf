@@ -13,7 +13,6 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.get('/verify', steam.verify(), (req: steam.SteamRequest, res: Response) => {
-  console.log(req.session);
   loginUser(req)
       .then(() => res.redirect('/'))
       .catch(e => handleError(e, req.session.steamid));

@@ -64,7 +64,7 @@ export class Player {
         = new Map<PunishmentType, PunishmentData>();
   }
 
-  static async addRole(role: Role | StaffRole) {
+  async addRole(role: Role | StaffRole) {
     const query = {
       text: addRoleQuery,
       value: role,
