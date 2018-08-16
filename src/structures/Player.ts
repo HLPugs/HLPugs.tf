@@ -1,10 +1,10 @@
 /* tslint:disable:variable-name */
 
-import { TFClassesTracker }                                       from './TFClassesTracker';
-import { Role, StaffRole }                                        from './Roles';
-import { PunishmentData, PunishmentType }                         from './Punishment';
-import db                                                         from '../database/db';
-import { addRoleQuery }                                           from '../database/queries/roles';
+import { TFClassesTracker }               from './TFClassesTracker';
+import { Role, StaffRole }                from './Roles';
+import { PunishmentData, PunishmentType } from './Punishment';
+import db                                 from '../database/db';
+import { addRoleQuery }                   from '../database/queries/player';
 
 /**
  * Describes a Player.

@@ -4,9 +4,9 @@ import { getActivePunishments } from './punishments';
 import { QueryResult }          from 'pg';
 import logger                   from './logger';
 import { Player }               from '../structures/Player';
-import { loginUserQuery }       from '../database/queries/roles';
 import { SteamRequest }         from 'steam-login';
 import { Punishment }           from '../structures/Punishment';
+import { loginUserQuery }       from '../database/queries/player';
 
 /**
  *
