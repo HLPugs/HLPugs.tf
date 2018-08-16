@@ -1,22 +1,22 @@
 /* tslint:disable:variable-name */
 
-import { TFClassesTracker } from './TFClassesTracker';
-import { Role, StaffRole }  from './Roles';
-import { Punishment }       from './Punishment';
-import db                   from '../database/db';
-import { addRoleQuery }     from '../database/queries/roles';
+import { TFClassesTracker }                                       from './TFClassesTracker';
+import { Role, StaffRole }                                        from './Roles';
+import { PunishmentData, PunishmentType }                         from './Punishment';
+import db                                                         from '../database/db';
+import { addRoleQuery }                                           from '../database/queries/roles';
 
 /**
  * Describes a Player.
  * @typedef Player
- * @property {string} steamid - The Player'announcements SteamID.
- * @property {URL} avatar - The link to the Player'announcements Steam avatar
- * @property {string} alias - The Player'announcements unique custom alias on the site.
- * @property {number} pugs - The number of pugs the Player has played.
- * @property {number} wins - The number of pugs the Player has won.
- * @property {number} losses - The number of pugs the Player has lost.
- * @property {Role[]} roles - The Player's stackable roles
- * @property {boolean} isCaptain - Whether or not the Player is qualified to be a captain.
+ * @property {string} steamid - The player's SteamID.
+ * @property {URL} avatar - The link to the player's Steam avatar
+ * @property {string} alias - The Player's unique custom alias on the site.
+ * @property {number} pugs - The number of pugs the player has played.
+ * @property {number} wins - The number of pugs the player has won.
+ * @property {number} losses - The number of pugs the player has lost.
+ * @property {Role[]} roles - The player's stackable roles
+ * @property {boolean} isCaptain - Whether or not the player is qualified to be a captain.
  * @property {TFClassesTracker} winsByClass - A {@link TFClassesTracker} object that maps the
  *     amount of pugs the Player has won to each class.
  * @property {TFClassesTracker} lossesByClass - A {@link TFClassesTracker} object that maps the
@@ -46,7 +46,7 @@ export class Player {
   private _staffRole: StaffRole | false;
   winsByClass: TFClassesTracker;
   lossesByClass: TFClassesTracker;
-  punishments: Punishment[]       = [];
+  activePunishments: Map<PunishmentType, PunishmentData>;
 
   /**
    * Creates a new Player object.
@@ -60,6 +60,8 @@ export class Player {
     this.alias = alias || undefined;
     this.winsByClass = new TFClassesTracker();
     this.lossesByClass = new TFClassesTracker();
+    this.activePunishments
+        = new Map<PunishmentType, PunishmentData>();
   }
 
   static async addRole(role: Role | StaffRole) {
@@ -71,13 +73,14 @@ export class Player {
     db.query(query);
   }
 
-  async addRoles(roles: (Role | StaffRole)[]) {
+  async updateRoles(roles: Role[], staffRole: StaffRole, isLeagueAdmin: boolean) {
 //    const staffRoles = ['mod', 'admin', 'headAdmin'];
 //    const staffRole = roles.filter(x => staffRoles.find(roles));
 //
 //    const query = {
 //      text: ``,
 //    };
+    return;
   }
 
   async removeRole(role: Role | StaffRole) {
