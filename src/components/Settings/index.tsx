@@ -32,7 +32,7 @@ class Settings extends React.PureComponent<SettingsProps, {}> {
           <div className="settingsSection">
             <div className="settingsTitle">
               Favorite Classes
-                        </div>
+            </div>
             <div className="settingsBody">
               <div className="favClassesHolder">
                 {this.props.classes.map((tfclass: DraftTFClassList, index) => {
@@ -55,7 +55,7 @@ class Settings extends React.PureComponent<SettingsProps, {}> {
           <div className="settingsSection">
             <div className="settingsTitle">
               Volume
-                        </div>
+            </div>
             <div className="settingsBody">
               <input type="range" />
               <input id="audioCues" type="checkbox" />
@@ -65,22 +65,22 @@ class Settings extends React.PureComponent<SettingsProps, {}> {
           <div className="settingsSection">
             <div className="settingsTitle">
               Voice Packs
-                        </div>
+            </div>
             <div className="settingsBody">
               <select>
                 <option>
                   Default
-                                </option>
+                </option>
               </select>
               <span className="hintText">
                 Changes sounds that play on the site such as during ready-up phase, etc.
-                            </span>
+              </span>
             </div>
           </div>
           <div className="settingsSection">
             <div className="settingsTitle">
               Chat
-                        </div>
+            </div>
             <div className="settingsBody">
               <input id="chatPings" type="checkbox" />
               <label htmlFor="chatPings">
