@@ -4,7 +4,7 @@
     height: 100vh;
     top: 0;
     left: 0;
-    background: rgba(0, 0, 0, 0.6);
+    background: var(--background-modal);
     z-index: 999;
     display: flex;
     align-items: center;
@@ -64,12 +64,12 @@
                 }
 
                 &:invalid {
-                    border-color: #f44336;
+                    border-color: hsl(4, 90%, 59%);
                 }
             }
 
             .aliasTaken {
-                color: #f44336;
+                color: hsl(4, 90%, 59%);
             }
         }
     }
