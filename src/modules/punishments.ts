@@ -1,15 +1,14 @@
 import { QueryResult } from 'pg';
 import db              from '../database/db';
-import { punishment }  from 'Punishment.ts';
-
-/**
+import { Punishment }  from '../structures/Punishment';
+    /**
  * Retrieves the most recent active Punishment of a Player
  * @param {string} steamid The Player to request the Punishment information from
  * @returns {Promise<object>} Ban reason, expiration, and creator's SteamID and steam avatar
  */
-export const getActivePunishments = async(steamid: string): Promise<punishment[]> => {
+export const getActivePunishments = async(steamid: string): Promise<Punishment[]> => {
 
-  // Retrieve Punishment reason, expiration, and creator's SteamID and avatar for all active punishments
+  // Retrieve Punishment reason, expiration, and creator's SteamID and avatar for all active activePunishments
   const query = {
     text: `SELECT
     punishment
@@ -36,6 +35,6 @@ export const getActivePunishments = async(steamid: string): Promise<punishment[]
   const res: QueryResult = await db.query(query);
   const punishments = res.rows;
 
-  // Exclude inactive punishments
-  return punishments.filter((x: punishment) => new Date(x.data.expiration) > new Date());
+  // Exclude inactive activePunishments
+  return punishments.filter((x: Punishment) => new Date(x.data.expiration) > new Date());
 };
