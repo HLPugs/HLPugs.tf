@@ -65,12 +65,7 @@ export class Player {
   }
 
   async addRole(role: Role | StaffRole) {
-    const query = {
-      text: addRoleQuery,
-      value: role,
-    };
-
-    db.query(query);
+    db.query(addRoleQuery, [role]);
   }
 
   async updateRoles(roles: Role[], staffRole: StaffRole, isLeagueAdmin: boolean) {

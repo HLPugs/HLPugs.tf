@@ -33,14 +33,14 @@ export const loginUser = async(req: SteamRequest): Promise<void> => {
 
   // Only spend time grabbing activePunishments if user exists
   if (alias !== null) {
-    // Set Player'announcements session
+    // Set Player's session
     player.alias = alias;
     player.updateRoles(roles, staffRole, isLeagueAdmin).catch((e) => {
       throw e;
     });
     player.isCaptain = isCaptain;
 
-    // Fetch Player's activePunishments
+    // Fetch player's active punishments
     const punishments = await getActivePunishments(steamid);
     punishments.forEach((punishment: Punishment) => {
       player.activePunishments.set(punishment.type, punishment.data);
