@@ -1,10 +1,17 @@
 /* tslint:disable:variable-name */
 
-import { TFClassesTracker }               from './TFClassesTracker';
-import { Role, StaffRole }                from './Roles';
-import { PunishmentData, PunishmentType } from './Punishment';
-import db                                 from '../database/db';
-import { addRoleQuery }                   from '../database/queries/player';
+import { TFClassesTracker }                                           from './TFClassesTracker';
+import { PunishmentData, PunishmentType }                             from './Punishment';
+import db                                                             from '../database/db';
+import {
+  addRoleQuery,
+  removeRoleQuery,
+  setLeagueAdminStatusQuery,
+  setStaffRoleQuery,
+} from '../database/queries/player';
+import logger                                                         from '../modules/logger';
+import { Role, StaffRole }                                            from './Roles';
+import { removePlayer }                                               from '../modules/playerMap';
 
 /**
  * Describes a Player.
@@ -35,6 +42,7 @@ export class Player {
   }
 
   steamid: string;
+  sessionid: string;
   alias: string                   = undefined;
   avatar: string;
   pugs: number                    = 0;
@@ -64,8 +72,32 @@ export class Player {
         = new Map<PunishmentType, PunishmentData>();
   }
 
-  async addRole(role: Role | StaffRole) {
-    db.query(addRoleQuery, [role]);
+  async addRole(role: Role): Promise<void> {
+    if (this._roles.indexOf(role) !== -1) {
+      logger.warn(`${this.alias} is already ${role}`);
+    } else {
+      await db.query(removeRoleQuery, [role, this.steamid]);
+      await db.query(addRoleQuery, [role, this.steamid]);
+      this._roles.push(role);
+    }
+  }
+
+  async setStaffRole(role: StaffRole | false): Promise<void> {
+    if (role === this.staffRole) {
+      logger.warn(`${this.alias} is already ${role}`);
+    } else {
+      await db.query(setStaffRoleQuery, [role, this.steamid]);
+      this._staffRole = role;
+    }
+  }
+
+  async setLeagueAdminStatus(status: boolean) {
+    if (this._isLeagueAdmin === status) {
+      logger.warn(`${this.alias}'s league admin status is already ${status}`);
+    } else {
+      await db.query(setLeagueAdminStatusQuery, [status, this.steamid]);
+      this._isLeagueAdmin = status;
+    }
   }
 
   async updateRoles(roles: Role[], staffRole: StaffRole, isLeagueAdmin: boolean) {
@@ -78,16 +110,11 @@ export class Player {
     return;
   }
 
-  async removeRole(role: Role | StaffRole) {
-
-  }
-
-  async setLeagueAdminStatus(status: boolean) {
+  async removeRole(role: Role | StaffRole | 'isLeagueAdmin') {
 
   }
 
   async removeAllRoles() {
 
   }
-
 }

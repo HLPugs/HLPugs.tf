@@ -5,17 +5,13 @@ dotenv.config();
 
 import * as config                       from 'config';
 import * as crypto                       from 'crypto';
-import * as connect_redis                from 'connect-redis';
 import * as express                      from 'express';
 import * as expressSession               from 'express-session';
 import * as steam                        from 'steam-login';
 import * as uuid                         from 'uuid';
 import { Server }                        from 'http';
 import { routing, sockets, handleError } from './modules';
-
-export const store = process.env.NODE_ENV === 'production' ?
-	connect_redis(expressSession) :
-  new expressSession.MemoryStore();
+import { store }                         from './modules/store';
 
 const sessionConfig = expressSession({
   store,

@@ -9,7 +9,7 @@
 		"watch-node": "nodemon dist/server.js",
 		"build-ts": "tsc -p tsconfig.json",
 		"watch-ts": "tsc -w",
-		"test": "npm run build-ts && mocha dist/test/*.js",
+		"test": "mocha -r ts-node/register src/test/*.ts",
 		"tslint": "tslint -c tslint.json -p tsconfig.json"
 	},
 	"dependencies": {
@@ -21,7 +21,6 @@
 		"dotenv": "^6.0.0",
 		"express": "^4.16.3",
 		"express-session": "^1.15.6",
-		"jest": "^23.4.2",
 		"npm": "^6.3.0",
 		"pg": "^7.4.3",
 		"request": "^2.87.0",

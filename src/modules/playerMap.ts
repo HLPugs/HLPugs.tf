@@ -1,22 +1,22 @@
-import { store }                          from '../server';
 import * as config                        from 'config';
 import logger                             from './logger';
 import * as crypto                        from 'crypto';
 import * as uuid                          from 'uuid';
 import { DraftTFClass, DraftTFClassList } from '../structures/DraftClassList';
 import { Player }                         from '../structures/Player';
+import { store }                          from './store';
 
 /**
  * @module playerMap
- * A module that enables the retrieval, setting and deletion of a {@Link Player}
+ * A module that enables the retrieval, setting and deletion of a {@link Player}
  * in a collection referenced by their SteamID
  */
 
-// Declare Player map and draft class list
+// this collection maps a SteamID to a session ID
 const players = new Map<string, string>();
+
 const draftTFClassLists = new Map<DraftTFClass, string[]>();
 
-// Load the gamemode-specific class configuration
 const draftTFClasses: DraftTFClassList[] = config.get('app.configuration.classes');
 
 // Empty out every class in the draft class list
@@ -52,23 +52,33 @@ export const addPlayer = (sessionid: string, steamid: string) => players.set(ste
  * @param {string} steamid - The fake SteamID to add
  * @return {Promise<void>} - Resolves once the Player is successfully added
  */
+
 export function addFakePlayer(steamid: string): Promise<void> {
-  return new Promise(((resolve, reject) => {
-
-    const sessionID = crypto.createHash('sha256')
-        .update(uuid.v1())
-        .update(crypto.randomBytes(256))
-        .digest('hex');
-
-    const session = { user: new Player(steamid, '', '') };
+  if (process.env.NODE_ENV !== 'production') {
+    return new Promise(((resolve, reject) => {
+      const fakeSess = {
+        cookie: {
+          expires: '2000000000',
+          originalMaxAge: 999999999,
+        },
+      };
+      const fakeRequest = {
+        sessionID: crypto.createHash('sha256')
+          .update(uuid.v1())
+          .update(crypto.randomBytes(256))
+          .digest('hex'),
+      };
 
     // @ts-ignore
-    store.set(sessionID, session, (err) => {
-      if (err) reject(err);
-      addPlayer(sessionID, steamid);
-      resolve();
-    });
-  }));
+      const fakeSession = store.createSession(fakeRequest, fakeSess);
+      fakeSession.user = new Player(steamid, '');
+      store.set(fakeSession.id, fakeSession, (err) => {
+        if (err) reject(err);
+        addPlayer(fakeSession.id, steamid);
+        resolve();
+      });
+    }));
+  }
 }
 
 /**
