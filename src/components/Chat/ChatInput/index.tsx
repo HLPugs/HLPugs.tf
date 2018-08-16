@@ -4,13 +4,14 @@ import EmojiPicker from './EmojiPicker';
 import { EmojiData, CustomEmoji } from 'emoji-mart';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CompletionItem } from '../../../common/types';
-import SearchEmojis from './SearchEmojis';
+import { SearchEmojis, SearchMentions } from './SearchCompletions';
 import './style.css';
 
 interface ChatInputProps {
   socket: SocketIOClient.Socket;
   loggedIn?: boolean;
   customEmojis: CustomEmoji[];
+  mentions: string[];
 }
 
 interface ChatInputState {
@@ -100,7 +101,9 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
     const fragment: string = tokens[tokens.length - 1];
 
     if (fragment && (fragment.startsWith('@') || fragment.startsWith(':'))) {
-      this.setState(SearchEmojis(fragment, this.messageInput, this.props.customEmojis));
+      fragment.startsWith(':') ? 
+        this.setState(SearchEmojis(fragment, this.props.customEmojis)) :
+        this.setState(SearchMentions(fragment, this.props.mentions));
     } else {
       this.setState({
         autoCompleteIndex: 0,

@@ -5,6 +5,7 @@ import { CustomEmoji } from 'emoji-mart';
 import './style.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserScheme } from '../../common/types';
+import { PlayerDataConsumer } from '../../pages/Home';
 
 interface ChatProps {
   socket: SocketIOClient.Socket;
@@ -42,21 +43,26 @@ class Chat extends React.PureComponent<ChatProps, ChatState> {
 
   render() {
     return (
-      <aside className={this.state.active ? 'chatActive' : ''}>
-        <div id="chatOpener" onClick={this.toggleChat}>
-          <FontAwesomeIcon icon="comments" />
-        </div>
-        <ChatMessages
-          socket={this.props.socket}
-          customEmojis={this.state.customEmojis}
-          steamid={this.props.user.steamid}
-        />
-        <ChatInput
-          socket={this.props.socket}
-          loggedIn={this.props.user.loggedIn}
-          customEmojis={this.state.customEmojis}
-        />
-      </aside>
+      <PlayerDataConsumer>
+        {(playerData) => (
+          <aside className={this.state.active ? 'chatActive' : ''}>
+            <div id="chatOpener" onClick={this.toggleChat}>
+              <FontAwesomeIcon icon="comments" />
+            </div>
+            <ChatMessages
+              socket={this.props.socket}
+              customEmojis={this.state.customEmojis}
+              steamid={this.props.user.steamid}
+            />
+            <ChatInput
+              socket={this.props.socket}
+              loggedIn={this.props.user.loggedIn}
+              customEmojis={this.state.customEmojis}
+              mentions={playerData ? Object.keys(playerData).map(p => playerData[p].alias) : []}
+            />
+          </aside>
+        )}
+      </PlayerDataConsumer>
     );
   }
 }
