@@ -5,7 +5,7 @@ import { CompletionItem } from '../../../common/types';
 const allEmojisList = Object.keys(allEmojis.emojis);
 
 const SearchEmojis = (fragment: string, customEmojis: CustomEmoji[]) => {
-    const query = fragment.slice(1);
+    const query = fragment.slice(1).toLowerCase();
 
     if (!fragment.startsWith(':') || query.length <= 1) {
         // If query is only 1 character or isn't actually a emoji search, return with blank
@@ -59,11 +59,11 @@ const SearchEmojis = (fragment: string, customEmojis: CustomEmoji[]) => {
 };
 
 const SearchMentions = (fragment: string, mentions: string[]) => {
-    const query = fragment.slice(1);
+    const query = fragment.slice(1).toLowerCase();
 
-    const exactMentions = mentions.filter(m => m.substring(0, query.length) === query);
+    const exactMentions = mentions.filter(m => m.toLowerCase().substring(0, query.length) === query);
 
-    const anyMentions = mentions.filter(m => m.includes(query));
+    const anyMentions = mentions.filter(m => m.toLowerCase().includes(query));
 
     const mentionCompletions = exactMentions.concat(anyMentions
         .filter(m => exactMentions.indexOf(m) === -1)
