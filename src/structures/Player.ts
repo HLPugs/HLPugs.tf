@@ -40,7 +40,6 @@ export class Player {
   get roles(): Role[] {
     return this._roles;
   }
-
   steamid: string;
   sessionid: string;
   alias: string                   = undefined;
@@ -51,7 +50,7 @@ export class Player {
   isCaptain: boolean              = false;
   private _isLeagueAdmin: boolean = false;
   private _roles: Role[]          = [];
-  private _staffRole: StaffRole | false;
+  private _staffRole: StaffRole | false = false;
   winsByClass: TFClassesTracker;
   lossesByClass: TFClassesTracker;
   activePunishments: Map<PunishmentType, PunishmentData>;
@@ -68,10 +67,12 @@ export class Player {
     this.alias = alias || undefined;
     this.winsByClass = new TFClassesTracker();
     this.lossesByClass = new TFClassesTracker();
+    this._staffRole = false;
+    this._roles = [];
+    this._isLeagueAdmin = false;
     this.activePunishments
         = new Map<PunishmentType, PunishmentData>();
   }
-
   async addRole(role: Role): Promise<void> {
     if (this._roles.indexOf(role) !== -1) {
       logger.warn(`${this.alias} is already ${role}`);

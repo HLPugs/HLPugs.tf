@@ -75,6 +75,7 @@ export function addFakePlayer(steamid: string): Promise<void> {
       store.set(fakeSession.id, fakeSession, (err) => {
         if (err) reject(err);
         addPlayer(fakeSession.id, steamid);
+        const p = this.getPlayer(steamid);
         resolve();
       });
     }));
