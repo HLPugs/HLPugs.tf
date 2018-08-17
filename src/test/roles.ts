@@ -10,8 +10,13 @@ describe('Roles', () => {
   before(async() => {
     await addFakePlayer('EpicGamer');
     chai.use(chaiAsPromised);
-    const query = `INSERT INTO players (steamid, avatar) VALUES ('EpicGamer', 'test') ON CONFLICT DO NOTHING`;
-    db.query(query);
+    const query = `INSERT INTO players (steamid, avatar) VALUES ('EpicGamer', 'test')`;
+    await db.query(query);
+  });
+
+  after(async() => {
+    const query = `DELETE FROM players WHERE steamid = 'EpicGamer'`;
+    await db.query(query);
   });
 
   it('should give a Player a patron role', async () => {
