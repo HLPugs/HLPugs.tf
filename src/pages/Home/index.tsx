@@ -32,9 +32,7 @@ class Home extends React.Component<HomeProps, HomeState> {
 
     this.state = {
       settingsOpen: false,
-      playerData: {
-
-      }
+      playerData: {}
     };
 
     this.props.socket.on('playerData', (playerData: Array<UserScheme>) => {
