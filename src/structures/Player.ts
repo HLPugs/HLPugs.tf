@@ -15,30 +15,20 @@ import { Role, StaffRole }                from './Roles';
 /**
  * Describes a Player.
  * @typedef Player
- * @property {string} steamid - The player's SteamID.
- * @property {URL} avatar - The link to the player's Steam avatar
+ * @property {string} steamid - The p's SteamID.
+ * @property {URL} avatar - The link to the p's Steam avatar
  * @property {string} alias - The Player's unique custom alias on the site.
- * @property {number} pugs - The number of pugs the player has played.
- * @property {number} wins - The number of pugs the player has won.
- * @property {number} losses - The number of pugs the player has lost.
- * @property {Role[]} roles - The player's stackable roles
- * @property {boolean} isCaptain - Whether or not the player is qualified to be a captain.
+ * @property {number} pugs - The number of pugs the p has played.
+ * @property {number} wins - The number of pugs the p has won.
+ * @property {number} losses - The number of pugs the p has lost.
+ * @property {Role[]} roles - The p's stackable roles
+ * @property {boolean} isCaptain - Whether or not the p is qualified to be a captain.
  * @property {TFClassesTracker} winsByClass - A {@link TFClassesTracker} object that maps the
  *     amount of pugs the Player has won to each class.
  * @property {TFClassesTracker} lossesByClass - A {@link TFClassesTracker} object that maps the
  *     amount of pugs the Player has lost to each class.
  */
 export class Player {
-  get isLeagueAdmin(): boolean {
-    return this._isLeagueAdmin;
-  }
-
-  get staffRole(): StaffRole | false {
-    return this._staffRole;
-  }
-  get roles(): Role[] {
-    return this._roles;
-  }
   steamid: string;
   sessionid: string;
   alias: string                   = undefined;
@@ -47,9 +37,9 @@ export class Player {
   totalWins: number               = 0;
   losses: number                  = 0;
   isCaptain: boolean              = false;
-  private _isLeagueAdmin: boolean = false;
-  private _roles: Role[]          = [];
-  private _staffRole: StaffRole | false = false;
+  isLeagueAdmin: boolean = false;
+  roles: Role[]          = [];
+  staffRole: StaffRole | false = false;
   winsByClass: TFClassesTracker;
   lossesByClass: TFClassesTracker;
   activePunishments: Map<PunishmentType, PunishmentData>;
@@ -66,21 +56,36 @@ export class Player {
     this.alias = alias || undefined;
     this.winsByClass = new TFClassesTracker();
     this.lossesByClass = new TFClassesTracker();
-    this._staffRole = false;
-    this._roles = [];
-    this._isLeagueAdmin = false;
+    this.staffRole = false;
+    this.roles = [];
+    this.isLeagueAdmin = false;
     this.activePunishments
         = new Map<PunishmentType, PunishmentData>();
     
   }
   
+  /*
+   Used as a second constructor method for assigning Player methods when
+   calling getPlayer (since methods are stripped from classes when put in a memory store)
+   */
+  static createPlayer(p: Player) {
+    const player = new Player(p.steamid, p.avatar, p.alias);
+	player.winsByClass = p.winsByClass;
+	player.lossesByClass = p.lossesByClass;
+	player.staffRole = p.staffRole;
+	player.roles = p.roles;
+	player.isLeagueAdmin = p.isLeagueAdmin;
+	player.activePunishments = p.activePunishments;
+	return player
+  }
+  
   async addRole(role: Role): Promise<void> {
-    if (this._roles.indexOf(role) !== -1) {
+    if (this.roles.indexOf(role) !== -1) {
       logger.warn(`${this.alias} is already ${role}`);
     } else {
       await db.query(removeRoleQuery, [role, this.steamid]);
       await db.query(addRoleQuery, [role, this.steamid]);
-      this._roles.push(role);
+      this.roles.push(role);
     }
   }
 
@@ -89,16 +94,16 @@ export class Player {
       logger.warn(`${this.alias} is already ${role}`);
     } else {
       await db.query(setStaffRoleQuery, [role, this.steamid]);
-      this._staffRole = role;
+      this.staffRole = role;
     }
   }
 
   async setLeagueAdminStatus(status: boolean) {
-    if (this._isLeagueAdmin === status) {
+    if (this.isLeagueAdmin === status) {
       logger.warn(`${this.alias}'s league admin status is already ${status}`);
     } else {
       await db.query(setLeagueAdminStatusQuery, [status, this.steamid]);
-      this._isLeagueAdmin = status;
+      this.isLeagueAdmin = status;
     }
   }
 

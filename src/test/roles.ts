@@ -20,37 +20,32 @@ describe('Roles', () => {
   });
 
   it('should give a Player a patron role', async () => {
-    const p = await getPlayer('EpicGamer');
-    const player = new Player(p.steamid, p.avatar);
+    const player = await getPlayer('EpicGamer');
     await player.addRole('patron');
     expect(player.roles).to.contain('patron');
   });
 
   it('should remove a Player\'s patron role', async () => {
-    const p = await getPlayer('EpicGamer');
-    const player = new Player(p.steamid, p.avatar);
+    const player = await getPlayer('EpicGamer');
     await player.removeRole('patron');
     expect(player.roles).to.not.contain('patron');
   });
 
   it('should give a Player the admin role', async() => {
-    const p = await getPlayer('EpicGamer');
-    const player = new Player(p.steamid, p.avatar);
+    const player = await getPlayer('EpicGamer');
     await player.setStaffRole('admin');
     expect(player.staffRole).to.equal('admin');
   });
 
   it('should remove a Player\'s staff role', async() => {
-    const p = await getPlayer('EpicGamer');
-    const player = new Player(p.steamid, p.avatar);
+    const player = await getPlayer('EpicGamer');
     await player.setStaffRole('admin');
     await player.setStaffRole(false);
     expect(player.staffRole).to.not.equal('admin');
   });
 
   it('should make the Player a league admin', async() => {
-    const p = await getPlayer('EpicGamer');
-    const player = new Player(p.steamid, p.avatar);
+    const player = await getPlayer('EpicGamer');
     await player.setLeagueAdminStatus(true);
     expect(player.isLeagueAdmin).to.equal(true);
   });
