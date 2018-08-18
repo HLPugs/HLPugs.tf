@@ -1,6 +1,5 @@
 import { Request }              from 'express';
 import db                       from '../database/db';
-import { getActivePunishments } from './punishments';
 import { QueryResult }          from 'pg';
 import logger                   from './logger';
 import { Player }               from '../structures/Player';
@@ -34,17 +33,10 @@ export const loginUser = async(req: SteamRequest): Promise<void> => {
   // Only spend time grabbing active punishments if user exists
   if (alias !== null) {
     // Set Player's session
+    await player.updateActivePunishments();
+    await player.updateRoles(roles, staffRole, isLeagueAdmin);
     player.alias = alias;
-    player.updateRoles(roles, staffRole, isLeagueAdmin).catch((e) => {
-      throw e;
-    });
     player.isCaptain = isCaptain;
-
-    // Fetch player's active punishments
-    const punishments = await getActivePunishments(steamid);
-    punishments.forEach((punishment: Punishment) => {
-      player.activePunishments.set(punishment.type, punishment.data);
-    });
 
     // Log the login
     logger.info(`${alias} logged in`, { steamid });

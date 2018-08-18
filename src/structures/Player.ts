@@ -1,16 +1,17 @@
 /* tslint:disable:variable-name */
 
-import { TFClassesTracker }                                           from './TFClassesTracker';
-import { PunishmentData, PunishmentType } from './Punishment';
-import db                                 from '../database/db';
+import { TFClassesTracker }                           from './TFClassesTracker';
+import { Punishment, PunishmentData, PunishmentType } from './Punishment';
+import db                                             from '../database/db';
 import {
-  addRoleQuery,
+  addRoleQuery, getActivePunishmentsQuery,
   removeRoleQuery,
   setLeagueAdminStatusQuery,
   setStaffRoleQuery,
-}                                         from '../database/queries/player';
-import logger                             from '../modules/logger';
-import { Role, StaffRole }                from './Roles';
+} from '../database/queries/player';
+import logger                                         from '../modules/logger';
+import { Role, StaffRole }                            from './Roles';
+import { QueryResult }                                from 'pg';
 
 /**
  * Describes a Player.
@@ -80,6 +81,22 @@ export class Player {
     player.isLeagueAdmin      = p.isLeagueAdmin;
     player._activePunishments = p._activePunishments;
     return player;
+  }
+
+  /**
+   * From the database, retrieves active punishments of this player and updates their session's punishments
+   * @returns {Promise<object>} Ban reason, expiration, and creator's SteamID and steam avatar
+   */
+  async updateActivePunishments(): Promise<void[]> {
+    const res: QueryResult = await db.query(getActivePunishmentsQuery, [this.steamid]);
+    const punishments = res.rows;
+
+    // Exclude inactive punishments
+    const activePunishments = punishments.filter((x: Punishment) => new Date(x.data.expiration) > new Date());
+    activePunishments.forEach((punishment: Punishment) => {
+      this._activePunishments.set(punishment.type, punishment.data);
+    });
+    return;
   }
 
   async addRole(role: Role): Promise<void> {
