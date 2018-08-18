@@ -89,13 +89,14 @@ export class Player {
     }
   }
 
-  async setStaffRole(role: StaffRole | false): Promise<void> {
+  async setStaffRole(role: StaffRole | false): Promise<Player> {
     if (role === this.staffRole) {
       logger.warn(`${this.alias} is already ${role}`);
     } else {
       await db.query(setStaffRoleQuery, [role, this.steamid]);
       this.staffRole = role;
     }
+    return this;
   }
 
   async setLeagueAdminStatus(status: boolean) {
@@ -117,8 +118,14 @@ export class Player {
     return;
   }
 
-  async removeRole(role: Role | StaffRole | 'isLeagueAdmin') {
-
+  async removeRole(role: Role) {
+    const indexOfRole = this.roles.indexOf(role);
+	if (indexOfRole === -1) {
+	  logger.warn(`${this.alias} already doesn't have ${role}`);
+	} else {
+	  await db.query(removeRoleQuery, [role, this.steamid]);
+	  this.roles.splice(indexOfRole, indexOfRole+1)
+	}
   }
 
   async removeAllRoles() {

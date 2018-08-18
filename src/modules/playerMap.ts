@@ -52,10 +52,11 @@ export const addPlayer = (sessionid: string, steamid: string) => players.set(ste
 /**
  *  Adds a fake session to the Player map. ( FOR DEBUGGING USE ONLY )
  * @param {string} steamid - The fake SteamID to add
+ * @param {string} alias - The site alias of the player
  * @return {Promise<void>} - Resolves once the Player is successfully added
  */
 
-export function addFakePlayer(steamid: string): Promise<void> {
+export function addFakePlayer(steamid: string, alias?: string): Promise<void> {
   if (process.env.NODE_ENV !== 'production') {
     return new Promise(((resolve, reject) => {
       const fakeSess = {
@@ -73,7 +74,7 @@ export function addFakePlayer(steamid: string): Promise<void> {
 
     // @ts-ignore
       const fakeSession = store.createSession(fakeRequest, fakeSess);
-      fakeSession.user = new Player(steamid, '');
+      fakeSession.user = new Player(steamid, '',  alias);
       store.set(fakeSession.id, fakeSession, (err) => {
         if (err) reject(err);
         addPlayer(fakeSession.id, steamid);
