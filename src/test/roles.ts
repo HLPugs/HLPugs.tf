@@ -13,11 +13,10 @@ describe('Roles', () => {
   before(async() => {
     await addFakePlayer(steamid, 'EpicGamer');
     chai.use(chaiAsPromised);
-	{
-	const query = `DELETE FROM players WHERE steamid = $1`;
-	await db.query(query, [steamid]);
-	
-	}
+    {
+      const query = `DELETE FROM players WHERE steamid = $1`;
+      await db.query(query, [steamid]);
+    }
     const query = `INSERT INTO players (steamid, avatar) VALUES ($1, 'fakeAvatar')`;
     db.query(query, [steamid]);
     player = await getPlayer(steamid);

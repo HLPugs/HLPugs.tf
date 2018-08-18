@@ -31,7 +31,7 @@ export const loginUser = async(req: SteamRequest): Promise<void> => {
   const res: QueryResult = await db.query(loginUserQuery, [steamid, avatar]);
   const { alias, isCaptain, roles, staffRole, isLeagueAdmin } = res.rows[0];
 
-  // Only spend time grabbing activePunishments if user exists
+  // Only spend time grabbing active punishments if user exists
   if (alias !== null) {
     // Set Player's session
     player.alias = alias;

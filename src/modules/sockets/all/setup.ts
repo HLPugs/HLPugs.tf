@@ -12,13 +12,8 @@ export const setup = (io: Server) => {
 	  }
 
     if (socket.request.session.user) {
-      const user = {
-        loggedIn: true,
-        alias: socket.request.session.user.alias,
-        avatar: socket.request.session.user.avatar,
-        steamid: socket.request.session.user.steamid,
-        punishments: socket.request.session.user.activePunishments,
-      };
+      const user = socket.request.session.user;
+      user.loggedIn = true;
 
       socket.emit('user', user);
     } else {

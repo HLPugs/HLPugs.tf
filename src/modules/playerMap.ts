@@ -35,7 +35,8 @@ export const getPlayer = (steamid: string): Promise<Player> => {
     const sessionid = players.get(steamid);
     store.get(sessionid, (err, session) => {
       if (err) throw err;
-      /* when a class is put in a memory store, it is stripped of it's methods.	  		Create an instance variable to gain access to Player's methods*/
+      /* When a class is put in a memory store, it is stripped of its methods.
+      	 Create an instance variable to gain access to Player's methods*/
 	  const player = Player.createPlayer(session.user);
       session ? resolve(player) : resolve(null);
     });

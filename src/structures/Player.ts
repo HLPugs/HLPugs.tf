@@ -61,24 +61,24 @@ export class Player {
     this.isLeagueAdmin = false;
     this.activePunishments
         = new Map<PunishmentType, PunishmentData>();
-    
+
   }
-  
+
   /*
    Used as a second constructor method for assigning Player methods when
    calling getPlayer (since methods are stripped from classes when put in a memory store)
    */
   static createPlayer(p: Player) {
     const player = new Player(p.steamid, p.avatar, p.alias);
-	player.winsByClass = p.winsByClass;
-	player.lossesByClass = p.lossesByClass;
-	player.staffRole = p.staffRole;
-	player.roles = p.roles;
-	player.isLeagueAdmin = p.isLeagueAdmin;
-	player.activePunishments = p.activePunishments;
-	return player
+    player.winsByClass = p.winsByClass;
+    player.lossesByClass = p.lossesByClass;
+    player.staffRole = p.staffRole;
+    player.roles = p.roles;
+    player.isLeagueAdmin = p.isLeagueAdmin;
+    player.activePunishments = p.activePunishments;
+    return player;
   }
-  
+
   async addRole(role: Role): Promise<void> {
     if (this.roles.indexOf(role) !== -1) {
       logger.warn(`${this.alias} is already ${role}`);
@@ -120,12 +120,12 @@ export class Player {
 
   async removeRole(role: Role) {
     const indexOfRole = this.roles.indexOf(role);
-	if (indexOfRole === -1) {
+    if (indexOfRole === -1) {
 	  logger.warn(`${this.alias} already doesn't have ${role}`);
-	} else {
+    } else {
 	  await db.query(removeRoleQuery, [role, this.steamid]);
-	  this.roles.splice(indexOfRole, indexOfRole+1)
-	}
+	  this.roles.splice(indexOfRole, indexOfRole + 1);
+    }
   }
 
   async removeAllRoles() {
