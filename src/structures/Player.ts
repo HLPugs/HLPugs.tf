@@ -29,6 +29,9 @@ import { Role, StaffRole }                from './Roles';
  *     amount of pugs the Player has lost to each class.
  */
 export class Player {
+  get activePunishments(): Map<PunishmentType, PunishmentData> {
+    return this._activePunishments;
+  }
   steamid: string;
   sessionid: string;
   alias: string                   = undefined;
@@ -42,7 +45,7 @@ export class Player {
   staffRole: StaffRole | false = false;
   winsByClass: TFClassesTracker;
   lossesByClass: TFClassesTracker;
-  activePunishments: Map<PunishmentType, PunishmentData>;
+  private _activePunishments: Map<PunishmentType, PunishmentData>;
 
   /**
    * Creates a new Player object.
@@ -59,7 +62,7 @@ export class Player {
     this.staffRole = false;
     this.roles = [];
     this.isLeagueAdmin = false;
-    this.activePunishments
+    this._activePunishments
         = new Map<PunishmentType, PunishmentData>();
 
   }
@@ -69,13 +72,13 @@ export class Player {
    calling getPlayer (since methods are stripped from classes when put in a memory store)
    */
   static createPlayer(p: Player) {
-    const player = new Player(p.steamid, p.avatar, p.alias);
-    player.winsByClass = p.winsByClass;
-    player.lossesByClass = p.lossesByClass;
-    player.staffRole = p.staffRole;
-    player.roles = p.roles;
-    player.isLeagueAdmin = p.isLeagueAdmin;
-    player.activePunishments = p.activePunishments;
+    const player              = new Player(p.steamid, p.avatar, p.alias);
+    player.winsByClass        = p.winsByClass;
+    player.lossesByClass      = p.lossesByClass;
+    player.staffRole          = p.staffRole;
+    player.roles              = p.roles;
+    player.isLeagueAdmin      = p.isLeagueAdmin;
+    player._activePunishments = p._activePunishments;
     return player;
   }
 
