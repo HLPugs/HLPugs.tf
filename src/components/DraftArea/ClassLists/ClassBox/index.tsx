@@ -20,6 +20,10 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 
     this.props.socket.emit('getDraftTFClassList', this.props.properties.name);
 
+    this.props.socket.on('reconnect', () => {
+      this.props.socket.emit('getDraftTFClassList', this.props.properties.name);
+    });
+
     this.props.socket.on('draftTFClassList', (tfClass: DraftTFClass, tfClassList: string[]) => {
       if (tfClass === this.props.properties.name) {
         this.setState({
