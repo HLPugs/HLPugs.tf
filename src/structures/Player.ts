@@ -1,17 +1,16 @@
 /* tslint:disable:variable-name */
 
 import { TFClassesTracker }                                           from './TFClassesTracker';
-import { PunishmentData, PunishmentType }                             from './Punishment';
-import db                                                             from '../database/db';
+import { PunishmentData, PunishmentType } from './Punishment';
+import db                                 from '../database/db';
 import {
   addRoleQuery,
   removeRoleQuery,
   setLeagueAdminStatusQuery,
   setStaffRoleQuery,
-} from '../database/queries/player';
-import logger                                                         from '../modules/logger';
-import { Role, StaffRole }                                            from './Roles';
-import { removePlayer }                                               from '../modules/playerMap';
+}                                         from '../database/queries/player';
+import logger                             from '../modules/logger';
+import { Role, StaffRole }                from './Roles';
 
 /**
  * Describes a Player.
@@ -58,10 +57,10 @@ export class Player {
   /**
    * Creates a new Player object.
    * @param {string} steamid - The Player's SteamID
-   * @param {URL} avatar - The link to the Player'announcements Steam avatar.
+   * @param {URL} avatar - The link to the Player's Steam avatar.
    * @param {string} alias The Player's unique custom alias on the site
    */
-  constructor(steamid: string, avatar: string, alias?: string) {
+  constructor(steamid: string, avatar?: string, alias?: string) {
     this.steamid = steamid;
     this.avatar = avatar;
     this.alias = alias || undefined;
@@ -72,7 +71,9 @@ export class Player {
     this._isLeagueAdmin = false;
     this.activePunishments
         = new Map<PunishmentType, PunishmentData>();
+    
   }
+  
   async addRole(role: Role): Promise<void> {
     if (this._roles.indexOf(role) !== -1) {
       logger.warn(`${this.alias} is already ${role}`);
