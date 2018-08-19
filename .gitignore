@@ -23,7 +23,7 @@ yarn-error.log*
 *.css
 
 # Jetbrains IDEs
-.idea/
+.idea
 
 # VSCode Workspace files
-.vscode/
+.vscode
