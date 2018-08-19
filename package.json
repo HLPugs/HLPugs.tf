@@ -12,7 +12,7 @@
     "react-onclickoutside": "^6.7.1",
     "react-router-dom": "^4.2.2",
     "react-scripts-ts": "2.16.0",
-    "socket.io-client": "^2.0.4",
+    "socket.io-client": "^2.1.1",
     "source-map-explorer": "^1.6.0",
     "webfontloader": "^1.6.28"
   },
