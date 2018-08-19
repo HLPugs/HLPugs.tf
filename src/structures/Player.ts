@@ -87,7 +87,7 @@ export class Player {
    * From the database, retrieves active punishments of this player and updates their session's punishments
    * @returns {Promise<object>} Ban reason, expiration, and creator's SteamID and steam avatar
    */
-  async updateActivePunishments(): Promise<void[]> {
+  async updateActivePunishments(): Promise<void> {
     const res: QueryResult = await db.query(getActivePunishmentsQuery, [this.steamid]);
     const punishments = res.rows;
 
@@ -126,16 +126,6 @@ export class Player {
       await db.query(setLeagueAdminStatusQuery, [status, this.steamid]);
       this.isLeagueAdmin = status;
     }
-  }
-
-  async updateRoles(roles: Role[], staffRole: StaffRole, isLeagueAdmin: boolean) {
-//    const staffRoles = ['mod', 'admin', 'headAdmin'];
-//    const staffRole = roles.filter(x => staffRoles.find(roles));
-//
-//    const query = {
-//      text: ``,
-//    };
-    return;
   }
 
   async removeRole(role: Role) {
