@@ -11,7 +11,7 @@ config/default.json
 .idea
 
 # vscode files
-/.vs/
+.vscode
 
 # Logs
 src/logs/*
