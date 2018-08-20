@@ -13,8 +13,6 @@
 		"tslint": "tslint -c tslint.json -p tsconfig.json"
 	},
 	"dependencies": {
-		"@types/dotenv": "^4.0.3",
-		"@types/steam-login": "^0.1.0",
 		"config": "^1.31.0",
 		"connect-redis": "^3.3.3",
 		"crypto": "^1.0.1",
@@ -23,7 +21,7 @@
 		"express-session": "^1.15.6",
 		"npm": "^6.3.0",
 		"pg": "^7.4.3",
-		"request": "^2.87.0",
+		"request": "^2.88.0",
 		"socket.io": "^2.1.1",
 		"steam-login": "^0.1.7",
 		"uuid": "^3.3.2",
@@ -34,11 +32,13 @@
 		"@types/chai-as-promised": "^7.1.0",
 		"@types/config": "0.0.34",
 		"@types/connect-redis": "0.0.7",
+		"@types/dotenv": "^4.0.3",
 		"@types/express": "^4.16.0",
 		"@types/mocha": "^5.2.5",
 		"@types/pg": "^7.4.10",
 		"@types/request": "^2.47.1",
 		"@types/socket.io": "^1.4.36",
+		"@types/steam-login": "^0.1.0",
 		"@types/uuid": "^3.4.3",
 		"@types/winston": "^2.3.9",
 		"chai": "^4.1.2",
@@ -47,7 +47,7 @@
 		"nodemon": "^1.18.3",
 		"ts-node": "^7.0.0",
 		"tslint": "^5.11.0",
-		"tslint-config-airbnb": "^5.9.2",
-		"typescript": "^2.7.2"
+		"tslint-config-airbnb": "^5.10.0",
+		"typescript": "^3.0.1"
 	}
 }

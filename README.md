@@ -40,7 +40,7 @@ This section is a definite work in progress. Deployment instructions including d
 - [**Gabe**](https://github.com/GabeKuslansky) - Main Developer
 - [**Nicell**](https://github.com/Nicell) - Co-Developer
 
-See the [contributors](https://github.com/HLPugs/Payload/contributors) page for more people who've helped with the project.
+See the [contributors](https://github.com/HLPugs/Intel/contributors) page for more people who've helped with the project.
 
 ## License
 This project is licensed under the MIT License. See [LICENSE.md](LICENSE) for details.
