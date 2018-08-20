@@ -9,7 +9,8 @@ import { loginUserQuery }       from '../database/queries/player';
 /**
  *
  * @param {e.Request} req
- * @returns {Promise<void>} Completes after necessary login data is set in the database and the logged in user's session
+ * @returns {Promise<void>} Completes after necessary login data is set
+ * in the database and the logged in user's session
  */
 export const loginUser = async(req: SteamRequest): Promise<void> => {
   req.session.sockets = [];
@@ -20,15 +21,13 @@ export const loginUser = async(req: SteamRequest): Promise<void> => {
 
   const player = new Player(steamid, avatar);
 
-  // Insert Player into database, or at the very least, update their IP
   // TODO Insert / Update IP
 
-  // Retrieve alias, captain and roles
   const res: QueryResult = await db.query(loginUserQuery, [steamid, avatar]);
   const { alias, isCaptain, roles, staffRole, isLeagueAdmin } = res.rows[0];
 
   // Only spend time grabbing active punishments if user exists
-  if (alias !== null) {
+  if (alias !== undefined) {
     // Update player's session from database
     await player.updateActivePunishments();
     player.roles = roles;
