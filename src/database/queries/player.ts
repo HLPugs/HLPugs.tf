@@ -7,7 +7,7 @@ export const setStaffRoleQuery = `UPDATE PLAYERS SET staffRole = $1 WHERE steami
 export const loginUserQuery = `INSERT INTO players (steamid, avatar)
            VALUES ($1, $2)
            ON CONFLICT (steamid) DO UPDATE SET avatar = $2
-           RETURNING isCaptain, alias, roles, staffRole, isLeagueAdmin`;
+           RETURNING isCaptain, alias, roles, staffRole, isLeagueAdmin, settings`;
 
 export const setLeagueAdminStatusQuery = `UPDATE players SET isLeagueAdmin = $1 WHERE steamid = $2`;
 

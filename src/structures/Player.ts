@@ -68,6 +68,7 @@ export class Player {
     this.alias    = alias;
     this._activePunishments
                   = new Map<PunishmentType, PunishmentData>();
+    this._settings = new PlayerSettings();
   }
 
   /*
@@ -75,29 +76,29 @@ export class Player {
    calling getPlayer (since methods are stripped from classes when put in a memory store)
    */
   static createPlayer(p: Player) {
-    const player              = new Player(p.steamid, p.avatar, p.alias);
+    const player              = new Player(p._steamid, p.avatar, p.alias);
     player.winsByClass        = p.winsByClass;
     player.lossesByClass      = p.lossesByClass;
     player.staffRole          = p.staffRole;
     player.roles              = p.roles;
     player.isLeagueAdmin      = p.isLeagueAdmin;
     player._activePunishments = p._activePunishments;
-    player._settings          = p.settings;
+    player._settings          = p._settings;
     return player;
   }
 
   async updateSetting(setting: PlayerSetting, value: number | string | boolean): Promise<void> {
-    const settingsAsJSON = JSON.stringify(this._settings);
-    await db.query(`UPDATE players SET settings = $1 WHERE steamid = $2`, [settingsAsJSON, this.steamid]);
+    const newSettings = this.settings;
+    newSettings[setting] = value;
+    await db.query(`UPDATE players SET settings = $1 WHERE steamid = $2`, [newSettings, this.steamid]);
     this._settings[setting] = value;
   }
 
   async addFavoriteClass(tfclass: DraftTFClass): Promise<void> {
-    if (this._settings.favoriteClasses.indexOf(tfclass) !== -1) {
+    if (this._settings.favoriteClasses.indexOf(tfclass) === -1) {
       const newSettings = this.settings;
       newSettings.favoriteClasses.push(tfclass);
-      const settingsAsJSON = JSON.stringify(newSettings);
-      await db.query(`UPDATE players SET settings = $1 WHERE steamid = $2`, [settingsAsJSON, this.steamid]);
+      await db.query(`UPDATE players SET settings = $1 WHERE steamid = $2`, [newSettings, this.steamid]);
       this._settings.favoriteClasses = newSettings.favoriteClasses;
     } else {
       logger.warn(`${this.alias} tried to add ${tfclass} to their favorite classes, but it already is one`);
@@ -109,10 +110,9 @@ export class Player {
       const newSettings = this.settings;
       const indexOfTFClass = newSettings.favoriteClasses.indexOf(tfclass);
       newSettings.favoriteClasses.splice(indexOfTFClass, 1);
-      const settingsAsJSON = JSON.stringify(newSettings);
-      await db.query(`UPDATE player SET settings = $1 WHERE steamid = $2`, [settingsAsJSON, this.steamid]);
+      await db.query(`UPDATE playerS SET settings = $1 WHERE steamid = $2`, [newSettings, this.steamid]);
     } else {
-      logger.warn(`${this.alias} tried to remove ${this.alias} as from their favorite classes,
+      logger.warn(`${this.alias} tried to remove ${tfclass} as from their favorite classes,
        but it is already non-existent`);
     }
   }
