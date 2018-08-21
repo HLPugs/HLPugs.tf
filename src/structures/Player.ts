@@ -8,10 +8,12 @@ import {
   removeRoleQuery,
   setLeagueAdminStatusQuery,
   setStaffRoleQuery,
-} from '../database/queries/player';
+}                                                     from '../database/queries/player';
 import logger                                         from '../modules/logger';
 import { Role, StaffRole }                            from './Roles';
 import { QueryResult }                                from 'pg';
+import { PlayerSetting, PlayerSettings }              from './PlayerSettings';
+import { DraftTFClass }                               from './DraftClassList';
 
 /**
  * Describes a Player.
@@ -30,22 +32,28 @@ import { QueryResult }                                from 'pg';
  *     amount of pugs the Player has lost to each class.
  */
 export class Player {
+  get steamid(): string {
+    return this._steamid;
+  }
+  get settings(): PlayerSettings {
+    return this._settings;
+  }
   get activePunishments(): Map<PunishmentType, PunishmentData> {
     return this._activePunishments;
   }
-  steamid: string;
-  sessionid: string;
-  alias: string                   = undefined;
+  private _steamid: string;
+  alias: string                     = undefined;
   avatar: string;
-  pugs: number                    = 0;
-  totalWins: number               = 0;
-  losses: number                  = 0;
-  isCaptain: boolean              = false;
-  isLeagueAdmin: boolean = false;
-  roles: Role[]          = [];
-  staffRole: StaffRole | false = false;
-  winsByClass: TFClassesTracker;
-  lossesByClass: TFClassesTracker;
+  isCaptain: boolean                = false;
+  roles: Role[]                     = [];
+  staffRole: StaffRole | false      = false;
+  isLeagueAdmin: boolean            = false;
+  totalWins: number                 = 0;
+  losses: number                    = 0;
+  pugs: number                      = 0;
+  winsByClass: TFClassesTracker     = new TFClassesTracker();
+  lossesByClass: TFClassesTracker   = new TFClassesTracker();
+  private _settings: PlayerSettings = new PlayerSettings();
   private _activePunishments: Map<PunishmentType, PunishmentData>;
 
   /**
@@ -55,17 +63,11 @@ export class Player {
    * @param {string} alias The Player's unique custom alias on the site
    */
   constructor(steamid: string, avatar?: string, alias?: string) {
-    this.steamid = steamid;
-    this.avatar = avatar;
-    this.alias = alias || undefined;
-    this.winsByClass = new TFClassesTracker();
-    this.lossesByClass = new TFClassesTracker();
-    this.staffRole = false;
-    this.roles = [];
-    this.isLeagueAdmin = false;
+    this._steamid = steamid;
+    this.avatar   = avatar;
+    this.alias    = alias;
     this._activePunishments
-        = new Map<PunishmentType, PunishmentData>();
-
+                  = new Map<PunishmentType, PunishmentData>();
   }
 
   /*
@@ -80,7 +82,39 @@ export class Player {
     player.roles              = p.roles;
     player.isLeagueAdmin      = p.isLeagueAdmin;
     player._activePunishments = p._activePunishments;
+    player._settings          = p.settings;
     return player;
+  }
+
+  async updateSetting(setting: PlayerSetting, value: number | string | boolean): Promise<void> {
+    const settingsAsJSON = JSON.stringify(this._settings);
+    await db.query(`UPDATE players SET settings = $1 WHERE steamid = $2`, [settingsAsJSON, this.steamid]);
+    this._settings[setting] = value;
+  }
+
+  async addFavoriteClass(tfclass: DraftTFClass): Promise<void> {
+    if (this._settings.favoriteClasses.indexOf(tfclass) !== -1) {
+      const newSettings = this.settings;
+      newSettings.favoriteClasses.push(tfclass);
+      const settingsAsJSON = JSON.stringify(newSettings);
+      await db.query(`UPDATE players SET settings = $1 WHERE steamid = $2`, [settingsAsJSON, this.steamid]);
+      this._settings.favoriteClasses = newSettings.favoriteClasses;
+    } else {
+      logger.warn(`${this.alias} tried to add ${tfclass} to their favorite classes, but it already is one`);
+    }
+  }
+
+  async removeFavoriteClass(tfclass: DraftTFClass): Promise<void> {
+    if (this._settings.favoriteClasses.indexOf(tfclass) !== -1) {
+      const newSettings = this.settings;
+      const indexOfTFClass = newSettings.favoriteClasses.indexOf(tfclass);
+      newSettings.favoriteClasses.splice(indexOfTFClass, 1);
+      const settingsAsJSON = JSON.stringify(newSettings);
+      await db.query(`UPDATE player SET settings = $1 WHERE steamid = $2`, [settingsAsJSON, this.steamid]);
+    } else {
+      logger.warn(`${this.alias} tried to remove ${this.alias} as from their favorite classes,
+       but it is already non-existent`);
+    }
   }
 
   /**
@@ -101,7 +135,7 @@ export class Player {
 
   async addRole(role: Role): Promise<void> {
     if (this.roles.indexOf(role) !== -1) {
-      logger.warn(`${this.alias} is already ${role}`);
+      logger.warn(`${ this.alias } is already ${ role }`);
     } else {
       await db.query(removeRoleQuery, [role, this.steamid]);
       await db.query(addRoleQuery, [role, this.steamid]);
@@ -111,7 +145,7 @@ export class Player {
 
   async setStaffRole(role: StaffRole | false): Promise<Player> {
     if (role === this.staffRole) {
-      logger.warn(`${this.alias} is already ${role}`);
+      logger.warn(`${ this.alias } is already ${ role }`);
     } else {
       await db.query(setStaffRoleQuery, [role, this.steamid]);
       this.staffRole = role;
@@ -121,7 +155,7 @@ export class Player {
 
   async setLeagueAdminStatus(status: boolean) {
     if (this.isLeagueAdmin === status) {
-      logger.warn(`${this.alias}'s league admin status is already ${status}`);
+      logger.warn(`${ this.alias }'s league admin status is already ${status}`); '';
     } else {
       await db.query(setLeagueAdminStatusQuery, [status, this.steamid]);
       this.isLeagueAdmin = status;
