@@ -60,8 +60,8 @@ process.on('uncaughtException', (e) => {
   process.exit(1);
 });
 //
-// process.on('unhandledRejection', (reason, p) => {
-//  throw reason;
-// })
+process.on('unhandledRejection', (reason, p) => {
+  throw reason;
+});
 
 server.listen(3001);
