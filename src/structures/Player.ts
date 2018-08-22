@@ -7,8 +7,8 @@ import {
   addRoleQuery, getActivePunishmentsQuery,
   removeRoleQuery,
   setLeagueAdminStatusQuery,
-  setStaffRoleQuery,
-}                                                     from '../database/queries/player';
+  setStaffRoleQuery, updateSettingsQuery,
+} from '../database/queries/player';
 import logger                                         from '../modules/logger';
 import { Role, StaffRole }                            from './Roles';
 import { QueryResult }                                from 'pg';
@@ -18,20 +18,23 @@ import { DraftTFClass }                               from './DraftClassList';
 /**
  * Describes a Player.
  * @typedef Player
- * @property {string} steamid - The p's SteamID.
- * @property {URL} avatar - The link to the p's Steam avatar
+ * @property {string} steamid- The player's SteamID.
+ * @property {string} avatar - The link to the player's Steam avatar
  * @property {string} alias - The Player's unique custom alias on the site.
- * @property {number} pugs - The number of pugs the p has played.
- * @property {number} wins - The number of pugs the p has won.
- * @property {number} losses - The number of pugs the p has lost.
- * @property {Role[]} roles - The p's stackable roles
- * @property {boolean} isCaptain - Whether or not the p is qualified to be a captain.
+ * @property {number} pugs - The number of pugs the player has played.
+ * @property {number} wins - The number of pugs the player has won.
+ * @property {number} losses - The number of pugs the player has lost.
+ * @property {Role[]} roles - The player's stackable roles
+ * @property {boolean} isCaptain - Whether or not the player is qualified to be a captain.
  * @property {TFClassesTracker} winsByClass - A {@link TFClassesTracker} object that maps the
- *     amount of pugs the Player has won to each class.
+ *     amount of pugs the player has won to each class.
  * @property {TFClassesTracker} lossesByClass - A {@link TFClassesTracker} object that maps the
- *     amount of pugs the Player has lost to each class.
+ *     amount of pugs the player has lost to each class.
  */
 export class Player {
+  set settings(value: PlayerSettings) {
+    this._settings = value;
+  }
   get steamid(): string {
     return this._steamid;
   }
@@ -42,18 +45,18 @@ export class Player {
     return this._activePunishments;
   }
   private _steamid: string;
-  alias: string                     = undefined;
+  alias: string                   = undefined;
   avatar: string;
-  isCaptain: boolean                = false;
-  roles: Role[]                     = [];
-  staffRole: StaffRole | false      = false;
-  isLeagueAdmin: boolean            = false;
-  totalWins: number                 = 0;
-  losses: number                    = 0;
-  pugs: number                      = 0;
-  winsByClass: TFClassesTracker     = new TFClassesTracker();
-  lossesByClass: TFClassesTracker   = new TFClassesTracker();
-  private _settings: PlayerSettings = new PlayerSettings();
+  isCaptain: boolean              = false;
+  roles: Role[]                   = [];
+  staffRole: StaffRole | false    = false;
+  isLeagueAdmin: boolean          = false;
+  totalWins: number               = 0;
+  losses: number                  = 0;
+  pugs: number                    = 0;
+  winsByClass: TFClassesTracker   = new TFClassesTracker();
+  lossesByClass: TFClassesTracker = new TFClassesTracker();
+  private _settings: PlayerSettings       = new PlayerSettings();
   private _activePunishments: Map<PunishmentType, PunishmentData>;
 
   /**
@@ -87,6 +90,23 @@ export class Player {
     return player;
   }
 
+  /**
+   * Updates the user's settings in the database and session based on
+   * the {@link PlayerSettings} passed
+   * @param {PlayerSettings} settings
+   * @return {Promise<void>}
+   */
+  async updateSettings(settings: PlayerSettings): Promise<void> {
+    await db.query(updateSettingsQuery, [settings, this.steamid]);
+    this.settings = settings;
+  }
+
+  /**
+   * In the database and session, updates a player's single {@link PlayerSetting} to equal the value passed
+   * @param {PlayerSetting} setting
+   * @param {number | string | boolean} value
+   * @return {Promise<void>}
+   */
   async updateSetting(setting: PlayerSetting, value: number | string | boolean): Promise<void> {
     const newSettings = this.settings;
     newSettings[setting] = value;
@@ -94,6 +114,11 @@ export class Player {
     this._settings[setting] = value;
   }
 
+  /**
+   * Adds a {@link DraftTFClass} to the player's list of favorite classes
+   * @param {DraftTFClass} tfclass
+   * @return {Promise<void>}
+   */
   async addFavoriteClass(tfclass: DraftTFClass): Promise<void> {
     if (this._settings.favoriteClasses.indexOf(tfclass) === -1) {
       const newSettings = this.settings;
@@ -105,12 +130,17 @@ export class Player {
     }
   }
 
+  /**
+   * Removes a {@link DraftTFClass} from the player's list of favorite classes
+   * @param {DraftTFClass} tfclass
+   * @return {Promise<void>}
+   */
   async removeFavoriteClass(tfclass: DraftTFClass): Promise<void> {
     if (this._settings.favoriteClasses.indexOf(tfclass) !== -1) {
       const newSettings = this.settings;
       const indexOfTFClass = newSettings.favoriteClasses.indexOf(tfclass);
       newSettings.favoriteClasses.splice(indexOfTFClass, 1);
-      await db.query(`UPDATE playerS SET settings = $1 WHERE steamid = $2`, [newSettings, this.steamid]);
+      await db.query(`UPDATE players SET settings = $1 WHERE steamid = $2`, [newSettings, this.steamid]);
     } else {
       logger.warn(`${this.alias} tried to remove ${tfclass} as from their favorite classes,
        but it is already non-existent`);
@@ -155,7 +185,7 @@ export class Player {
 
   async setLeagueAdminStatus(status: boolean) {
     if (this.isLeagueAdmin === status) {
-      logger.warn(`${ this.alias }'s league admin status is already ${status}`); '';
+      logger.warn(`${ this.alias }'s league admin status is already ${status}`);
     } else {
       await db.query(setLeagueAdminStatusQuery, [status, this.steamid]);
       this.isLeagueAdmin = status;

@@ -30,3 +30,5 @@ export const getActivePunishmentsQuery = `SELECT
   AND timeline::text <> '{}'::text) AS dt
   WHERE
   r = 1`;
+
+export const updateSettingsQuery = `UPDATE players SET settings = $1 WHERE steamid = $2`;
