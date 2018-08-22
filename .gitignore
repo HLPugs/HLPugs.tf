@@ -14,7 +14,7 @@ config/default.json
 .vscode
 
 # Logs
-src/logs/*
+logs/*
 
 # Keep Logs folder
 !src/logs/.gitkeep
