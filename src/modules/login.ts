@@ -5,6 +5,7 @@ import { Player }                              from '../structures/Player';
 import { SteamRequest }                        from 'steam-login';
 import { loginUserQuery } from '../database/queries/player';
 import { PlayerSettings }                      from '../structures/PlayerSettings';
+import * as session from 'express-session';
 
 /**
  *
@@ -42,6 +43,7 @@ export const loginUser = async(req: SteamRequest): Promise<void> => {
         this.settings = updatedSettings;
       }
     }
+    console.log(JSON.stringify(player));
     logger.info(`${alias} logged in`, { steamid });
   }
 
