@@ -43,7 +43,6 @@ export const loginUser = async(req: SteamRequest): Promise<void> => {
         this.settings = updatedSettings;
       }
     }
-    console.log(JSON.stringify(player));
     logger.info(`${alias} logged in`, { steamid });
   }
 
