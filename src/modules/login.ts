@@ -5,6 +5,10 @@ import { Player }                              from '../structures/Player';
 import { SteamRequest }                        from 'steam-login';
 import { loginUserQuery } from '../database/queries/player';
 import { PlayerSettings }                      from '../structures/PlayerSettings';
+
+// This import is used to let the tests know that session exists on the SteamRequest.
+// Ignore is utilized since it's an unused import.
+// @ts-ignore
 import * as session from 'express-session';
 
 /**
