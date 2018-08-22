@@ -1,4 +1,3 @@
-import { Request }                             from 'express';
 import db                                      from '../database/db';
 import { QueryResult }                         from 'pg';
 import logger                                  from './logger';
@@ -18,7 +17,6 @@ export const loginUser = async(req: SteamRequest): Promise<void> => {
 
   const steamid = req.user.steamid;
   const avatar  = req.user.avatar.medium;
-  const ip      = req.headers['x-forwarded-for'];
 
   const player = new Player(steamid, avatar);
 
