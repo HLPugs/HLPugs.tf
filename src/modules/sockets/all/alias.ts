@@ -26,12 +26,8 @@ export const alias = (io: Server) => {
       socket.request.session.user.alias = alias;
       socket.request.session.save((err: any) => err ? console.log(err) : null);
 
-      const user = {
-        loggedIn: true,
-        alias: socket.request.session.user.alias,
-        avatar: socket.request.session.user.avatar,
-        steamid: socket.request.session.user.steamid,
-      };
+      const user = socket.request.session.user;
+      user.loggedIn = true;
 
       socket.emit('user', user);
 
