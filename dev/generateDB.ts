@@ -5,6 +5,6 @@ import * as fs from 'fs';
 
 const db = new Pool(config.get('db.postgres'));
 
-const schemaQuery = minify(fs.readFileSync('./schema.sql', 'utf8'));
+const schemaQuery = minify(fs.readFileSync('dev/schema.sql', 'utf8'));
 
 db.query(schemaQuery);
