@@ -11,7 +11,7 @@
 		"watch-ts": "tsc -w",
 		"test": "mocha --exit -r ts-node/register src/test/*.ts",
 		"tslint": "tslint -c tslint.json -p tsconfig.json",
-		"generateDB": "ts-node dev/generateDB.ts"
+		"build-db": "ts-node dev/buildDB.ts"
 	},
 	"dependencies": {
 		"config": "^1.31.0",

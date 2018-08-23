@@ -7,11 +7,15 @@ Back end for the Captain Draft & Mix PUG Service under [HLPugs.tf](https://hlpug
 - [Node.js](https://nodejs.org/en/download/)
 - [npm](https://www.npmjs.com/get-npm) (this comes with Node.js now)
 - TypeScript installed: Run `npm i -g typescript` from a command prompt
+- [PostgreSQL](https://www.postgresql.org/) v10+ - There are many great tutorials on how to install this on your system of choice
 - (Optional) [Payload](https://github.com/HLPugs/Payload) - The accompanying front end to Intel
 
 ### Installing
 1. Clone the repository
 2. Within the repository execute `npm i`
+3. Create a new database within PostgreSQL
+4. Create a `default.json` within `config/` utilizing `example-default.json` and `default-travis.json` as references
+5. Run `npm run build-db` to generate Intel's structure within your new DB
 
 ### Developing
 1. Run `npm run watch-node` in one terminal
