@@ -1,6 +1,7 @@
 # Intel
 
 [![Travis (.com)](https://img.shields.io/travis/com/HLPugs/Intel.svg?style=flat-square)](https://travis-ci.com/HLPugs/Intel)
+[![Codecov](https://img.shields.io/codecov/c/github/HLPugs/Intel.svg?style=flat-square)](https://codecov.io/gh/HLPugs/Intel)
 [![Code Climate](https://img.shields.io/codeclimate/maintainability/HLPugs/Intel.svg?style=flat-square)](https://codeclimate.com/github/HLPugs/Intel)
 [![Discord](https://img.shields.io/discord/342788231508787201.svg?style=flat-square)](https://discord.gg/rwXy3rq)
 [![GitHub](https://img.shields.io/github/license/HLPugs/Intel.svg?style=flat-square)](LICENSE)
