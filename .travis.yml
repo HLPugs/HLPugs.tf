@@ -11,6 +11,8 @@ services:
   - postgresql
 env:
   - NODE_APP_INSTANCE=travis
+before_script:
+  - psql -c "ALTER USER travis WITH PASSWORD 'travis';"
 install:
   - npm install
 script:
