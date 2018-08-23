@@ -110,9 +110,9 @@
   },
   "db": {
     "postgres": {
-      "user": "postgres",
+      "user": "travis",
       "host": "localhost",
-      "database": "postgres",
+      "database": "travis",
       "password": "",
       "port": 5432
     }
