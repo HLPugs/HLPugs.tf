@@ -1,9 +1,11 @@
 {
   "app": {
     "steam": {
-    "apiKey": "api key",
-    "realm": "web.site.name",
-    "verify": "web.site.name/verify",
+      "apiKey": "api key",
+      "realm": "web.site.name",
+      "verify": "web.site.name/verify"
+    },
+    "secret": "verysecret",
     "configuration": {
       "branding": {
         "siteName": "HLPugs.tf",
@@ -105,7 +107,6 @@
       }
     ],
     "frontURL": "http://localhost:3000"
-  }
   },
   "db": {
     "postgres": {
@@ -122,6 +123,6 @@
     }
   },
   "winston": {
-    "logDirectory": "src/logs"
+    "logDirectory": "logs"
   }
 }
