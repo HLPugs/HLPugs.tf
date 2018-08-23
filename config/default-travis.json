@@ -114,7 +114,7 @@
       "host": "localhost",
       "database": "travis",
       "password": "travis",
-      "port": 5432
+      "port": 5433
     }
   },
   "discord": {
