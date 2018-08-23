@@ -10,7 +10,8 @@
 		"build-ts": "tsc -p tsconfig.json",
 		"watch-ts": "tsc -w",
 		"test": "mocha -r ts-node/register src/test/*.ts",
-		"tslint": "tslint -c tslint.json -p tsconfig.json"
+		"tslint": "tslint -c tslint.json -p tsconfig.json",
+		"generateDB": "ts-node dev/generateDB.ts"
 	},
 	"dependencies": {
 		"config": "^1.31.0",
@@ -46,6 +47,7 @@
 		"chai-as-promised": "^7.1.1",
 		"mocha": "^5.2.0",
 		"nodemon": "^1.18.3",
+		"pg-minify": "^0.5.4",
 		"ts-node": "^7.0.0",
 		"tslint": "^5.11.0",
 		"tslint-config-airbnb": "^5.10.0",
