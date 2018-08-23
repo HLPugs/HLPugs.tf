@@ -19,3 +19,7 @@ logs/*
 # Keep Logs folder
 !src/logs/.gitkeep
 /.vs/
+
+# Coverage
+coverage
+.nyc_output

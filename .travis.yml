@@ -21,4 +21,6 @@ install:
 script:
   - npm run build-db
   - npm run build
-  - npm run test
+  - npm run coverage
+after_success:
+  - npm run codecov
