@@ -2,7 +2,7 @@
 
 [![Code Climate](https://img.shields.io/codeclimate/maintainability/HLPugs/Payload.svg?style=flat-square)](https://codeclimate.com/github/HLPugs/Payload)
 [![Discord](https://img.shields.io/discord/342788231508787201.svg?style=flat-square)](https://discord.gg/rwXy3rq)
-[![GitHub](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](LICENSE)
+[![GitHub](https://img.shields.io/github/license/HLPugs/Payload.svg?style=flat-square)](LICENSE)
 
 
 Front end for the Captain Draft & Mix PUG Service under [HLPugs.tf](https://hlpugs.tf). The goal of this project is to create a tool for Captain Draft & Mix PUGs in Team Fortress 2 that is customizable and extendable.
