@@ -10,9 +10,10 @@ addons:
 services:
   - postgresql
 env:
-  - NODE_APP_INSTANCE=travis
   global:
     - PGPORT=5433
+  matrix:
+    - NODE_APP_INSTANCE=travis
 before_script:
   - psql -c "ALTER USER travis WITH PASSWORD 'travis';"
 install:
