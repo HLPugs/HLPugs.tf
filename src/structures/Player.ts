@@ -32,19 +32,8 @@ import { DraftTFClass }                               from './DraftClassList';
  *     amount of pugs the player has lost to each class.
  */
 export class Player {
-  set settings(value: PlayerSettings) {
-    this._settings = value;
-  }
-  get steamid(): string {
-    return this._steamid;
-  }
-  get settings(): PlayerSettings {
-    return this._settings;
-  }
-  get activePunishments(): Map<PunishmentType, PunishmentData> {
-    return this._activePunishments;
-  }
-  private _steamid: string;
+
+  private steamid: string;
   alias: string                   = undefined;
   avatar: string;
   isCaptain: boolean              = false;
@@ -56,8 +45,8 @@ export class Player {
   pugs: number                    = 0;
   winsByClass: TFClassesTracker   = new TFClassesTracker();
   lossesByClass: TFClassesTracker = new TFClassesTracker();
-  private _settings: PlayerSettings       = new PlayerSettings();
-  private _activePunishments: Map<PunishmentType, PunishmentData>;
+  private settings: PlayerSettings       = new PlayerSettings();
+  private activePunishments: Map<PunishmentType, PunishmentData>;
 
   /**
    * Creates a new Player object.
@@ -66,12 +55,12 @@ export class Player {
    * @param {string} alias The Player's unique custom alias on the site
    */
   constructor(steamid: string, avatar?: string, alias?: string) {
-    this._steamid = steamid;
+    this.steamid = steamid;
     this.avatar   = avatar;
     this.alias    = alias;
-    this._activePunishments
+    this.activePunishments
                   = new Map<PunishmentType, PunishmentData>();
-    this._settings = new PlayerSettings();
+    this.settings = new PlayerSettings();
   }
 
   /*
@@ -79,14 +68,14 @@ export class Player {
    calling getPlayer (since methods are stripped from classes when put in a memory store)
    */
   static createPlayer(p: Player) {
-    const player              = new Player(p._steamid, p.avatar, p.alias);
+    const player              = new Player(p.steamid, p.avatar, p.alias);
     player.winsByClass        = p.winsByClass;
     player.lossesByClass      = p.lossesByClass;
     player.staffRole          = p.staffRole;
     player.roles              = p.roles;
     player.isLeagueAdmin      = p.isLeagueAdmin;
-    player._activePunishments = p._activePunishments;
-    player._settings          = p._settings;
+    player.activePunishments = p.activePunishments;
+    player.settings          = p.settings;
     return player;
   }
 
@@ -111,7 +100,7 @@ export class Player {
     const newSettings = this.settings;
     newSettings[setting] = value;
     await db.query(`UPDATE players SET settings = $1 WHERE steamid = $2`, [newSettings, this.steamid]);
-    this._settings[setting] = value;
+    this.settings[setting] = value;
   }
 
   /**
@@ -120,11 +109,11 @@ export class Player {
    * @return {Promise<void>}
    */
   async addFavoriteClass(tfclass: DraftTFClass): Promise<void> {
-    if (this._settings.favoriteClasses.indexOf(tfclass) === -1) {
+    if (this.settings.favoriteClasses.indexOf(tfclass) === -1) {
       const newSettings = this.settings;
       newSettings.favoriteClasses.push(tfclass);
       await db.query(`UPDATE players SET settings = $1 WHERE steamid = $2`, [newSettings, this.steamid]);
-      this._settings.favoriteClasses = newSettings.favoriteClasses;
+      this.settings.favoriteClasses = newSettings.favoriteClasses;
     } else {
       logger.warn(`${this.alias} tried to add ${tfclass} to their favorite classes, but it already is one`);
     }
@@ -136,7 +125,7 @@ export class Player {
    * @return {Promise<void>}
    */
   async removeFavoriteClass(tfclass: DraftTFClass): Promise<void> {
-    if (this._settings.favoriteClasses.indexOf(tfclass) !== -1) {
+    if (this.settings.favoriteClasses.indexOf(tfclass) !== -1) {
       const newSettings = this.settings;
       const indexOfTFClass = newSettings.favoriteClasses.indexOf(tfclass);
       newSettings.favoriteClasses.splice(indexOfTFClass, 1);
@@ -158,7 +147,7 @@ export class Player {
     // Exclude inactive punishments
     const activePunishments = punishments.filter((x: Punishment) => new Date(x.data.expiration) > new Date());
     activePunishments.forEach((punishment: Punishment) => {
-      this._activePunishments.set(punishment.type, punishment.data);
+      this.activePunishments.set(punishment.type, punishment.data);
     });
     return;
   }

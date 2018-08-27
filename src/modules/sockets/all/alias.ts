@@ -11,8 +11,8 @@ export const alias = (io: Server) => {
 
     socket.on('submitAlias', async (alias: string) => {
       const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
-      if (!aliasRules.test(alias)) return; // Exits function if alias didn't pass Regex check
 
+      if (!aliasRules.test(alias)) return; // Exits function if alias didn't pass Regex check
       const res = await db.query('SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)', [alias]);
       if (res.rows[0]) return; // Exits function if alias was taken
 
@@ -22,6 +22,7 @@ export const alias = (io: Server) => {
       };
 
       const res2 = await db.query(query);
+
       if (!res2.rows[0]) return; // Exits function if alias didn't update in the database
       socket.request.session.user.alias = alias;
       socket.request.session.save((err: any) => err ? console.log(err) : null);
