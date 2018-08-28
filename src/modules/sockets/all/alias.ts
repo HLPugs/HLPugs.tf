@@ -21,7 +21,6 @@ export const alias = (io: Server) => {
         text: `UPDATE players SET alias = $1 WHERE steamid = $2 AND alias IS NULL RETURNING *`,
         values: [alias, socket.request.session.user.steamid],
       };
-
       {
         const { rows } = await db.query(query);
         if (!rows) return; // Exits function if alias didn't update in the database

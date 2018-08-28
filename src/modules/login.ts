@@ -27,9 +27,10 @@ export const loginUser = async (req: SteamRequest): Promise<void> => {
 
   // TODO Insert / Update IP
 
-  const { rows } = await db.query(loginUserQuery, [steamid, avatar]);
+  const {
+    rows: [{ alias, iscaptain, roles, staffrole, isleagueadmin, settings }],
+  } = await db.query(loginUserQuery, [steamid, avatar]);
   // PostgreSQL forces lowercase table names
-  const { alias, iscaptain, roles, staffrole, isleagueadmin, settings } = rows[0];
 
   if (alias) {
     await player.updateActivePunishments();
