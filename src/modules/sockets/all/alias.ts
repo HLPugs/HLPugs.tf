@@ -5,8 +5,8 @@ import logger from '../../logger';
 export const alias = (io: Server) => {
   io.on('connection', (socket) => {
     socket.on('checkAlias', async (alias: string) => {
-      const { rows } = await db.query('SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)', [alias]);
-      socket.emit('aliasStatus', rows[0]);
+      const { rows: [row] } = await db.query('SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)', [alias]);
+      socket.emit('aliasStatus', row);
     });
 
     socket.on('submitAlias', async (alias: string) => {
@@ -14,8 +14,8 @@ export const alias = (io: Server) => {
       const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
 
       if (!aliasRules.test(alias)) return; // Exits function if alias didn't pass Regex check
-      const { rows } = await db.query('SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)', [alias]);
-      if (rows[0]) return; // Exits function if alias was taken
+      const { 'rows': [row] } = await db.query('SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)', [alias]);
+      if (row) return; // Exits function if alias was taken
 
       const query = {
         text: `UPDATE players SET alias = $1 WHERE steamid = $2 AND alias IS NULL RETURNING *`,
