@@ -16,7 +16,7 @@ import * as session from 'express-session';
  * @returns {Promise<void>} Completes after necessary login data is set
  * in the database and the logged in user's session
  */
-export const loginUser = async (req: SteamRequest): Promise<void> => {
+export const loginUser = async(req: SteamRequest): Promise<void> => {
   req.session.sockets = [];
 
   const steamid = req.user.steamid;
