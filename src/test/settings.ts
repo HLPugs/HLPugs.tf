@@ -24,8 +24,9 @@ describe('settings', () => {
     await player.updateSetting('volume', 100);
     expect(player.settings.volume).to.equal(100);
 
-    const { rows } = await db.query(`SELECT settings->'volume' as volume FROM players WHERE steamid = $1`, [steamid]);
-    const { volume } = rows[0];
+    const {
+      rows: [{ volume }],
+    } = await db.query(`SELECT settings->'volume' as volume FROM players WHERE steamid = $1`, [steamid]);
     expect(volume).to.equal(100);
   });
 
@@ -33,9 +34,10 @@ describe('settings', () => {
     await player.updateSetting('voicepack', 'kegapack');
     expect(player.settings.voicepack).to.equal('kegapack');
 
-    const { rows } = await db.query(`SELECT settings->'voicepack' as vp FROM players WHERE steamid = $1`, [steamid]);
-    const { vp } = rows[0];
-    expect(vp).to.equal('kegapack');
+    const {
+      rows: [{ voicepack }],
+    } = await db.query(`SELECT settings->'voicepack' as voicepack FROM players WHERE steamid = $1`, [steamid]);
+    expect(voicepack).to.equal('kegapack');
   });
 
   it('should disable mention notifications', async () => {
@@ -47,8 +49,7 @@ describe('settings', () => {
       text: `SELECT settings->'isNotifiableByMention' as isnotifiablebymention FROM players WHERE steamid = $1`,
       values: [steamid],
     };
-    const { rows } = await db.query(query);
-    const { isnotifiablebymention } = rows[0];
+    const { rows: [{ isnotifiablebymention }] } = await db.query(query);
     expect(isnotifiablebymention).to.equal(false);
   });
 
@@ -61,8 +62,7 @@ describe('settings', () => {
       text: `SELECT settings->'favoriteClasses' as classes FROM players WHERE steamid = $1`,
       values: [steamid],
     };
-    const { rows } = await db.query(query);
-    const { classes } = rows[0];
+    const { 'rows': [{ classes }] } = await db.query(query);
     expect(classes).to.deep.equal(['Demoman', 'Flex']);
   });
 
@@ -75,8 +75,7 @@ describe('settings', () => {
       text: `SELECT settings->'favoriteClasses' as classes FROM players WHERE steamid = $1`,
       values: [steamid],
     };
-    const { rows } = await db.query(query);
-    const { classes } = rows[0];
+    const { rows: [{ classes }] } = await db.query(query);
     expect(classes).to.deep.equal(['Flex', 'Scout']);
   });
 
