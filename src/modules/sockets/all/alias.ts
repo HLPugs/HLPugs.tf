@@ -13,23 +13,24 @@ export const alias = (io: Server) => {
       const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
 
       if (!aliasRules.test(alias)) return; // Exits function if alias didn't pass Regex check
-      const res = await db.query('SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)', [alias]);
-      if (res.rows[0]) return; // Exits function if alias was taken
+      const { rows } = await db.query('SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)', [alias]);
+      if (rows) return; // Exits function if alias was taken
 
       const query = {
         text: `UPDATE players SET alias = $1 WHERE steamid = $2 AND alias IS NULL RETURNING *`,
         values: [alias, socket.request.session.user.steamid],
       };
 
-      const res2 = await db.query(query);
+      {
+        const { rows } = await db.query(query);
+        if (!rows[0]) return; // Exits function if alias didn't update in the database
+      }
 
-      if (!res2.rows[0]) return; // Exits function if alias didn't update in the database
       socket.request.session.user.alias = alias;
       socket.request.session.save((err: any) => err ? console.log(err) : null);
 
       const user = socket.request.session.user;
       user.loggedIn = true;
-
       socket.emit('user', user);
 
       // Log account creation

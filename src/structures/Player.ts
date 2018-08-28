@@ -33,7 +33,7 @@ import { DraftTFClass }                               from './DraftClassList';
  */
 export class Player {
 
-  private steamid: string;
+  readonly steamid: string;
   alias: string                   = undefined;
   avatar: string;
   isCaptain: boolean              = false;
@@ -45,8 +45,8 @@ export class Player {
   pugs: number                    = 0;
   winsByClass: TFClassesTracker   = new TFClassesTracker();
   lossesByClass: TFClassesTracker = new TFClassesTracker();
-  private settings: PlayerSettings       = new PlayerSettings();
-  private activePunishments: Map<PunishmentType, PunishmentData>;
+  settings: PlayerSettings       = new PlayerSettings();
+  activePunishments: Map<PunishmentType, PunishmentData>;
 
   /**
    * Creates a new Player object.
@@ -146,7 +146,9 @@ export class Player {
 
     // Exclude inactive punishments
     const activePunishments = punishments.filter((x: Punishment) => new Date(x.data.expiration) > new Date());
+    console.log(activePunishments);
     activePunishments.forEach((punishment: Punishment) => {
+      console.log(punishment);
       this.activePunishments.set(punishment.type, punishment.data);
     });
     return;

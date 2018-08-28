@@ -12,15 +12,15 @@ export const loginUserQuery = `INSERT INTO players (steamid, avatar)
 export const setLeagueAdminStatusQuery = `UPDATE players SET isLeagueAdmin = $1 WHERE steamid = $2`;
 
 export const getActivePunishmentsQuery = `SELECT
-    punishment
+    type
     , data
         FROM (
             SELECT
-    punishment
+    type
     , timeline -> 'punishments' -> (json_array_length(timeline -> 'punishments') - 1) AS data
       , rank()
   OVER (PARTITION BY
-  punishment
+  type
   ORDER BY
   timeline -> 'punishments' -> 0 ->> 'issued_on' DESC) AS r
   FROM

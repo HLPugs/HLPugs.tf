@@ -28,16 +28,16 @@ export const loginUser = async(req: SteamRequest): Promise<void> => {
   // TODO Insert / Update IP
 
   const res: QueryResult = await db.query(loginUserQuery, [steamid, avatar]);
-  const { alias, isCaptain, roles, staffRole, isLeagueAdmin, settings } = res.rows[0];
+  const { alias, iscaptain, roles, staffrole, isleagueadmin, settings } = res.rows[0];
 
   // Only spend time retrieving more information from database if user exists
   if (alias) {
     await player.updateActivePunishments();
     player.roles = roles;
-    player.staffRole = staffRole;
-    player.isLeagueAdmin = isLeagueAdmin;
+    player.staffRole = staffrole;
+    player.isLeagueAdmin = isleagueadmin;
     player.alias = alias;
-    player.isCaptain = isCaptain;
+    player.isCaptain = iscaptain;
     if (settings) {
       if (PlayerSettings.matchesStructure(settings)) {
         this.settings = settings;
