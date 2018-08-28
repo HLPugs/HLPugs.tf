@@ -146,9 +146,7 @@ export class Player {
 
     // Exclude inactive punishments
     const activePunishments = punishments.filter((x: Punishment) => new Date(x.data.expiration) > new Date());
-    console.log(activePunishments);
     activePunishments.forEach((punishment: Punishment) => {
-      console.log(punishment);
       this.activePunishments.set(punishment.type, punishment.data);
     });
     return;
