@@ -1,5 +1,4 @@
 import db from '../database/db';
-import { QueryResult } from 'pg';
 import logger from './logger';
 import { Player } from '../structures/Player';
 import { SteamRequest } from 'steam-login';

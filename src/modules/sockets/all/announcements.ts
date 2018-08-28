@@ -1,7 +1,6 @@
 import { Server }               from 'socket.io';
 import { Announcement, Region } from '../../../structures/Announcement';
 import db                       from '../../../database/db';
-import { QueryResult }          from 'pg';
 
 // @ts-ignore
 const defaultRegion: Region = process.env.region;

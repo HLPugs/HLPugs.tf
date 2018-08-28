@@ -1,5 +1,3 @@
-/* tslint:disable:variable-name */
-
 import { TFClassesTracker }                           from './TFClassesTracker';
 import { Punishment, PunishmentData, PunishmentType } from './Punishment';
 import db                                             from '../database/db';
@@ -11,7 +9,6 @@ import {
 } from '../database/queries/player';
 import logger                                         from '../modules/logger';
 import { Role, StaffRole }                            from './Roles';
-import { QueryResult }                                from 'pg';
 import { PlayerSetting, PlayerSettings }              from './PlayerSettings';
 import { DraftTFClass }                               from './DraftClassList';
 
