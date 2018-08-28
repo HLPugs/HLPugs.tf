@@ -141,8 +141,7 @@ export class Player {
    * @returns {Promise<object>} Ban reason, expiration, and creator's SteamID and steam avatar
    */
   async updateActivePunishments(): Promise<void> {
-    const res: QueryResult = await db.query(getActivePunishmentsQuery, [this.steamid]);
-    const punishments = res.rows;
+    const { 'rows':  punishments } = await db.query(getActivePunishmentsQuery, [this.steamid]);
 
     // Exclude inactive punishments
     const activePunishments = punishments.filter((x: Punishment) => new Date(x.data.expiration) > new Date());

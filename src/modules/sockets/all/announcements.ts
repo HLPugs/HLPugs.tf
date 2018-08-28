@@ -14,8 +14,8 @@ export async function getAnnouncements(customRegion?: Region): Promise<Announcem
     values: [region],
   };
 
-  const res: QueryResult = await db.query(query);
-  return res.rows;
+  const { rows } = await db.query(query);
+  return rows;
 }
 
 export const announcements = async (io: Server) => {
