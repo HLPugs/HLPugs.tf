@@ -104,7 +104,7 @@ export class Player {
    * @return {Promise<void>}
    */
   async addFavoriteClass(tfclass: DraftTFClass): Promise<void> {
-    if (this.settings.favoriteClasses.indexOf(tfclass) === -1) {
+    if (!this.hasFavoriteClass(tfclass)) {
       const newSettings = this.settings;
       newSettings.favoriteClasses.push(tfclass);
       await db.query(`UPDATE players SET settings = $1 WHERE steamid = $2`, [newSettings, this.steamid]);
@@ -112,6 +112,10 @@ export class Player {
     } else {
       logger.warn(`${this.alias} tried to add ${tfclass} to their favorite classes, but it already is one`);
     }
+  }
+
+  hasFavoriteClass(tfclass: DraftTFClass): boolean {
+    return this.settings.favoriteClasses.indexOf(tfclass) !== -1;
   }
 
   /**
