@@ -1,1 +1,2 @@
-UPDATE PLAYERS SET roles = array_append(roles, $1) WHERE steamid = $2;
+UPDATE players SET roles = players.roles || $2
+WHERE steamid=$1 AND NOT roles @> $2

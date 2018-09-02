@@ -150,7 +150,6 @@ export class Player {
     if (this.roles.indexOf(role) !== -1) {
       logger.warn(`${this.alias} is already ${role}`);
     } else {
-      await db.query(removeRoleQuery, [role, this.steamid]);
       await db.query(addRoleQuery, [role, this.steamid]);
       this.roles.push(role);
     }
