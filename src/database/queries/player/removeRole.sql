@@ -1,1 +1,2 @@
-UPDATE PLAYERS SET roles = array_remove(roles, $1) WHERE steamid = $2
+UPDATE players SET roles = array_remove(roles, $1) 
+WHERE steamid = $2;
