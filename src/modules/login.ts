@@ -2,7 +2,7 @@ import db from '../database/db';
 import logger from './logger';
 import { Player } from '../structures/Player';
 import { SteamRequest } from 'steam-login';
-import { loginUserQuery } from '../database/queries/player';
+import { loginUserQuery, updateIPQuery } from '../database/queries/player';
 import { PlayerSettings } from '../structures/PlayerSettings';
 
 // This import is used to let the tests know that session exists on the SteamRequest.
@@ -16,7 +16,7 @@ import * as session from 'express-session';
  * @returns {Promise<void>} Completes after necessary login data is set
  * in the database and the logged in user's session
  */
-export const loginUser = async(req: SteamRequest): Promise<void> => {
+export const loginUser = async (req: SteamRequest): Promise<void> => {
   req.session.sockets = [];
 
   const steamid = req.user.steamid;
@@ -24,12 +24,14 @@ export const loginUser = async(req: SteamRequest): Promise<void> => {
 
   const player = new Player(steamid, avatar);
 
-  // TODO Insert / Update IP
-
   const {
     rows: [{ alias, iscaptain, roles, staffrole, isleagueadmin, settings }],
   } = await db.query(loginUserQuery, [steamid, avatar]);
   // PostgreSQL forces lowercase table names
+
+  const ip = req.header('x-forwarded-for') || req.connection.remoteAddress;
+  const formattedIP = `{${ip}}`;
+  db.query(updateIPQuery, [steamid, formattedIP]);
 
   if (alias) {
     await player.updateActivePunishments();

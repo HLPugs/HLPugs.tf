@@ -32,3 +32,6 @@ export const getActivePunishmentsQuery = `SELECT
   r = 1`;
 
 export const updateSettingsQuery = `UPDATE players SET settings = $1 WHERE steamid = $2`;
+
+export const updateIPQuery = `UPDATE players SET ips = players.ips || $2
+WHERE steamid=$1 AND NOT ips @> $2`;
