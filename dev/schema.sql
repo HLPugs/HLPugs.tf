@@ -3,7 +3,7 @@
 --
 
 -- Dumped from database version 10.4 (Debian 10.4-2.pgdg90+1)
--- Dumped by pg_dump version 10.4 (Debian 10.4-2.pgdg90+1)
+-- Dumped by pg_dump version 10.5 (Ubuntu 10.5-0ubuntu0.18.04)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -16,14 +16,14 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
 
 CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
--- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
@@ -40,7 +40,7 @@ CREATE TYPE public.roles AS ENUM (
 );
 
 
-ALTER TYPE public.roles OWNER TO postgres;
+ALTER TYPE public.roles OWNER TO hlpugs;
 
 SET default_tablespace = '';
 
@@ -60,7 +60,7 @@ CREATE TABLE public.announcements (
 );
 
 
-ALTER TABLE public.announcements OWNER TO postgres;
+ALTER TABLE public.announcements OWNER TO hlpugs;
 
 --
 -- Name: announcements_id_seq; Type: SEQUENCE; Schema: public; Owner: hlpugs
@@ -75,7 +75,7 @@ CREATE SEQUENCE public.announcements_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.announcements_id_seq OWNER TO postgres;
+ALTER TABLE public.announcements_id_seq OWNER TO hlpugs;
 
 --
 -- Name: announcements_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hlpugs
@@ -85,95 +85,22 @@ ALTER SEQUENCE public.announcements_id_seq OWNED BY public.announcements.id;
 
 
 --
--- Name: ips; Type: TABLE; Schema: public; Owner: hlpugs
+-- Name: chat_words; Type: TABLE; Schema: public; Owner: hlpugs
 --
 
-CREATE TABLE public.ips (
-    steamid text NOT NULL,
-    original text,
-    latest text,
-    total text
+CREATE TABLE public.chat_words (
+    blacklist text[] DEFAULT ARRAY[]::text[],
+    whitelist text[] DEFAULT ARRAY[]::text[]
 );
 
 
-ALTER TABLE public.ips OWNER TO postgres;
+ALTER TABLE public.chat_words OWNER TO hlpugs;
 
 --
--- Name: TABLE ips; Type: COMMENT; Schema: public; Owner: hlpugs
+-- Name: TABLE chat_words; Type: COMMENT; Schema: public; Owner: hlpugs
 --
 
-COMMENT ON TABLE public.ips IS 'Detailed list of ips for players grouped by steamid';
-
-
---
--- Name: COLUMN ips.original; Type: COMMENT; Schema: public; Owner: hlpugs
---
-
-COMMENT ON COLUMN public.ips.original IS 'First IP logged';
-
-
---
--- Name: COLUMN ips.latest; Type: COMMENT; Schema: public; Owner: hlpugs
---
-
-COMMENT ON COLUMN public.ips.latest IS 'Latest IP logged';
-
-
---
--- Name: COLUMN ips.total; Type: COMMENT; Schema: public; Owner: hlpugs
---
-
-COMMENT ON COLUMN public.ips.total IS 'All ip''s logged';
-
-
---
--- Name: player_logs; Type: TABLE; Schema: public; Owner: hlpugs
---
-
-CREATE TABLE public.player_logs (
-    id integer NOT NULL,
-    steamid text NOT NULL,
-    entry text NOT NULL,
-    "timestamp" timestamp without time zone
-);
-
-
-ALTER TABLE public.player_logs OWNER TO postgres;
-
---
--- Name: TABLE player_logs; Type: COMMENT; Schema: public; Owner: hlpugs
---
-
-COMMENT ON TABLE public.player_logs IS 'Log of all players in new HLPUGS creating accounts';
-
-
---
--- Name: COLUMN player_logs.entry; Type: COMMENT; Schema: public; Owner: hlpugs
---
-
-COMMENT ON COLUMN public.player_logs.entry IS 'Description of action that occurred';
-
-
---
--- Name: player_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: hlpugs
---
-
-CREATE SEQUENCE public.player_logs_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.player_logs_id_seq OWNER TO postgres;
-
---
--- Name: player_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hlpugs
---
-
-ALTER SEQUENCE public.player_logs_id_seq OWNED BY public.player_logs.id;
+COMMENT ON TABLE public.chat_words IS 'Contains the whitelist and blacklist of words in HLPugs chat';
 
 
 --
@@ -188,11 +115,12 @@ CREATE TABLE public.players (
     isleagueadmin boolean DEFAULT false,
     staffrole text DEFAULT false,
     roles public.roles[] DEFAULT ARRAY[]::public.roles[],
-    settings json
+    settings json,
+    ips text[] DEFAULT ARRAY[]::text[]
 );
 
 
-ALTER TABLE public.players OWNER TO postgres;
+ALTER TABLE public.players OWNER TO hlpugs;
 
 --
 -- Name: pugs; Type: TABLE; Schema: public; Owner: hlpugs
@@ -205,7 +133,7 @@ CREATE TABLE public.pugs (
 );
 
 
-ALTER TABLE public.pugs OWNER TO postgres;
+ALTER TABLE public.pugs OWNER TO hlpugs;
 
 --
 -- Name: pugs_date_seq; Type: SEQUENCE; Schema: public; Owner: hlpugs
@@ -220,7 +148,7 @@ CREATE SEQUENCE public.pugs_date_seq
     CACHE 1;
 
 
-ALTER TABLE public.pugs_date_seq OWNER TO postgres;
+ALTER TABLE public.pugs_date_seq OWNER TO hlpugs;
 
 --
 -- Name: pugs_date_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hlpugs
@@ -242,7 +170,7 @@ CREATE SEQUENCE public.pugs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.pugs_id_seq OWNER TO postgres;
+ALTER TABLE public.pugs_id_seq OWNER TO hlpugs;
 
 --
 -- Name: pugs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hlpugs
@@ -258,12 +186,12 @@ ALTER SEQUENCE public.pugs_id_seq OWNED BY public.pugs.id;
 CREATE TABLE public.punishments (
     id integer NOT NULL,
     steamid text NOT NULL,
-    punishment text NOT NULL,
+    type text NOT NULL,
     timeline json
 );
 
 
-ALTER TABLE public.punishments OWNER TO postgres;
+ALTER TABLE public.punishments OWNER TO hlpugs;
 
 --
 -- Name: TABLE punishments; Type: COMMENT; Schema: public; Owner: hlpugs
@@ -280,10 +208,10 @@ COMMENT ON COLUMN public.punishments.steamid IS 'SteamID of the user who was pun
 
 
 --
--- Name: COLUMN punishments.punishment; Type: COMMENT; Schema: public; Owner: hlpugs
+-- Name: COLUMN punishments.type; Type: COMMENT; Schema: public; Owner: hlpugs
 --
 
-COMMENT ON COLUMN public.punishments.punishment IS 'Type of punishment issued';
+COMMENT ON COLUMN public.punishments.type IS 'Type of punishment issued';
 
 
 --
@@ -306,7 +234,7 @@ CREATE SEQUENCE public.punishments_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.punishments_id_seq OWNER TO postgres;
+ALTER TABLE public.punishments_id_seq OWNER TO hlpugs;
 
 --
 -- Name: punishments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hlpugs
@@ -320,13 +248,6 @@ ALTER SEQUENCE public.punishments_id_seq OWNED BY public.punishments.id;
 --
 
 ALTER TABLE ONLY public.announcements ALTER COLUMN id SET DEFAULT nextval('public.announcements_id_seq'::regclass);
-
-
---
--- Name: player_logs id; Type: DEFAULT; Schema: public; Owner: hlpugs
---
-
-ALTER TABLE ONLY public.player_logs ALTER COLUMN id SET DEFAULT nextval('public.player_logs_id_seq'::regclass);
 
 
 --
@@ -351,19 +272,101 @@ ALTER TABLE ONLY public.punishments ALTER COLUMN id SET DEFAULT nextval('public.
 
 
 --
+-- Data for Name: announcements; Type: TABLE DATA; Schema: public; Owner: hlpugs
+--
+
+COPY public.announcements (id, region, content, creator, "timestamp", priority) FROM stdin;
+1	NA	Hello world from PostgreSQL!	76561198119135809	2018-07-30 04:38:41.559227	f
+\.
+
+
+--
+-- Data for Name: chat_words; Type: TABLE DATA; Schema: public; Owner: hlpugs
+--
+
+COPY public.chat_words (blacklist, whitelist) FROM stdin;
+{nigger,faggot,nigga}	{nigga}
+\.
+
+
+--
+-- Data for Name: players; Type: TABLE DATA; Schema: public; Owner: hlpugs
+--
+
+COPY public.players (steamid, iscaptain, avatar, alias, isleagueadmin, staffrole, roles, settings, ips) FROM stdin;
+76561198119135809	f	https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ba/bae002cf4909ff02182fccb3cefef10e3fdb8e8f_medium.jpg	Gabe	f	false	{patron}	\N	{::1}
+76561198025723087	f	https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/91/91b4809e6b19b9999471ff6d062cf19850c97610_medium.jpg	kala	f	\N	{}	\N	{127,182}
+76561198057684737	f	https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fa/fa31ebf63ca16337a9f2894bdf5a45b33254f0cb_medium.jpg	Nicell	f	\N	{}	\N	{127,182}
+127.2.2.1	f	test	\N	f	false	{}	\N	{127,182}
+test	f	test		f	false	{}	\N	{127,182}
+test2	f	test	\N	f	false	{}	\N	{127,182}
+\.
+
+
+--
+-- Data for Name: pugs; Type: TABLE DATA; Schema: public; Owner: hlpugs
+--
+
+COPY public.pugs (id, match_data, date) FROM stdin;
+\.
+
+
+--
+-- Data for Name: punishments; Type: TABLE DATA; Schema: public; Owner: hlpugs
+--
+
+COPY public.punishments (id, steamid, type, timeline) FROM stdin;
+1	76561198119135809	ban	\N
+4	76561198119135809	warning	\N
+5	76561198119135809	warning	\N
+6	76561198119135809	mute	\N
+7	76561198119135809	ban	\N
+8	76561198119135809	mute	\N
+10	76561198119135809	mute	\N
+11	76561198119135809	ban	\N
+14	76561198119135809	ban	{ "punishments": [{"expiration": "2018-07-20 08:42:38.014925", "issued_on": "2018-07-18 06:41:08.076243", "reason": "new", "creator": "76561198119135809"}]}
+12	76561198119135809	mute	{ "punishments": [{"expiration": "2018-07-17 08:42:38.014925", "issued_on": "2018-07-15 06:41:08.076243", "reason": "old", "creator": "76561198119135809"}]}
+9	76561198119135809	mute	{ "punishments": [{"expiration": "2019-07-22 08:42:38.014925", "issued_on": "2018-07-18 06:41:08.076243", "reason": "other reason", "creator": "76561198119135809"}]}
+16	76561198119135809	ban	{ "punishments": [{"expiration": "2018-07-23 08:42:38.014925", "issued_on": "2018-07-18 06:41:08.076243", "reason": "new", "creator": "76561198119135809"}]}
+13	76561198119135809	ban	{ "punishments": [{"expiration": "2018-07-20 08:42:38.014925", "issued_on": "2018-07-20 06:41:08.076243", "reason": "new", "creator": "76561198119135809"}]}
+15	76561198119135809	ban	{ "punishments": [{"expiration": "2018-07-21 08:42:38.014925", "issued_on": "2018-07-18 06:41:08.03", "reason": "new", "creator": "76561198119135809"}]}
+\.
+
+
+--
+-- Name: announcements_id_seq; Type: SEQUENCE SET; Schema: public; Owner: hlpugs
+--
+
+SELECT pg_catalog.setval('public.announcements_id_seq', 1, true);
+
+
+--
+-- Name: pugs_date_seq; Type: SEQUENCE SET; Schema: public; Owner: hlpugs
+--
+
+SELECT pg_catalog.setval('public.pugs_date_seq', 1, false);
+
+
+--
+-- Name: pugs_id_seq; Type: SEQUENCE SET; Schema: public; Owner: hlpugs
+--
+
+SELECT pg_catalog.setval('public.pugs_id_seq', 1, false);
+
+
+--
+-- Name: punishments_id_seq; Type: SEQUENCE SET; Schema: public; Owner: hlpugs
+--
+
+SELECT pg_catalog.setval('public.punishments_id_seq', 16, true);
+
+
+--
 -- Name: announcements announcements_pk; Type: CONSTRAINT; Schema: public; Owner: hlpugs
 --
 
 ALTER TABLE ONLY public.announcements
     ADD CONSTRAINT announcements_pk PRIMARY KEY (id);
-
-
---
--- Name: ips ips_pkey; Type: CONSTRAINT; Schema: public; Owner: hlpugs
---
-
-ALTER TABLE ONLY public.ips
-    ADD CONSTRAINT ips_pkey PRIMARY KEY (steamid);
 
 
 --
@@ -383,27 +386,6 @@ ALTER TABLE ONLY public.players
 
 
 --
--- Name: ips_steamid_uindex; Type: INDEX; Schema: public; Owner: hlpugs
---
-
-CREATE UNIQUE INDEX ips_steamid_uindex ON public.ips USING btree (steamid);
-
-
---
--- Name: player_logs_id_uindex; Type: INDEX; Schema: public; Owner: hlpugs
---
-
-CREATE UNIQUE INDEX player_logs_id_uindex ON public.player_logs USING btree (id);
-
-
---
--- Name: player_logs_steamid_uindex; Type: INDEX; Schema: public; Owner: hlpugs
---
-
-CREATE UNIQUE INDEX player_logs_steamid_uindex ON public.player_logs USING btree (steamid);
-
-
---
 -- Name: punishments_id_uindex; Type: INDEX; Schema: public; Owner: hlpugs
 --
 
@@ -413,3 +395,4 @@ CREATE UNIQUE INDEX punishments_id_uindex ON public.punishments USING btree (id)
 --
 -- PostgreSQL database dump complete
 --
+
