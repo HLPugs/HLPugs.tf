@@ -1,9 +1,11 @@
-import db from '../database/db';
+import db, { loadQuery } from '../database/db';
 import logger from './logger';
 import { Player } from '../structures/Player';
 import { SteamRequest } from 'steam-login';
-import { loginUserQuery, updateIPQuery } from '../database/queries/player';
 import { PlayerSettings } from '../structures/PlayerSettings';
+
+const loginUserQuery = loadQuery('player/loginUser');
+const updateIPQuery = loadQuery('player/updateIP');
 
 // This import is used to let the tests know that session exists on the SteamRequest.
 // Ignore is utilized since it's an unused import.

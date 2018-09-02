@@ -1,0 +1,1 @@
+UPDATE PLAYERS SET roles = array_append(roles, $1) WHERE steamid = $2;
