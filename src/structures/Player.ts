@@ -150,11 +150,21 @@ export class Player {
     if (this.roles.indexOf(role) !== -1) {
       logger.warn(`${this.alias} is already ${role}`);
     } else {
-      await db.query(addRoleQuery, [role, this.steamid]);
+      const formattedRole = `{${role}}`;
+      await db.query(addRoleQuery, [formattedRole, this.steamid]);
       this.roles.push(role);
     }
   }
 
+  async removeRole(role: Role): Promise<void> {
+    const indexOfRole = this.roles.indexOf(role);
+    if (indexOfRole === -1) {
+      logger.warn(`${this.alias} already doesn't have ${role}`);
+    } else {
+      await db.query(removeRoleQuery, [role, this.steamid]);
+      this.roles.splice(indexOfRole, indexOfRole + 1);
+    }
+  }
   async setStaffRole(role: StaffRole | false): Promise<Player> {
     if (role === this.staffRole) {
       logger.warn(`${this.alias} is already ${role}`);
@@ -172,19 +182,5 @@ export class Player {
       await db.query('UPDATE players SET isLeagueAdmin = $1 WHERE steamid = $2', [status, this.steamid]);
       this.isLeagueAdmin = status;
     }
-  }
-
-  async removeRole(role: Role) {
-    const indexOfRole = this.roles.indexOf(role);
-    if (indexOfRole === -1) {
-      logger.warn(`${this.alias} already doesn't have ${role}`);
-    } else {
-      await db.query(removeRoleQuery, [role, this.steamid]);
-      this.roles.splice(indexOfRole, indexOfRole + 1);
-    }
-  }
-
-  async removeAllRoles() {
-
   }
 }
