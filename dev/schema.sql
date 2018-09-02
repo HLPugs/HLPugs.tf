@@ -15,6 +15,28 @@ SET check_function_bodies = false;
 SET client_min_messages = warning;
 SET row_security = off;
 
+DROP DATABASE hlpugs;
+--
+-- Name: hlpugs; Type: DATABASE; Schema: -; Owner: postgres
+--
+
+CREATE DATABASE hlpugs WITH TEMPLATE = template0 ENCODING = 'UTF8' LC_COLLATE = 'en_US.UTF-8' LC_CTYPE = 'en_US.UTF-8';
+
+
+ALTER DATABASE hlpugs OWNER TO postgres;
+
+\connect hlpugs
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+SET row_security = off;
+
 --
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
 --
@@ -285,7 +307,7 @@ COPY public.announcements (id, region, content, creator, "timestamp", priority) 
 --
 
 COPY public.chat_words (blacklist, whitelist) FROM stdin;
-{nigger,faggot,nigga}	{nigga}
+{badword,badword2,badword3}	{badword}
 \.
 
 
@@ -294,12 +316,12 @@ COPY public.chat_words (blacklist, whitelist) FROM stdin;
 --
 
 COPY public.players (steamid, iscaptain, avatar, alias, isleagueadmin, staffrole, roles, settings, ips) FROM stdin;
-76561198119135809	f	https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ba/bae002cf4909ff02182fccb3cefef10e3fdb8e8f_medium.jpg	Gabe	f	false	{patron}	\N	{::1}
 76561198025723087	f	https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/91/91b4809e6b19b9999471ff6d062cf19850c97610_medium.jpg	kala	f	\N	{}	\N	{127,182}
 76561198057684737	f	https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fa/fa31ebf63ca16337a9f2894bdf5a45b33254f0cb_medium.jpg	Nicell	f	\N	{}	\N	{127,182}
 127.2.2.1	f	test	\N	f	false	{}	\N	{127,182}
 test	f	test		f	false	{}	\N	{127,182}
 test2	f	test	\N	f	false	{}	\N	{127,182}
+76561198119135809	f	https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/ba/bae002cf4909ff02182fccb3cefef10e3fdb8e8f_medium.jpg	Gabe	f	false	{patron}	\N	{::1,12345}
 \.
 
 
@@ -390,6 +412,13 @@ ALTER TABLE ONLY public.players
 --
 
 CREATE UNIQUE INDEX punishments_id_uindex ON public.punishments USING btree (id);
+
+
+--
+-- Name: SCHEMA public; Type: ACL; Schema: -; Owner: postgres
+--
+
+GRANT ALL ON SCHEMA public TO PUBLIC;
 
 
 --
