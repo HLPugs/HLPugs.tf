@@ -19,6 +19,7 @@ interface MessageElement {
 
 interface ChatMessageProps {
   customEmojis: CustomEmoji[];
+  alias?: string;
 }
 
 class ChatMessage extends React.PureComponent<ChatMessageType & ChatMessageProps, {}> {
@@ -104,14 +105,23 @@ class ChatMessage extends React.PureComponent<ChatMessageType & ChatMessageProps
           </span>
         );
       }
-
-      return <span key={index}>{element.message}</span>;
+      return (
+        <span key={index}>{element.message}</span>
+      );
     });
+  }
+
+  highlight = () => {
+    if (this.props.alias && this.props.message.split(' ').indexOf(`@${this.props.alias}`) > -1) {
+      return 'highlight';
+    }
+
+    return '';
   }
 
   render() {
     return (
-      <div className="message">
+      <div className={'message ' + this.highlight()}>
         <div className="info">
           <Link to={`/player/${this.props.userid}`} target="blank" className="username">
             {this.props.username}

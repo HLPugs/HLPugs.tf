@@ -9,6 +9,7 @@ interface ChatMessagesProps {
   socket: SocketIOClient.Socket;
   customEmojis: CustomEmoji[];
   steamid?: string;
+  alias?: string;
 }
 
 interface ChatMessagesState {
@@ -101,7 +102,12 @@ class ChatMessages extends React.Component<ChatMessagesProps, ChatMessagesState>
       <>
         <div id="messageList" ref={this.messageList} onScroll={this.handleScroll}>
           {this.state.messages.map((message: ChatMessageType) =>
-            <ChatMessage {...message} key={message.id} customEmojis={this.props.customEmojis} />
+            <ChatMessage
+              {...message}
+              key={message.id}
+              alias={this.props.alias}
+              customEmojis={this.props.customEmojis}
+            />
           )}
         </div>
         {this.newMessageIndicator()}

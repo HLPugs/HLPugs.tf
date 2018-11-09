@@ -53,6 +53,7 @@ class Chat extends React.PureComponent<ChatProps, ChatState> {
               socket={this.props.socket}
               customEmojis={this.state.customEmojis}
               steamid={this.props.user.steamid}
+              alias={this.props.user.alias}
             />
             <ChatInput
               socket={this.props.socket}

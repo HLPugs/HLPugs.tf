@@ -11,6 +11,21 @@
         border-bottom: none;
     }
 
+    &.highlight {
+        background: rgba(255,193,7,.05);
+        position: relative;
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: 0px;
+            top: -1px;
+            background: #ffc107;
+            height: calc(100% + 1px);
+            width: 5px;
+        }
+    }
+
     .info {
         display: flex;
         justify-content: space-between;
