@@ -3,6 +3,7 @@ import * as io from 'socket.io-client';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { SiteConfiguration, UserScheme } from '../common/types';
 import Home from '../pages/Home';
+import Player from '../pages/Player';
 import Banned from '../pages/Banned';
 import Loading from '../components/Loading';
 
@@ -135,6 +136,16 @@ class App extends React.Component<{}, AppState> {
                     user={this.state.user ? this.state.user : {}} 
                   />
                 } 
+              />
+              <Route
+                path="/player/:steamid"
+                render={() =>
+                  <Player 
+                    socket={this.socket}
+                    configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
+                    user={this.state.user ? this.state.user : {}}
+                  />
+                }
               />
               <Route
                 exact={true}
