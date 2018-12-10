@@ -85,95 +85,22 @@ ALTER SEQUENCE public.announcements_id_seq OWNED BY public.announcements.id;
 
 
 --
--- Name: ips; Type: TABLE; Schema: public; Owner: hlpugs
+-- Name: chat_words; Type: TABLE; Schema: public; Owner: hlpugs
 --
 
-CREATE TABLE public.ips (
-    steamid text NOT NULL,
-    original text,
-    latest text,
-    total text
+CREATE TABLE public.chat_words (
+    blacklist text[] DEFAULT ARRAY[]::text[],
+    whitelist text[] DEFAULT ARRAY[]::text[]
 );
 
 
-ALTER TABLE public.ips OWNER TO postgres;
+ALTER TABLE public.chat_words OWNER TO postgres;
 
 --
--- Name: TABLE ips; Type: COMMENT; Schema: public; Owner: hlpugs
+-- Name: TABLE chat_words; Type: COMMENT; Schema: public; Owner: hlpugs
 --
 
-COMMENT ON TABLE public.ips IS 'Detailed list of ips for players grouped by steamid';
-
-
---
--- Name: COLUMN ips.original; Type: COMMENT; Schema: public; Owner: hlpugs
---
-
-COMMENT ON COLUMN public.ips.original IS 'First IP logged';
-
-
---
--- Name: COLUMN ips.latest; Type: COMMENT; Schema: public; Owner: hlpugs
---
-
-COMMENT ON COLUMN public.ips.latest IS 'Latest IP logged';
-
-
---
--- Name: COLUMN ips.total; Type: COMMENT; Schema: public; Owner: hlpugs
---
-
-COMMENT ON COLUMN public.ips.total IS 'All ip''s logged';
-
-
---
--- Name: player_logs; Type: TABLE; Schema: public; Owner: hlpugs
---
-
-CREATE TABLE public.player_logs (
-    id integer NOT NULL,
-    steamid text NOT NULL,
-    entry text NOT NULL,
-    "timestamp" timestamp without time zone
-);
-
-
-ALTER TABLE public.player_logs OWNER TO postgres;
-
---
--- Name: TABLE player_logs; Type: COMMENT; Schema: public; Owner: hlpugs
---
-
-COMMENT ON TABLE public.player_logs IS 'Log of all players in new HLPUGS creating accounts';
-
-
---
--- Name: COLUMN player_logs.entry; Type: COMMENT; Schema: public; Owner: hlpugs
---
-
-COMMENT ON COLUMN public.player_logs.entry IS 'Description of action that occurred';
-
-
---
--- Name: player_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: hlpugs
---
-
-CREATE SEQUENCE public.player_logs_id_seq
-    AS integer
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
-ALTER TABLE public.player_logs_id_seq OWNER TO postgres;
-
---
--- Name: player_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hlpugs
---
-
-ALTER SEQUENCE public.player_logs_id_seq OWNED BY public.player_logs.id;
+COMMENT ON TABLE public.chat_words IS 'Contains the whitelist and blacklist of words in HLPugs chat';
 
 
 --
@@ -188,7 +115,8 @@ CREATE TABLE public.players (
     isleagueadmin boolean DEFAULT false,
     staffrole text DEFAULT false,
     roles public.roles[] DEFAULT ARRAY[]::public.roles[],
-    settings json
+    settings json,
+    ips text[] DEFAULT ARRAY[]::text[]
 );
 
 
@@ -258,7 +186,7 @@ ALTER SEQUENCE public.pugs_id_seq OWNED BY public.pugs.id;
 CREATE TABLE public.punishments (
     id integer NOT NULL,
     steamid text NOT NULL,
-    punishment text NOT NULL,
+    type text NOT NULL,
     timeline json
 );
 
@@ -280,10 +208,10 @@ COMMENT ON COLUMN public.punishments.steamid IS 'SteamID of the user who was pun
 
 
 --
--- Name: COLUMN punishments.punishment; Type: COMMENT; Schema: public; Owner: hlpugs
+-- Name: COLUMN punishments.type; Type: COMMENT; Schema: public; Owner: hlpugs
 --
 
-COMMENT ON COLUMN public.punishments.punishment IS 'Type of punishment issued';
+COMMENT ON COLUMN public.punishments.type IS 'Type of punishment issued';
 
 
 --
@@ -323,13 +251,6 @@ ALTER TABLE ONLY public.announcements ALTER COLUMN id SET DEFAULT nextval('publi
 
 
 --
--- Name: player_logs id; Type: DEFAULT; Schema: public; Owner: hlpugs
---
-
-ALTER TABLE ONLY public.player_logs ALTER COLUMN id SET DEFAULT nextval('public.player_logs_id_seq'::regclass);
-
-
---
 -- Name: pugs id; Type: DEFAULT; Schema: public; Owner: hlpugs
 --
 
@@ -359,14 +280,6 @@ ALTER TABLE ONLY public.announcements
 
 
 --
--- Name: ips ips_pkey; Type: CONSTRAINT; Schema: public; Owner: hlpugs
---
-
-ALTER TABLE ONLY public.ips
-    ADD CONSTRAINT ips_pkey PRIMARY KEY (steamid);
-
-
---
 -- Name: punishments punishments_id_pk; Type: CONSTRAINT; Schema: public; Owner: hlpugs
 --
 
@@ -380,27 +293,6 @@ ALTER TABLE ONLY public.punishments
 
 ALTER TABLE ONLY public.players
     ADD CONSTRAINT users_steamid_key UNIQUE (steamid);
-
-
---
--- Name: ips_steamid_uindex; Type: INDEX; Schema: public; Owner: hlpugs
---
-
-CREATE UNIQUE INDEX ips_steamid_uindex ON public.ips USING btree (steamid);
-
-
---
--- Name: player_logs_id_uindex; Type: INDEX; Schema: public; Owner: hlpugs
---
-
-CREATE UNIQUE INDEX player_logs_id_uindex ON public.player_logs USING btree (id);
-
-
---
--- Name: player_logs_steamid_uindex; Type: INDEX; Schema: public; Owner: hlpugs
---
-
-CREATE UNIQUE INDEX player_logs_steamid_uindex ON public.player_logs USING btree (steamid);
 
 
 --

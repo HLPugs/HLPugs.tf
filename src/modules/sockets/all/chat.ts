@@ -1,6 +1,7 @@
 import * as config from 'config';
-import * as uuid   from 'uuid';
-import { Server }  from 'socket.io';
+import * as uuid from 'uuid';
+import { Server } from 'socket.io';
+import { ChatWords } from '../../../structures/ChatWords';
 
 interface messageObjectType {
   message: string;
@@ -10,11 +11,20 @@ interface messageObjectType {
   timestamp: number;
 }
 
-// TODO: Find a better home for these where they're easily updated (database? config file?).
-const blacklistWords = ['te'];
-const whitelistWords = ['test'];
+const chatWords = new ChatWords();
 
 const messageHistory: messageObjectType[] = [];
+
+const cleanWord = (word: string) => {
+  const { blacklistWords, whitelistWords } = chatWords;
+  let tempWord = word;
+
+  whitelistWords.forEach(whitelistedWord => tempWord = tempWord.replace(new RegExp(whitelistedWord, 'ig'), ''));
+
+  const wordNotClean = blacklistWords.some(blacklistedWord => tempWord.toLowerCase().includes(blacklistedWord));
+
+  return wordNotClean ? '*'.repeat(word.length) : word;
+};
 
 export const chat = (io: Server) => {
   io.on('connection', (socket) => {
@@ -58,14 +68,4 @@ export const chat = (io: Server) => {
       socket.emit('customEmojis', config.get('app.customEmojis'));
     });
   });
-};
-
-const cleanWord = (word: string) => {
-  let tempWord = word;
-
-  whitelistWords.forEach(whitelistedWord => tempWord = tempWord.replace(new RegExp(whitelistedWord, 'ig'), ''));
-
-  const wordNotClean = blacklistWords.some(blacklistedWord => tempWord.toLowerCase().includes(blacklistedWord));
-
-  return wordNotClean ? '*'.repeat(word.length) : word;
 };
