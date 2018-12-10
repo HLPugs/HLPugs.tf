@@ -3,7 +3,7 @@ import * as uuid from 'uuid';
 import { Server } from 'socket.io';
 import { ChatWords } from '../../../structures/ChatWords';
 
-interface messageObjectType {
+interface MessageObjectType {
   message: string;
   username: string;
   userid: string;
@@ -13,7 +13,7 @@ interface messageObjectType {
 
 const chatWords = new ChatWords();
 
-const messageHistory: messageObjectType[] = [];
+const messageHistory: MessageObjectType[] = [];
 
 const cleanWord = (word: string) => {
   const { blacklistWords, whitelistWords } = chatWords;
@@ -38,7 +38,7 @@ export const chat = (io: Server) => {
         if (Date.now() - socket.request.session.lastMessageSentTimestamp < 1000) return;
 
         if (cleanedMessage.length && cleanedMessage.length <= 300 && socket.request.session.user.alias) {
-          const messageObject: messageObjectType = {
+          const messageObject: MessageObjectType = {
             message: cleanedMessage,
             username: socket.request.session.user.alias,
             userid: socket.request.session.user.steamid,

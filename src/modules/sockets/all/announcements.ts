@@ -9,7 +9,7 @@ export async function getAnnouncements(customRegion?: Region): Promise<Announcem
   // Populate in-memory announcements collection
   const region = customRegion !== undefined ? customRegion : defaultRegion;
   const query = {
-    text: `SELECT content, priority FROM announcements WHERE region = $1 ORDER BY timestamp DESC`,
+    text: 'SELECT content, priority FROM announcements WHERE region = $1 ORDER BY timestamp DESC',
     values: [region],
   };
 

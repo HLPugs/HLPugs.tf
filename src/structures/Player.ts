@@ -94,7 +94,7 @@ export class Player {
   async updateSetting(setting: PlayerSetting, value: number | string | boolean): Promise<void> {
     const newSettings = this.settings;
     newSettings[setting] = value;
-    await db.query(`UPDATE players SET settings = $1 WHERE steamid = $2`, [newSettings, this.steamid]);
+    await db.query('UPDATE players SET settings = $1 WHERE steamid = $2', [newSettings, this.steamid]);
     this.settings[setting] = value;
   }
 
@@ -107,7 +107,7 @@ export class Player {
     if (!this.hasFavoriteClass(tfclass)) {
       const newSettings = this.settings;
       newSettings.favoriteClasses.push(tfclass);
-      await db.query(`UPDATE players SET settings = $1 WHERE steamid = $2`, [newSettings, this.steamid]);
+      await db.query('UPDATE players SET settings = $1 WHERE steamid = $2', [newSettings, this.steamid]);
       this.settings.favoriteClasses = newSettings.favoriteClasses;
     } else {
       logger.warn(`${this.alias} tried to add ${tfclass} to their favorite classes, but it already is one`);
@@ -128,7 +128,7 @@ export class Player {
       const newSettings = this.settings;
       const indexOfTFClass = newSettings.favoriteClasses.indexOf(tfclass);
       newSettings.favoriteClasses.splice(indexOfTFClass, 1);
-      await db.query(`UPDATE players SET settings = $1 WHERE steamid = $2`, [newSettings, this.steamid]);
+      await db.query('UPDATE players SET settings = $1 WHERE steamid = $2', [newSettings, this.steamid]);
     } else {
       logger.warn(`${this.alias} tried to remove ${tfclass} as from their favorite classes,
        but it is already non-existent`);

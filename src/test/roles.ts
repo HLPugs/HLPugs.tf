@@ -14,16 +14,16 @@ describe('Roles', () => {
     await addFakePlayer(steamid, 'EpicGamer');
     chai.use(chaiAsPromised);
     {
-      const query = `DELETE FROM players WHERE steamid = $1`;
+      const query = 'DELETE FROM players WHERE steamid = $1';
       await db.query(query, [steamid]);
     }
-    const query = `INSERT INTO players (steamid, avatar) VALUES ($1, 'fakeAvatar')`;
+    const query = 'INSERT INTO players (steamid, avatar) VALUES ($1, \'fakeAvatar\')';
     db.query(query, [steamid]);
     player = await getPlayer(steamid);
   });
 
   after(async() => {
-    const query = `DELETE FROM players WHERE steamid = $1`;
+    const query = 'DELETE FROM players WHERE steamid = $1';
     await db.query(query, [steamid]);
   });
 

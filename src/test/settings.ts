@@ -26,7 +26,7 @@ describe('settings', () => {
 
     const {
       rows: [{ volume }],
-    } = await db.query(`SELECT settings->'volume' as volume FROM players WHERE steamid = $1`, [steamid]);
+    } = await db.query('SELECT settings->\'volume\' as volume FROM players WHERE steamid = $1', [steamid]);
     expect(volume).to.equal(100);
   });
 
@@ -36,7 +36,7 @@ describe('settings', () => {
 
     const {
       rows: [{ voicepack }],
-    } = await db.query(`SELECT settings->'voicepack' as voicepack FROM players WHERE steamid = $1`, [steamid]);
+    } = await db.query('SELECT settings->\'voicepack\' as voicepack FROM players WHERE steamid = $1', [steamid]);
     expect(voicepack).to.equal('kegapack');
   });
 
@@ -46,7 +46,7 @@ describe('settings', () => {
 
     const query = {
       // Postgres enforces returning columns in lower-case
-      text: `SELECT settings->'isNotifiableByMention' as isnotifiablebymention FROM players WHERE steamid = $1`,
+      text: 'SELECT settings->\'isNotifiableByMention\' as isnotifiablebymention FROM players WHERE steamid = $1',
       values: [steamid],
     };
     const { rows: [{ isnotifiablebymention }] } = await db.query(query);
@@ -59,7 +59,7 @@ describe('settings', () => {
     expect(player.settings.favoriteClasses).to.deep.equal(['Demoman', 'Flex']);
 
     const query = {
-      text: `SELECT settings->'favoriteClasses' as classes FROM players WHERE steamid = $1`,
+      text: 'SELECT settings->\'favoriteClasses\' as classes FROM players WHERE steamid = $1',
       values: [steamid],
     };
     const { 'rows': [{ classes }] } = await db.query(query);
@@ -72,7 +72,7 @@ describe('settings', () => {
     expect(player.settings.favoriteClasses).to.deep.equal(['Flex', 'Scout']);
 
     const query = {
-      text: `SELECT settings->'favoriteClasses' as classes FROM players WHERE steamid = $1`,
+      text: 'SELECT settings->\'favoriteClasses\' as classes FROM players WHERE steamid = $1',
       values: [steamid],
     };
     const { rows: [{ classes }] } = await db.query(query);

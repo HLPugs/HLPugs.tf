@@ -18,7 +18,7 @@ export const alias = (io: Server) => {
       if (row) return; // Exits function if alias was taken
 
       const query = {
-        text: `UPDATE players SET alias = $1 WHERE steamid = $2 AND alias IS NULL RETURNING *`,
+        text: 'UPDATE players SET alias = $1 WHERE steamid = $2 AND alias IS NULL RETURNING *',
         values: [alias, socket.request.session.user.steamid],
       };
       {
