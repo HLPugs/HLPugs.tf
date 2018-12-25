@@ -1,46 +1,46 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity('warnings', { schema:'pugdb' })
+@Entity('warnings')
 export class warnings {
 
   @PrimaryGeneratedColumn({
-    type:'int',
-    name:'id',
+    type: 'int',
+    name: 'id',
   })
-    id:number;
+  id: number;
 
   @Column('varchar', {
-    nullable:false,
-    length:512,
-    name:'message',
+    nullable: false,
+    length: 512,
+    name: 'message',
   })
-    message:string;
+  message: string;
 
   @Column('varchar', {
-    nullable:false,
-    length:20,
-    name:'alias',
+    nullable: false,
+    length: 20,
+    name: 'alias',
   })
-    alias:string;
+  alias: string;
 
-  @Column('datetime', {
-    nullable:false,
-    name:'expiration',
+  @Column({
+    nullable: false,
+    name: 'expiration',
   })
-    expiration:Date;
+  expiration: Date;
 
   @Column('varchar', {
-    nullable:false,
-    length:20,
-    name:'creator',
+    nullable: false,
+    length: 20,
+    name: 'creator',
   })
-    creator:string;
+  creator: string;
 
-  @Column('datetime', {
-    nullable:true,
-    default:'CURRENT_TIMESTAMP',
-    name:'date',
-  })
-    date:Date | null;
+  // @Column({
+  //   nullable: true,
+  //   default: 'CURRENT_TIMESTAMP',
+  //   name: 'date',
+  // })
+  // date: Date | null;
 
 }

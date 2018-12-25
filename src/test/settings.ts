@@ -1,7 +1,7 @@
 import * as chai from 'chai';
 import 'mocha';
 import { addFakePlayer, getPlayer } from '../modules/playerMap';
-import { Player } from '../structures/Player';
+import { Player } from '../types/Player';
 import db from '../database/db';
 
 const expect = chai.expect;

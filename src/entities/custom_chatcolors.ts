@@ -1,57 +1,57 @@
 import { Index, Entity, Column } from 'typeorm';
 
-@Entity('custom_chatcolors', { schema:'pugdb' })
-@Index('identity', ['identity'], { unique:true })
+@Entity('custom_chatcolors')
+@Index('identity', ['identity'], { unique: true })
 export class custom_chatcolors {
 
   @Column('int', {
-    nullable:false,
-    primary:true,
-    name:'index',
+    nullable: false,
+    primary: true,
+    name: 'index',
   })
-    index:number;
+  index: number;
 
   @Column('varchar', {
-    nullable:false,
+    nullable: false,
     unique: true,
-    length:32,
-    name:'identity',
+    length: 32,
+    name: 'identity',
   })
-    identity:string;
+  identity: string;
 
   @Column('char', {
-    nullable:true,
-    length:1,
-    name:'flag',
+    nullable: true,
+    length: 1,
+    name: 'flag',
   })
-    flag:string | null;
+  flag: string | null;
 
   @Column('varchar', {
-    nullable:true,
-    length:32,
-    name:'tag',
+    nullable: true,
+    length: 32,
+    name: 'tag',
   })
-    tag:string | null;
+  tag: string | null;
 
   @Column('varchar', {
-    nullable:true,
-    length:8,
-    name:'tagcolor',
+    nullable: true,
+    length: 8,
+    name: 'tagcolor',
   })
-    tagcolor:string | null;
+  tagcolor: string | null;
 
   @Column('varchar', {
-    nullable:true,
-    length:8,
-    name:'namecolor',
+    nullable: true,
+    length: 8,
+    name: 'namecolor',
   })
-    namecolor:string | null;
+  namecolor: string | null;
 
   @Column('varchar', {
-    nullable:true,
-    length:8,
-    name:'textcolor',
+    nullable: true,
+    length: 8,
+    name: 'textcolor',
   })
-    textcolor:string | null;
+  textcolor: string | null;
 
 }

@@ -1,10 +1,10 @@
-import * as config                        from 'config';
-import logger                             from './logger';
-import * as crypto                        from 'crypto';
-import * as uuid                          from 'uuid';
-import { DraftTFClass, DraftTFClassList } from '../structures/DraftClassList';
-import { Player }                         from '../structures/Player';
-import { store }                          from './store';
+import * as config from 'config';
+import logger from './logger';
+import * as crypto from 'crypto';
+import * as uuid from 'uuid';
+import { DraftTFClass, DraftTFClassList } from '../types/DraftClassList';
+import { Player } from '../types/Player';
+import { store } from './store';
 
 /**
  * @module playerMap
@@ -37,7 +37,7 @@ export const getPlayer = (steamid: string): Promise<Player> => {
       if (err) throw err;
       /* When a class is put in a memory store, it is stripped of its methods.
       	 An instance variable is created to gain access to Player's methods*/
-	  const player = Player.createPlayer(session.user);
+      const player = Player.createPlayer(session.user);
       session ? resolve(player) : resolve(null);
     });
   });
@@ -73,9 +73,9 @@ export function addFakePlayer(steamid: string, alias?: string): Promise<void> {
           .digest('hex'),
       };
 
-    // @ts-ignore
+      // @ts-ignore
       const fakeSession = store.createSession(fakeRequest, fakeSess);
-      fakeSession.user = new Player(steamid, '',  alias);
+      fakeSession.user = new Player(steamid, '', alias);
       store.set(fakeSession.id, fakeSession, (err) => {
         if (err) reject(err);
         addPlayer(fakeSession.id, steamid);
@@ -128,13 +128,13 @@ export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: Draft
  */
 export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: DraftTFClass) => {
   const indexOfPlayer = draftTFClassLists
-	  .get(draftTFClass)
-	  .indexOf(steamid);
+    .get(draftTFClass)
+    .indexOf(steamid);
 
   if (indexOfPlayer >= 0) {
     draftTFClassLists
-		.get(draftTFClass)
-		.splice(indexOfPlayer, 1);
+      .get(draftTFClass)
+      .splice(indexOfPlayer, 1);
 
     const player: Player = await getPlayer(steamid);
     logger.info(`${player.alias} removed from ${draftTFClass}`);

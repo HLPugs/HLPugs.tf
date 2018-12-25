@@ -1,8 +1,8 @@
 import db, { loadQuery } from '../database/db';
 import logger from './logger';
-import { Player } from '../structures/Player';
+import { Player } from '../types/Player';
 import { SteamRequest } from 'steam-login';
-import { PlayerSettings } from '../structures/PlayerSettings';
+import { PlayerSettings } from '../types/PlayerSettings';
 
 const loginUserQuery = loadQuery('player/loginUser');
 const updateIPQuery = loadQuery('player/updateIP');

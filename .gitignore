@@ -26,3 +26,5 @@ npm-debug.log
 
 # TypeORM config (has DB info)
 ormconfig.json
+config/dev.json
+config/test.json

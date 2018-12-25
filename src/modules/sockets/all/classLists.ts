@@ -1,6 +1,6 @@
-import { Server }       from 'socket.io';
-import { DraftTFClass } from '../../../structures/DraftClassList';
-import * as playerMap   from '../../playerMap';
+import { Server } from 'socket.io';
+import { DraftTFClass } from '../../../types/DraftClassList';
+import * as playerMap from '../../playerMap';
 
 export const classLists = (io: Server) => {
   io.on('connection', (socket) => {
@@ -13,7 +13,7 @@ export const classLists = (io: Server) => {
       io.emit('addToDraftTFClass', tfClass, socket.request.session.user.steamid);
     });
 
-    socket.on('removeFromDraftTFClass', async(draftTFClass: DraftTFClass) => {
+    socket.on('removeFromDraftTFClass', async (draftTFClass: DraftTFClass) => {
       await playerMap.removePlayerDraftTFClass(socket.request.session.user.steamid, draftTFClass);
       io.emit('removeFromDraftTFClass', draftTFClass, socket.request.session.user.steamid);
     });

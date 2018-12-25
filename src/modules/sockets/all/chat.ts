@@ -1,7 +1,7 @@
 import * as config from 'config';
 import * as uuid from 'uuid';
 import { Server } from 'socket.io';
-import { ChatWords } from '../../../structures/ChatWords';
+import { ChatWords } from '../../../types/ChatWords';
 
 interface MessageObjectType {
   message: string;
