@@ -12,19 +12,17 @@ config/default.json
 
 # vscode files
 .vscode
+/.vs/
 
-# Logs
+# Winston logs
 logs/*
 
-# Keep Logs folder
-!src/logs/.gitkeep
-/.vs/
 
 # Coverage
 coverage
 .nyc_output
 coverage.lcov
 npm-debug.log
-logs/error.log
-src/logs/error.log
-src/logs/combined.log
+
+# TypeORM config (has DB info)
+ormconfig.json
