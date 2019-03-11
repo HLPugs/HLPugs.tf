@@ -1,3 +1,4 @@
+import 'mocha';
 import { Announcement } from '../entities/Announcement/announcement';
 import { createTypeormConn } from '../utils/createTypeormConn';
 
