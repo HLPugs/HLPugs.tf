@@ -9,8 +9,9 @@ export class ChatWords {
   }
 
   async updateWords() {
-    const { rows: [{ blacklist, whitelist }] } = await db.query('SELECT * FROM chat_words');
-    this.blacklistWords = blacklist;
-    this.whitelistWords = whitelist;
+    const res = await db.query('SELECT * FROM chat_words');
+    const { blacklist, whitelist } = res.rows[0] ? res.rows[0] : { blacklist: [], whitelist: [] };
+    this.blacklistWords = blacklist ? blacklist : [];
+    this.whitelistWords = whitelist ? whitelist : [];
   }
 }
