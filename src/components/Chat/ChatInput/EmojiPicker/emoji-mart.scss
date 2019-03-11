@@ -100,10 +100,11 @@
 }
 
 .emoji-mart-search {
-    margin-top: 6px;
-    margin-bottom: 6px;
-    padding: 0 6px;
+  margin-top: 6px;
+  margin-bottom: 6px;
+  padding: 0 6px;
 }
+
 .emoji-mart-search input {
     font-size: 16px;
     display: block;
@@ -123,6 +124,10 @@
         border-color: var(--color);
         box-shadow: var(--paper-2);
     }
+}
+
+.emoji-mart-search-icon {
+  display: none;
 }
 
 .emoji-mart-category .emoji-mart-emoji span {
