@@ -14,7 +14,7 @@ export class Announcement extends BaseEntity {
   creator: string;
 
   @Column('enum', { default: 'all' })
-  public readonly region: Region = 'all';
+  public region: Region = 'all';
 
   static async createAnnouncement(announcement: Announcement) {
     await this.save(announcement);
