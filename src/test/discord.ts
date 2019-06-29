@@ -1,9 +1,6 @@
 import { postToDiscord } from '../modules';
-import * as chai from 'chai';
-import 'mocha';
+import { expect } from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
-
-const expect = chai.expect;
 
 describe('postToDiscord', () => {
   before(() => {
