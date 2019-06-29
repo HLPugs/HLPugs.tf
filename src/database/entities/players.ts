@@ -1,8 +1,9 @@
 import { Index, Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
+
 @Entity('players', { schema:'pugdb' })
-@Index('id_UNIQUE', ['id'], { unique:true })
-@Index('steamid_UNIQUE', ['steamid'], { unique:true })
+@Index('id_UNIQUE', ['id', ], {unique:true})
+@Index('steamid_UNIQUE', ['steamid', ], { unique:true })
 export class players {
 
   @PrimaryGeneratedColumn({
@@ -104,9 +105,5 @@ export class players {
     name:'elo',
   })
     elo:number | null;
-
-  static getRecentPugs(limit?: number) {
-    return {};
-  }
 
 }
