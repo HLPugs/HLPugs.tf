@@ -1,108 +1,109 @@
 import { Index, Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity('players')
-@Index('steamid_UNIQUE', ['steamid'], { unique: true })
+@Entity('players', { schema:'pugdb' })
+@Index('id_UNIQUE', ['id'], { unique:true })
+@Index('steamid_UNIQUE', ['steamid'], { unique:true })
 export class players {
 
   @PrimaryGeneratedColumn({
-    type: 'int',
-    name: 'id',
+    type:'int',
+    name:'id',
   })
-  id: number;
+    id:number;
 
   @Column('varchar', {
-    nullable: false,
+    nullable:false,
     unique: true,
-    length: 30,
-    name: 'steamid',
+    length:30,
+    name:'steamid',
   })
-  steamid: string;
+    steamid:string;
 
   @Column('varchar', {
-    nullable: true,
-    length: 50,
-    name: 'ip',
+    nullable:true,
+    length:50,
+    name:'ip',
   })
-  ip: string | null;
+    ip:string | null;
 
   @Column('int', {
-    nullable: true,
-    default: '0',
-    name: 'pugs',
+    nullable:true,
+    default:'0',
+    name:'pugs',
   })
-  pugs: number | null;
+    pugs:number | null;
 
   @Column('int', {
-    nullable: true,
-    default: '0',
-    name: 'wins',
+    nullable:true,
+    default:'0',
+    name:'wins',
   })
-  wins: number | null;
+    wins:number | null;
 
   @Column('int', {
-    nullable: false,
-    primary: true,
-    default: '0',
-    name: 'losses',
+    nullable:false,
+    primary:true,
+    default:'0',
+    name:'losses',
   })
-  losses: number;
+    losses:number;
 
-  @Column({
-    nullable: true,
-    width: 1,
-    default: '0',
-    name: 'captain',
+  @Column('tinyint', {
+    nullable:true,
+    width:1,
+    default:'0',
+    name:'captain',
   })
-  captain: boolean | null;
-
-  @Column('int', {
-    nullable: true,
-    default: '0',
-    name: 'subsin',
-  })
-  subsin: number | null;
+    captain:boolean | null;
 
   @Column('int', {
-    nullable: true,
-    default: '0',
-    name: 'subsout',
+    nullable:true,
+    default:'0',
+    name:'subsin',
   })
-  subsout: number | null;
-
-  @Column({
-    nullable: true,
-    width: 1,
-    default: '0',
-    name: 'crestrict',
-  })
-  crestrict: boolean | null;
+    subsin:number | null;
 
   @Column('int', {
-    nullable: true,
-    default: '5',
-    name: 'goodboy',
+    nullable:true,
+    default:'0',
+    name:'subsout',
   })
-  goodboy: number | null;
+    subsout:number | null;
+
+  @Column('tinyint', {
+    nullable:true,
+    width:1,
+    default:'0',
+    name:'crestrict',
+  })
+    crestrict:boolean | null;
 
   @Column('int', {
-    nullable: true,
-    default: '0',
-    name: 'captainpenalty',
+    nullable:true,
+    default:'5',
+    name:'goodboy',
   })
-  captainpenalty: number | null;
-
-  @Column({
-    nullable: true,
-    name: 'captainpenaltytime',
-  })
-  captainpenaltytime: Date | null;
+    goodboy:number | null;
 
   @Column('int', {
-    nullable: true,
-    default: '0',
-    name: 'elo',
+    nullable:true,
+    default:'0',
+    name:'captainpenalty',
   })
-  elo: number | null;
+    captainpenalty:number | null;
+
+  @Column('datetime', {
+    nullable:true,
+    name:'captainpenaltytime',
+  })
+    captainpenaltytime:Date | null;
+
+  @Column('int', {
+    nullable:true,
+    default:'0',
+    name:'elo',
+  })
+    elo:number | null;
 
   static getRecentPugs(limit?: number) {
     return {};

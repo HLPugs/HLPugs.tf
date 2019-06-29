@@ -1,16 +1,16 @@
-import * as chai from 'chai';
-import * as chaiAsPromised from 'chai-as-promised';
+import * as chai                    from 'chai';
+import * as chaiAsPromised          from 'chai-as-promised';
 import 'mocha';
-import db from '../database/db';
+import db                           from '../database/db';
 import { addFakePlayer, getPlayer } from '../modules/playerMap';
-import { Player } from '../types/Player';
+import { Player }                   from '../structures/Player';
 const expect = chai.expect;
 const steamid = 'steamid';
 
 let player: Player;
 
 describe('Roles', () => {
-  before(async () => {
+  before(async() => {
     await addFakePlayer(steamid, 'EpicGamer');
     chai.use(chaiAsPromised);
     {
@@ -22,7 +22,7 @@ describe('Roles', () => {
     player = await getPlayer(steamid);
   });
 
-  after(async () => {
+  after(async() => {
     const query = 'DELETE FROM players WHERE steamid = $1';
     await db.query(query, [steamid]);
   });
@@ -37,19 +37,19 @@ describe('Roles', () => {
     expect(player.roles).to.not.contain('patron');
   });
 
-  it('should give a Player the admin role', async () => {
+  it('should give a Player the admin role', async() => {
     await player.setStaffRole('admin');
     expect(player.staffRole).to.equal('admin');
   });
 
-  it('should remove a Player\'s staff role', async () => {
+  it('should remove a Player\'s staff role', async() => {
     const player = await getPlayer(steamid);
     await player.setStaffRole('developer');
     await player.setStaffRole(false);
     expect(player.staffRole).to.not.equal('admin');
   });
 
-  it('should make the Player a league admin', async () => {
+  it('should make the Player a league admin', async() => {
     const player = await getPlayer(steamid);
     await player.setLeagueAdminStatus(true);
     expect(player.isLeagueAdmin).to.equal(true);

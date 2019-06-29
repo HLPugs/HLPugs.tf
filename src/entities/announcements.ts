@@ -1,7 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity('warnings', { schema:'pugdb' })
-export class warnings {
+@Entity('announcements', { schema:'pugdb' })
+export class announcements {
 
   @PrimaryGeneratedColumn({
     type:'int',
@@ -19,28 +19,16 @@ export class warnings {
   @Column('varchar', {
     nullable:false,
     length:20,
-    name:'alias',
-  })
-    alias:string;
-
-  @Column('datetime', {
-    nullable:false,
-    name:'expiration',
-  })
-    expiration:Date;
-
-  @Column('varchar', {
-    nullable:false,
-    length:20,
     name:'creator',
   })
     creator:string;
 
-  @Column('datetime', {
+  @Column('varchar', {
     nullable:true,
-    default:'CURRENT_TIMESTAMP',
-    name:'date',
+    length:45,
+    default:'all',
+    name:'region',
   })
-    date:Date | null;
+    region:string | null;
 
 }

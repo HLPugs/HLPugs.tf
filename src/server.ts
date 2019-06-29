@@ -1,24 +1,23 @@
-import * as config from 'config';
-import * as crypto from 'crypto';
-import * as dotenv from 'dotenv';
-import * as express from 'express';
-import * as expressSession from 'express-session';
-import { Server } from 'http';
-import * as steam from 'steam-login';
-import * as uuid from 'uuid';
-import { createTypeormConn } from './utils/createTypeormConn';
-import { handleError, routing, sockets } from './modules';
-import { store } from './modules/store';
-
+import * as dotenv                       from 'dotenv';
 dotenv.config();
+
+import * as config                       from 'config';
+import * as crypto                       from 'crypto';
+import * as express                      from 'express';
+import * as expressSession               from 'express-session';
+import * as steam                        from 'steam-login';
+import * as uuid                         from 'uuid';
+import { Server }                        from 'http';
+import { routing, sockets, handleError } from './modules';
+import { store }                         from './modules/store';
 
 const sessionConfig = expressSession({
   store,
   genid(req) {
     return crypto.createHash('sha256')
-      .update(uuid.v1())
-      .update(crypto.randomBytes(256))
-      .digest('hex');
+        .update(uuid.v1())
+        .update(crypto.randomBytes(256))
+        .digest('hex');
   },
   resave: false,
   saveUninitialized: false,
@@ -47,8 +46,9 @@ app.use(steam.middleware({
 app.use(routing);
 
 // Error handling middleware
+// tslint:disable-next-line:max-line-length
 app.use(async (e: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
-  await handleError(e, { req, res });
+  await handleError(e);
   next(e);
 });
 
@@ -62,6 +62,4 @@ process.on('unhandledRejection', (reason, p) => {
   throw reason;
 });
 
-createTypeormConn().then(() => {
-  server.listen(3001);
-});
+server.listen(3001);

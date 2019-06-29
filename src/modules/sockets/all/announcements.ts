@@ -1,7 +1,6 @@
-import { Server } from 'socket.io';
-import { Announcement } from '../../../entities/Announcement/announcement';
-import { Region } from '../../../types/Region';
-import db from '../../../database/db';
+import { Server }               from 'socket.io';
+import { Announcement, Region } from '../../../structures/Announcement';
+import db                       from '../../../database/db';
 
 // @ts-ignore
 const defaultRegion: Region = process.env.region;
@@ -21,7 +20,7 @@ export async function getAnnouncements(customRegion?: Region): Promise<Announcem
 export const announcements = async (io: Server) => {
 
   io.on('connection', (socket) => {
-    socket.on('loadAnnouncements', async (customRegion?: Region) => {
+    socket.on('loadAnnouncements', async(customRegion?: Region) => {
       const region = customRegion !== undefined ? customRegion : defaultRegion;
       const announcementList = await getAnnouncements(region);
       socket.emit('receiveAnnouncements', announcementList);

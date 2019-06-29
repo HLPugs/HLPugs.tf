@@ -1,39 +1,40 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Index, Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
-@Entity('pugs')
+@Entity('pugs', { schema:'pugdb' })
+@Index('idpugs_UNIQUE', ['idpugs'], { unique:true })
 export class pugs {
 
   @PrimaryGeneratedColumn({
-    type: 'int',
-    name: 'idpugs',
+    type:'int',
+    name:'idpugs',
   })
-  idpugs: number;
+    idpugs:number;
 
   @Column('varchar', {
-    nullable: false,
-    length: 45,
-    name: 'map',
+    nullable:false,
+    length:45,
+    name:'map',
   })
-  map: string;
+    map:string;
 
   @Column('int', {
-    nullable: false,
-    name: 'winner',
+    nullable:false,
+    name:'winner',
   })
-  winner: number;
+    winner:number;
 
-  // @Column({
-  //   nullable: true,
-  //   default: 'CURRENT_TIMESTAMP',
-  //   name: 'date',
-  // })
-  // date: Date | null;
+  @Column('datetime', {
+    nullable:true,
+    default:'CURRENT_TIMESTAMP',
+    name:'date',
+  })
+    date:Date | null;
 
   @Column('varchar', {
-    nullable: true,
-    length: 45,
-    name: 'logslink',
+    nullable:true,
+    length:45,
+    name:'logslink',
   })
-  logslink: string | null;
+    logslink:string | null;
 
 }
