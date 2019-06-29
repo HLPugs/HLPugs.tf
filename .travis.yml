@@ -19,6 +19,7 @@ before_script:
 install:
   - npm install
 script:
+  - npm run build-db
   - npm run build
   - npm run coverage
 after_success:
