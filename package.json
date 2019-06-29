@@ -27,7 +27,6 @@
 		"request": "^2.88.0",
 		"socket.io": "^2.1.1",
 		"steam-login": "^0.1.7",
-		"typeorm": "^0.2.9",
 		"uuid": "^3.3.2",
 		"winston": "^3.0.0"
 	},
