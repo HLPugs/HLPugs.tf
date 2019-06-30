@@ -1,5 +1,5 @@
-import * as React from 'react';
-import './style.css';
+import React from 'react';
+import './style.scss';
 
 interface AliasModalProps {
     socket: SocketIOClient.Socket;
@@ -12,7 +12,7 @@ interface AliasModalState {
 
 class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
 
-  protected checkAlias: number;
+  protected checkAlias: number = 0;
 
   private readonly aliasInput: React.RefObject<HTMLInputElement>;
 
@@ -90,7 +90,7 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
               {this.submitText()}
             </button>
           </div>
-          <span>Alias must be 2-17 characters using only alphanumeric + _</span>
+          <span>Alias must be 2-17 characters using only alphanumeric and "_"</span>
         </div>
       </div>
     );

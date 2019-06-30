@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import PreDraftRequirementItem from './PreDraftRequirementItem';
 import { PreDraftRequirementType } from '../../../../common/types';
-import './style.css';
+import './style.scss';
 
 interface PreDraftRequirementsProps {
   requirements: PreDraftRequirementType[];

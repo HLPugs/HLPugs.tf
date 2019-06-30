@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { ChatMessageType } from '../../../common/types';
 import ChatMessage from './ChatMessage';
 import { CustomEmoji } from 'emoji-mart';
-import './style.css';
+import './style.scss';
 import { FontAwesomeIcon } from '../../../../node_modules/@fortawesome/react-fontawesome';
 
 interface ChatMessagesProps {

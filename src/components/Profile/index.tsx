@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 
-import './style.css';
+import './style.scss';
 
 class Profile extends React.Component<{}, {}> {
   render() {

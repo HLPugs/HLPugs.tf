@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './style.css';
+import './style.scss';
 
 class SteamLogIn extends React.Component {
   render() {

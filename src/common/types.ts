@@ -28,7 +28,7 @@ export interface NavItem {
 }
 export type DraftTFClass =
   'Scout' | 'Soldier' | 'Roamer' |
-  'Pocket' | 'Pyro' | 'Demoman' |
+  'Pocket' | 'Pyro' | 'Demo' |
   'Heavy' | 'Engineer' | 'Medic' |
   'Sniper' | 'Spy' | 'Flex' ;
 

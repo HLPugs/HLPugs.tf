@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { PreDraftRequirementType } from '../../../../../common/types';
 import { FontAwesomeIcon } from '../../../../../../node_modules/@fortawesome/react-fontawesome';
-import './style.css';
+import './style.scss';
 
 interface PreDraftRequirementItemProps {
   state: PreDraftRequirementType;

@@ -1,9 +1,14 @@
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import App from './App';
 
-import * as WebFont from 'webfontloader';
-import * as moment from 'moment';
+import WebFont from 'webfontloader';
+import moment from 'moment';
+
+import './style.scss';
+import './animations.scss';
+import './buttons.scss';
+import './formElements.scss';
 
 WebFont.load({
   google: {
@@ -16,11 +21,6 @@ moment.updateLocale('en', {
     sameDay: 'LT'
   }
 });
-
-import './style.css';
-import './animations.css';
-import './buttons.css';
-import './formElements.css';
 
 ReactDOM.render(
   <App />,

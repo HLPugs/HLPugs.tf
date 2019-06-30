@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { SiteConfiguration, UserScheme } from '../../common/types';
 import Header from '../../components/Header';
 import User from '../../components/User';
@@ -7,7 +7,7 @@ import DraftArea from '../../components/DraftArea';
 import Chat from '../../components/Chat';
 import AliasModal from '../../components/AliasModal';
 import Settings from '../../components/Settings';
-import './style.css';
+import './style.scss';
 
 interface HomeProps {
   socket: SocketIOClient.Socket;
@@ -17,7 +17,7 @@ interface HomeProps {
 
 interface HomeState {
   settingsOpen: boolean;
-  playerData: Object;
+  playerData: any;
 }
 
 const ctxt = React.createContext<Object | null>(null);

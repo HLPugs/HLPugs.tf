@@ -1,7 +1,7 @@
-import * as React                          from 'react';
-import Linkify                             from 'react-linkify';
-import { FontAwesomeIcon }                 from '@fortawesome/react-fontawesome';
-import './style.css';
+import React from 'react';
+import Linkify from 'react-linkify';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import './style.scss';
 import { BasicAnnouncement } from '../../../common/types';
 
 interface AnnouncementsProps {

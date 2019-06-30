@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { Emoji } from 'emoji-mart';
 import { CompletionItem } from '../../../../common/types';
-import './style.css';
+import './style.scss';
 
 interface AutoCompletionsProps {
   autoCompleteIndex: number;

@@ -1,5 +1,5 @@
-import * as React from 'react';
-import './style.css';
+import React from 'react';
+import './style.scss';
 
 interface LoadingMessage {
   message: string;

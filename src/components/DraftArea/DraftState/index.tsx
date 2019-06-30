@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import PreDraftRequirements from './PreDraftRequirements';
 import { PreDraftRequirementType } from '../../../common/types';
-import './style.css';
+import './style.scss';
 
 interface DraftStateProps {
   socket: SocketIOClient.Socket;

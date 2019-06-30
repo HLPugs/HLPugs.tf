@@ -1,9 +1,9 @@
-import * as React                         from 'react';
-import ClassLists                         from './ClassLists';
-import DraftState                         from './DraftState';
-import Announcements                      from './Announcements';
-import { DraftTFClassList }               from '../../common/types';
-import './style.css';
+import React from 'react';
+import ClassLists from './ClassLists';
+import DraftState from './DraftState';
+import Announcements from './Announcements';
+import { DraftTFClassList } from '../../common/types';
+import './style.scss';
 
 interface DraftAreaProps {
   socket: SocketIOClient.Socket;

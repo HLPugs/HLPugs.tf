@@ -1,12 +1,12 @@
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Linkify from 'react-linkify';
 import { ChatMessageType } from '../../../../common/types';
 import { Emoji } from 'emoji-mart';
 import allEmojis from 'emoji-mart/data/all.json';
 import { CustomEmoji } from 'emoji-mart';
-import * as moment from 'moment';
-import './style.css';
+import moment from 'moment';
+import './style.scss';
 
 interface MessageElement {
   name?: string;
@@ -24,10 +24,12 @@ interface ChatMessageProps {
 
 class ChatMessage extends React.PureComponent<ChatMessageType & ChatMessageProps, {}> {
   renderMessage = (message: string, id: string) => {
-    const colonsRegex = new RegExp('(^|\\s)(\:[a-zA-Z0-9-_+]+\:(\:skin-tone-[2-6]\:)?)', 'g');
+    const colonsRegex = new RegExp('(^|\\s)(:[a-zA-Z0-9-_+]+:(:skin-tone-[2-6]:)?)', 'g');
 
     let match;
     const emojis: MessageElement[] = [];
+
+    // eslint-disable-next-line
     while (match = colonsRegex.exec(message)) {
       const name = match[2];
       const offset: number = match.index + match[1].length;

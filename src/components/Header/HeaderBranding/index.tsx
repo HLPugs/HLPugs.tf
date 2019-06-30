@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import { SiteBranding } from '../../../common/types';
 import { Link } from 'react-router-dom';
 import logo from '../../../img/logo.svg';
-import './style.css';
+import './style.scss';
 
 class HeaderBranding extends React.Component<SiteBranding, {}> {
   render() {

@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { NavItem } from '../../common/types';
 import NavigationItem from './NavigationItem';
-import './style.css';
+import './style.scss';
 
 interface NavigationProps {
   navigationGroup: NavItem[];

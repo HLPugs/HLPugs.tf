@@ -1,9 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import UserInfo from './UserInfo';
 import UserDropDown from './UserDropDown';
 import SteamLogIn from './SteamLogIn';
 import { UserScheme } from '../../common/types';
-import './style.css';
+import './style.scss';
 
 interface UserProps {
   user: UserScheme;

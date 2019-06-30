@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import { SiteConfiguration, UserScheme } from '../../common/types';
 import Header from '../../components/Header';
 import User from '../../components/User';
@@ -6,7 +6,7 @@ import Navigation from '../../components/Navigation';
 import Settings from '../../components/Settings';
 import Profile from '../../components/Profile';
 
-import './style.css';
+import './style.scss';
 
 interface ProfileProps {
   socket: SocketIOClient.Socket;

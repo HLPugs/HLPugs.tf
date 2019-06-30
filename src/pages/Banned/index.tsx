@@ -1,10 +1,9 @@
-import * as React from 'react';
+import React from 'react';
 import Header from '../../components/Header';
 import Navigation from '../../components/Navigation';
 import { SiteConfiguration } from '../../common/types';
-import * as moment from 'moment';
-import { Moment } from 'moment';
-import './style.css';
+import moment from 'moment';
+import './style.scss';
 
 interface BannedProps {
   socket: SocketIOClient.Socket;
@@ -13,8 +12,8 @@ interface BannedProps {
 
 interface BannedState {
   banReason: string;
-  banDate: Moment;
-  unBanDate: Moment;
+  banDate: moment.Moment;
+  unBanDate: moment.Moment;
 }
 
 class Banned extends React.Component<BannedProps, BannedState> {

@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { DraftTFClass, DraftTFClassList } from '../../../../common/types';
 import ClassIcon from '../../../ClassIcon';
-import './style.css';
+import './style.scss';
 import PlayerBox from './PlayerBox';
 
 interface ClassBoxProps {

@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { Picker, EmojiData, CustomEmoji } from 'emoji-mart';
 import onClickOutside, { InjectedOnClickOutProps } from 'react-onclickoutside';
-import './emoji-mart.css';
+import './emoji-mart.scss';
 
 interface EmojiPickerProps {
   pickerToggle: boolean;

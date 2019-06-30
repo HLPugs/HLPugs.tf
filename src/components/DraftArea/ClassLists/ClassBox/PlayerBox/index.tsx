@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import './style.css';
+import './style.scss';
 import { PlayerDataConsumer } from '../../../../../pages/Home';
 
 interface PlayerBoxProps {
@@ -12,7 +12,7 @@ class PlayerBox extends React.PureComponent<PlayerBoxProps, {}> {
   render() {
     return (
       <PlayerDataConsumer>
-        {playerData => playerData && (
+        {(playerData: any) => playerData && (
           <Link to={`/player/${this.props.steamid}`} target="blank" className="player">
             <div
               className="playerIcon"

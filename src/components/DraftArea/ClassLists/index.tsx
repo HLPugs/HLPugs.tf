@@ -1,7 +1,7 @@
-import * as React                         from 'react';
-import ClassBox                           from './ClassBox';
+import React from 'react';
+import ClassBox from './ClassBox';
 import { DraftTFClassList } from '../../../common/types';
-import './style.css';
+import './style.scss';
 
 interface ClassListsProps {
   socket: SocketIOClient.Socket;

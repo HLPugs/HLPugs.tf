@@ -1,11 +1,11 @@
-import * as React from 'react';
+import React from 'react';
 import AutoCompletions from './AutoCompletions';
 import EmojiPicker from './EmojiPicker';
 import { EmojiData, CustomEmoji } from 'emoji-mart';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CompletionItem } from '../../../common/types';
 import { SearchEmojis, SearchMentions } from './SearchCompletions';
-import './style.css';
+import './style.scss';
 
 interface ChatInputProps {
   socket: SocketIOClient.Socket;

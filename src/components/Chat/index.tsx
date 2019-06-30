@@ -1,8 +1,8 @@
-import * as React from 'react';
+import React from 'react';
 import ChatMessages from './ChatMessages';
 import ChatInput from './ChatInput';
 import { CustomEmoji } from 'emoji-mart';
-import './style.css';
+import './style.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { UserScheme } from '../../common/types';
 import { PlayerDataConsumer } from '../../pages/Home';
@@ -44,7 +44,7 @@ class Chat extends React.PureComponent<ChatProps, ChatState> {
   render() {
     return (
       <PlayerDataConsumer>
-        {(playerData) => (
+        {(playerData: any) => (
           <aside className={this.state.active ? 'chatActive' : ''}>
             <div id="chatOpener" onClick={this.toggleChat}>
               <FontAwesomeIcon icon="comments" />
