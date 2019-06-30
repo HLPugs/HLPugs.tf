@@ -15,7 +15,9 @@ env:
   matrix:
     - NODE_APP_INSTANCE=travis
 before_script:
-  - psql -c "CREATE DATABASE hlpugs; CREATE USER hlpugs WITH PASSWORD 'build'; GRANT ALL PRIVILEGES ON DATABASE hlpugs TO hlpugs"
+  - psql -c "CREATE DATABASE hlpugs;"
+  - psql -c "CREATE USER hlpugs WITH PASSWORD 'build';"
+  - psql -c "GRANT ALL PRIVILEGES ON DATABASE hlpugs TO hlpugs;"
 install:
   - npm install
 script:
