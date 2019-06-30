@@ -110,10 +110,10 @@
   },
   "db": {
     "postgres": {
-      "user": "travis",
+      "user": "hlpugs",
       "host": "localhost",
-      "database": "travis",
-      "password": "travis",
+      "database": "hlpugs",
+      "password": "build",
       "port": 5433
     }
   },
