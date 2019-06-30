@@ -44,9 +44,15 @@ class Loading extends React.PureComponent<LoadingProps, LoadingState> {
     return (
       <div id="loadingHolder">
         <div id="loadingDots">
-          <div className="loadingDot" />
-          <div className="loadingDot" style={{ animationDelay: '.1s' }} />
-          <div className="loadingDot" style={{ animationDelay: '.2s' }} />
+          <div className="loadingDotHolder">
+            <div className="loadingDot" />
+          </div>
+          <div className="loadingDotHolder" style={{ '--delay': '.1s' } as React.CSSProperties}>
+            <div className="loadingDot" />
+          </div>
+          <div className="loadingDotHolder" style={{ '--delay': '.2s' } as React.CSSProperties}>
+            <div className="loadingDot" />
+          </div>
         </div>
         <div id="loadingDescription">
           {this.state.loadingMessage}
