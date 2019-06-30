@@ -2,8 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Linkify from 'react-linkify';
 import { ChatMessageType } from '../../../../common/types';
-import { Emoji } from 'emoji-mart';
-import allEmojis from 'emoji-mart/data/all.json';
+import { NimbleEmoji } from 'emoji-mart';
+import data from 'emoji-mart/data/twitter.json';
 import { CustomEmoji } from 'emoji-mart';
 import moment from 'moment';
 import './style.scss';
@@ -35,7 +35,7 @@ class ChatMessage extends React.PureComponent<ChatMessageType & ChatMessageProps
       const offset: number = match.index + match[1].length;
       const length = name.length;
 
-      if (Object.keys(allEmojis.emojis).indexOf(name.slice(1, name.length - 1)) !== -1) {
+      if (Object.keys(data.emojis).indexOf(name.slice(1, name.length - 1)) !== -1) {
         emojis.push({
           name: name,
           offset: offset,
@@ -94,7 +94,7 @@ class ChatMessage extends React.PureComponent<ChatMessageType & ChatMessageProps
     return elements.map((element: MessageElement, index: number) => {
       if (element.name) {
         return (
-          <Emoji emoji={element.name} size={20} set="twitter" sheetSize={32} tooltip={true} key={index} />
+          <NimbleEmoji data={data} emoji={element.name} size={20} set="twitter" sheetSize={32} tooltip={true} key={index} />
         );
       } else if (element.customName) {
         return (

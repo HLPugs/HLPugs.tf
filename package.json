@@ -8,7 +8,7 @@
     "@fortawesome/free-regular-svg-icons": "^5.9.0",
     "@fortawesome/free-solid-svg-icons": "^5.9.0",
     "@fortawesome/react-fontawesome": "^0.1.4",
-    "emoji-mart": "^2.8.1",
+    "emoji-mart": "^2.11.1",
     "moment": "^2.24",
     "node-sass": "^4.12.0",
     "react": "^16.8.6",
@@ -24,8 +24,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "analyze": "source-map-explorer build/static/js/main.*",
-    "test": "react-scripts test --env=jsdom",
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "devDependencies": {

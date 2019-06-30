@@ -1,5 +1,6 @@
 import React from 'react';
-import { Picker, EmojiData, CustomEmoji } from 'emoji-mart';
+import { NimblePicker, EmojiData, CustomEmoji } from 'emoji-mart';
+import data from 'emoji-mart/data/twitter.json';
 import onClickOutside, { InjectedOnClickOutProps } from 'react-onclickoutside';
 import './emoji-mart.scss';
 
@@ -19,8 +20,9 @@ class EmojiPicker extends React.Component<EmojiPickerProps & InjectedOnClickOutP
     if (!this.props.pickerToggle) { return null; }
 
     return (
-      <Picker
+      <NimblePicker
         custom={this.props.customEmojis}
+        data={data}
         set="twitter"
         perLine={7}
         color="var(--color)"
