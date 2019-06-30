@@ -19,14 +19,14 @@ SET row_security = off;
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner:
 --
 
-CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+-- CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 
 
 --
 -- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner:
 --
 
-COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+-- COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
@@ -40,7 +40,7 @@ CREATE TYPE public.roles AS ENUM (
 );
 
 
-ALTER TYPE public.roles OWNER TO postgres;
+ALTER TYPE public.roles OWNER TO hlpugs;
 
 SET default_tablespace = '';
 
@@ -60,7 +60,7 @@ CREATE TABLE public.announcements (
 );
 
 
-ALTER TABLE public.announcements OWNER TO postgres;
+ALTER TABLE public.announcements OWNER TO hlpugs;
 
 --
 -- Name: announcements_id_seq; Type: SEQUENCE; Schema: public; Owner: hlpugs
@@ -75,7 +75,7 @@ CREATE SEQUENCE public.announcements_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.announcements_id_seq OWNER TO postgres;
+ALTER TABLE public.announcements_id_seq OWNER TO hlpugs;
 
 --
 -- Name: announcements_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hlpugs
@@ -94,7 +94,7 @@ CREATE TABLE public.chat_words (
 );
 
 
-ALTER TABLE public.chat_words OWNER TO postgres;
+ALTER TABLE public.chat_words OWNER TO hlpugs;
 
 --
 -- Name: TABLE chat_words; Type: COMMENT; Schema: public; Owner: hlpugs
@@ -120,7 +120,7 @@ CREATE TABLE public.players (
 );
 
 
-ALTER TABLE public.players OWNER TO postgres;
+ALTER TABLE public.players OWNER TO hlpugs;
 
 --
 -- Name: pugs; Type: TABLE; Schema: public; Owner: hlpugs
@@ -133,7 +133,7 @@ CREATE TABLE public.pugs (
 );
 
 
-ALTER TABLE public.pugs OWNER TO postgres;
+ALTER TABLE public.pugs OWNER TO hlpugs;
 
 --
 -- Name: pugs_date_seq; Type: SEQUENCE; Schema: public; Owner: hlpugs
@@ -148,7 +148,7 @@ CREATE SEQUENCE public.pugs_date_seq
     CACHE 1;
 
 
-ALTER TABLE public.pugs_date_seq OWNER TO postgres;
+ALTER TABLE public.pugs_date_seq OWNER TO hlpugs;
 
 --
 -- Name: pugs_date_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hlpugs
@@ -170,7 +170,7 @@ CREATE SEQUENCE public.pugs_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.pugs_id_seq OWNER TO postgres;
+ALTER TABLE public.pugs_id_seq OWNER TO hlpugs;
 
 --
 -- Name: pugs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hlpugs
@@ -191,7 +191,7 @@ CREATE TABLE public.punishments (
 );
 
 
-ALTER TABLE public.punishments OWNER TO postgres;
+ALTER TABLE public.punishments OWNER TO hlpugs;
 
 --
 -- Name: TABLE punishments; Type: COMMENT; Schema: public; Owner: hlpugs
@@ -234,7 +234,7 @@ CREATE SEQUENCE public.punishments_id_seq
     CACHE 1;
 
 
-ALTER TABLE public.punishments_id_seq OWNER TO postgres;
+ALTER TABLE public.punishments_id_seq OWNER TO hlpugs;
 
 --
 -- Name: punishments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: hlpugs
