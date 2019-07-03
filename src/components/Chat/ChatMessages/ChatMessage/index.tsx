@@ -115,6 +115,11 @@ class ChatMessage extends React.PureComponent<ChatMessageType & ChatMessageProps
 
   highlight = () => {
     if (this.props.alias && this.props.message.split(' ').indexOf(`@${this.props.alias}`) > -1) {
+      if (moment(new Date()).diff(moment(this.props.timestamp)) < 1000) {
+        new Notification(`${this.props.username} sent a message!`, {
+          body: this.props.message
+        });
+      }
       return 'highlight';
     }
 

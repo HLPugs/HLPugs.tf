@@ -22,6 +22,8 @@ moment.updateLocale('en', {
   }
 });
 
+Notification.requestPermission();
+
 ReactDOM.render(
   <App />,
   document.getElementById('root') as HTMLElement
