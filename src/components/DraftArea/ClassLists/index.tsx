@@ -2,9 +2,9 @@ import React from 'react';
 import ClassBox from './ClassBox';
 import { DraftTFClassList } from '../../../common/types';
 import './style.scss';
+import { SocketConsumer } from '../../../pages/Home';
 
 interface ClassListsProps {
-  socket: SocketIOClient.Socket;
   classes: DraftTFClassList[];
   steamid?: string;
 }
@@ -12,11 +12,15 @@ interface ClassListsProps {
 class DraftArea extends React.Component<ClassListsProps, {}> {
   render() {
     return (
-      <div id="classList">
-        {this.props.classes.map((tfclass: DraftTFClassList) =>
-          <ClassBox properties={tfclass} key={tfclass.name} socket={this.props.socket} steamid={this.props.steamid} />
+      <SocketConsumer>
+        {(socket: SocketIOClient.Socket) => (
+          <div id="classList">
+            {this.props.classes.map((tfclass: DraftTFClassList) =>
+              <ClassBox properties={tfclass} key={tfclass.name} socket={socket} steamid={this.props.steamid} />
+            )}
+          </div>
         )}
-      </div>
+      </SocketConsumer>
     );
   }
 }

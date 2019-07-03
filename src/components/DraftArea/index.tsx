@@ -4,9 +4,9 @@ import DraftState from './DraftState';
 import Announcements from './Announcements';
 import { DraftTFClassList } from '../../common/types';
 import './style.scss';
+import { SocketConsumer } from '../../pages/Home';
 
 interface DraftAreaProps {
-  socket: SocketIOClient.Socket;
   classes: DraftTFClassList[];
   steamid?: string;
 }
@@ -14,11 +14,15 @@ interface DraftAreaProps {
 class DraftArea extends React.PureComponent<DraftAreaProps, {}> {
   render() {
     return (
-      <main>
-        <Announcements socket={this.props.socket} />
-        <DraftState socket={this.props.socket} />
-        <ClassLists classes={this.props.classes} socket={this.props.socket} steamid={this.props.steamid} />
-      </main>
+      <SocketConsumer>
+        {(socket: SocketIOClient.Socket) => (
+          <main>
+            <Announcements socket={socket} />
+            <DraftState socket={socket} />
+            <ClassLists classes={this.props.classes} steamid={this.props.steamid} />
+          </main>
+        )}
+      </SocketConsumer>
     );
   }
 }

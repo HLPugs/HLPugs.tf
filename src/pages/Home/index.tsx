@@ -1,5 +1,6 @@
 import React from 'react';
 import { SiteConfiguration, UserScheme } from '../../common/types';
+import io from 'socket.io-client';
 import Header from '../../components/Header';
 import User from '../../components/User';
 import Navigation from '../../components/Navigation';
@@ -20,11 +21,17 @@ interface HomeState {
   playerData: any;
 }
 
-const ctxt = React.createContext<Object | null>(null);
+const PlayerCtxt = React.createContext<Object | null>(null);
 
-const PlayerDataProvider = ctxt.Provider;
+const PlayerDataProvider = PlayerCtxt.Provider;
 
-export const PlayerDataConsumer = ctxt.Consumer;
+export const PlayerDataConsumer = PlayerCtxt.Consumer;
+
+const SocketCtxt = React.createContext<SocketIOClient.Socket>(io());
+
+const SocketProvider = SocketCtxt.Provider;
+
+export const SocketConsumer = SocketCtxt.Consumer;
 
 class Home extends React.Component<HomeProps, HomeState> {
   constructor(props: HomeProps) {
@@ -97,27 +104,28 @@ class Home extends React.Component<HomeProps, HomeState> {
     return (
       <div id="Home">
         <PlayerDataProvider value={this.state.playerData}>
-          <Header
-            siteName={this.props.configuration.branding.siteName}
-            siteSubTitle={this.props.configuration.branding.siteSubTitle}
-            logoPath={this.props.configuration.branding.logoPath}
-          />
-          <User user={this.props.user} settingsOnClick={this.toggleSettings} />
-          <Navigation navigationGroup={this.props.configuration.navigation} />
-          <DraftArea
-            socket={this.props.socket}
-            classes={this.props.configuration.classes}
-            steamid={this.props.user.steamid}
-          />
-          <Chat socket={this.props.socket} user={this.props.user} />
-          <Settings
-            visibility={this.state.settingsOpen}
-            socket={this.props.socket}
-            classes={this.props.configuration.classes}
-            settingsOnClick={this.toggleSettings}
-            userAlias={this.props.user.alias}
-          />
-          {this.AliasModal()}
+          <SocketProvider value={this.props.socket}>
+            <Header
+              siteName={this.props.configuration.branding.siteName}
+              siteSubTitle={this.props.configuration.branding.siteSubTitle}
+              logoPath={this.props.configuration.branding.logoPath}
+            />
+            <User user={this.props.user} settingsOnClick={this.toggleSettings} />
+            <Navigation navigationGroup={this.props.configuration.navigation} />
+            <DraftArea
+              classes={this.props.configuration.classes}
+              steamid={this.props.user.steamid}
+            />
+            <Chat socket={this.props.socket} user={this.props.user} />
+            <Settings
+              socket={this.props.socket}
+              visibility={this.state.settingsOpen}
+              classes={this.props.configuration.classes}
+              settingsOnClick={this.toggleSettings}
+              userAlias={this.props.user.alias}
+            />
+            {this.AliasModal()}
+          </SocketProvider>
         </PlayerDataProvider>
       </div>
     );
