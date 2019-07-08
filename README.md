@@ -25,8 +25,6 @@ Front end for the Captain Draft & Mix PUG Service under [HLPugs.tf](https://hlpu
 
 Now you should be able to start editing any `.tsx` or `.ts` file and get instant feedback through `localhost:3000`
 
-To work with `.scss` files, running `npm run watch-css` in another terminal window will let you edit `.scss` files and see the changes on the fly.
-
 ### Customizing
 If you are just interested in customizing your own instance of Payload, here are a few simple things you can do.
 
