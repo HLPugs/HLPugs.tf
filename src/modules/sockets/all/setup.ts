@@ -8,8 +8,8 @@ export const setup = (io: Server) => {
     socket.emit('siteConfiguration', config.get('app.configuration'));
 
     if (socket.request.session.err) {
-    	socket.emit('serverError', socket.request.session.err);
-	  }
+      socket.emit('serverError', socket.request.session.err);
+    }
 
     if (socket.request.session.user) {
       const user = socket.request.session.user;
@@ -29,7 +29,7 @@ export const setup = (io: Server) => {
       if (socket.request.session.sockets !== undefined) {
         socket.request.session.sockets.push(socket.id);
         socket.request.session.save((e: any) => {
-		      if (e) throw e;
+          if (e) throw e;
         });
         if (socket.request.session.sockets.length === 1) {
           playerMap.addPlayer(socket.request.session.id, socket.request.session.user.steamid);

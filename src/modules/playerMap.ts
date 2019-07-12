@@ -36,8 +36,8 @@ export const getPlayer = (steamid: string): Promise<Player> => {
     store.get(sessionid, (err, session) => {
       if (err) throw err;
       /* When a class is put in a memory store, it is stripped of its methods.
-      	 An instance variable is created to gain access to Player's methods*/
-	  const player = Player.createPlayer(session.user);
+         An instance variable is created to gain access to Player's methods*/
+      const player = Player.createPlayer(session.user);
       session ? resolve(player) : resolve(null);
     });
   });
@@ -128,13 +128,13 @@ export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: Draft
  */
 export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: DraftTFClass) => {
   const indexOfPlayer = draftTFClassLists
-	  .get(draftTFClass)
-	  .indexOf(steamid);
+    .get(draftTFClass)
+    .indexOf(steamid);
 
   if (indexOfPlayer >= 0) {
     draftTFClassLists
-		.get(draftTFClass)
-		.splice(indexOfPlayer, 1);
+    .get(draftTFClass)
+    .splice(indexOfPlayer, 1);
 
     const player: Player = await getPlayer(steamid);
     logger.info(`${player.alias} removed from ${draftTFClass}`);

@@ -93,9 +93,9 @@ export class Player {
    */
   async updateSetting(setting: PlayerSetting, value: number | string | boolean): Promise<void> {
     const newSettings = this.settings;
-    newSettings[setting] = value;
+    // newSettings[setting] = value;
     await db.query('UPDATE players SET settings = $1 WHERE steamid = $2', [newSettings, this.steamid]);
-    this.settings[setting] = value;
+    // this.settings[setting] = value;
   }
 
   /**
