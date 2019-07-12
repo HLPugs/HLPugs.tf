@@ -16,7 +16,6 @@ export async function getAnnouncements(region: Region = defaultRegion): Promise<
   return rows;
 }
 
-
 export const announcements = async (io: Server) => {
   io.on('connection', (socket) => {
     socket.on('loadAnnouncements', async(region: Region = defaultRegion) => {

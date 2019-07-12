@@ -6,7 +6,8 @@
   "extends": "tslint-config-airbnb",
   "rules": {
     "linebreak-style": false,
-    "max-line-length": [ true, 120 ],
-    "quotemark": [true, "single", "avoid-template"]
+    "max-line-length": [ true, 150 ],
+    "quotemark": [true, "single", "avoid-template"],
+    "indent": [false]
   }
 }

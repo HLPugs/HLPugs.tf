@@ -2,7 +2,6 @@ import { Router, Request, Response } from 'express';
 import * as config                   from 'config';
 import * as steam                    from 'steam-login';
 import { loginUser }                 from './login';
-import { handleError }               from './errorHandler';
 
 const router: Router = Router();
 
@@ -12,10 +11,9 @@ router.get('/', (req: Request, res: Response) => {
   res.redirect(frontURL);
 });
 
-router.get('/verify', steam.verify(), (req: steam.SteamRequest, res: Response) => {
-  loginUser(req)
-      .then(() => res.redirect('/'))
-      .catch(e => handleError(e, req.session.steamid));
+router.get('/verify', steam.verify(), async(req: steam.SteamRequest, res: Response) => {
+  await loginUser(req);
+  res.redirect('/');
 });
 
 router.get('/auth', steam.authenticate(), (req: steam.SteamRequest, res: Response) => {
