@@ -139,11 +139,12 @@ class App extends React.Component<{}, AppState> {
               />
               <Route
                 path="/player/:steamid"
-                render={() =>
+                render={routeProps =>
                   <Player 
                     socket={this.socket}
                     configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
                     user={this.state.user ? this.state.user : {}}
+                    {...routeProps}
                   />
                 }
               />

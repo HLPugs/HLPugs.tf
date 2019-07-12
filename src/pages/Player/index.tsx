@@ -5,10 +5,14 @@ import User from '../../components/User';
 import Navigation from '../../components/Navigation';
 import Settings from '../../components/Settings';
 import Profile from '../../components/Profile';
-
 import './style.scss';
+import { RouteComponentProps } from 'react-router';
 
-interface ProfileProps {
+interface MatchParams {
+  steamid: string;
+}
+
+interface ProfileProps extends RouteComponentProps<MatchParams> {
   socket: SocketIOClient.Socket;
   configuration: SiteConfiguration;
   user: UserScheme;
@@ -36,6 +40,8 @@ class Player extends React.Component<ProfileProps, ProfileState> {
   }
 
   render() {
+    const { steamid } = this.props.match.params;
+    
     return (
       <div id="Profile">
         <Header
@@ -45,7 +51,7 @@ class Player extends React.Component<ProfileProps, ProfileState> {
         />
         <User user={this.props.user} settingsOnClick={this.toggleSettings} />
         <Navigation navigationGroup={this.props.configuration.navigation} />
-        <Profile />
+        <Profile steamid={steamid}/>
         <Settings
           visibility={this.state.settingsOpen}
           socket={this.props.socket}

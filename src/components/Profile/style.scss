@@ -9,9 +9,9 @@ main {
     align-items: center;
     
     .profile {
-      max-width: 750px;
+      max-width: 900px;
       width: 100%;
-      background: var(--background-light);
+      background: var(--background-dark);
       box-shadow: var(--paper-2);
       border-radius: 4px;
       margin: 8px;
@@ -22,9 +22,9 @@ main {
 
         .profilePicture {
           flex-shrink: 0;
-          width: 128px;
-          height: 128px;
-          border-radius: 64px;
+          width: 186px;
+          height: 186px;
+          border-radius: 93px;
           margin: 10px;
           background: var(--font-color);
           box-shadow: var(--paper-1);
@@ -43,8 +43,8 @@ main {
 
           .alias {
             display: flex;
-            justify-content: flex-end;
-            font-size: 24px;
+            font-size: 32px;
+            margin: 10px;
             padding-right: 10px;
             flex-shrink: 0;
           }
@@ -52,6 +52,7 @@ main {
           .quickLinks {
             display: flex;
             justify-content: flex-end;
+            flex-wrap: wrap;
             align-items: flex-end;
             margin: 10px;
             flex-grow: 1;
@@ -60,15 +61,22 @@ main {
               width: 64px;
               height: 64px;
               flex-shrink: 0;
-              background: var(--background);
+              background: var(--background-light);
               border-radius: 4px;
               margin-left: 25px;
+              margin-bottom: 15px;
               box-shadow: var(--paper-1);
               cursor: pointer;
               transition: all .2s ease;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              text-decoration: none;
+              color: var(--font-color-secondary);
 
               &:hover {
                 box-shadow: var(--paper-2);
+                color: var(--font-color);
               }
             }
           }
