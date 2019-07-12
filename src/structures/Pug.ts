@@ -25,15 +25,15 @@ export class Pug {
      * @param {Team[]} teams - The 2 teams participating in the Pug.
      */
   constructor(id: number, map: string, teams: Team[]) {
-	  if (Team.length !== 2) {
-	      throw new Error('Teams must only contain 2 Team objects.');
-	  } else if (teams[0].color === teams[1].color) {
-	      throw new Error('Teams must be opposing colors.');
-	  } else {
-	    this.id = id;
-    	this.teams = teams;
-    	this.timestamp = new Date();
-  	}
+    if (Team.length !== 2) {
+      throw new Error('Teams must only contain 2 Team objects.');
+    } else if (teams[0].color === teams[1].color) {
+      throw new Error('Teams must be opposing colors.');
+    } else {
+      this.id = id;
+      this.teams = teams;
+      this.timestamp = new Date();
+    }
   }
 
     /**

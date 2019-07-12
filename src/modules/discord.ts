@@ -17,12 +17,12 @@ export async function postToDiscord(message: string, channel: string, fancy = fa
 
   const data = {
     url,
-  	username,
+    username,
     method: 'POST',
     body: {
       avatar_url: '',
       content: fancy ? '' : message,
-	    embeds: fancy ? [{ description: message }] : [],
+      embeds: fancy ? [{ description: message }] : [],
     },
     json: true,
   };

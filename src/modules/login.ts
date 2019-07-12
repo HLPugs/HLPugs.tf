@@ -44,11 +44,11 @@ export const loginUser = async (req: SteamRequest): Promise<void> => {
     player.isCaptain = iscaptain;
     if (settings) {
       if (PlayerSettings.matchesStructure(settings)) {
-        this.settings = settings;
+        player.settings = settings;
       } else {
         const updatedSettings = PlayerSettings.fromObject(settings);
         await player.updateSettings(settings);
-        this.settings = updatedSettings;
+        player.settings = updatedSettings;
       }
     }
     logger.info(`${alias} logged in`, { steamid });
