@@ -12,7 +12,7 @@ import './formElements.scss';
 
 WebFont.load({
   google: {
-    families: ['Lato:400,700']
+    families: ['Lato:400,700@display=swap']
   }
 });
 
