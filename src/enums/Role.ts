@@ -1,0 +1,6 @@
+export enum Role {
+	PATRON,
+	VOICE_ACTOR,
+	DEVELOPER,
+	CONTRIBUTOR
+}

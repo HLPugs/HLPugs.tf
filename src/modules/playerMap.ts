@@ -3,7 +3,7 @@ import logger                             from './logger';
 import * as crypto                        from 'crypto';
 import * as uuid                          from 'uuid';
 import { DraftTFClass, DraftTFClassList } from '../structures/DraftClassList';
-import { Player }                         from '../structures/Player';
+import { Player }                         from '../entities/Player';
 import { store }                          from './store';
 
 /**
@@ -29,17 +29,16 @@ draftTFClasses.forEach(draftTFClass => draftTFClassLists.set(draftTFClass.name, 
  */
 export const getPlayer = (steamid: string): Promise<Player> => {
   return new Promise((resolve) => {
-    if (!players.has(steamid)) {
-      logger.warn(`Player (${steamid}) was requested from the player map but was not found`);
-    }
-    const sessionid = players.get(steamid);
-    store.get(sessionid, (err, session) => {
-      if (err) throw err;
-      /* When a class is put in a memory store, it is stripped of its methods.
+	if (!players.has(steamid)) {
+		logger.warn(`Player (${steamid}) was requested from the player map but was not found`);
+	}
+	const sessionid = players.get(steamid);
+	store.get(sessionid, (err, session) => {
+		if (err) throw err;
+		/* When a class is put in a memory store, it is stripped of its methods.
          An instance variable is created to gain access to Player's methods*/
-      const player = Player.createPlayer(session.user);
-      session ? resolve(player) : resolve(null);
-    });
+		session ? resolve(session.user) : resolve(null);
+	});
   });
 };
 
@@ -59,29 +58,32 @@ export const addPlayer = (sessionid: string, steamid: string) => players.set(ste
 
 export function addFakePlayer(steamid: string, alias?: string): Promise<void> {
   if (process.env.NODE_ENV !== 'production') {
-    return new Promise(((resolve, reject) => {
-      const fakeSess = {
-        cookie: {
-          expires: '2000000000',
-          originalMaxAge: 999999999,
-        },
-      };
-      const fakeRequest = {
-        sessionID: crypto.createHash('sha256')
-          .update(uuid.v1())
-          .update(crypto.randomBytes(256))
-          .digest('hex'),
-      };
+	  return new Promise(((resolve, reject) => {
+		  const fakeSess = {
+		  cookie: {
+			  expires: '2000000000',
+			  originalMaxAge: 999999999,
+		  },
+		};
+		const fakeRequest = {
+		sessionID: crypto.createHash('sha256')
+			.update(uuid.v1())
+			.update(crypto.randomBytes(256))
+			.digest('hex'),
+		};
 
-    // @ts-ignore
-      const fakeSession = store.createSession(fakeRequest, fakeSess);
-      fakeSession.user = new Player(steamid, '',  alias);
-      store.set(fakeSession.id, fakeSession, (err) => {
-        if (err) reject(err);
-        addPlayer(fakeSession.id, steamid);
-        resolve();
-      });
-    }));
+	// @ts-ignore
+		const fakeSession = store.createSession(fakeRequest, fakeSess);
+		const fakePlayer = new Player();
+		fakePlayer.steamid = steamid;
+		fakePlayer.alias = '';
+		fakeSession.user = fakePlayer
+		store.set(fakeSession.id, fakeSession, (err) => {
+		if (err) reject(err);
+		  addPlayer(fakeSession.id, steamid);
+		  resolve();
+		});
+	}));
   }
 }
 
@@ -101,9 +103,9 @@ export const removeAllPlayers = () => players.clear();
  */
 export const getAllPlayers = () => {
   return new Promise(async (resolve) => {
-    const playersArr = Array.from(players.keys());
-    const newPlayerArr = playersArr.map(steamid => getPlayer(steamid));
-    resolve(Promise.all(newPlayerArr));
+	const playersArr = Array.from(players.keys());
+	const newPlayerArr = playersArr.map(steamid => getPlayer(steamid));
+	resolve(Promise.all(newPlayerArr));
   });
 };
 
@@ -115,9 +117,9 @@ export const getAllPlayers = () => {
 export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: DraftTFClass) => {
   // Ensure Player isn't already added up to the class
   if (draftTFClassLists.get(draftTFClass).indexOf(steamid) === -1) {
-    draftTFClassLists.get(draftTFClass).push(steamid);
-    const player: Player = await getPlayer(steamid);
-    logger.info(`${player.alias} added to ${draftTFClass}!`);
+	draftTFClassLists.get(draftTFClass).push(steamid);
+	const player: Player = await getPlayer(steamid);
+	logger.info(`${player.alias} added to ${draftTFClass}!`);
   }
 };
 
@@ -128,16 +130,16 @@ export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: Draft
  */
 export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: DraftTFClass) => {
   const indexOfPlayer = draftTFClassLists
-    .get(draftTFClass)
-    .indexOf(steamid);
+	.get(draftTFClass)
+	.indexOf(steamid);
 
   if (indexOfPlayer >= 0) {
-    draftTFClassLists
-    .get(draftTFClass)
-    .splice(indexOfPlayer, 1);
+	draftTFClassLists
+	.get(draftTFClass)
+	.splice(indexOfPlayer, 1);
 
-    const player: Player = await getPlayer(steamid);
-    logger.info(`${player.alias} removed from ${draftTFClass}`);
+	const player: Player = await getPlayer(steamid);
+	logger.info(`${player.alias} removed from ${draftTFClass}`);
   }
 };
 

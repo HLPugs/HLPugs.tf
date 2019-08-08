@@ -14,23 +14,26 @@ import { BaseController } from './api/v1/controllers/BaseController';
 import { controllers } from './api/v1/controllers/index';
 import { logResponseTime } from './middleware/logResponseTime';
 import { handleApiErrors } from './middleware/handleApiErrors';
+import { createConnection, getManager } from 'typeorm';
+
+createConnection();
 
 const apiPrefix: string = config.get('app.apiPrefix');
 
 const sessionConfig = expressSession({
   store,
   genid(req) {
-    return crypto.createHash('sha256')
-    .update(uuid.v1())
-    .update(crypto.randomBytes(256))
-    .digest('hex');
+	  return crypto.createHash('sha256')
+	  .update(uuid.v1())
+	  .update(crypto.randomBytes(256))
+	  .digest('hex');
   },
   resave: false,
   saveUninitialized: false,
   secret: config.get('app.secret'),
   cookie: {
-    secure: false,
-    maxAge: 1000 * 60 * 60 * 24 * 14,
+	secure: false,
+	maxAge: 1000 * 60 * 60 * 24 * 14,
   },
 });
 

@@ -28,3 +28,4 @@ npm-debug.log
 logs/error.log
 src/logs/error.log
 src/logs/combined.log
+ormconfig.json

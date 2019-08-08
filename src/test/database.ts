@@ -1,15 +1,15 @@
 import * as chai           from 'chai';
 import * as chaiAsPromised from 'chai-as-promised';
 import 'mocha';
-import db                  from '../database/db';
+// import db                  from '../database/db';
 
-describe('Database connection', () => {
-  before(() => {
-    chai.use(chaiAsPromised);
-    chai.should();
-  });
+// describe('Database connection', () => {
+//   before(() => {
+//     chai.use(chaiAsPromised);
+//     chai.should();
+//   });
 
-  it('should connect to the database', async() => {
-    db.connect().should.be.fulfilled;
-  });
-});
+//   it('should connect to the database', async() => {
+//     // db.connect().should.be.fulfilled;
+//   });
+// });

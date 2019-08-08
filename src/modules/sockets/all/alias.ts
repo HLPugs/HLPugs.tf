@@ -1,8 +1,7 @@
-import db from '../../../database/db';
 import { Server } from 'socket.io';
 import logger from '../../logger';
 
-export const alias = (io: Server) => {
+/*export const alias = (io: Server) => {
   io.on('connection', (socket) => {
     socket.on('checkAlias', async (alias: string) => {
       const { rows: [row] } = await db.query('SELECT 1 FROM players WHERE LOWER(alias) = LOWER($1)', [alias]);
@@ -41,4 +40,4 @@ export const alias = (io: Server) => {
       );
     });
   });
-};
+};*/

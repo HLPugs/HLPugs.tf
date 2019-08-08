@@ -3,6 +3,8 @@
     "outDir": "dist",
     "module": "commonjs",
     "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "target": "es5",
     "sourceMap": true,
     "moduleResolution": "node",

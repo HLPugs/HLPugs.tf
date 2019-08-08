@@ -3,11 +3,10 @@
     "node": true,
     "es6": true
   },
-  "extends": "tslint-config-airbnb",
   "rules": {
+    "indent": [true, "tabs", 4],
     "linebreak-style": false,
     "max-line-length": [ true, 150 ],
-    "quotemark": [true, "single", "avoid-template"],
-    "indent": [false]
+    "quotemark": [true, "single", "avoid-template"]
   }
 }
