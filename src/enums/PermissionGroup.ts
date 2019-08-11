@@ -1,6 +1,5 @@
-export enum PermissionGroup {
-	// Numbers are power level
-	HEAD_ADMIN = 3,
-	ADMIN = 2,
-	MODERATOR = 1
+export enum PermissionGroupName {
+	HEAD_ADMIN = 'headAdmin',
+	ADMIN = 'admin',
+	MODERATOR = 'moderator'
 }

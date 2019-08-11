@@ -1,73 +1,75 @@
-import { Entity, PrimaryGeneratedColumn, Column, Unique, Index } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany } from 'typeorm';
 import { Length, IsInt, IsBoolean, IsFQDN, IsOptional, IsString, IsIP, IsNumberString, Matches, Allow, IsEnum, ArrayUnique } from 'class-validator';
-import { PermissionGroup } from '../enums/PermissionGroup';
+import { PermissionGroupName } from '../enums/PermissionGroup';
 import { Role } from '../enums/Role';
 import { LinqRepository } from 'typeorm-linq-repository';
+import Punishment from './Punishment';
 
 @Entity({ name: 'players' })
-export class Player {
+export default class Player {
 
   @PrimaryGeneratedColumn()
   @Allow()
-	id: number;
+  id: number;
 
   @Column()
   @Index({ unique: true })
   @IsNumberString()
-	steamid: string;
+  steamid: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsString()
   @Index({ unique: true })
   @Matches(/^[a-zA-Z0-9_]{2,17}$/)
   @Length(2, 17)
-	alias: string;
+  alias: string;
 
   @Column()
   @IsFQDN()
   avatarUrl: string;
-  
-  @Column()
-  @IsOptional()
-  @IsEnum(PermissionGroup)
-  permissionGroup: PermissionGroup;
 
-  @Column('simple-array')
+  @Column({ nullable: true })
+  @IsOptional()
+  @IsEnum(PermissionGroupName)
+  permissionGroup: PermissionGroupName;
+
+  @Column('simple-array', { nullable: true})
   @IsOptional()
   @ArrayUnique()
   roles: Role[];
 
   @Column()
   @IsIP('4')
-	ip: string;
+  ip: string;
 
-  @Column()
+  @Column({ default: 0 })
   @IsInt()
-	pugs: number;
+  pugs: number;
 
-  @Column()
+  @Column({ default: 0 })
   @IsInt()
-	wins: number;
+  wins: number;
 
-  @Column()
+  @Column({ default: 0 })
   @IsInt()
-	losses: number;
+  losses: number;
 
-  @Column()
+  @Column({ default: false })
   @IsBoolean()
-	isCaptain: boolean;
+  isCaptain: boolean;
 
-  @Column()
+  @Column({default: 0})
   @IsInt()
-	subsIn: number;
+  subsIn: number;
 
-  @Column()
+  @Column({default: 0})
   @IsInt()
-	subsOut: number;
+  subsOut: number;
 
-  @Column()
+  @Column({default: false})
   @IsBoolean()
   isCrestricted: boolean;
-}
 
-export const playerRepository: LinqRepository<Player> = new LinqRepository(Player);
+  // @OneToMany()
+  activePunishments: Punishment[];
+}

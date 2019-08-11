@@ -1,59 +1,79 @@
-import * as dotenv                       from 'dotenv';
-dotenv.config();
 
-import * as config                       from 'config';
-import * as crypto                       from 'crypto';
-import * as express                      from 'express';
-import * as expressSession               from 'express-session';
-import * as steam                        from 'steam-login';
-import * as uuid                         from 'uuid';
-import { Server }                        from 'http';
-import { routing, sockets } from './modules';
-import { store }                         from './modules/store';
-import { BaseController } from './api/v1/controllers/BaseController';
-import { controllers } from './api/v1/controllers/index';
-import { logResponseTime } from './middleware/logResponseTime';
-import { handleApiErrors } from './middleware/handleApiErrors';
-import { createConnection, getManager } from 'typeorm';
+import * as config from 'config';
+import * as crypto from 'crypto';
+import * as expressSession from 'express-session';
+import { Server } from 'http';
+import 'reflect-metadata';
+import * as uuid from 'uuid';
+import * as socketIO from 'socket.io';
+import { store } from './modules/store';
+import { createConnection } from 'typeorm';
+import express = require('express');
+import { useExpressServer } from 'routing-controllers';
+import { Bold, Underscore, FgYellow, Reset, consoleLogStatus, FgRed, FgGreen, FgBlue } from './utils/ConsoleColors';
+import CurrentUserChecker from './utils/CurrentUserChecker';
+import { useSocketServer } from 'socket-controllers';
 
-createConnection();
-
-const apiPrefix: string = config.get('app.apiPrefix');
+const app: express.Application = express();
 
 const sessionConfig = expressSession({
   store,
-  genid(req) {
-	  return crypto.createHash('sha256')
-	  .update(uuid.v1())
-	  .update(crypto.randomBytes(256))
-	  .digest('hex');
+  genid() {
+    return crypto.createHash('sha256')
+      .update(uuid.v1())
+      .update(crypto.randomBytes(256))
+      .digest('hex');
   },
   resave: false,
   saveUninitialized: false,
   secret: config.get('app.secret'),
   cookie: {
-	secure: false,
-	maxAge: 1000 * 60 * 60 * 24 * 14,
+    secure: false,
+    maxAge: 1000 * 60 * 60 * 24 * 14,
   },
 });
 
-const app: express.Application = express();
-const server = new Server(app);
+app.use(sessionConfig);
 
-// npm run test fails without this setTimeout. It is unknown why this is.
-sockets(server, sessionConfig);
+consoleLogStatus(`\n${Underscore}${FgBlue}HLPugs.tf Bootstrap Initializing`);
+consoleLogStatus(`Synchronizing models to database with ${FgYellow}TypeORM${Reset}...\n`);
+createConnection()
+  .then(() => {
+    consoleLogStatus(`\n${FgGreen}Success! Entities synchronized with database`)
 
-app
-.use(sessionConfig, routing)
-.use(apiPrefix, logResponseTime, handleApiErrors)
-.use(steam.middleware({
-  realm: config.get('app.steam.realm'),
-  verify: config.get('app.steam.verify'),
-  apiKey: config.get('app.steam.apiKey'),
-}));
+    useExpressServer(app, {
+      defaultErrorHandler: false,
+      routePrefix: '/api',
+      currentUserChecker: CurrentUserChecker,
+      middlewares: [__dirname + '/middlewares/*.js', __dirname + '/middlewares/api/*.js'],
+      controllers: [__dirname + '/controllers/api/*.js']
+    });
 
-controllers.forEach((controller: BaseController) => {
-  app.use(apiPrefix, controller.router);
-});
+    useExpressServer(app, {
+      defaultErrorHandler: false,
+      currentUserChecker: CurrentUserChecker,
+      middlewares: [__dirname + '/middlewares/*.js'],
+      controllers: [__dirname + '/controllers/*.js']
+    });
 
-server.listen(3001);
+    const server = new Server(app);
+
+    const io = socketIO(server);
+    io.use((socket, next) => {
+      sessionConfig(socket.request, socket.request.res, next);
+    });
+
+    useSocketServer(io, {
+      controllers: [__dirname + '/controllers/sockets/*.js'],
+    });
+
+    server.listen(3001, () => {
+      consoleLogStatus(`${FgYellow}Express${Reset}: http://localhost:3001/api`);
+      consoleLogStatus(`${FgBlue}WebClient${Reset}: http://localhost:3000`);
+    });
+
+  })
+  .catch(e => {
+    console.error(`\n${FgRed}${Bold}Error occured in TypeORM synchronization${Reset}`);
+    console.error(`${FgRed}${e}${Reset}`);
+  });

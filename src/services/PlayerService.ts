@@ -1,53 +1,65 @@
-import { Player } from '../entities/Player';
-class PlayerService {
+import Player from '../entities/Player';
+import Match from '../entities/Match';
+import Punishment from '../entities/Punishment';
+import { PunishmentType } from '../enums/PunishmentType';
+import { LinqRepository } from 'typeorm-linq-repository';
+import { validate } from 'class-validator';
 
-  static async getMatchesForProfile(steamid: string, pageSize: number, currentPage: number) {
-    const startIndex = (pageSize - 1) * currentPage;
-    const endIndex = startIndex + pageSize;
-    // tslint:disable-next-line: max-line-length
-   // const [rows, fields] = await db.query('SELECT p.map, p.winner, p.date, p.logslink, ps.team, ps.tf2class, ps.captain FROM pugs p INNER JOIN syncpugs ps ON p.idpugs = ps.pugid AND ps.steamid = ? ORDER BY p.date DESC LIMIT ?,?', [steamid, startIndex, endIndex]);
-   // return rows;
+//const punishmentRepository = new LinqRepository(Punishment);
+
+export default class PlayerService {
+  
+  async getPlayer(steamid: string): Promise<Player> {
+    const playerRepository = new LinqRepository(Player);
+    const player = await playerRepository
+      .getOne()
+      .where(p => p.steamid)
+      .equal(steamid);
+
+    return player;
   }
 
-  static async getPlayerBySteamid(steamid: string): Promise<Player> {
-    // tslint:disable-next-line: max-line-length
-  //  const [[player], fields] = await db.query('SELECT r.admin, r.moderator, r.patron, r.voiceactor, s.alias, p.pugs, p.wins, p.losses, p.captain, p.subsin, p.subsout, p.steamid FROM players p INNER JOIN settings s ON p.steamid=s.steamid AND p.steamid = ? LEFT JOIN roles r ON p.steamid = r.steamid', steamid);
-    const player = new Player();
-   return player as Player;
+  async getPlayerByAlias(alias: string): Promise<Player> {
+    const playerRepository = new LinqRepository(Player);
+    const player = await playerRepository
+      .getOne()
+      .where(p => p.alias)
+      .equal(alias);
+
+      return player;
+  }
+
+  async updateAlias(steamid: string, alias: string): Promise<void> {
+    const playerRepository = new LinqRepository(Player);
+    const player = await this.getPlayer(steamid);
+    player.alias = alias;
+    await playerRepository.update(player);
+  }
+
+  async updateOrInsertPlayer(player: Player): Promise<void> {
+    const playerRepository = new LinqRepository(Player);
+
+    const existingPlayer = await this.getPlayer(player.steamid);
+
+    if (existingPlayer) {
+      await playerRepository.update(player);
+    } else {
+      await playerRepository.create(player);
+    }
+  }
+
+  async getActivePunishments(steamid: string): Promise<Punishment[]> {
+    const punishmentRepository = new LinqRepository(Punishment);
+    return await punishmentRepository
+            .getAll()
+            .where(p => p.expirationDate)
+            .greaterThan(new Date())
+            .and(p => p.offenderSteamid)
+            .equal(steamid);
+  };
+
+  async isCurrentlySiteBanned(steamid: string): Promise<boolean> {
+    const punishments = await this.getActivePunishments(steamid)
+    return punishments.some(p => p.punishmentType === PunishmentType.BAN);
   }
 }
-
-//     {
-//       // tslint:disable-next-line: max-line-length
-//       const [[matches], fields] = await db.query('SELECT tf2class, COUNT(*) as count FROM syncpugs WHERE steamid = ? GROUP BY tf2class ORDER BY tf2class ASC', steamid);
-//       player.pugs = matches;
-//     }
-//     {
-//       // tslint:disable-next-line: max-line-length
-//       const [rows, fields] = await db.query('SELECT tf2class, COUNT(*) as count FROM syncpugs WHERE steamid = ? GROUP BY tf2class ORDER BY tf2class ASC', steamid);
-//       player.pugs = rows;
-//     }
-//     {
-//       // tslint:disable-next-line: max-line-length
-//       const [[rows], fields] = await db.query('SELECT s.tf2class, COUNT(*) as count FROM syncpugs s INNER JOIN pugs p WHERE p.winner != s.team AND s.steamid = ? AND p.idpugs = s.pugid GROUP BY tf2class', steamid);
-//     }
-//     {
-//       // tslint:disable-next-line: max-line-length
-//       const [rows, fields] = await db.query('SELECT s.team, p.winner, s.tf2class, COUNT(*) as count FROM syncpugs s INNER JOIN pugs p WHERE s.steamid = ? AND p.idpugs = s.pugid GROUP BY tf2class, team, winner', steamid);
-//       // tslint:disable-next-line: one-variable-per-declaration
-//       const wonGames: any[] = [], lostGames: any[] = [];
-//       rows.forEach((match: any) => {
-//         if (match.winner == match.team) {
-//           wonGames.push(match);
-//         } else {
-//           lostGames.push(match);
-//         }
-//       });
-//       player.wonGames = wonGames;
-//       player.lostGames = lostGames;
-//     }
-//     return player;
-//   }
-// }
-
-export default PlayerService;

@@ -3,8 +3,8 @@ import logger                             from './logger';
 import * as crypto                        from 'crypto';
 import * as uuid                          from 'uuid';
 import { DraftTFClass, DraftTFClassList } from '../structures/DraftClassList';
-import { Player }                         from '../entities/Player';
 import { store }                          from './store';
+import Player 														from '../entities/Player';
 
 /**
  * @module playerMap

@@ -1,4 +1,4 @@
-import { Player } from '../entities/Player';
+import Player from "../entities/Player";
 
 /**
  * An object that maps {@link Player} objects to a {@link DraftTFClass} name.

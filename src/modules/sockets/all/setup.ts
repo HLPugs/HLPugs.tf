@@ -1,6 +1,6 @@
-import * as config      from 'config';
-import { Server }       from 'socket.io';
-import * as playerMap   from '../../playerMap';
+import { Server } from 'socket.io';
+import * as config from 'config';
+import * as playerMap from '../../../modules/playerMap';
 import { DraftTFClass } from '../../../structures/DraftClassList';
 
 export const setup = (io: Server) => {

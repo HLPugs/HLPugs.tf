@@ -21,4 +21,8 @@ export class TFClassesTracker {
   medic: number = 0;
   sniper: number = 0;
   spy: number = 0;
+  flex: number = 0;
+  roamer: number = 0;
+  pocket: number = 0;
+  total: number = 0;
 }

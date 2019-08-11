@@ -1,0 +1,15 @@
+{
+    "type": "sqlite",
+    "logging": true,
+    "synchronize": true,
+    "database": "localdb/database.sqlite",
+    "entities": [
+        "dist/entities/*.js"
+    ],
+    "migrations": [
+        "dist/migrations/*.js"
+    ],
+    "subscribers": [
+        "dist/subscribers/*.js"
+    ]
+}

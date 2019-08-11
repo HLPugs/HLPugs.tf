@@ -1,13 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { IsNumberString, IsString, MinDate, IsDate, Allow, IsEnum } from 'class-validator';
 import { PunishmentType } from '../enums/PunishmentType';
-import { LinqRepository } from 'typeorm-linq-repository';
+import { LinqRepository, RepositoryBase } from 'typeorm-linq-repository';
 
 @Entity()
-export class Punishment {
+export default class Punishment {
 	
 	@PrimaryGeneratedColumn()
-	@Allow()
 	id: number;
 
 	@Column()
@@ -29,7 +28,7 @@ export class Punishment {
 	@Column()
 	@IsDate()
 	@MinDate(new Date())
-	expiration: Date;
+	expirationDate: Date;
 
 	@Column()
 	@IsDate()
@@ -38,6 +37,6 @@ export class Punishment {
 	@Column()
 	@IsDate()
 	lastModifiedDate: Date;
-}
 
-export const punishmentRepository: LinqRepository<Punishment> = new LinqRepository(Punishment);
+	isActive: boolean;
+}

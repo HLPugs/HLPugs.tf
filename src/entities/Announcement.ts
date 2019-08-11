@@ -1,13 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { Allow, IsEnum, IsString,IsNumberString, IsBoolean, IsDate, IsNotEmpty } from 'class-validator';
-import { Region } from '../enums/Region';
 import { LinqRepository } from 'typeorm-linq-repository';
+import { Region } from '../enums/Region';
 
 @Entity('announcements')
-export class Announcement {
+export default class Announcement {
 	
 	@PrimaryGeneratedColumn()
-	@Allow()
 	id: number
 
 	@Column()
@@ -29,7 +28,5 @@ export class Announcement {
 
 	@Column()
 	@IsDate()
-	timestamp: Date;
+	timestamp?: Date;
 }
-
-export const announcementRepository: LinqRepository<Announcement> = new LinqRepository(Announcement);
