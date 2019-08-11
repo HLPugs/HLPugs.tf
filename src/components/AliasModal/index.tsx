@@ -2,12 +2,12 @@ import React from 'react';
 import './style.scss';
 
 interface AliasModalProps {
-    socket: SocketIOClient.Socket;
+  socket: SocketIOClient.Socket;
 }
 
 interface AliasModalState {
-    aliasTaken: boolean;
-    invalidInput: boolean;
+  aliasTaken: boolean;
+  invalidInput: boolean;
 }
 
 class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
@@ -44,7 +44,7 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
       () => {
         if (!this.aliasInput.current) { return; }
 
-        this.props.socket.emit('checkAlias', this.aliasInput.current.value);
+        this.props.socket.emit('checkAlias', { alias: this.aliasInput.current.value });
       },
       500
     );
@@ -53,7 +53,7 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
   submitAlias = () => {
     if (!this.aliasInput.current) { return; }
 
-    this.props.socket.emit('submitAlias', this.aliasInput.current.value);
+    this.props.socket.emit('submitAlias', { alias: this.aliasInput.current.value });
   }
 
   submitText = () => {

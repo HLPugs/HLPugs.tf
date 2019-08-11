@@ -41,7 +41,7 @@ export interface UserScheme {
   loggedIn?: boolean;
   alias?: string;
   steamid?: string;
-  avatar?: string;
+  avatarUrl?: string;
 }
 
 export interface ChatMessageType {

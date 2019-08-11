@@ -16,7 +16,7 @@ class PlayerBox extends React.PureComponent<PlayerBoxProps, {}> {
           <Link to={`/player/${this.props.steamid}`} target="blank" className="player">
             <div
               className="playerIcon"
-              style={{ backgroundImage: `url(${playerData[this.props.steamid].avatar})` }}
+              style={{ backgroundImage: `url(${playerData[this.props.steamid].avatarUrl})` }}
             />
             <div className="playerName">{playerData[this.props.steamid].alias}</div>
             <div className="captainStar">

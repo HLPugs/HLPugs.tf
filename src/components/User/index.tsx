@@ -16,7 +16,7 @@ class User extends React.PureComponent<UserProps, {}> {
     if (this.props.user.loggedIn) {
       return (
         <div id="User">
-          <UserInfo alias={this.props.user.alias} avatar={this.props.user.avatar} />
+          <UserInfo alias={this.props.user.alias} avatarUrl={this.props.user.avatarUrl} />
           <UserDropDown
             steamid={this.props.user.steamid}
             settingsOnClick={this.props.settingsOnClick}
