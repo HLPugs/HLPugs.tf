@@ -1,4 +1,3 @@
-import { TFClassesTracker } from "../models/TFClassesTracker";
 import Match from "../entities/Match";
 import { Role } from "../enums/Role";
 import { PermissionGroupName } from "../enums/PermissionGroup";
@@ -9,9 +8,9 @@ export default class ProfileViewModel {
     avatar: string;
     subsIn: number;
     subsOut: number;
-    wins: TFClassesTracker;
-    losses: TFClassesTracker;
-    ties: TFClassesTracker;
+    wins: HLPugs.TFClassesTracker;
+    losses: HLPugs.TFClassesTracker;
+    ties: HLPugs.TFClassesTracker;
     isCaptain: boolean;
     permissionGroup: PermissionGroupName;
     roles: Role[];
