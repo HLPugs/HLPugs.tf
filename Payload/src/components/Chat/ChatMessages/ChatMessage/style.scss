@@ -1,0 +1,75 @@
+.message {
+    display: flex;
+    flex-shrink: 0;
+    flex-direction: column;
+    padding: 10px;
+    transition: box-shadow .3s ease;
+    border-bottom: solid 1px var(--background);
+    animation: fade-in .2s ease;
+
+    &:last-child {
+        border-bottom: none;
+    }
+
+    &.highlight {
+        background: rgba(255,193,7,.05);
+        position: relative;
+
+        &:before {
+            content: '';
+            position: absolute;
+            left: 0px;
+            top: -1px;
+            background: #ffc107;
+            height: calc(100% + 1px);
+            width: 5px;
+        }
+    }
+
+    .info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+        
+        .username {
+            color: var(--font-color-tertiary);
+            font-weight: 700;
+            text-decoration: none;
+            transition: color .2s ease;
+
+            &:hover {
+                color: var(--font-color-secondary);
+            }
+        }
+        
+        .timestamp {
+            color: var(--font-color-tertiary);
+            font-size: 12px;
+        }
+    }
+
+    .messageContent {
+        word-break: break-all;
+
+        a {
+            color: var(--color);
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
+
+    &:hover {
+        box-shadow: var(--paper-2);
+    }
+}
+
+.customEmoji {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    background-size: contain;
+}

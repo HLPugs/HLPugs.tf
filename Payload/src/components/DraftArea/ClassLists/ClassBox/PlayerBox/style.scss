@@ -1,0 +1,54 @@
+@import '../../../../../sassVariables.scss';
+
+.player {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    transition: all .2s ease;
+    padding: 4px;
+    box-sizing: border-box;
+    color: var(--font-color);
+    text-decoration: none;
+
+    &:last-child {
+        border-radius: 0px 0px 3px 3px;
+    }
+
+    &:hover {
+        background: var(--background);
+        box-shadow: var(--paper-1);
+    }
+
+    .playerIcon {
+        background: var(--font-color);
+        box-shadow: var(--paper-1);
+        border-radius: 4px;
+        height: 32px;
+        width: 32px;
+        margin-right: 4px;
+        flex-shrink: 0;
+        background-size: contain;
+    }
+
+    .playerName {
+        padding-left: 5px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 100%;
+        line-height: 1;
+    }
+
+    .captainStar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--color-light);
+    }
+}
+
+@media (max-width: $position-count * 150 + px) {
+    .playerIcon {
+        display: none;
+    }
+}

@@ -1,0 +1,25 @@
+#userInfo {
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  height: 100%;
+
+  #userIcon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--font-color);
+    box-shadow: var(--paper-1);
+    flex-shrink: 0;
+    background-size: contain;
+    margin-left: 5px;
+  }
+
+  #userName {
+    font-size: 20px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding: 5px 10px;
+    text-align: center;
+  }
+}

@@ -1,0 +1,14 @@
+#User {
+  grid-area: user;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  position: relative;
+  z-index: 2;
+  
+  &:hover #UserDropDown {
+    transition: opacity .3s ease;
+    visibility: visible;
+    opacity: 1;
+  }
+}

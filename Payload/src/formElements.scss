@@ -1,0 +1,129 @@
+@mixin track() {
+  height: 10px;
+  border-radius: 4px;
+  background: var(--color);
+  box-shadow: var(--paper-1);
+}
+
+@mixin thumb() {
+  -webkit-appearance: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+  background: var(--color);
+  border: solid 7px var(--font-color);
+  position: relative;
+  top: -5px;
+  box-shadow: var(--paper-2);
+}
+
+input[type="range"] {
+  width: 400px;
+  -webkit-appearance: none;
+  border-radius: 4px;
+  margin-bottom: 20px;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-slider-runnable-track {
+    @include track;
+  }
+  
+  &::-webkit-slider-thumb {
+    @include thumb;
+  }
+
+  &::-moz-range-track {
+    @include track;
+  }
+
+  &::-ms-track {
+    @include track;
+  }
+}
+
+input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+
+  & + label {
+    user-select: none;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    display: inline-block;
+
+    & + input[type="checkbox"] {
+
+      & + label {
+        margin-top: 5px;
+      }
+    }
+  }
+
+  & + label:before {
+    content: '';
+    display: inline-block;
+    width: 22px;
+    height: 22px;
+    margin-right: 6px;
+    border-radius: 4px;
+    box-shadow: var(--paper-1);
+    background: var(--font-color);
+    overflow: hidden;
+    transition: all .2s ease;
+    flex-shrink: 0;
+    vertical-align: text-top;
+  }
+
+  &:hover + label:before {
+    box-shadow: var(--paper-2);
+  }
+
+  &:active + label:before {
+    background: var(--font-color-secondary);
+  }
+
+  &:checked + label:before {
+    background: var(--color-light);
+  }
+
+  &:checked:active + label:before {
+    background: var(--font-color-secondary);
+  }
+
+  & + label:after {
+    content: '';
+    display: block;
+    position: absolute;
+    transform: rotate(45deg) translate(154%, 88%);
+    width: 5px;
+    height: 11px;
+    border-right: solid 3px;
+    border-bottom: solid 3px;
+    border-color: var(--font-color);
+    left: 7px;
+    top: 2px;
+    opacity: 0;
+    transition: all .2s ease;
+  }
+
+  &:checked + label:after {
+    transform: rotate(45deg) translate(0, 0);
+    opacity: 1;
+  }
+}
+
+select {
+  outline: none;
+  background: var(--background-light);
+  border: none;
+  border-radius: 4px;
+  color: var(--font-color);
+  padding: 5px;
+  box-shadow: var(--paper-1);
+  width: 150px;
+  font-family: var(--font);
+}

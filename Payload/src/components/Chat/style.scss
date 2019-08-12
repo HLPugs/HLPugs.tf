@@ -1,0 +1,57 @@
+@import '../../sassVariables.scss';
+
+aside {
+    grid-area: aside;
+    background: var(--background-dark);
+    box-shadow: var(--paper-3);
+    position: relative;
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 56px);
+
+    #chatOpener {
+        position: absolute;
+        bottom: 15px;
+        left: -71px;
+        width: 56px;
+        height: 56px;
+        background: var(--color);
+        border-radius: 50%;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--paper-2);
+        font-size: 24px;
+        cursor: pointer;
+        transition: background .2s ease;
+        display: none;
+
+        &:hover {
+            background: var(--color-light);
+        }
+        
+        &:active {
+            background: var(--color-dark);
+        }
+    }
+}
+
+@media (max-width: $position-count * 150 + 175 + px) {
+    aside {
+        width: 200px;
+        right: 0;
+        transform: translateX(200px);
+        transition: transform .5s ease;
+        position: absolute;
+        top: 56px;
+        height: calc(100vh - 56px);
+
+        &.chatActive {
+            transform: translateX(0);
+        }
+        
+        #chatOpener {
+            display: flex;
+        }
+    }
+}

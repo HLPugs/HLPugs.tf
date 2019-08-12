@@ -1,0 +1,125 @@
+@import '../../../../sassVariables.scss';
+
+.tfclass {
+    margin-right: var(--draft-area-spacing);
+    margin-top: var(--draft-area-spacing);
+    width: 100%;
+    min-height: 76px;
+    box-shadow: var(--paper-2);
+    border-radius: 4px;
+    background: var(--background-light);
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    align-self: flex-start;
+
+    &:first-child {
+        margin-left: var(--draft-area-spacing);
+    }
+
+    .classHeader {
+        height: 36px;
+        background: var(--color-gradient);
+        box-shadow: var(--paper-1);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-radius: 4px 4px 0px 0px;
+        padding-left: 3px;
+        padding-right: 6px;
+
+        span {
+            font-size: 18px;
+
+            &.classIcon {
+                position: relative;
+                top: 1px;
+
+                svg {
+                    width: 30px;
+                    height: 30px;
+                }
+            }
+
+            &.count {
+                display: flex;
+                flex-shrink: 1;
+
+                .added {
+                    font-size: 12px;
+                    align-self: flex-start;
+                }
+
+                .needed {
+                    font-size: 12px;
+                    align-self: flex-end;
+                }
+            }
+        }
+
+        .classCheckbox {
+            width: 22px;
+            height: 22px;
+            border-radius: 4px;
+            box-shadow: var(--paper-1);
+            background: var(--font-color);
+            cursor: pointer;
+            overflow: hidden;
+            transition: all .2s ease;
+            flex-shrink: 0;
+            user-select: none;
+
+            &:hover {
+                box-shadow: var(--paper-2);
+            }
+            
+            &:active {
+                background: var(--font-color-secondary);
+            }
+            
+            &.checked {
+                background: var(--color-light);
+                
+                &:active {
+                    background: var(--font-color-secondary);
+                }
+
+                &:hover {
+                    box-shadow: var(--paper-2);
+                }
+            }
+            
+            &.checked:after {
+                transform: rotate(45deg) translate(0, 0);
+                opacity: 1;
+            }
+            
+            &:after {
+                content: '';
+                display: block;
+                position: relative;
+                transform: rotate(45deg) translate(154%, 88%);
+                width: 5px;
+                height: 11px;
+                border-right: solid 3px;
+                border-bottom: solid 3px;
+                border-color: var(--font-color);
+                left: 7px;
+                top: 2px;
+                opacity: 0;
+                transition: all .2s ease;
+            }
+        }
+    }
+
+    .playerList {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media (max-width: $position-count * 150 + px) {
+  .className {
+    display: none;
+  }
+}

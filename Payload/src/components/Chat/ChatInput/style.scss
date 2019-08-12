@@ -1,0 +1,78 @@
+#inputHolder { 
+    display: flex;
+    border-top: solid 1px var(--background-light);
+    padding: 5px;
+    flex-shrink: 0;
+    flex-grow: 0;
+    position: relative;
+    
+    #messageInput {
+        padding: 5px;
+        padding-right: 25px;
+        height: 46px;
+        box-sizing: border-box;
+        border: none;
+        background: var(--background);
+        border: solid 1px var(--background-light);
+        border-radius: 4px;
+        resize: none;
+        outline: none;
+        font-family: var(--font);
+        color: var(--font-color);
+        font-size: 14px;
+        box-shadow: var(--paper-1);
+        position: relative;
+        top: 0;
+        transition: all .3s ease;
+        flex-grow: 1;
+
+        &:focus {
+            box-shadow: var(--paper-2);
+            border-color: var(--color-darker);
+        }
+
+        &::placeholder {
+            color: var(--font-color-tertiary);
+        }
+        
+        &::-webkit-scrollbar {
+            display: none;
+        }
+    }
+
+    #emojiPickerToggle {
+        position: absolute;
+        font-size: 20px;
+        color: var(--font-color-tertiary);
+        cursor: pointer;
+        transition: color .2s ease;
+        right: 8px;
+        top: 5px;
+
+        &:hover {
+            color: var(--font-color);
+        }
+    }
+
+    #messageCharacterCount {
+        position: absolute;
+        font-size: 12px;
+        bottom: 7px;
+        right: 8px;
+        color: var(--font-color-secondary);
+    }
+
+    #emojiPickerHolder {
+        position: absolute;
+        bottom: 100%;
+        right: 5px;
+    }
+}
+
+#emojiBackgroundToggle {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    bottom: 0;
+    right: 0;
+}

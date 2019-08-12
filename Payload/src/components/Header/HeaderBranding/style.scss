@@ -1,0 +1,34 @@
+#HeaderBranding {
+  display: flex;
+  z-index: 3;
+  
+  a {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--font-color);
+  
+    #logo {
+      height: 56px;
+      width: 56px;
+      background-size: 48px 48px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+    
+    #siteText {
+      display: flex;
+      flex-direction: column;
+      
+      #siteName {
+        font-size: 20px;
+        font-weight: 700;
+      }
+      
+      #siteSubTitle {
+        font-size: 12px;
+        text-align: center;
+      }
+    }
+  }
+}

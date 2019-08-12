@@ -1,0 +1,76 @@
+#AliasModalHolder {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background: var(--background-modal);
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    #AliasModal {
+        padding: 10px;
+        border-radius: 4px;
+        box-shadow: var(--paper-2);
+        background: var(--background);
+        display: flex;
+        flex-direction: column;
+
+        span:first-child {
+            font-size: 18px;
+        }
+        
+        span:last-child {
+            font-size: 14px;
+        }
+
+        button {
+            width: 90px;
+        }
+
+        div {
+            display: flex;
+            padding-top: 15px;
+            padding-bottom: 15px;
+
+            input {
+                padding: 5px;
+                box-sizing: border-box;
+                border: none;
+                background: var(--background);
+                border: solid 1px var(--background-light);
+                border-radius: 4px;
+                resize: none;
+                outline: none;
+                font-family: var(--font);
+                color: var(--font-color);
+                font-size: 14px;
+                box-shadow: var(--paper-1);
+                position: relative;
+                top: 0;
+                transition: all .3s ease;
+                flex-grow: 1;
+                margin-right: 10px;
+
+                &:focus {
+                    box-shadow: var(--paper-2);
+                    border: solid 1px var(--color);
+                }
+
+                &::placeholder {
+                    color: var(--font-color-tertiary);
+                }
+
+                &:invalid {
+                    border-color: hsl(4, 90%, 59%);
+                }
+            }
+
+            .aliasTaken {
+                color: hsl(4, 90%, 59%);
+            }
+        }
+    }
+}

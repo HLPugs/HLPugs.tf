@@ -1,0 +1,111 @@
+#settingsHolder {
+    position: absolute;
+    display: flex;
+    width: 100vw;
+    height: 100vh;
+    background: var(--background-modal);
+    justify-content: center;
+    align-items: center;
+    animation: fade-in .3s ease;
+
+    #settings {
+        display: flex;
+        flex-direction: column;
+        background: var(--color-gradient);
+        padding: 10px;
+        border-radius: 4px;
+        box-shadow: var(--paper-2);
+
+        .settingsHeader {
+            font-size: 18px;
+            font-weight: 700;
+            padding-bottom: 10px;
+
+            svg {
+                padding-right: 5px;
+            }
+        }
+
+        .settingsButtons {
+            display: flex;
+            justify-content: flex-end;
+
+            button + button {
+                margin-left: 15px;
+            }
+        }
+
+        .settingsSection {
+            display:flex;
+            border-radius: 4px;
+            background: var(--background);
+            margin-bottom: 10px;
+            overflow: hidden;
+            position: relative;
+
+            &:before {
+                content: '';
+                display: block;
+                position: absolute;
+                top: 0; right: 0; bottom: 0; left: 0;
+                z-index: 1;
+                box-shadow: var(--paper-inset-2);
+            }
+
+            .settingsTitle {
+                padding: 26px;
+                background: var(--color-darker);
+                box-shadow: var(--paper-2);
+                width: 150px;
+                text-align: right;
+                font-weight: 700;
+            }
+
+            .settingsBody {
+                padding: 26px;
+                display: flex;
+                flex-direction: column;
+                z-index: 2;
+
+                .hintText {
+                    color: var(--font-color-tertiary);
+                    padding-top: 10px;
+                }
+
+                .favClassesHolder {
+                    width: 550px;
+                    display: flex;
+                    flex-wrap: wrap;
+                    margin-bottom: 10px;
+                    justify-content: center;
+
+                    .favClass {
+                        display: flex;
+                        align-items: center;
+                        width: calc(33% - 10px);
+                        justify-content: space-between;
+                        padding: 5px;
+                        box-sizing: border-box;
+                        margin-right: 10px;
+                        margin-bottom: 10px;
+                        background: var(--color-gradient);
+                        border-radius: 4px;
+                        box-shadow: var(--paper-1);
+
+                        svg {
+                            height: 24px;
+                        }
+
+                        label {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+
+            &:last-child {
+                margin-bottom: 0px;
+            }
+        }
+    }
+}
