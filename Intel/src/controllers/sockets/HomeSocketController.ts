@@ -2,14 +2,20 @@ import * as playerMap from '../../modules/playerMap';
 import { SocketController, OnConnect, ConnectedSocket, OnMessage, SocketIO, OnDisconnect } from 'socket-controllers';
 import config = require('config');
 import { DraftTFClass } from '../../structures/DraftClassList';
+import * as dotenv from 'dotenv';
+import Player from '../../entities/Player';
+import PlayerService from '../../services/PlayerService';
+
+const env = dotenv.config().parsed;
 
 const siteConfiguration = config.get('app.configuration');
+const playerService = new PlayerService();
 
 @SocketController()
 export class HomeSocketController {
 
     @OnConnect()
-    playerConnected(@ConnectedSocket() socket: any) {
+    async playerConnected(@ConnectedSocket() socket: any) {
         socket.emit('siteConfiguration', siteConfiguration);
         if (socket.request.session.err) {
             socket.emit('serverError', socket.request.session.err);
@@ -21,7 +27,14 @@ export class HomeSocketController {
 
             socket.emit('user', user);
         } else {
-            socket.emit('user', { loggedIn: false });
+            console.log('offline env = ' + env.offline);
+            if (env.offline.toLowerCase() === 'true') {
+                const user: any = await playerService.getPlayerByAlias('Gabe');
+                user.loggedIn = true;
+                socket.emit('user', user);
+            } else {
+                socket.emit('user', { loggedIn: false });
+            }
         }
     }
 

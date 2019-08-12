@@ -13,6 +13,10 @@ import { useExpressServer } from 'routing-controllers';
 import { Bold, Underscore, FgYellow, Reset, consoleLogStatus, FgRed, FgGreen, FgBlue } from './utils/ConsoleColors';
 import CurrentUserChecker from './utils/CurrentUserChecker';
 import { useSocketServer } from 'socket-controllers';
+import Seed from './utils/Seed';
+import * as dotenv from 'dotenv';
+
+const env = dotenv.config().parsed;
 
 const app: express.Application = express();
 
@@ -38,7 +42,10 @@ app.use(sessionConfig);
 consoleLogStatus(`\n${Underscore}${FgBlue}HLPugs.tf Bootstrap Initializing`);
 consoleLogStatus(`Synchronizing models to database with ${FgYellow}TypeORM${Reset}...\n`);
 createConnection()
-  .then(() => {
+  .then(async() => {
+    if (env.offline) {
+      await Seed();
+    }
     consoleLogStatus(`\n${FgGreen}Success! Entities synchronized with database`)
 
     useExpressServer(app, {

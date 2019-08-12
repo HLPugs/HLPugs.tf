@@ -25,7 +25,7 @@ export class HomeController {
         req.session.user = player;
 
         const isCurrentlySiteBanned = this.playerService.isCurrentlySiteBanned(player.steamid);
-        
+
         req.session.sockets = [];
         req.user.loggedIn = !isCurrentlySiteBanned;
         req.user = player;
