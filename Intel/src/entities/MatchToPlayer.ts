@@ -1,11 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import Match from './Match';
 import Player from './Player';
-import { DraftTFClass } from '../structures/DraftClassList';
-import Team from '../../../Common/Enums/Team';
+import Team from '../../../common/Enums/Team';
 
 @Entity()
-export class MatchToPlayer {
+export default class MatchToPlayer {
 
 	@PrimaryGeneratedColumn()
 	matchToPlayerId!: number;
@@ -14,7 +13,7 @@ export class MatchToPlayer {
 	postId!: number;
 
 	@Column()
-	tf2class: DraftTFClass;
+	tf2class: Models.DraftTFClass;
 
 	@Column()
 	team: Team;

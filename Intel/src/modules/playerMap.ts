@@ -2,7 +2,7 @@ import * as config                        from 'config';
 import logger                             from './logger';
 import * as crypto                        from 'crypto';
 import * as uuid                          from 'uuid';
-import { DraftTFClass, DraftTFClassList } from '../structures/DraftClassList';
+import { DraftTFClassList } from '../structures/DraftClassList';
 import { store }                          from './store';
 import Player 														from '../entities/Player';
 
@@ -15,7 +15,7 @@ import Player 														from '../entities/Player';
 // this collection maps a SteamID to a session ID
 const players = new Map<string, string>();
 
-const draftTFClassLists = new Map<DraftTFClass, string[]>();
+const draftTFClassLists = new Map<Models.DraftTFClass, string[]>();
 
 const draftTFClasses: DraftTFClassList[] = config.get('app.configuration.classes');
 
@@ -114,7 +114,7 @@ export const getAllPlayers = () => {
  * @param {string} steamid - The SteamID of the Player to add
  * @param {string} draftTFClass - The class to be added on
  */
-export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: DraftTFClass) => {
+export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: Models.DraftTFClass) => {
   // Ensure Player isn't already added up to the class
   if (draftTFClassLists.get(draftTFClass).indexOf(steamid) === -1) {
 	draftTFClassLists.get(draftTFClass).push(steamid);
@@ -128,7 +128,7 @@ export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: Draft
  * @param {string} steamid - The SteamID of the Player to remove
  * @param {string} draftTFClass - The class to be removed from
  */
-export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: DraftTFClass) => {
+export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: Models.DraftTFClass) => {
   const indexOfPlayer = draftTFClassLists
 	.get(draftTFClass)
 	.indexOf(steamid);
@@ -156,6 +156,6 @@ export const removePlayerAllDraftTFClasses = (steamid: string) => {
  * @param {DraftTFClass} draftTFClass
  * @returns {string[]} An array of the added players SteamIDs as strings
  */
-export const getAllPlayersDraftTFClass = (draftTFClass: DraftTFClass): string[] => {
+export const getAllPlayersDraftTFClass = (draftTFClass: Models.DraftTFClass): string[] => {
   return draftTFClassLists.get(draftTFClass);
 };

@@ -1,6 +1,5 @@
 import logger from './logger';
 import { SteamRequest } from 'steam-login';
-import { PlayerSettings } from '../structures/PlayerSettings';
 
 // This import is used to let the tests know that session exists on the SteamRequest.
 // Ignore is utilized since it's an unused import.

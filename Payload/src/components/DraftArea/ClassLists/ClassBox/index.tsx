@@ -1,5 +1,5 @@
 import React from 'react';
-import { DraftTFClass, DraftTFClassList } from '../../../../common/types';
+import { DraftTFClassList } from '../../../../common/types';
 import ClassIcon from '../../../ClassIcon';
 import './style.scss';
 import PlayerBox from './PlayerBox';
@@ -24,7 +24,7 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
       this.props.socket.emit('getDraftTFClassList', this.props.properties.name);
     });
 
-    this.props.socket.on('draftTFClassList', (tfClass: DraftTFClass, tfClassList: string[]) => {
+    this.props.socket.on('draftTFClassList', (tfClass: Models.DraftTFClass, tfClassList: string[]) => {
       if (tfClass === this.props.properties.name) {
         this.setState({
           players: tfClassList
@@ -32,7 +32,7 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
       }
     });
 
-    this.props.socket.on('addToDraftTFClass', (tfClass: DraftTFClass, steamid: string) => {
+    this.props.socket.on('addToDraftTFClass', (tfClass: Models.DraftTFClass, steamid: string) => {
       if (tfClass === this.props.properties.name) {
         this.setState({
           players: [...this.state.players, steamid]
@@ -40,7 +40,7 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
       }
     });
 
-    this.props.socket.on('removeFromDraftTFClass', (tfClass: DraftTFClass, steamid: string) => {
+    this.props.socket.on('removeFromDraftTFClass', (tfClass: Models.DraftTFClass, steamid: string) => {
       if (tfClass === this.props.properties.name) {
         const newPlayers = [...this.state.players];
         const indexOfPlayer = newPlayers.indexOf(steamid);

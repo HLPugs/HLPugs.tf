@@ -1,9 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinColumn, JoinTable } from 'typeorm';
 import { IsNumberString, IsEnum, IsString, IsNotEmpty, IsDate } from 'class-validator';
 import Player from './Player';
-import { MatchToPlayer } from './MatchToPlayer';
 import MatchType from '../../../Common/Enums/MatchType';
 import Team from '../../../Common/Enums/Team';
+import MatchToPlayer from './MatchToPlayer';
 
 @Entity('matches')
 export default class Match {
