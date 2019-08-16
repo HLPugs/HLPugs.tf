@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany, PrimaryColumn, ManyToMany, JoinTable } from 'typeorm';
 import { Length, IsInt, IsBoolean, IsFQDN, IsOptional, IsString, IsIP, IsNumberString, Matches, Allow, IsEnum, ArrayUnique } from 'class-validator';
-import { PermissionGroupName } from '../enums/PermissionGroup';
-import { Role } from '../enums/Role';
-import { LinqRepository } from 'typeorm-linq-repository';
-import Punishment from './Punishment';
+import Match from './Match';
+import { MatchToPlayer } from './MatchToPlayer';
+import PermissionGroupName from '../../../Common/Enums/PermissionGroup';
+import Role from '../../../Common/Enums/Role';
 
 @Entity({ name: 'players' })
 export default class Player {
@@ -44,15 +44,15 @@ export default class Player {
 
   @Column({ default: 0 })
   @IsInt()
-  pugs: number;
+  totalPugCount: number;
 
   @Column({ default: 0 })
   @IsInt()
-  wins: number;
+  totalWinCount: number;
 
   @Column({ default: 0 })
   @IsInt()
-  losses: number;
+  totalLossCount: number;
 
   @Column({ default: false })
   @IsBoolean()
@@ -70,6 +70,9 @@ export default class Player {
   @IsBoolean()
   isCrestricted: boolean;
 
-  // @OneToMany()
-  activePunishments: Punishment[];
+  @ManyToMany(type => Match, match => match.players)
+  matches: Match[];
+
+  @OneToMany(type => MatchToPlayer, matchToPlayer => matchToPlayer.player)
+  matchToPlayerCategories: MatchToPlayer[];
 }

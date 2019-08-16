@@ -1,8 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { Allow, IsEnum, IsString,IsNumberString, IsBoolean, IsDate, IsNotEmpty } from 'class-validator';
-import { LinqRepository } from 'typeorm-linq-repository';
-import { Region } from '../enums/Region';
-
+import { IsEnum, IsString,IsNumberString, IsBoolean, IsDate, IsNotEmpty } from 'class-validator';
+import Region from '../../../Common/Enums/Region';
 @Entity('announcements')
 export default class Announcement {
 	

@@ -1,4 +1,5 @@
 {
+    "name": "default",
     "type": "sqlite",
     "logging": true,
     "synchronize": true,

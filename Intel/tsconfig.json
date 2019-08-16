@@ -20,6 +20,6 @@
     "lib": ["es6", "es5"]
   },
   "include": [
-    "src/**/*", "../models"
+    "src/**/*", "../common"
   ]
 }

@@ -1,4 +1,4 @@
-import { PermissionGroupName } from "../enums/PermissionGroup";
+import PermissionGroupName from '../../../Common/Enums/PermissionGroup';
 
 const PrivilegeRankings: Map<PermissionGroupName, number> = new Map(
 	[
@@ -7,3 +7,5 @@ const PrivilegeRankings: Map<PermissionGroupName, number> = new Map(
 		[PermissionGroupName.MODERATOR, 10]
 	],
 )
+
+export default PrivilegeRankings;

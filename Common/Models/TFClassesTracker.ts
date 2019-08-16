@@ -1,4 +1,4 @@
-namespace HLPugs {
+namespace Models {
   /**
    * Used to store data by class.
    * @typedef TFClassesTracker

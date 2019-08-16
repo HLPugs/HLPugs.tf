@@ -12,7 +12,7 @@
       "smartStep": true,
       "internalConsoleOptions": "openOnSessionStart",
       "outFiles": [
-        "${workspaceFolder}/intel/dist/Intel/src/**/*.js"
+        "${workspaceFolder}/Intel/dist/Intel/src/**/*.js"
       ]
     }
   ]

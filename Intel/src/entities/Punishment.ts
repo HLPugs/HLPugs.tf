@@ -1,7 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { IsNumberString, IsString, MinDate, IsDate, Allow, IsEnum } from 'class-validator';
-import { PunishmentType } from '../enums/PunishmentType';
-import { LinqRepository, RepositoryBase } from 'typeorm-linq-repository';
+import PunishmentType from '../../../Common/Enums/PunishmentType';
 
 @Entity()
 export default class Punishment {

@@ -21,20 +21,20 @@ const env = dotenv.config().parsed;
 const app: express.Application = express();
 
 const sessionConfig = expressSession({
-  store,
-  genid() {
-    return crypto.createHash('sha256')
-      .update(uuid.v1())
-      .update(crypto.randomBytes(256))
-      .digest('hex');
-  },
-  resave: false,
-  saveUninitialized: false,
-  secret: config.get('app.secret'),
-  cookie: {
-    secure: false,
-    maxAge: 1000 * 60 * 60 * 24 * 14,
-  },
+	store,
+	genid() {
+		return crypto.createHash('sha256')
+			.update(uuid.v1())
+			.update(crypto.randomBytes(256))
+			.digest('hex');
+	},
+	resave: false,
+	saveUninitialized: false,
+	secret: config.get('app.secret'),
+	cookie: {
+		secure: false,
+		maxAge: 1000 * 60 * 60 * 24 * 14,
+	},
 });
 
 app.use(sessionConfig);
@@ -42,45 +42,45 @@ app.use(sessionConfig);
 consoleLogStatus(`\n${Underscore}${FgBlue}HLPugs.tf Bootstrap Initializing`);
 consoleLogStatus(`Synchronizing models to database with ${FgYellow}TypeORM${Reset}...\n`);
 createConnection()
-  .then(async() => {
-    if (env.offline) {
-      await Seed();
-    }
-    consoleLogStatus(`\n${FgGreen}Success! Entities synchronized with database`)
+	.then(async() => {
+		if (env.offline === 'true') {
+			await Seed();
+		}
+		consoleLogStatus(`\n${FgGreen}Success! Entities synchronized with database`)
 
-    useExpressServer(app, {
-      defaultErrorHandler: false,
-      routePrefix: '/api',
-      currentUserChecker: CurrentUserChecker,
-      middlewares: [__dirname + '/middlewares/*.js', __dirname + '/middlewares/api/*.js'],
-      controllers: [__dirname + '/controllers/api/*.js']
-    });
+		useExpressServer(app, {
+			defaultErrorHandler: false,
+			routePrefix: '/api',
+			currentUserChecker: CurrentUserChecker,
+			middlewares: [__dirname + '/middlewares/*.js', __dirname + '/middlewares/api/*.js'],
+			controllers: [__dirname + '/controllers/api/*.js']
+		});
 
-    useExpressServer(app, {
-      defaultErrorHandler: false,
-      currentUserChecker: CurrentUserChecker,
-      middlewares: [__dirname + '/middlewares/*.js'],
-      controllers: [__dirname + '/controllers/*.js']
-    });
+		useExpressServer(app, {
+			defaultErrorHandler: false,
+			currentUserChecker: CurrentUserChecker,
+			middlewares: [__dirname + '/middlewares/*.js'],
+			controllers: [__dirname + '/controllers/*.js']
+		});
 
-    const server = new Server(app);
+		const server = new Server(app);
 
-    const io = socketIO(server);
-    io.use((socket, next) => {
-      sessionConfig(socket.request, socket.request.res, next);
-    });
+		const io = socketIO(server);
+		io.use((socket, next) => {
+			sessionConfig(socket.request, socket.request.res, next);
+		});
 
-    useSocketServer(io, {
-      controllers: [__dirname + '/controllers/sockets/*.js'],
-    });
+		useSocketServer(io, {
+			controllers: [__dirname + '/controllers/sockets/*.js'],
+		});
 
-    server.listen(3001, () => {
-      consoleLogStatus(`${FgYellow}Express${Reset}: http://localhost:3001/api`);
-      consoleLogStatus(`${FgBlue}WebClient${Reset}: http://localhost:3000`);
-    });
+		server.listen(3001, () => {
+			consoleLogStatus(`${FgYellow}Express${Reset}: http://localhost:3001/api`);
+			consoleLogStatus(`${FgBlue}WebClient${Reset}: http://localhost:3000`);
+		});
 
-  })
-  .catch(e => {
-    console.error(`\n${FgRed}${Bold}Error occured in TypeORM synchronization${Reset}`);
-    console.error(`${FgRed}${e}${Reset}`);
-  });
+	})
+	.catch(e => {
+		console.error(`\n${FgRed}${Bold}Error occured in TypeORM synchronization${Reset}`);
+		console.error(`${FgRed}${e.stack}${Reset}`);
+	});

@@ -7,36 +7,36 @@ const playerService = new PlayerService();
 @SocketController()
 export class AliasSocketController {
 
-    @OnMessage('submitAlias')
-    async submitAlias(@ConnectedSocket() socket: any, @MessageBody() body: any) {
-        const alias: string = body.alias;
-        const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
+	@OnMessage('submitAlias')
+	async submitAlias(@ConnectedSocket() socket: any, @MessageBody() body: any) {
+		const alias: string = body.alias;
+		const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
 
-        if (!aliasRules.test(alias) || await this.isAliasTaken(alias)) return;
-        
-        const steamid = socket.request.session.user.steamid;
-        await playerService.updateAlias(steamid, alias);
-        
-        const aliasUpdated = await this.isAliasTaken(alias);
-        if (aliasUpdated) {
-            socket.request.session.user.alias = alias;
-            socket.request.session.save();
-            const user = socket.request.session.user;
-            user.loggedIn = true;
+		if (!aliasRules.test(alias) || await this.isAliasTaken(alias)) return;
+		
+		const steamid = socket.request.session.user.steamid;
+		await playerService.updateAlias(steamid, alias);
+		
+		const aliasUpdated = await this.isAliasTaken(alias);
+		if (aliasUpdated) {
+			socket.request.session.user.alias = alias;
+			socket.request.session.save();
+			const user = socket.request.session.user;
+			user.loggedIn = true;
 
-            socket.emit('user', user);
-        }
-    }
+			socket.emit('user', user);
+		}
+	}
 
 
-    @OnMessage('checkAlias')
-    async checkAlias(@ConnectedSocket() socket: any, @MessageBody() body: any) {
-        const player = await playerService.getPlayerByAlias(body.alias);
-        socket.emit('aliasStatus', player);
-    }
+	@OnMessage('checkAlias')
+	async checkAlias(@ConnectedSocket() socket: any, @MessageBody() body: any) {
+		const player = await playerService.getPlayerByAlias(body.alias);
+		socket.emit('aliasStatus', player);
+	}
 
-    private async isAliasTaken(alias: string): Promise<boolean> {
-        const player = await playerService.getPlayerByAlias(alias);
-        return player instanceof Player;
-    }
+	private async isAliasTaken(alias: string): Promise<boolean> {
+		const player = await playerService.getPlayerByAlias(alias);
+		return player instanceof Player;
+	}
 }

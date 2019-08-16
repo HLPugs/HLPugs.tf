@@ -1,4 +1,5 @@
 import { IconName, IconPrefix } from '@fortawesome/fontawesome-svg-core';
+import { DraftTFClass } from '../../../models/DraftTFClass';
 
 export interface SiteConfiguration {
   branding: SiteBranding;
@@ -26,11 +27,7 @@ export interface NavItem {
     moduleName: string;
   };
 }
-export type DraftTFClass =
-  'Scout' | 'Soldier' | 'Roamer' |
-  'Pocket' | 'Pyro' | 'Demo' |
-  'Heavy' | 'Engineer' | 'Medic' |
-  'Sniper' | 'Spy' | 'Flex' ;
+
 
 export interface DraftTFClassList {
   name: DraftTFClass;
