@@ -1,4 +1,4 @@
-import Match from '../../Intel/src/entities/Match';
+//import Match from '../../Intel/src/entities/Match';
 import MatchType from '../Enums/MatchType';
 import Team from '../Enums/Team';
 
@@ -11,7 +11,7 @@ export default class ProfileMatchViewModel {
 	date!: Date;
 	logsId!: number;
 
-	static fromMatch(match: Match) {
+	static fromMatch(match: any) {
 		const profileMatchViewModel = new ProfileMatchViewModel();
 
 		profileMatchViewModel.id = match.id;

@@ -1,6 +1,6 @@
-import DraftTFClass from '../../../common/Models/DraftTFClass';
+//import DraftTFClass from '../../../common/Models/DraftTFClass';
 
 export interface DraftTFClassList {
-  name: DraftTFClass;
+  name: any;
   numberPerTeam: number;
 }

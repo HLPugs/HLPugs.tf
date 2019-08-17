@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { IsNumberString, IsString, MinDate, IsDate, Allow, IsEnum } from 'class-validator';
-import PunishmentType from '../../../Common/Enums/PunishmentType';
+//import PunishmentType from '../../../Common/Enums/PunishmentType';
 
 @Entity()
 export default class Punishment {
@@ -9,8 +9,8 @@ export default class Punishment {
 	id: number;
 
 	@Column()
-	@IsEnum(PunishmentType)
-	punishmentType: PunishmentType;
+	@IsEnum('')
+	punishmentType: any;
 
 	@Column()
 	@IsNumberString()

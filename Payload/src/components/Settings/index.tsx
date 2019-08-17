@@ -3,7 +3,8 @@ import './style.scss';
 import { DraftTFClassList } from '../../common/types';
 import ClassIcon from '../ClassIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SettingsViewModel } from '../../../../common/ViewModels/SettingsViewModel';
+import 'socket.io-client';
+//import { SettingsViewModel } from '../../../../common/ViewModels/SettingsViewModel';
 
 interface SettingsProps {
   socket: SocketIOClient.Socket;
@@ -11,7 +12,7 @@ interface SettingsProps {
   settingsOnClick: Function;
   classes: DraftTFClassList[];
   userAlias?: string;
-  settings: SettingsViewModel;
+  settings: any;
 }
 
 class Settings extends React.PureComponent<SettingsProps, {}> {
@@ -22,8 +23,8 @@ class Settings extends React.PureComponent<SettingsProps, {}> {
 
   savePress = () => {
 
-    this.props.socket.on('playerSettings', (settings: SettingsViewModel) => {
-      this.setState({ settings })
+    this.props.socket.on('playerSettings', (settings: any) => {
+      this.setState({ settings });
     });
 
     this.props.socket.emit('saveSettings', { alias: this.props.userAlias, settings: this.props.settings });

@@ -3,7 +3,7 @@ import config = require('config');
 import { Response, Request } from 'express';
 import * as steam from 'steam-login';
 import PlayerService from '../services/PlayerService';
-import UserViewModel from '../../../Common/ViewModels/UserViewModel';
+//import UserViewModel from '../../../Common/ViewModels/UserViewModel';
 import Player from '../entities/Player';
 import { RequestWithUser } from '../interfaces/RequestWithUser';
 
@@ -26,7 +26,7 @@ export class HomeController {
 
 		const isCurrentlySiteBanned = await playerService.isCurrentlySiteBanned(player.steamid);
 
-		const userViewModel = UserViewModel.fromPlayer(player);
+		const userViewModel = {loggedIn: true, isBanned: false};
 		
 		userViewModel.loggedIn = !isCurrentlySiteBanned;
 		userViewModel.isBanned = isCurrentlySiteBanned;

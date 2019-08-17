@@ -1,0 +1,11 @@
+# Ignore built ts files
+dist/**/*
+
+# Dependency directory
+node_modules
+
+# Webstorm files
+.idea
+
+# vscode files
+.vscode

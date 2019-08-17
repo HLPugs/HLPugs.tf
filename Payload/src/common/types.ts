@@ -1,10 +1,10 @@
 import { IconName, IconPrefix } from '@fortawesome/fontawesome-svg-core';
-import DraftTFClass from '../../../common/Models/DraftTFClass';
+//import DraftTFClass from '../../../common/Models/DraftTFClass';
 
 export interface SiteConfiguration {
   branding: SiteBranding;
   navigation: NavItem[];
-  classes: DraftTFClassList[];
+  classes: any[];
 }
 
 export interface SiteBranding {
@@ -29,20 +29,20 @@ export interface NavItem {
 }
 
 export interface DraftTFClassList {
-  name: DraftTFClass;
+  name: any;
   numberPerTeam: number;
 }
 
 interface SettingsViewModel {
-	id: number;
-	isNotifiableByMention: boolean;
-	volume: number;
-	favoriteClasses: DraftTFClass[];
-	addToFavoritesAfterMatch: boolean;
-	addToFavoritesOnLogin: boolean;
-	audioCuesEnabled: boolean;
-	voicepack: string;
-	colorOfNameInChat: string;
+  id: number;
+  isNotifiableByMention: boolean;
+  volume: number;
+  favoriteClasses: any[];
+  addToFavoritesAfterMatch: boolean;
+  addToFavoritesOnLogin: boolean;
+  audioCuesEnabled: boolean;
+  voicepack: string;
+  colorOfNameInChat: string;
 }
 export interface UserViewModel {
   loggedIn?: boolean;

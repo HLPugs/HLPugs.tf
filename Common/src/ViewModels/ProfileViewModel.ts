@@ -1,4 +1,4 @@
-import Player from '../../Intel/src/entities/Player';
+//import Player from '../../Intel/src/entities/Player';
 import TFClassesTracker from '../Models/TFClassesTracker';
 
 export class ProfileViewModel {
@@ -11,7 +11,7 @@ export class ProfileViewModel {
 	subsIn: number;
 	subsOut: number;
 
-	static fromPlayer(player: Player): ProfileViewModel {
+	static fromPlayer(player: any): ProfileViewModel {
 		const profileViewModel = new ProfileViewModel();
 		profileViewModel.alias = player.alias;
 		profileViewModel.avatarUrl = player.avatarUrl;

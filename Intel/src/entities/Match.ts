@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinColumn, JoinTable } from 'typeorm';
 import { IsNumberString, IsEnum, IsString, IsNotEmpty, IsDate } from 'class-validator';
 import Player from './Player';
-import MatchType from '../../../Common/Enums/MatchType';
-import Team from '../../../Common/Enums/Team';
+//import MatchType from '../../../Common/Enums/MatchType';
+//import Team from '../../../Common/Enums/Team';
 import MatchToPlayer from './MatchToPlayer';
 
 @Entity('matches')
@@ -12,8 +12,8 @@ export default class Match {
 	id: number;
 
 	@Column()
-	@IsEnum(MatchType)
-	matchType: MatchType;
+	@IsEnum('')
+	matchType: any;
 
 	@Column()
 	@IsString()
@@ -21,8 +21,8 @@ export default class Match {
 	map: String;
 
 	@Column()
-	@IsEnum(Team)
-	winningTeam: Team;
+	@IsEnum('')
+	winningTeam: any;
 
 	@CreateDateColumn()
 	@IsDate()

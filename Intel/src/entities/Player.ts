@@ -2,8 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany, PrimaryColumn
 import { Length, IsInt, IsBoolean, IsFQDN, IsOptional, IsString, IsIP, IsNumberString, Matches, Allow, IsEnum, ArrayUnique } from 'class-validator';
 import Match from './Match';
 import MatchToPlayer from './MatchToPlayer';
-import PermissionGroupName from '../../../Common/Enums/PermissionGroup';
-import Role from '../../../Common/Enums/Role';
+//import PermissionGroupName from '../../../Common/Enums/PermissionGroup';
+//import Role from '../../../Common/Enums/Role';
 import PlayerSettings from './PlayerSettings';
 
 @Entity({ name: 'players' })
@@ -31,13 +31,13 @@ export default class Player {
 
   @Column({ nullable: true })
   @IsOptional()
-  @IsEnum(PermissionGroupName)
-  permissionGroup: PermissionGroupName;
+  @IsEnum('')
+  permissionGroup: any;
 
   @Column('simple-array', { nullable: true})
   @IsOptional()
   @ArrayUnique()
-  roles: Role[];
+  roles: any[];
 
   @Column()
   @IsIP('4')

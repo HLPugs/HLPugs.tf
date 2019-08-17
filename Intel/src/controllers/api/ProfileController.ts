@@ -1,15 +1,15 @@
 import { Get, Param, QueryParam, JsonController } from 'routing-controllers';
 import { isSteamID } from '../../utils/SteamIDChecker';
 import { ProfileService } from '../../services/ProfileService';
-import { ProfileViewModel } from '../../../../common/ViewModels/ProfileViewModel';
-import ProfilePaginatedMatchesViewModel from '../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
+//import { ProfileViewModel } from '../../../../common/ViewModels/ProfileViewModel';
+//import ProfilePaginatedMatchesViewModel from '../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
 
 const profileService = new ProfileService();
 @JsonController('/profile')
 export class PlayerController {
 
 	@Get('/:identifier')
-	getProfile(@Param('identifier') identifier: string): Promise<ProfileViewModel> {
+	getProfile(@Param('identifier') identifier: string): Promise<any> {
 		if (isSteamID(identifier)) {
 			return profileService.getProfileBySteamid(identifier);
 		} else {
@@ -21,7 +21,7 @@ export class PlayerController {
 	getPlayersMatches(
 		@Param('identifier') identifier: string,
 		@QueryParam('pageSize') pageSize: number,
-		@QueryParam('currentPage') currentPage: number): Promise<ProfilePaginatedMatchesViewModel> {
+		@QueryParam('currentPage') currentPage: number): Promise<any> {
 		return profileService.getPaginatedMatches(identifier, pageSize, currentPage);
 	}
 
