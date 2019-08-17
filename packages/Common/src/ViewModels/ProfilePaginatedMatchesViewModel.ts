@@ -1,4 +1,4 @@
-import ProfileMatchViewModel from '../ViewModels/ProfileMatchViewModel';
+import ProfileMatchViewModel from './ProfileMatchViewModel';
 
 	export default class ProfilePaginatedMatchesViewModel {
 		matches!: ProfileMatchViewModel[];
