@@ -1,6 +1,6 @@
 import DraftTFClass from '../Models/DraftTFClass';
 
-export class SettingsViewModel {
+export default class SettingsViewModel {
 	id: number;
 	isNotifiableByMention: boolean;
 	volume: number;

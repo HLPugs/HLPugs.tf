@@ -3,7 +3,7 @@ import { Length, IsInt, IsBoolean, IsFQDN, IsOptional, IsString, IsIP, IsNumberS
 import Match from './Match';
 import MatchToPlayer from './MatchToPlayer';
 //import PermissionGroupName from '../../../Common/Enums/PermissionGroup';
-//import Role from '../../../Common/Enums/Role';
+import Role from '@hlpugs/common/lib/Enums/Role';
 import PlayerSettings from './PlayerSettings';
 
 @Entity({ name: 'players' })
@@ -37,7 +37,7 @@ export default class Player {
   @Column('simple-array', { nullable: true})
   @IsOptional()
   @ArrayUnique()
-  roles: any[];
+  roles: Role[];
 
   @Column()
   @IsIP('4')

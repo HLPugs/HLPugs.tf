@@ -1,5 +1,5 @@
 # Ignore built ts files
-dist/**/*
+lib/**/*
 
 # Dependency directory
 node_modules

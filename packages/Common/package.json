@@ -1,11 +1,12 @@
 {
-  "name": "common",
+  "name": "@hlpugs/common",
   "version": "0.1.0",
+  "main": "lib/index.js",
   "private": true,
   "scripts": {
     "build": "rm -rf dist && npm run build-ts",
     "build-ts": "tsc -p tsconfig.json",
-    "watch-ts": "tsc -w",
+    "watch": "tsc -w",
     "tslint": "tslint -c tslint.json -p tsconfig.json"
   }
 }

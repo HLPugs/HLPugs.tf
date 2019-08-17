@@ -1,7 +1,7 @@
 //import Player from '../../Intel/src/entities/Player';
 import TFClassesTracker from '../Models/TFClassesTracker';
 
-export class ProfileViewModel {
+export default class ProfileViewModel {
 	alias: string;
 	steamid: string;
 	avatarUrl: string;
