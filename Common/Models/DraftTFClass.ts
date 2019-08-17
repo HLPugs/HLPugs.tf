@@ -1,7 +1,7 @@
-namespace Models {
-  export type DraftTFClass =
+type DraftTFClass =
   'Scout' | 'Soldier' | 'Roamer' |
   'Pocket' | 'Pyro' | 'Demo' |
   'Heavy' | 'Engineer' | 'Medic' |
-  'Sniper' | 'Spy' | 'Flex' ;
-}
+  'Sniper' | 'Spy' | 'Flex';
+
+export default DraftTFClass;

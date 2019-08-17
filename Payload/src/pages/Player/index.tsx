@@ -1,5 +1,5 @@
 import React from 'react';
-import { SiteConfiguration, UserScheme } from '../../common/types';
+import { SiteConfiguration, UserViewModel } from '../../common/types';
 import Header from '../../components/Header';
 import User from '../../components/User';
 import Navigation from '../../components/Navigation';
@@ -15,7 +15,7 @@ interface MatchParams {
 interface ProfileProps extends RouteComponentProps<MatchParams> {
   socket: SocketIOClient.Socket;
   configuration: SiteConfiguration;
-  user: UserScheme;
+  user: UserViewModel;
 }
 
 interface ProfileState {
@@ -58,6 +58,7 @@ class Player extends React.Component<ProfileProps, ProfileState> {
           classes={this.props.configuration.classes}
           settingsOnClick={this.toggleSettings}
           userAlias={this.props.user.alias}
+          settings={this.props.user.settings}
         />
       </div>
     );

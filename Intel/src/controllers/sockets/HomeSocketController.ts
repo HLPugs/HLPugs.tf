@@ -2,8 +2,9 @@ import * as playerMap from '../../modules/playerMap';
 import { SocketController, OnConnect, ConnectedSocket, OnMessage, SocketIO, OnDisconnect } from 'socket-controllers';
 import config = require('config');
 import * as dotenv from 'dotenv';
-import Player from '../../entities/Player';
+import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
 import PlayerService from '../../services/PlayerService';
+import DraftTFClass from '../../../../common/Models/DraftTFClass';
 
 const env = dotenv.config().parsed;
 
@@ -21,21 +22,18 @@ export class HomeSocketController {
 		}
 
 		if (socket.request.session.user) {
-			const user = socket.request.session.user;
-			user.loggedIn = true;
-
+			const user: UserViewModel = socket.request.session.user;
 			socket.emit('user', user);
 		} else {
 			if (env.offline.toLowerCase() === 'true') {
 				const user: any = await playerService.getPlayerByAlias('Gabe');
-				user.loggedIn = true;
 				socket.emit('user', user);
 			} else {
 				socket.emit('user', { loggedIn: false });
 			}
 		}
 	}
-
+	
 	@OnMessage('home')
 	async playerLoadedHomepage(@ConnectedSocket() socket: any, @SocketIO() io: any) {
 		// Send socket all online users' information
@@ -71,7 +69,7 @@ export class HomeSocketController {
 				if (socket.request.session.sockets.length === 0) {
 					playerMap.removePlayerAllDraftTFClasses(socket.request.session.user.steamid);
 
-					const draftTFClasses: Models.DraftTFClass[] = config.get('app.configuration.classes');
+					const draftTFClasses: DraftTFClass[] = config.get('app.configuration.classes');
 					draftTFClasses.forEach((draftTFClass) => {
 						io.emit('removeFromDraftTFClass', draftTFClass, socket.request.session.user.steamid);
 					});

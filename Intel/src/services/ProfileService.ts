@@ -2,10 +2,10 @@ import Match from '../entities/Match';
 import { LinqRepository } from 'typeorm-linq-repository';
 import Player from '../entities/Player';
 import { ProfileViewModel } from '../../../common/ViewModels/ProfileViewModel';
-import ProfileMatchViewModel from '../../../Common/ViewModels/ProfileMatchViewModel';
-import ProfilePaginatedMatchesViewModel from '../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
 import { isSteamID } from '../utils/SteamIDChecker';
 import PlayerService from './PlayerService';
+import ProfilePaginatedMatchesViewModel from '../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
+import ProfileMatchViewModel from '../../../Common/ViewModels/ProfileMatchViewModel';
 
 const playerService = new PlayerService();
 

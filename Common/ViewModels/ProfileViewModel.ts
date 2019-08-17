@@ -1,12 +1,13 @@
 import Player from '../../Intel/src/entities/Player';
+import TFClassesTracker from '../Models/TFClassesTracker';
 
 export class ProfileViewModel {
 	alias: string;
 	steamid: string;
 	avatarUrl: string;
-	wins: Models.TFClassesTracker;
-	losses: Models.TFClassesTracker;
-	ties: Models.TFClassesTracker;
+	wins: TFClassesTracker;
+	losses: TFClassesTracker;
+	ties: TFClassesTracker;
 	subsIn: number;
 	subsOut: number;
 

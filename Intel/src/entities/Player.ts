@@ -71,7 +71,9 @@ export default class Player {
   @IsBoolean()
   isCrestricted: boolean;
 
-  @OneToOne(type => PlayerSettings)
+  @OneToOne(type => PlayerSettings, settings => settings.player, {
+    cascade: true
+  })
   settings: PlayerSettings;
 
   @ManyToMany(type => Match, match => match.players)

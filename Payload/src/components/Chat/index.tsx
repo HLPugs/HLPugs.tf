@@ -4,12 +4,12 @@ import ChatInput from './ChatInput';
 import { CustomEmoji } from 'emoji-mart';
 import './style.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { UserScheme } from '../../common/types';
+import { UserViewModel } from '../../common/types';
 import { PlayerDataConsumer } from '../../pages/Home';
 
 interface ChatProps {
   socket: SocketIOClient.Socket;
-  user: UserScheme;
+  user: UserViewModel;
 }
 
 interface ChatState {

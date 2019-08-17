@@ -1,5 +1,5 @@
 import React from 'react';
-import { SiteConfiguration, UserScheme } from '../../common/types';
+import { SiteConfiguration, UserViewModel } from '../../common/types';
 import io from 'socket.io-client';
 import Header from '../../components/Header';
 import User from '../../components/User';
@@ -13,7 +13,7 @@ import './style.scss';
 interface HomeProps {
   socket: SocketIOClient.Socket;
   configuration: SiteConfiguration;
-  user: UserScheme;
+  user: UserViewModel;
 }
 
 interface HomeState {
@@ -42,7 +42,7 @@ class Home extends React.Component<HomeProps, HomeState> {
       playerData: {}
     };
 
-    this.props.socket.on('playerData', (playerData: Array<UserScheme>) => {
+    this.props.socket.on('playerData', (playerData: Array<UserViewModel>) => {
       let newPlayerData = { ...this.state.playerData };
 
       for (const player of playerData) {
@@ -56,7 +56,7 @@ class Home extends React.Component<HomeProps, HomeState> {
       });
     });
 
-    this.props.socket.on('addPlayerToData', (player: UserScheme) => {
+    this.props.socket.on('addPlayerToData', (player: UserViewModel) => {
       let newPlayerData = { ...this.state.playerData };
 
       if (player.steamid) {
@@ -118,6 +118,7 @@ class Home extends React.Component<HomeProps, HomeState> {
             />
             <Chat socket={this.props.socket} user={this.props.user} />
             <Settings
+              settings={this.props.user.settings}
               socket={this.props.socket}
               visibility={this.state.settingsOpen}
               classes={this.props.configuration.classes}

@@ -1,10 +1,11 @@
 import React from 'react';
+import DraftTFClass from '../../../../common/Models/DraftTFClass';
 interface ClassIconProps {
-  name: Models.DraftTFClass;
+  name: DraftTFClass;
 }
 
 type IconSVGs = {
-  [key in Models.DraftTFClass]?: React.ReactNode;
+  [key in DraftTFClass]?: React.ReactNode;
 }
 
 // tslint:disable:max-line-length

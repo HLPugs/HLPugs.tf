@@ -9,6 +9,7 @@
     "sourceMap": true,
     "moduleResolution": "node",
     "noImplicitAny": true,
+    "strictPropertyInitialization": false,
     "baseUrl": ".",
     "paths": {
       "*": [

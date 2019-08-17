@@ -1,7 +1,7 @@
 import React from 'react';
 import io from 'socket.io-client';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
-import { SiteConfiguration, UserScheme } from '../common/types';
+import { SiteConfiguration, UserViewModel } from '../common/types';
 import Home from '../pages/Home';
 import Player from '../pages/Player';
 import Banned from '../pages/Banned';
@@ -45,7 +45,7 @@ library.add(
 
 interface AppState {
   configuration?: SiteConfiguration;
-  user?: UserScheme;
+  user?: UserViewModel;
   disconnected: boolean;
 }
 
@@ -75,7 +75,7 @@ class App extends React.Component<{}, AppState> {
       });
     });
 
-    this.socket.on('user', (user: UserScheme) => {
+    this.socket.on('user', (user: UserViewModel) => {
       this.setState({
         user: user
       });

@@ -1,4 +1,4 @@
-import { Controller, Get, NotFoundError } from 'routing-controllers';
+import { Controller, Get } from 'routing-controllers';
 
 @Controller()
 export class APIController {

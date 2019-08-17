@@ -1,5 +1,6 @@
+import DraftTFClass from '../../../common/Models/DraftTFClass';
 
 export interface DraftTFClassList {
-  name: Models.DraftTFClass;
+  name: DraftTFClass;
   numberPerTeam: number;
 }

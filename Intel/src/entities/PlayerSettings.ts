@@ -1,5 +1,6 @@
 import { Entity, Column, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import Player from './Player';
+import DraftTFClass from '../../../common/Models/DraftTFClass';
 
 @Entity()
 export default class PlayerSettings {
@@ -14,20 +15,23 @@ export default class PlayerSettings {
 	volume: number;
 
 	@Column('simple-array', { nullable: true})
-	favoriteClasses: Models.DraftTFClass[];
+	favoriteClasses: DraftTFClass[];
 
 	@Column({ default: false })
-	isAddToFavoritesAfterMatchEnabled: boolean;
+	addToFavoritesAfterMatch: boolean;
 
 	@Column({ default: false})
-	isAddToFavoritesOnLoginEnabled: boolean;
+	addToFavoritesOnLogin: boolean;
 
 	@Column({ default: true })
-	areAudioCuesEnabled: boolean;
+	audioCuesEnabled: boolean;
 
 	@Column({ default: 'default'})
 	voicepack: string; // enum ?
 
 	@Column({ default: 'default' })
 	colorOfNameInChat: string; // enum?
+
+	@OneToOne(type => Player, player => player.settings)
+	player: Player;
 }

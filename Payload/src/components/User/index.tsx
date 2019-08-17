@@ -2,11 +2,11 @@ import React from 'react';
 import UserInfo from './UserInfo';
 import UserDropDown from './UserDropDown';
 import SteamLogIn from './SteamLogIn';
-import { UserScheme } from '../../common/types';
+import { UserViewModel } from '../../common/types';
 import './style.scss';
 
 interface UserProps {
-  user: UserScheme;
+  user: UserViewModel;
   settingsOnClick: Function;
 }
 

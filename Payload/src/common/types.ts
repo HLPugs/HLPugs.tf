@@ -1,4 +1,5 @@
 import { IconName, IconPrefix } from '@fortawesome/fontawesome-svg-core';
+import DraftTFClass from '../../../common/Models/DraftTFClass';
 
 export interface SiteConfiguration {
   branding: SiteBranding;
@@ -28,15 +29,27 @@ export interface NavItem {
 }
 
 export interface DraftTFClassList {
-  name: Models.DraftTFClass;
+  name: DraftTFClass;
   numberPerTeam: number;
 }
 
-export interface UserScheme {
+interface SettingsViewModel {
+	id: number;
+	isNotifiableByMention: boolean;
+	volume: number;
+	favoriteClasses: DraftTFClass[];
+	addToFavoritesAfterMatch: boolean;
+	addToFavoritesOnLogin: boolean;
+	audioCuesEnabled: boolean;
+	voicepack: string;
+	colorOfNameInChat: string;
+}
+export interface UserViewModel {
   loggedIn?: boolean;
   alias?: string;
   steamid?: string;
   avatarUrl?: string;
+  settings?: any;
 }
 
 export interface ChatMessageType {
