@@ -7,6 +7,7 @@ import Settings from '../../components/Settings';
 import Profile from '../../components/Profile';
 import './style.scss';
 import { RouteComponentProps } from 'react-router';
+import HttpClient from '../../common/HttpClient';
 
 interface MatchParams {
   steamid: string;
@@ -14,6 +15,7 @@ interface MatchParams {
 
 interface ProfileProps extends RouteComponentProps<MatchParams> {
   socket: SocketIOClient.Socket;
+  http: HttpClient;
   configuration: SiteConfiguration;
   user: UserViewModel;
 }

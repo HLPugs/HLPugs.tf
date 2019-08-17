@@ -6,6 +6,7 @@ import Home from '../pages/Home';
 import Player from '../pages/Player';
 import Banned from '../pages/Banned';
 import Loading from '../components/Loading';
+import HttpClient from '../common/HttpClient';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSteamSymbol, faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
@@ -50,13 +51,15 @@ interface AppState {
 }
 
 class App extends React.Component<{}, AppState> {
-  
+
+  private http: HttpClient;
   private socket: SocketIOClient.Socket;
   private dummyConfiguration: SiteConfiguration;
-  
+
   constructor(props: Object) {
     super(props);
-    
+
+    this.http = new HttpClient();
     this.socket = io(`${window.location.protocol}//${window.location.hostname}:3001`);
 
     this.dummyConfiguration = {
@@ -70,15 +73,11 @@ class App extends React.Component<{}, AppState> {
     };
 
     this.socket.on('siteConfiguration', (configuration: SiteConfiguration) => {
-      this.setState({
-        configuration: configuration
-      });
+      this.setState({ configuration });
     });
 
     this.socket.on('user', (user: UserViewModel) => {
-      this.setState({
-        user: user
-      });
+      this.setState({ user });
     });
 
     this.socket.on('disconnect', () => {
@@ -92,7 +91,7 @@ class App extends React.Component<{}, AppState> {
         disconnected: false
       });
     });
-    
+
     this.state = {
       disconnected: false
     };
@@ -118,7 +117,7 @@ class App extends React.Component<{}, AppState> {
 
     return null;
   }
-  
+
   render() {
     if (this.state.configuration && this.state.user) {
       return (
@@ -126,21 +125,23 @@ class App extends React.Component<{}, AppState> {
           {this.reconnectMessage()}
           <Router>
             <Switch>
-              <Route 
-                exact={true} 
-                path="/" 
-                render={() => 
-                  <Home 
-                    socket={this.socket} 
-                    configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration} 
-                    user={this.state.user ? this.state.user : {}} 
+              <Route
+                exact={true}
+                path="/"
+                render={() =>
+                  <Home
+                    http={this.http}
+                    socket={this.socket}
+                    configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
+                    user={this.state.user ? this.state.user : {}}
                   />
-                } 
+                }
               />
               <Route
                 path="/player/:steamid"
                 render={routeProps =>
-                  <Player 
+                  <Player
+                    http={this.http}
                     socket={this.socket}
                     configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
                     user={this.state.user ? this.state.user : {}}
@@ -153,6 +154,7 @@ class App extends React.Component<{}, AppState> {
                 path="/banned"
                 render={() =>
                   <Banned
+                    http={this.http}
                     socket={this.socket}
                     configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
                   />
@@ -166,7 +168,7 @@ class App extends React.Component<{}, AppState> {
     }
 
     return (
-      <Loading 
+      <Loading
         loadingMessages={[
           {
             message: 'Connecting to Server',

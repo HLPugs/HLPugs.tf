@@ -20,14 +20,14 @@ class Settings extends React.PureComponent<SettingsProps, {}> {
     super(props);
   }
 
-  savePress = () => {
-
+  componentDidMount() {
     this.props.socket.on('playerSettings', (settings: SettingsViewModel) => {
       this.setState({ settings })
     });
+  }
 
+  savePress = () => {
     this.props.socket.emit('saveSettings', { alias: this.props.userAlias, settings: this.props.settings });
-
     this.props.settingsOnClick();
   }
 
