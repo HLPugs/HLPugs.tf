@@ -13,7 +13,7 @@ export default class Match {
 
 	@Column()
 	@IsEnum('')
-	matchType: any;
+	matchType: string;
 
 	@Column()
 	@IsString()
@@ -22,7 +22,7 @@ export default class Match {
 
 	@Column()
 	@IsEnum('')
-	winningTeam: any;
+	winningTeam: string;
 
 	@CreateDateColumn()
 	@IsDate()

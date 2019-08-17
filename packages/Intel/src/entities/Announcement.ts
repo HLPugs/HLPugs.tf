@@ -14,7 +14,7 @@ export default class Announcement {
 
 	@Column()
 	@IsEnum('')
-	region: any;
+	region: string;
 
 	@Column()
 	@IsNumberString()

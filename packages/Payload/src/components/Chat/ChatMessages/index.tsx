@@ -3,7 +3,7 @@ import { ChatMessageType } from '../../../common/types';
 import ChatMessage from './ChatMessage';
 import { CustomEmoji } from 'emoji-mart';
 import './style.scss';
-import { FontAwesomeIcon } from '../../../../node_modules/@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface ChatMessagesProps {
   socket: SocketIOClient.Socket;

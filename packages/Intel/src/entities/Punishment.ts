@@ -10,7 +10,7 @@ export default class Punishment {
 
 	@Column()
 	@IsEnum('')
-	punishmentType: any;
+	punishmentType: string;
 
 	@Column()
 	@IsNumberString()

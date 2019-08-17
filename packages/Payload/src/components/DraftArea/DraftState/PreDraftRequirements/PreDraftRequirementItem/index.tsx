@@ -1,6 +1,6 @@
 import React from 'react';
 import { PreDraftRequirementType } from '../../../../../common/types';
-import { FontAwesomeIcon } from '../../../../../../node_modules/@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './style.scss';
 
 interface PreDraftRequirementItemProps {

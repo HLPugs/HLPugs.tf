@@ -1,5 +1,4 @@
 import * as config                        from 'config';
-import logger                             from './logger';
 import * as crypto                        from 'crypto';
 import * as uuid                          from 'uuid';
 import { DraftTFClassList } from '../structures/DraftClassList';
@@ -30,9 +29,6 @@ draftTFClasses.forEach(draftTFClass => draftTFClassLists.set(draftTFClass.name, 
  */
 export const getPlayer = (steamid: string): Promise<Player> => {
   return new Promise((resolve) => {
-	if (!players.has(steamid)) {
-		logger.warn(`Player (${steamid}) was requested from the player map but was not found`);
-	}
 	const sessionid = players.get(steamid);
 	store.get(sessionid, (err, session) => {
 		if (err) throw err;
@@ -118,9 +114,8 @@ export const getAllPlayers = () => {
 export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: any) => {
   // Ensure Player isn't already added up to the class
   if (draftTFClassLists.get(draftTFClass).indexOf(steamid) === -1) {
-	draftTFClassLists.get(draftTFClass).push(steamid);
-	const player: Player = await getPlayer(steamid);
-	logger.info(`${player.alias} added to ${draftTFClass}!`);
+		draftTFClassLists.get(draftTFClass).push(steamid);
+		const player: Player = await getPlayer(steamid);
   }
 };
 
@@ -131,16 +126,15 @@ export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: any) 
  */
 export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: any) => {
   const indexOfPlayer = draftTFClassLists
-	.get(draftTFClass)
-	.indexOf(steamid);
+		.get(draftTFClass)
+		.indexOf(steamid);
 
-  if (indexOfPlayer >= 0) {
-	draftTFClassLists
-	.get(draftTFClass)
-	.splice(indexOfPlayer, 1);
+	if (indexOfPlayer >= 0) {
+		draftTFClassLists
+			.get(draftTFClass)
+			.splice(indexOfPlayer, 1);
 
-	const player: Player = await getPlayer(steamid);
-	logger.info(`${player.alias} removed from ${draftTFClass}`);
+		const player: Player = await getPlayer(steamid);
   }
 };
 

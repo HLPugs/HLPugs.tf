@@ -14,10 +14,10 @@ export default class MatchToPlayer {
 	postId!: number;
 
 	@Column()
-	tf2class: any;
+	tf2class: string;
 
 	@Column()
-	team: any;
+	team: string;
 
 	@ManyToOne(type => Match, match => match.matchToPlayerCategories)
 	match!: Match;

@@ -32,7 +32,7 @@ export default class Player {
   @Column({ nullable: true })
   @IsOptional()
   @IsEnum('')
-  permissionGroup: any;
+  permissionGroup: string;
 
   @Column('simple-array', { nullable: true})
   @IsOptional()

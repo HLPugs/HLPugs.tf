@@ -1,1 +1,3 @@
-Intel/.env
+node_modules
+
+localdb
