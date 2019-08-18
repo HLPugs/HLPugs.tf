@@ -7,6 +7,7 @@
   "scripts": {
     "bootstrap": "lerna bootstrap --hoist",
     "start": "lerna run start --stream",
+    "dev": "lerna run dev --stream",
     "tsc": "lerna run tsc --stream",
     "watch": "lerna run watch --stream"
   }
