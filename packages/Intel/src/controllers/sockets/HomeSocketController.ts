@@ -2,9 +2,9 @@ import * as playerMap from '../../modules/playerMap';
 import { SocketController, OnConnect, ConnectedSocket, OnMessage, SocketIO, OnDisconnect } from 'socket-controllers';
 import config = require('config');
 import * as dotenv from 'dotenv';
-//import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
+import UserViewModel from '@hlpugs/common/lib/ViewModels/UserViewModel';
 import PlayerService from '../../services/PlayerService';
-//import DraftTFClass from '../../../../common/Models/DraftTFClass';
+import DraftTFClass from '@hlpugs/common/lib/Models/DraftTFClass';
 
 const env = dotenv.config().parsed;
 
@@ -22,7 +22,7 @@ export class HomeSocketController {
 		}
 
 		if (socket.request.session.user) {
-			const user: any = socket.request.session.user;
+			const user: UserViewModel = socket.request.session.user;
 			socket.emit('user', user);
 		} else {
 			if (env.offline.toLowerCase() === 'true') {
@@ -69,7 +69,7 @@ export class HomeSocketController {
 				if (socket.request.session.sockets.length === 0) {
 					playerMap.removePlayerAllDraftTFClasses(socket.request.session.user.steamid);
 
-					const draftTFClasses: any[] = config.get('app.configuration.classes');
+					const draftTFClasses: DraftTFClass[] = config.get('app.configuration.classes');
 					draftTFClasses.forEach((draftTFClass) => {
 						io.emit('removeFromDraftTFClass', draftTFClass, socket.request.session.user.steamid);
 					});

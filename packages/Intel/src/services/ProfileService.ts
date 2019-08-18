@@ -1,11 +1,11 @@
 import Match from '../entities/Match';
 import { LinqRepository } from 'typeorm-linq-repository';
 import Player from '../entities/Player';
-//import { ProfileViewModel } from '../../../common/ViewModels/ProfileViewModel';
+import ProfileViewModel from '@hlpugs/common/lib/ViewModels/ProfileViewModel';
 import { isSteamID } from '../utils/SteamIDChecker';
 import PlayerService from './PlayerService';
-//import ProfilePaginatedMatchesViewModel from '../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
-//import ProfileMatchViewModel from '../../../Common/ViewModels/ProfileMatchViewModel';
+import ProfilePaginatedMatchesViewModel from '@hlpugs/common/lib/ViewModels/ProfilePaginatedMatchesViewModel';
+import ProfileMatchViewModel from '@hlpugs/common/lib/ViewModels/ProfileMatchViewModel';
 
 const playerService = new PlayerService();
 
@@ -14,7 +14,7 @@ const matchRepo = new LinqRepository(Match);
 
 export class ProfileService {
 
-	async getPaginatedMatches(identifier: string, pageSize: number, currentPage: number): Promise<any> {
+	async getPaginatedMatches(identifier: string, pageSize: number, currentPage: number): Promise<ProfilePaginatedMatchesViewModel> {
 		let profileQuery;
 		if (isSteamID(identifier)) {
 			profileQuery = matchRepo
@@ -36,30 +36,30 @@ export class ProfileService {
 			.skip(currentPage * pageSize)
 			.take(Math.min(pageSize, 50));
 
-		paginatedMatches.map(match => '');
+		paginatedMatches.map(match => ProfileMatchViewModel.fromMatch(match));
 
-		const profilePaginatedMatchesViewModel = {matches: [new Match()], totalMatches: 2, totalMatchCount: 1};
+		const profilePaginatedMatchesViewModel = new ProfilePaginatedMatchesViewModel();
 		profilePaginatedMatchesViewModel.matches = paginatedMatches;
 		profilePaginatedMatchesViewModel.totalMatches = totalMatchCount;
 
 		return profilePaginatedMatchesViewModel;
 	}
 
-	async getProfileBySteamid(steamid: string): Promise<any> {
+	async getProfileBySteamid(steamid: string): Promise<ProfileViewModel> {
 		const player: Player = await playerRepo
 			.getOne()
 			.where(p => p.steamid)
 			.equal(steamid);
 
-		return '';
+		return ProfileViewModel.fromPlayer(player);
 	}
 
-	async getProfileByAlias(alias: string): Promise<any> {
+	async getProfileByAlias(alias: string): Promise<ProfileViewModel> {
 		const player = await playerRepo
 			.getOne()
 			.where(player => player.alias)
 			.equal(alias);
 
-		return '';
+		return ProfileViewModel.fromPlayer(player);
 	}
 }

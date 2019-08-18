@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { IsEnum, IsString,IsNumberString, IsBoolean, IsDate, IsNotEmpty } from 'class-validator';
-//import Region from '../../../Common/Enums/Region';
+import Region from '@hlpugs/common/lib/Enums/Region';
+
 @Entity('announcements')
 export default class Announcement {
 	
@@ -13,8 +14,8 @@ export default class Announcement {
 	message: string;
 
 	@Column()
-	@IsEnum('')
-	region: string;
+	@IsEnum(Region)
+	region: Region;
 
 	@Column()
 	@IsNumberString()

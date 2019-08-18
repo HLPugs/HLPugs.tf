@@ -1,8 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinColumn, JoinTable } from 'typeorm';
 import { IsNumberString, IsEnum, IsString, IsNotEmpty, IsDate } from 'class-validator';
 import Player from './Player';
-//import MatchType from '../../../Common/Enums/MatchType';
-//import Team from '../../../Common/Enums/Team';
+import MatchType from '@hlpugs/common/lib/Enums/MatchType';
+import Team from '@hlpugs/common/lib/Enums/Team';
 import MatchToPlayer from './MatchToPlayer';
 
 @Entity('matches')
@@ -12,8 +12,8 @@ export default class Match {
 	id: number;
 
 	@Column()
-	@IsEnum('')
-	matchType: string;
+	@IsEnum(MatchType)
+	matchType: MatchType;
 
 	@Column()
 	@IsString()
@@ -21,8 +21,8 @@ export default class Match {
 	map: String;
 
 	@Column()
-	@IsEnum('')
-	winningTeam: string;
+	@IsEnum(Team)
+	winningTeam: Team;
 
 	@CreateDateColumn()
 	@IsDate()

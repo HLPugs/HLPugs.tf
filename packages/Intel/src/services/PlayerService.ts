@@ -2,7 +2,7 @@
 import Player from '../entities/Player';
 import Punishment from '../entities/Punishment';
 import { LinqRepository } from 'typeorm-linq-repository';
-//import PunishmentType from '../../../Common/Enums/PunishmentType';
+import PunishmentType from '@hlpugs/common/lib/Enums/PunishmentType';
 import PlayerSettings from '../entities/PlayerSettings';
 import { isSteamID } from '../utils/SteamIDChecker';
 
@@ -91,6 +91,6 @@ export default class PlayerService {
 
 	async isCurrentlySiteBanned(steamid: string): Promise<boolean> {
 		const punishments = await this.getActivePunishments(steamid)
-		return punishments.some(p => p.punishmentType === '');
+		return punishments.some(p => p.punishmentType === PunishmentType.BAN);
 	}
 }

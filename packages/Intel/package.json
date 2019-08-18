@@ -2,6 +2,7 @@
   "name": "@hlpugs/intel",
   "version": "0.1.1",
   "private": true,
+  "main": "dist/index.js",
   "scripts": {
     "start": "npm run serve",
     "build": "rimraf dist && npm run build-ts",

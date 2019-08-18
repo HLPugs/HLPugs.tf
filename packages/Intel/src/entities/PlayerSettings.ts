@@ -1,6 +1,6 @@
 import { Entity, Column, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import Player from './Player';
-//import DraftTFClass from '../../../common/Models/DraftTFClass';
+import DraftTFClass from '@hlpugs/common/lib/Models/DraftTFClass';
 
 @Entity()
 export default class PlayerSettings {
@@ -15,7 +15,7 @@ export default class PlayerSettings {
 	volume: number;
 
 	@Column('simple-array', { nullable: true})
-	favoriteClasses: any[];
+	favoriteClasses: DraftTFClass[];
 
 	@Column({ default: false })
 	addToFavoritesAfterMatch: boolean;

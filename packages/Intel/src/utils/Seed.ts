@@ -2,8 +2,8 @@ import Player from '../entities/Player';
 import { LinqRepository } from 'typeorm-linq-repository';
 import Match from '../entities/Match';
 import PlayerService from '../services/PlayerService';
-//import MatchType from '../../../Common/Enums/MatchType';
-//import Team from '../../../Common/Enums/Team';
+import MatchType from '@hlpugs/common/lib/Enums/MatchType';
+import Team from '@hlpugs/common/lib/Enums/Team';
 
 const SeedPlayers = async () => {
 	const playerRepo = new LinqRepository(Player);
@@ -28,8 +28,8 @@ const SeedMatches = async () => {
 		const match = new Match();
 		match.map = 'koth_ashville_rc1';
 		match.players = [player];
-		match.matchType = '';
-		match.winningTeam = '';
+		match.matchType = MatchType.PUG;
+		match.winningTeam = Team.BLU;
 	
 		await matchRepo
 			.create(match);

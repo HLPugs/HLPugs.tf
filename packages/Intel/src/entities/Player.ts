@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany, PrimaryColumn
 import { Length, IsInt, IsBoolean, IsFQDN, IsOptional, IsString, IsIP, IsNumberString, Matches, Allow, IsEnum, ArrayUnique } from 'class-validator';
 import Match from './Match';
 import MatchToPlayer from './MatchToPlayer';
-//import PermissionGroupName from '../../../Common/Enums/PermissionGroup';
+import PermissionGroupName from '@hlpugs/common/lib/Enums/PermissionGroup';
 import Role from '@hlpugs/common/lib/Enums/Role';
 import PlayerSettings from './PlayerSettings';
 
@@ -31,8 +31,8 @@ export default class Player {
 
   @Column({ nullable: true })
   @IsOptional()
-  @IsEnum('')
-  permissionGroup: string;
+  @IsEnum(PermissionGroupName)
+  permissionGroup: PermissionGroupName;
 
   @Column('simple-array', { nullable: true})
   @IsOptional()

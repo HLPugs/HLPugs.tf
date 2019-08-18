@@ -1,6 +1,6 @@
-//import DraftTFClass from '../../../common/Models/DraftTFClass';
+import DraftTFClass from '@hlpugs/common/lib/Models/DraftTFClass';
 
 export interface DraftTFClassList {
-  name: any;
+  name: DraftTFClass;
   numberPerTeam: number;
 }

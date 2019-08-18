@@ -4,7 +4,7 @@ import * as uuid                          from 'uuid';
 import { DraftTFClassList } from '../structures/DraftClassList';
 import { store }                          from './store';
 import Player 														from '../entities/Player';
-//import DraftTFClass from '../../../common/Models/DraftTFClass';
+import DraftTFClass from '@hlpugs/common/lib/Models/DraftTFClass';
 
 /**
  * @module playerMap
@@ -15,7 +15,7 @@ import Player 														from '../entities/Player';
 // this collection maps a SteamID to a session ID
 const players = new Map<string, string>();
 
-const draftTFClassLists = new Map<any, string[]>();
+const draftTFClassLists = new Map<DraftTFClass, string[]>();
 
 const draftTFClasses: DraftTFClassList[] = config.get('app.configuration.classes');
 
@@ -111,7 +111,7 @@ export const getAllPlayers = () => {
  * @param {string} steamid - The SteamID of the Player to add
  * @param {string} draftTFClass - The class to be added on
  */
-export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: any) => {
+export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: DraftTFClass) => {
   // Ensure Player isn't already added up to the class
   if (draftTFClassLists.get(draftTFClass).indexOf(steamid) === -1) {
 		draftTFClassLists.get(draftTFClass).push(steamid);
@@ -124,7 +124,7 @@ export const addPlayerDraftTFClass = async (steamid: string, draftTFClass: any) 
  * @param {string} steamid - The SteamID of the Player to remove
  * @param {string} draftTFClass - The class to be removed from
  */
-export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: any) => {
+export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: DraftTFClass) => {
   const indexOfPlayer = draftTFClassLists
 		.get(draftTFClass)
 		.indexOf(steamid);
@@ -151,6 +151,6 @@ export const removePlayerAllDraftTFClasses = (steamid: string) => {
  * @param {DraftTFClass} draftTFClass
  * @returns {string[]} An array of the added players SteamIDs as strings
  */
-export const getAllPlayersDraftTFClass = (draftTFClass: any): string[] => {
+export const getAllPlayersDraftTFClass = (draftTFClass: DraftTFClass): string[] => {
   return draftTFClassLists.get(draftTFClass);
 };
