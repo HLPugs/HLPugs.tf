@@ -52,6 +52,7 @@ createConnection()
 			defaultErrorHandler: false,
 			routePrefix: '/api',
 			currentUserChecker: CurrentUserChecker,
+			cors: true,
 			middlewares: [__dirname + '/middlewares/*.js', __dirname + '/middlewares/api/*.js'],
 			controllers: [__dirname + '/controllers/api/*.js']
 		});
