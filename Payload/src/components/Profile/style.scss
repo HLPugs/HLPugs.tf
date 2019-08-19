@@ -94,3 +94,9 @@ main {
     }
   }
 }
+
+.recharts-tooltip-wrapper {
+  .recharts-default-tooltip {
+    background: var(--background-light);
+  }
+}
