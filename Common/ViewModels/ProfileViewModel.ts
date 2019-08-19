@@ -5,9 +5,9 @@ export class ProfileViewModel {
 	alias: string;
 	steamid: string;
 	avatarUrl: string;
-	wins: TFClassesTracker;
-	losses: TFClassesTracker;
-	ties: TFClassesTracker;
+	wins: TFClassesTracker = new TFClassesTracker();
+	losses: TFClassesTracker = new TFClassesTracker();
+	ties: TFClassesTracker = new TFClassesTracker();
 	subsIn: number;
 	subsOut: number;
 

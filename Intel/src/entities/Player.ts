@@ -1,10 +1,10 @@
 import { Entity, PrimaryGeneratedColumn, Column, Index, OneToMany, PrimaryColumn, ManyToMany, JoinTable, OneToOne } from 'typeorm';
 import { Length, IsInt, IsBoolean, IsFQDN, IsOptional, IsString, IsIP, IsNumberString, Matches, Allow, IsEnum, ArrayUnique } from 'class-validator';
 import Match from './Match';
-import MatchToPlayer from './MatchToPlayer';
 import PermissionGroupName from '../../../Common/Enums/PermissionGroup';
 import Role from '../../../Common/Enums/Role';
 import PlayerSettings from './PlayerSettings';
+import MatchPlayerData from './MatchPlayerData';
 
 @Entity({ name: 'players' })
 export default class Player {
@@ -72,13 +72,14 @@ export default class Player {
   isCrestricted: boolean;
 
   @OneToOne(type => PlayerSettings, settings => settings.player, {
-    cascade: true
+	cascade: true
   })
   settings: PlayerSettings;
 
   @ManyToMany(type => Match, match => match.players)
   matches: Match[];
 
-  @OneToMany(type => MatchToPlayer, matchToPlayer => matchToPlayer.player)
-  matchToPlayerCategories: MatchToPlayer[];
+  @OneToMany(type => MatchPlayerData, matchPlayerData => matchPlayerData.player, {
+  })
+  matchPlayerData: MatchPlayerData[];
 }
