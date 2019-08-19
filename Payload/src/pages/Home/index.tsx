@@ -9,10 +9,8 @@ import Chat from '../../components/Chat';
 import AliasModal from '../../components/AliasModal';
 import Settings from '../../components/Settings';
 import './style.scss';
-import HttpClient from '../../common/HttpClient';
 
 interface HomeProps {
-  http: HttpClient;
   socket: SocketIOClient.Socket;
   configuration: SiteConfiguration;
   user: UserViewModel;

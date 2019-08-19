@@ -6,7 +6,6 @@ import Home from '../pages/Home';
 import Player from '../pages/Player';
 import Banned from '../pages/Banned';
 import Loading from '../components/Loading';
-import HttpClient from '../common/HttpClient';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSteamSymbol, faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
@@ -52,14 +51,12 @@ interface AppState {
 
 class App extends React.Component<{}, AppState> {
 
-  private http: HttpClient;
   private socket: SocketIOClient.Socket;
   private dummyConfiguration: SiteConfiguration;
 
   constructor(props: Object) {
     super(props);
 
-    this.http = new HttpClient();
     this.socket = io(`${window.location.protocol}//${window.location.hostname}:3001`);
 
     this.dummyConfiguration = {
@@ -130,7 +127,6 @@ class App extends React.Component<{}, AppState> {
                 path="/"
                 render={() =>
                   <Home
-                    http={this.http}
                     socket={this.socket}
                     configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
                     user={this.state.user ? this.state.user : {}}
@@ -141,7 +137,6 @@ class App extends React.Component<{}, AppState> {
                 path="/player/:steamid"
                 render={routeProps =>
                   <Player
-                    http={this.http}
                     socket={this.socket}
                     configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
                     user={this.state.user ? this.state.user : {}}
@@ -154,7 +149,6 @@ class App extends React.Component<{}, AppState> {
                 path="/banned"
                 render={() =>
                   <Banned
-                    http={this.http}
                     socket={this.socket}
                     configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
                   />

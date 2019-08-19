@@ -4,10 +4,8 @@ import Navigation from '../../components/Navigation';
 import { SiteConfiguration } from '../../common/types';
 import moment from 'moment';
 import './style.scss';
-import HttpClient from '../../common/HttpClient';
 
 interface BannedProps {
-  http: HttpClient;
   socket: SocketIOClient.Socket;
   configuration: SiteConfiguration;
 }

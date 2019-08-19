@@ -1,5 +1,6 @@
 import React from 'react';
 import './style.scss';
+import LoadingDots from '../LoadingDots';
 
 interface LoadingMessage {
   message: string;
@@ -43,17 +44,7 @@ class Loading extends React.PureComponent<LoadingProps, LoadingState> {
   render() {
     return (
       <div id="loadingHolder">
-        <div id="loadingDots">
-          <div className="loadingDotHolder">
-            <div className="loadingDot" />
-          </div>
-          <div className="loadingDotHolder" style={{ '--delay': '.1s' } as React.CSSProperties}>
-            <div className="loadingDot" />
-          </div>
-          <div className="loadingDotHolder" style={{ '--delay': '.2s' } as React.CSSProperties}>
-            <div className="loadingDot" />
-          </div>
-        </div>
+        <LoadingDots/>
         <div id="loadingDescription">
           {this.state.loadingMessage}
         </div>
