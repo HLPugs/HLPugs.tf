@@ -1,3 +1,5 @@
+import DraftTFClass from './DraftTFClass';
+
 /**
  * Used to store data by class.
  * @typedef TFClassesTracker
@@ -12,18 +14,18 @@
  * @property {number} spy
  */
 class TFClassesTracker {
-  scout: number = 0;
-  soldier: number = 0;
-  pyro: number = 0;
-  demoman: number = 0;
-  engineer: number = 0;
-  heavy: number = 0;
-  medic: number = 0;
-  sniper: number = 0;
-  spy: number = 0;
-  flex: number = 0;
-  roamer: number = 0;
-  pocket: number = 0;
+  Scout: number = 0;
+  Soldier: number = 0;
+  Pyro: number = 0;
+  Demoman: number = 0;
+  Heavy: number = 0;
+  Engineer: number = 0;
+  Medic: number = 0;
+  Sniper: number = 0;
+  Spy: number = 0;
+  Flex: number = 0;
+  Pocket: number = 0;
+  Roamer: number = 0; 
   total: number = 0;
 }
 

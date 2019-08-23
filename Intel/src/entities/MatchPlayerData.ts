@@ -5,24 +5,17 @@ import Team from '../../../common/Enums/Team';
 import DraftTFClass from '../../../common/Models/DraftTFClass';
 
 @Entity()
-export default class MatchToPlayer {
-
-	@PrimaryGeneratedColumn()
-	matchToPlayerId!: number;
-
-	matchId!: number;
-	postId!: number;
-
+export default class MatchPlayerData {
+	
 	@Column()
 	tf2class: DraftTFClass;
 
 	@Column()
 	team: Team;
 
-	@ManyToOne(type => Match, match => match.matchToPlayerCategories)
+	@ManyToOne(type => Match, match => match.matchPlayerData, { primary: true })
 	match!: Match;
 
-	@ManyToOne(type => Player, player => player.matchToPlayerCategories)
+	@ManyToOne(type => Player, player => player.matchPlayerData, { primary: true })
 	player!: Player;
-	
 }

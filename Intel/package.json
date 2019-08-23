@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "npm run serve",
-    "build": "rm -rf dist && npm run build-ts",
+    "build": "rimraf dist && rimraf localdb && npm run build-ts",
     "dev": "npm run build && npm run watch-node && npm run watch-ts",
     "serve": "node dist/Intel/src/server.js",
     "watch-node": "nodemon dist/server.js",
@@ -28,6 +28,7 @@
     "npm": "^6.3.0",
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.0",
+    "rimraf": "^3.0.0",
     "routing-controllers": "^0.7.7",
     "socket-controllers": "0.0.5",
     "socket.io": "^2.2.0",

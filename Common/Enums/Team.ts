@@ -1,5 +1,6 @@
 enum Team {
-	BLU,
-	RED
+	BLU = 'BLU',
+	RED = 'RED',
+	NONE = 'NONE'
 }
 export default Team;

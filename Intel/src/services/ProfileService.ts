@@ -6,6 +6,7 @@ import { isSteamID } from '../utils/SteamIDChecker';
 import PlayerService from './PlayerService';
 import ProfilePaginatedMatchesViewModel from '../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
 import ProfileMatchViewModel from '../../../Common/ViewModels/ProfileMatchViewModel';
+import Team from '../../../Common/Enums/Team';
 
 const playerService = new PlayerService();
 
@@ -21,13 +22,13 @@ export class ProfileService {
 				.getAll()
 				.join(m => m.players)
 				.where(player => player.steamid)
-				.in([identifier]);
+				.in([identifier])
 		} else {
 			profileQuery = matchRepo
 				.getAll()
 				.join(m => m.players)
 				.where(player => player.alias)
-				.equal(identifier);
+				.equal(identifier)
 		}
 
 		const totalMatchCount = await profileQuery.count();
@@ -49,7 +50,9 @@ export class ProfileService {
 		const player: Player = await playerRepo
 			.getOne()
 			.where(p => p.steamid)
-			.equal(steamid);
+			.equal(steamid)
+			.include(p => p.matchPlayerData);
+
 
 		return ProfileViewModel.fromPlayer(player);
 	}
@@ -58,8 +61,30 @@ export class ProfileService {
 		const player = await playerRepo
 			.getOne()
 			.where(player => player.alias)
-			.equal(alias);
+			.equal(alias)
+			.include(p => p.matchPlayerData)
+			.thenInclude(mpr => mpr.match);
 
-		return ProfileViewModel.fromPlayer(player);
+		const profileViewModel = ProfileViewModel.fromPlayer(player);
+
+		for (const matchPlayerData of player.matchPlayerData) {
+			const relativeMatch = await matchRepo
+				.getOne()
+				.where(m => m.id)
+				.equal(matchPlayerData.match.id);
+
+			if (relativeMatch.winningTeam === matchPlayerData.match.winningTeam) {
+				profileViewModel.wins[matchPlayerData.tf2class]++;
+				profileViewModel.wins.total++;
+			} else if (relativeMatch.winningTeam === Team.NONE) {
+				profileViewModel.ties[matchPlayerData.tf2class]++;
+				profileViewModel.ties.total++;
+			} else {
+				profileViewModel.losses[matchPlayerData.tf2class]++;
+				profileViewModel.losses.total++;
+			}
+		}
+
+		return profileViewModel;
 	}
 }

@@ -1,9 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinColumn, JoinTable } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinColumn, JoinTable, OneToMany } from 'typeorm';
 import { IsNumberString, IsEnum, IsString, IsNotEmpty, IsDate } from 'class-validator';
 import Player from './Player';
 import MatchType from '../../../Common/Enums/MatchType';
 import Team from '../../../Common/Enums/Team';
-import MatchToPlayer from './MatchToPlayer';
+import MatchPlayerData from './MatchPlayerData';
+import Region from '../../../Common/Enums/Region';
 
 @Entity('matches')
 export default class Match {
@@ -42,9 +43,12 @@ export default class Match {
 		inverseJoinColumn: {
 			name: 'playerSteamid',
 			referencedColumnName: 'steamid'
-		}
+		},
 	})
 	players: Player[];
 
-	matchToPlayerCategories: MatchToPlayer[];
+	@OneToMany(type => MatchPlayerData, matchPlayerData => matchPlayerData.match, {
+		cascade: true
+	})
+	matchPlayerData: MatchPlayerData[];
 }
