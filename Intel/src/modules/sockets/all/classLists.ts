@@ -1,6 +1,6 @@
 import { Server }       from 'socket.io';
 import * as playerMap   from '../../playerMap';
-import DraftTFClass from '../../../../../common/Models/DraftTFClass';
+import DraftTFClass from '../../../../../Common/Enums/DraftTFClass';
 
 export const classLists = (io: Server) => {
 	io.on('connection', (socket) => {

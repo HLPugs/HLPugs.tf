@@ -6,7 +6,9 @@ import MatchType from '../../../Common/Enums/MatchType';
 import Team from '../../../Common/Enums/Team';
 import MatchPlayerData from '../entities/MatchPlayerData';
 import { consoleLogStatus } from './ConsoleColors';
-import DraftTFClass from '../../../common/Models/DraftTFClass';
+import DraftTFClass from '../../../Common/Enums/DraftTFClass';
+import Region from '../../../Common/Enums/Region';
+import Gamemode from '../../../Common/Enums/Gamemode';
 
 const SeedPlayers = async () => {
 	const playerRepo = new LinqRepository(Player);
@@ -25,7 +27,7 @@ const SeedMatches = async () => {
 	const playerService = new PlayerService();
 	const matchRepo = new LinqRepository(Match);
 
-	const player = await playerService.getPlayerByAlias('Gabe');
+	const player = await playerService.getPlayer('76561198119135809');
 	const player2 = await playerService
 	const matchPlayerData = new MatchPlayerData();
 	matchPlayerData.tf2class = DraftTFClass.SOLDIER
@@ -39,6 +41,8 @@ const SeedMatches = async () => {
 		match.players = [player];
 		match.matchType = MatchType.PUG;
 		match.winningTeam = Team.BLU;
+		match.region = Region.NorthAmerica;
+		match.gamemode = Gamemode.Highlander;
 
 		await matchRepo
 			.create(match);

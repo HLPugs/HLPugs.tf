@@ -12,12 +12,12 @@ export class AliasSocketController {
 		const alias: string = body.alias;
 		const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
 
-		if (!aliasRules.test(alias) || await this.isAliasTaken(alias)) return;
-		
+		if (!aliasRules.test(alias) || await playerService.playerExists(alias)) return;
+
 		const steamid = socket.request.session.user.steamid;
 		await playerService.updateAlias(steamid, alias);
-		
-		const aliasUpdated = await this.isAliasTaken(alias);
+
+		const aliasUpdated = await playerService.playerExists(alias);
 		if (aliasUpdated) {
 			socket.request.session.user.alias = alias;
 			socket.request.session.save();
@@ -28,15 +28,9 @@ export class AliasSocketController {
 		}
 	}
 
-
 	@OnMessage('checkAlias')
 	async checkAlias(@ConnectedSocket() socket: any, @MessageBody() body: any) {
-		const player = await playerService.getPlayerByAlias(body.alias);
+		const player = await playerService.playerExists(body.alias);
 		socket.emit('aliasStatus', player);
-	}
-
-	private async isAliasTaken(alias: string): Promise<boolean> {
-		const player = await playerService.getPlayerByAlias(alias);
-		return player instanceof Player;
 	}
 }

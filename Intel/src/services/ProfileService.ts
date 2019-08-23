@@ -15,21 +15,12 @@ const matchRepo = new LinqRepository(Match);
 
 export class ProfileService {
 
-	async getPaginatedMatches(identifier: string, pageSize: number, currentPage: number): Promise<ProfilePaginatedMatchesViewModel> {
-		let profileQuery;
-		if (isSteamID(identifier)) {
-			profileQuery = matchRepo
+	async getPaginatedMatches(steamid: string, pageSize: number, currentPage: number): Promise<ProfilePaginatedMatchesViewModel> {
+			const profileQuery = matchRepo
 				.getAll()
 				.join(m => m.players)
 				.where(player => player.steamid)
-				.in([identifier])
-		} else {
-			profileQuery = matchRepo
-				.getAll()
-				.join(m => m.players)
-				.where(player => player.alias)
-				.equal(identifier)
-		}
+				.in([steamid])
 
 		const totalMatchCount = await profileQuery.count();
 
@@ -46,45 +37,11 @@ export class ProfileService {
 		return profilePaginatedMatchesViewModel;
 	}
 
-	async getProfileBySteamid(steamid: string): Promise<ProfileViewModel> {
-		const player: Player = await playerRepo
-			.getOne()
-			.where(p => p.steamid)
-			.equal(steamid)
-			.include(p => p.matchPlayerData);
-
-
-		return ProfileViewModel.fromPlayer(player);
-	}
-
-	async getProfileByAlias(alias: string): Promise<ProfileViewModel> {
-		const player = await playerRepo
-			.getOne()
-			.where(player => player.alias)
-			.equal(alias)
-			.include(p => p.matchPlayerData)
-			.thenInclude(mpr => mpr.match);
-
+	async getProfile(steamid: string): Promise<ProfileViewModel> {
+		const player = await playerService.getPlayer(steamid);
 		const profileViewModel = ProfileViewModel.fromPlayer(player);
 
-		for (const matchPlayerData of player.matchPlayerData) {
-			const relativeMatch = await matchRepo
-				.getOne()
-				.where(m => m.id)
-				.equal(matchPlayerData.match.id);
-
-			if (relativeMatch.winningTeam === matchPlayerData.match.winningTeam) {
-				profileViewModel.wins[matchPlayerData.tf2class]++;
-				profileViewModel.wins.total++;
-			} else if (relativeMatch.winningTeam === Team.NONE) {
-				profileViewModel.ties[matchPlayerData.tf2class]++;
-				profileViewModel.ties.total++;
-			} else {
-				profileViewModel.losses[matchPlayerData.tf2class]++;
-				profileViewModel.losses.total++;
-			}
-		}
-
+		
 		return profileViewModel;
 	}
 }

@@ -5,6 +5,7 @@ import MatchType from '../../../Common/Enums/MatchType';
 import Team from '../../../Common/Enums/Team';
 import MatchPlayerData from './MatchPlayerData';
 import Region from '../../../Common/Enums/Region';
+import Gamemode from '../../../Common/Enums/Gamemode';
 
 @Entity('matches')
 export default class Match {
@@ -17,9 +18,17 @@ export default class Match {
 	matchType: MatchType;
 
 	@Column()
+	@IsEnum(Gamemode)
+	gamemode: Gamemode;
+
+	@Column()
 	@IsString()
 	@IsNotEmpty()
 	map: String;
+
+	@Column()
+	@IsEnum(Region)
+	region: Region;
 
 	@Column()
 	@IsEnum(Team)

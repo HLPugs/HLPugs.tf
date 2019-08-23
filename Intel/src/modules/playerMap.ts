@@ -5,7 +5,9 @@ import * as uuid                          from 'uuid';
 import { DraftTFClassList } from '../structures/DraftClassList';
 import { store }                          from './store';
 import Player 														from '../entities/Player';
-import DraftTFClass from '../../../common/Models/DraftTFClass';
+import DraftTFClass from '../../../Common/Enums/DraftTFClass';
+import GamemodeSchemes from '../../../common/Constants/GamemodeSchemes';
+import Gamemode from '../../../Common/Enums/Gamemode';
 
 /**
  * @module playerMap
@@ -18,10 +20,11 @@ const players = new Map<string, string>();
 
 const draftTFClassLists = new Map<DraftTFClass, string[]>();
 
-const draftTFClasses: DraftTFClassList[] = config.get('app.configuration.classes');
-
+const currentGamemode = process.env.gamemode as Gamemode;
+const gamemodeClassSchemes = GamemodeSchemes.get(currentGamemode);
 // Empty out every class in the draft class list
-draftTFClasses.forEach(draftTFClass => draftTFClassLists.set(draftTFClass.name, []));
+
+gamemodeClassSchemes.forEach(scheme => draftTFClassLists.set(scheme.tf2class, []));
 
 /**
  * Retrieves a session ID from the map using a SteamID.
@@ -149,7 +152,7 @@ export const removePlayerDraftTFClass = async (steamid: string, draftTFClass: Dr
  * @param {string} steamid - The SteamID of the Player to be removed from all classes
  */
 export const removePlayerAllDraftTFClasses = (steamid: string) => {
-  draftTFClasses.forEach(draftTFClassList => removePlayerDraftTFClass(steamid, draftTFClassList.name));
+  gamemodeClassSchemes.forEach(scheme => removePlayerDraftTFClass(steamid, scheme.tf2class));
 };
 
 /**

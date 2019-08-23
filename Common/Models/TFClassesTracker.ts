@@ -1,4 +1,4 @@
-import DraftTFClass from './DraftTFClass';
+import DraftTFClass from '../Enums/DraftTFClass';
 
 /**
  * Used to store data by class.
