@@ -9,11 +9,10 @@ import MatchPlayerData from './MatchPlayerData';
 @Entity({ name: 'players' })
 export default class Player {
 
-  @PrimaryGeneratedColumn()
   @Allow()
   id: number;
 
-  @Column()
+  @PrimaryColumn()
   @Index({ unique: true })
   @IsNumberString()
   steamid: string;
@@ -53,6 +52,10 @@ export default class Player {
 
   @Column({ default: 0 })
   @IsInt()
+  totalTieCount: number;
+
+  @Column({ default: 0 })
+  @IsInt()
   totalLossCount: number;
 
   @Column({ default: false })
@@ -79,7 +82,6 @@ export default class Player {
   @ManyToMany(type => Match, match => match.players)
   matches: Match[];
 
-  @OneToMany(type => MatchPlayerData, matchPlayerData => matchPlayerData.player, {
-  })
+  @OneToMany(type => MatchPlayerData, matchPlayerData => matchPlayerData.player)
   matchPlayerData: MatchPlayerData[];
 }
