@@ -2,7 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import Match from './Match';
 import Player from './Player';
 import Team from '../../../Common/Enums/Team';
-import DraftTFClass from '../../../Common/Models/DraftTFClass';
+import DraftTFClass from '../../../Common/Enums/DraftTFClass';
 
 @Entity()
 export default class MatchPlayerData {

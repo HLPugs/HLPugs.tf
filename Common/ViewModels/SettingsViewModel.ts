@@ -1,4 +1,4 @@
-import DraftTFClass from '../Models/DraftTFClass';
+import DraftTFClass from '../Enums/DraftTFClass';
 
 export class SettingsViewModel {
 	id: number;

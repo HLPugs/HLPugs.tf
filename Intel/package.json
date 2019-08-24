@@ -4,9 +4,10 @@
   "private": true,
   "scripts": {
     "start": "npm run serve",
-    "build": "rimraf dist && rimraf localdb && npm run build-ts",
+    "build": "npm run flush-sqlite && rimraf dist && npm run build-ts",
     "dev": "npm run build && npm run watch-node && npm run watch-ts",
-    "serve": "node dist/Intel/src/server.js",
+    "serve": "npm run flush-sqlite && node dist/Intel/src/server.js",
+    "flush-sqlite": "rimraf localdb",
     "watch-node": "nodemon dist/server.js",
     "build-ts": "tsc -p tsconfig.json",
     "watch-ts": "tsc -w",

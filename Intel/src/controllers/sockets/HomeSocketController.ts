@@ -4,12 +4,17 @@ import config = require('config');
 import * as dotenv from 'dotenv';
 import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
 import PlayerService from '../../services/PlayerService';
-import DraftTFClass from '../../../../Common/Models/DraftTFClass';
+import DraftTFClass from '../../../../Common/Enums/DraftTFClass';
+import GamemodeSchemes from '../../../../common/Constants/GamemodeSchemes';
+import Gamemode from '../../../../Common/Enums/Gamemode';
+import GamemodeClassScheme from '../../../../common/Models/GamemodeScheme';
 
 const env = dotenv.config().parsed;
 
 const siteConfiguration = config.get('app.configuration');
 const playerService = new PlayerService();
+
+const currentGamemode = process.env.gamemode as Gamemode;
 
 @SocketController()
 export class HomeSocketController {
@@ -25,8 +30,9 @@ export class HomeSocketController {
 			const user: UserViewModel = socket.request.session.user;
 			socket.emit('user', user);
 		} else {
+			// Used for development
 			if (env.offline.toLowerCase() === 'true') {
-				const user: any = await playerService.getPlayerByAlias('Gabe');
+				const user: any = await playerService.getPlayer('76561198119135809');
 				socket.emit('user', user);
 			} else {
 				socket.emit('user', { loggedIn: false });
@@ -69,9 +75,9 @@ export class HomeSocketController {
 				if (socket.request.session.sockets.length === 0) {
 					playerMap.removePlayerAllDraftTFClasses(socket.request.session.user.steamid);
 
-					const draftTFClasses: DraftTFClass[] = config.get('app.configuration.classes');
-					draftTFClasses.forEach((draftTFClass) => {
-						io.emit('removeFromDraftTFClass', draftTFClass, socket.request.session.user.steamid);
+					const gamemodeScheme: GamemodeClassScheme[] = GamemodeSchemes.get(currentGamemode);
+					gamemodeScheme.forEach(scheme => {
+						io.emit('removeFromDraftTFClass', scheme.tf2class, socket.request.session.user.steamid);
 					});
 
 					playerMap.removePlayer(socket.request.session.user.steamid);
