@@ -8,6 +8,12 @@ import Team from '../../../Common/Enums/Team';
 import ClassStatisticsFilterOptions from '../../../Common/Models/ClassStatisticsFilterOptions';
 import ClassStatistics from '../../../common/Models/ClassStatistics';
 import { isSteamID } from '../utils/SteamIDChecker';
+import MatchPlayerData from '../entities/MatchPlayerData';
+import { getManager } from 'typeorm';
+import Gamemode from '../../../Common/Enums/Gamemode';
+import Region from '../../../Common/Enums/Region';
+import MatchType from '../../../Common/Enums/MatchType';
+import DraftTFClass from '../../../Common/Enums/DraftTFClass';
 export default class PlayerService {
 
 	async getPlayer(steamid: string): Promise<Player> {
@@ -21,73 +27,50 @@ export default class PlayerService {
 	}
 
 	async getClassStatistics(steamid: string, filterOptions?: ClassStatisticsFilterOptions): Promise<ClassStatistics> {
-		const playerRepo = new LinqRepository(Player);
+		const matchPlayerDataRepo = new LinqRepository(MatchPlayerData);
 
-		let classStatisticsQuery = playerRepo
-			.getOne()
-			.where(player => player.steamid)
-			.equal(steamid)
-			.include(p => p.matches)
-			.thenInclude(m => m.matchPlayerData)
-			.join(m => m.matchPlayerData)
-			.where(mpd => mpd.player.steamid)
-			.equal(steamid)
-
-		let classStatisticsQueryWithFilters;
+		let filterQuery = '';
+		const filters: (MatchType | Region | Gamemode)[] = [];
 		if (filterOptions) {
-			classStatisticsQueryWithFilters = classStatisticsQuery;
-
-			if (filterOptions.team) {
-				classStatisticsQueryWithFilters = classStatisticsQueryWithFilters
-					.and(mpd => mpd.team)
-					.equal(filterOptions.team);
+			if (filterOptions.gamemode) {
+				filterQuery += ' AND m.gamemode = ?';
+				filters.push(filterOptions.gamemode)
 			}
 
-			if (filterOptions.tf2class) {
-				classStatisticsQueryWithFilters = classStatisticsQueryWithFilters
-					.and(mpd => mpd.tf2class)
-					.in([...filterOptions.tf2class]);
+			if (filterOptions.matchType) {
+				filterQuery += ' AND m.matchtype = ?';
+				filters.push(filterOptions.matchType);
 			}
 
-			if (filterOptions.gamemode || filterOptions.matchType || filterOptions.region) {
-				classStatisticsQueryWithFilters = classStatisticsQueryWithFilters
-					.join(player => player.matches)
-
-				if (filterOptions.gamemode) {
-					classStatisticsQueryWithFilters = classStatisticsQueryWithFilters
-						.where(match => match.gamemode)
-						.equal(filterOptions.gamemode);
-				}
-
-				if (filterOptions.region) {
-					classStatisticsQueryWithFilters = classStatisticsQueryWithFilters
-						.and(match => match.region)
-						.equal(filterOptions.region);
-				}
-
-				if (filterOptions.matchType) {
-					classStatisticsQueryWithFilters = classStatisticsQueryWithFilters
-						.and(match => match.matchType)
-						.equal(filterOptions.matchType);
-				}
+			if (filterOptions.region) {
+				filterQuery += ' AND m.region = ?';
+				filters.push(filterOptions.region);
 			}
 		}
+		const db = await getManager();
+		// tslint:disable-next-line: max-line-length
+		const winsQuery = db.query(`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team = m.winningTeam AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`, [steamid, ...filters]);
+		// tslint:disable-next-line: max-line-length
+		const lossQuery = db.query(`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team != m.winningTeam AND mpd.team != '${Team.NONE}' AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`, [steamid, ...filters]);
+		// tslint:disable-next-line: max-line-length
+		const tiesQuery = db.query(`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team != m.winningTeam AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`, [steamid, ...filters]);
 
-		const player = await classStatisticsQuery;
+		const winResults = await winsQuery;
+		const lossResults = await lossQuery;
+		const tieResults = await tiesQuery;
+
 		const classStatistics = new ClassStatistics();
 
-		player.matches.forEach(match => {
-			const matchPlayerData = match.matchPlayerData[0];
-			if (match.winningTeam === matchPlayerData.team) {
-				classStatistics.winsByClass[matchPlayerData.tf2class]++;
-				classStatistics.totalWins++;
-			} else if (match.winningTeam === Team.NONE) {
-				classStatistics.tiesByClass[matchPlayerData.tf2class]++;
-				classStatistics.totalTies++;
-			} else {
-				classStatistics.lossesByClass[matchPlayerData.tf2class]++;
-				classStatistics.totalLosses++;
-			}
+		winResults.forEach((classStatistic: any) => {
+			classStatistics.winsByClass[classStatistic.tf2class as DraftTFClass] = classStatistic.count;
+		});
+
+		lossResults.forEach((classStatistic: any) => {
+			classStatistics.lossesByClass[classStatistic.tf2class as DraftTFClass] = classStatistic.count;
+		});
+
+		tieResults.forEach((classStatistic: any) => {
+			classStatistics.tiesByClass[classStatistic.tf2class as DraftTFClass] = classStatistic.count;
 		});
 
 		return classStatistics;

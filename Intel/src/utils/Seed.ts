@@ -29,14 +29,14 @@ const SeedMatches = async () => {
 
 	const player = await playerService.getPlayer('76561198119135809');
 	const player2 = await playerService
-	const matchPlayerData = new MatchPlayerData();
-	matchPlayerData.tf2class = DraftTFClass.SOLDIER
-	matchPlayerData.player = player;
-	matchPlayerData.team = Team.RED;
-
+	
 	for (let i = 0; i < 50; i++) {
 		const match = new Match();
 		match.map = 'koth_ashville_rc1';
+		const matchPlayerData = new MatchPlayerData();
+		matchPlayerData.tf2class = (Math.random()*100) > 50 ? DraftTFClass.SOLDIER : DraftTFClass.DEMOMAN;
+		matchPlayerData.player = player;
+		matchPlayerData.team = Team.RED;
 		match.matchPlayerData = [matchPlayerData];
 		match.players = [player];
 		match.matchType = MatchType.PUG;
