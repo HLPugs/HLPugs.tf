@@ -4,10 +4,9 @@ import config = require('config');
 import * as dotenv from 'dotenv';
 import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
 import PlayerService from '../../services/PlayerService';
-import DraftTFClass from '../../../../Common/Enums/DraftTFClass';
-import GamemodeSchemes from '../../../../common/Constants/GamemodeSchemes';
+import GamemodeSchemes from '../../../../Common/Constants/GamemodeSchemes';
 import Gamemode from '../../../../Common/Enums/Gamemode';
-import GamemodeClassScheme from '../../../../common/Models/GamemodeScheme';
+import GamemodeClassScheme from '../../../../Common/Models/GamemodeScheme';
 
 const env = dotenv.config().parsed;
 

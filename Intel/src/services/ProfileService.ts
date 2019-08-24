@@ -1,7 +1,7 @@
 import Match from '../entities/Match';
 import { LinqRepository } from 'typeorm-linq-repository';
 import Player from '../entities/Player';
-import { ProfileViewModel } from '../../../common/ViewModels/ProfileViewModel';
+import { ProfileViewModel } from '../../../Common/ViewModels/ProfileViewModel';
 import { isSteamID } from '../utils/SteamIDChecker';
 import PlayerService from './PlayerService';
 import ProfilePaginatedMatchesViewModel from '../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';

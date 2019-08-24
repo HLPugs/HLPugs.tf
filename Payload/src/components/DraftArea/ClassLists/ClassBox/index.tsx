@@ -3,7 +3,7 @@ import { DraftTFClassList } from '../../../../common/types';
 import ClassIcon from '../../../ClassIcon';
 import './style.scss';
 import PlayerBox from './PlayerBox';
-import DraftTFClass from '../../../../../../common/Models/DraftTFClass';
+import DraftTFClass from '../../../../../../Common/Enums/DraftTFClass';
 
 interface ClassBoxProps {
   properties: DraftTFClassList;

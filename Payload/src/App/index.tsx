@@ -22,7 +22,9 @@ import {
   faTimes,
   faGrinAlt,
   faStar,
-  faArrowDown
+  faArrowDown,
+  faArrowLeft,
+  faArrowRight
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -40,7 +42,9 @@ library.add(
   faTimes,
   faGrinAlt,
   faStar,
-  faArrowDown
+  faArrowDown,
+  faArrowLeft,
+  faArrowRight
 );
 
 interface AppState {

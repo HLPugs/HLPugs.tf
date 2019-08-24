@@ -1,6 +1,6 @@
 import { Get, Param, QueryParam, JsonController } from 'routing-controllers';
 import { ProfileService } from '../../services/ProfileService';
-import { ProfileViewModel } from '../../../../common/ViewModels/ProfileViewModel';
+import { ProfileViewModel } from '../../../../Common/ViewModels/ProfileViewModel';
 import ProfilePaginatedMatchesViewModel from '../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
 
 const profileService = new ProfileService();
