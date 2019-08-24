@@ -1,11 +1,9 @@
 import { JsonController, Get, Param, QueryParam } from 'routing-controllers';
 import PlayerService from '../../services/PlayerService';
 import Region from '../../../../Common/Enums/Region';
-import Team from '../../../../Common/Enums/Team';
 import Gamemode from '../../../../Common/Enums/Gamemode';
 import MatchType from '../../../../Common/Enums/MatchType';
 import ClassStatisticsFilterOptions from '../../../../Common/Models/ClassStatisticsFilterOptions';
-import DraftTFClass from '../../../../Common/Enums/DraftTFClass';
 
 const playerService = new PlayerService();
 

@@ -6,9 +6,8 @@ import PunishmentType from '../../../Common/Enums/PunishmentType';
 import PlayerSettings from '../entities/PlayerSettings';
 import Team from '../../../Common/Enums/Team';
 import ClassStatisticsFilterOptions from '../../../Common/Models/ClassStatisticsFilterOptions';
-import ClassStatistics from '../../../common/Models/ClassStatistics';
+import ClassStatistics from '../../../Common/Models/ClassStatistics';
 import { isSteamID } from '../utils/SteamIDChecker';
-import MatchPlayerData from '../entities/MatchPlayerData';
 import { getManager } from 'typeorm';
 import Gamemode from '../../../Common/Enums/Gamemode';
 import Region from '../../../Common/Enums/Region';
@@ -27,8 +26,6 @@ export default class PlayerService {
 	}
 
 	async getClassStatistics(steamid: string, filterOptions?: ClassStatisticsFilterOptions): Promise<ClassStatistics> {
-		const matchPlayerDataRepo = new LinqRepository(MatchPlayerData);
-
 		let filterQuery = '';
 		const filters: (MatchType | Region | Gamemode)[] = [];
 		if (filterOptions) {

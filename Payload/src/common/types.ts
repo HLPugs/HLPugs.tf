@@ -1,5 +1,5 @@
 import { IconName, IconPrefix } from '@fortawesome/fontawesome-svg-core';
-import DraftTFClass from '../../../Common/Models/DraftTFClass';
+import DraftTFClass from '../../../Common/Enums/DraftTFClass';
 
 export interface SiteConfiguration {
   branding: SiteBranding;

@@ -1,5 +1,5 @@
 import React from 'react';
-import DraftTFClass from '../../../../Common/Models/DraftTFClass';
+import DraftTFClass from '../../../../Common/Enums/DraftTFClass';
 interface ClassIconProps {
   name: DraftTFClass;
 }

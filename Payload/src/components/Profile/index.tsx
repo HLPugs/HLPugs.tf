@@ -5,8 +5,8 @@ import HttpClient from '../../common/HttpClient';
 import { ProfileViewModel } from '../../../../Common/ViewModels/ProfileViewModel';
 import LoadingDots from '../LoadingDots';
 import ClassIcon from '../ClassIcon';
-import DraftTFClass from '../../../../Common/Models/DraftTFClass';
-import ProfilePaginatedMatchesViewModel from '../../../../common/ViewModels/ProfilePaginatedMatchesViewModel';
+import DraftTFClass from '../../../../Common/Enums/DraftTFClass';
+import ProfilePaginatedMatchesViewModel from '../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 
