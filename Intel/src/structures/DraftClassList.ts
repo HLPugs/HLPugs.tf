@@ -1,4 +1,4 @@
-import DraftTFClass from '../../../common/Models/DraftTFClass';
+import DraftTFClass from '../../../Common/Models/DraftTFClass';
 
 export interface DraftTFClassList {
   name: DraftTFClass;

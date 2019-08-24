@@ -2,12 +2,15 @@ import React from 'react';
 
 import './style.scss';
 import HttpClient from '../../common/HttpClient';
-import { ProfileViewModel } from '../../../../common/ViewModels/ProfileViewModel';
+import { ProfileViewModel } from '../../../../Common/ViewModels/ProfileViewModel';
 import LoadingDots from '../LoadingDots';
-
-import {BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, TooltipPayload} from 'recharts';
 import ClassIcon from '../ClassIcon';
-import DraftTFClass from '../../../../common/Models/DraftTFClass';
+import DraftTFClass from '../../../../Common/Models/DraftTFClass';
+import ProfilePaginatedMatchesViewModel from '../../../../common/ViewModels/ProfilePaginatedMatchesViewModel';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import moment from 'moment';
+
+import {BarChart, Bar, XAxis, YAxis, Tooltip, TooltipPayload} from 'recharts';
 
 const data = [
   {
@@ -26,7 +29,7 @@ const data = [
     ties: 2,
     losses: 24
   }, {
-    TFClass: 'Demo',
+    TFClass: 'Demoman',
     wins: 174,
     ties: 14,
     losses: 186
@@ -64,7 +67,10 @@ interface ProfileProps {
 
 interface ProfileState {
   loading: boolean;
+  matchesPage: number;
+  matchesPageSize: number;
   player?: ProfileViewModel;
+  matches?: ProfilePaginatedMatchesViewModel;
 }
 
 class Profile extends React.Component<ProfileProps, ProfileState> {
@@ -74,7 +80,9 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
     super(props);
 
     this.state = {
-      loading: true
+      loading: true,
+      matchesPage: 0,
+      matchesPageSize: 5
     };
 
     this.http = new HttpClient();
@@ -82,6 +90,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
   componentDidMount() {
     this.getPlayerData();
+    this.getMatches();
   }
 
   getPlayerData = async () => {
@@ -97,8 +106,25 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
     });
   }
 
+  getMatches = async () => {
+    const matches = await this.http.get(`/profile/${this.props.steamid}/matches?pageSize=${this.state.matchesPageSize}&currentPage=${this.state.matchesPage}`);
+    
+    this.setState({
+      matches
+    });
+  }
+
+  changePage = async (delta: number) => {
+    const newPage = this.state.matchesPage + delta;
+    if (newPage >= 0 && newPage < this.state.matches!.totalMatches / this.state.matchesPageSize) {
+      this.setState({
+        matchesPage: this.state.matchesPage + delta
+      }, this.getMatches);
+    }
+  }
+
   render() {
-    return this.state.player ? (
+    return this.state.player && this.state.matches ? (
       <main>
         <div className="profileWindow">
           <div className="profile">
@@ -185,6 +211,37 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
                 <Bar dataKey="ties" stackId="a" fill="#ffeb3b" />
                 <Bar dataKey="losses" stackId="a" fill="#f44336" />
               </BarChart>
+            </div>
+          </div>
+          <div className="matches">
+            <div className="title">Recent Matches</div>
+            <div className="matchHolder">
+              {this.state.matches.matches.map(match => (
+                <div key={match.id} className="match">
+                  <div className="map" style={{backgroundImage: `url('/img/maps/${match.map}.jpg')`}} />
+                  <div className="matchDetail">
+                    <div>
+                      <span>Soldier {match.id}</span>
+                      <span>{match.map}</span>
+                    </div>
+                    <div>
+                      <span>{moment(match.date).fromNow()}</span>
+                      <span>{match.winningTeam}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="pagination">
+              <div className={`${this.state.matchesPage === 0 ? 'disabled' : ''} pager`} onClick={() => this.changePage(-1)}>
+                <FontAwesomeIcon icon="arrow-left" />
+              </div>
+              <div className="pages">
+                {this.state.matchesPage+1} / {Math.ceil(this.state.matches.totalMatches / this.state.matchesPageSize)}
+              </div>
+              <div className={`${this.state.matchesPage+1 === Math.ceil(this.state.matches.totalMatches / this.state.matchesPageSize) ? 'disabled' : ''} pager`} onClick={() => this.changePage(1)}>
+                <FontAwesomeIcon icon="arrow-right" />
+              </div>
             </div>
           </div>
         </div>

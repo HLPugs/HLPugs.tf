@@ -3,7 +3,7 @@ import './style.scss';
 import { DraftTFClassList } from '../../common/types';
 import ClassIcon from '../ClassIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { SettingsViewModel } from '../../../../common/ViewModels/SettingsViewModel';
+import { SettingsViewModel } from '../../../../Common/ViewModels/SettingsViewModel';
 
 interface SettingsProps {
   socket: SocketIOClient.Socket;

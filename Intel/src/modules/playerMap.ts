@@ -5,7 +5,7 @@ import * as uuid                          from 'uuid';
 import { DraftTFClassList } from '../structures/DraftClassList';
 import { store }                          from './store';
 import Player 														from '../entities/Player';
-import DraftTFClass from '../../../common/Models/DraftTFClass';
+import DraftTFClass from '../../../Common/Models/DraftTFClass';
 
 /**
  * @module playerMap

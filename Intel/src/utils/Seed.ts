@@ -6,7 +6,7 @@ import MatchType from '../../../Common/Enums/MatchType';
 import Team from '../../../Common/Enums/Team';
 import MatchPlayerData from '../entities/MatchPlayerData';
 import { consoleLogStatus } from './ConsoleColors';
-import DraftTFClass from '../../../common/Models/DraftTFClass';
+import DraftTFClass from '../../../Common/Models/DraftTFClass';
 
 const SeedPlayers = async () => {
 	const playerRepo = new LinqRepository(Player);

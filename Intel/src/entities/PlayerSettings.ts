@@ -1,6 +1,6 @@
 import { Entity, Column, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import Player from './Player';
-import DraftTFClass from '../../../common/Models/DraftTFClass';
+import DraftTFClass from '../../../Common/Models/DraftTFClass';
 
 @Entity()
 export default class PlayerSettings {

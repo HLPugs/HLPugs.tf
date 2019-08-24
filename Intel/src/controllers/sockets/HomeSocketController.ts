@@ -4,7 +4,7 @@ import config = require('config');
 import * as dotenv from 'dotenv';
 import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
 import PlayerService from '../../services/PlayerService';
-import DraftTFClass from '../../../../common/Models/DraftTFClass';
+import DraftTFClass from '../../../../Common/Models/DraftTFClass';
 
 const env = dotenv.config().parsed;
 
