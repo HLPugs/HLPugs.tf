@@ -4,6 +4,8 @@ import Region from '../../../../Common/Enums/Region';
 import Gamemode from '../../../../Common/Enums/Gamemode';
 import MatchType from '../../../../Common/Enums/MatchType';
 import ClassStatisticsFilterOptions from '../../../../Common/Models/ClassStatisticsFilterOptions';
+import { validateSync } from 'class-validator';
+import { ClassValidationError } from '../../custom-errors/ClassValidationError';
 
 
 const playerService = new PlayerService();
