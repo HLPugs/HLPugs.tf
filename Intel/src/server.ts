@@ -64,14 +64,7 @@ createConnection()
 			middlewares: [__dirname + '/middlewares/*.js'],
 			controllers: [__dirname + '/controllers/*.js']
 		});
-		
-		app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
-			res.status(404);
-			const responseObject = new ErrorModel();
-			responseObject.httpCode = 404;
-			responseObject.message = `${req.path} did not match an endpoint`;
-			res.json(responseObject);
-		})
+
 		const server = new Server(app);
 
 		const io = socketIO(server);

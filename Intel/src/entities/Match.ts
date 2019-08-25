@@ -24,7 +24,7 @@ export default class Match {
 	@Column()
 	@IsString()
 	@IsNotEmpty()
-	map: String;
+	map: string;
 
 	@Column()
 	@IsEnum(Region)

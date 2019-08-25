@@ -37,10 +37,12 @@ const SeedMatches = async () => {
 		matchPlayerData.tf2class = (Math.random()*100) > 50 ? DraftTFClass.SOLDIER : DraftTFClass.DEMOMAN;
 		matchPlayerData.player = player;
 		matchPlayerData.team = Team.RED;
+		matchPlayerData.wasCaptain = true;
 		match.matchPlayerData = [matchPlayerData];
 		match.players = [player];
 		match.matchType = MatchType.PUG;
 		match.winningTeam = Team.BLU;
+		match.logsId = 12345867;
 		match.region = Region.NorthAmerica;
 		match.gamemode = Gamemode.Highlander;
 

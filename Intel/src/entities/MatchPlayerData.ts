@@ -13,9 +13,13 @@ export default class MatchPlayerData {
 	@Column()
 	team: Team;
 
+	@Column({ default: false })
+	wasCaptain: boolean
+
 	@ManyToOne(type => Match, match => match.matchPlayerData, { primary: true })
 	match!: Match;
 
 	@ManyToOne(type => Player, player => player.matchPlayerData, { primary: true })
 	player!: Player;
+	
 }

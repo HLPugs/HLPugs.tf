@@ -16,22 +16,23 @@ const matchRepo = new LinqRepository(Match);
 export class ProfileService {
 
 	async getPaginatedMatches(steamid: string, pageSize: number, currentPage: number): Promise<ProfilePaginatedMatchesViewModel> {
-			const profileQuery = matchRepo
-				.getAll()
-				.join(m => m.players)
-				.where(player => player.steamid)
-				.in([steamid])
+		const profileQuery = matchRepo
+			.getAll()
+			.join(m => m.players)
+			.where(player => player.steamid)
+			.in([steamid])
 
 		const totalMatchCount = await profileQuery.count();
 
 		const paginatedMatches = await profileQuery
+			.include(m => m.matchPlayerData)
 			.skip(currentPage * pageSize)
-			.take(Math.min(pageSize, 50));
+			.take(Math.min(pageSize, 50))
 
-		paginatedMatches.map(match => ProfileMatchViewModel.fromMatch(match));
+		const paginatedMatchesViewModel = paginatedMatches.map(match => ProfileMatchViewModel.fromMatch(match));
 
 		const profilePaginatedMatchesViewModel = new ProfilePaginatedMatchesViewModel();
-		profilePaginatedMatchesViewModel.matches = paginatedMatches;
+		profilePaginatedMatchesViewModel.matches = paginatedMatchesViewModel;
 		profilePaginatedMatchesViewModel.totalMatches = totalMatchCount;
 
 		return profilePaginatedMatchesViewModel;
@@ -41,7 +42,7 @@ export class ProfileService {
 		const player = await playerService.getPlayer(steamid);
 		const profileViewModel = ProfileViewModel.fromPlayer(player);
 
-		
+
 		return profileViewModel;
 	}
 }
