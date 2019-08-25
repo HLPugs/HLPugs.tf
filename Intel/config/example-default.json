@@ -2,8 +2,8 @@
   "app": {
     "steam": {
       "apiKey": "api key",
-      "realm": "web.site.name",
-      "verify": "web.site.name/verify"
+      "realm": "http://localhost:3001",
+      "verify": "http://localhost:3001/verify"
     },
     "secret": "verysecret",
     "configuration": {
@@ -100,29 +100,16 @@
     "customEmojis": [
       {
         "name": "HLPugs",
-        "short_names": [
-          "hlpugs"
-        ],
+        "short_names": ["hlpugs"],
         "imageUrl": "/img/emojis/hlpugs.png"
       }
     ],
     "frontURL": "http://localhost:3000"
   },
-  "db": {
-    "postgres": {
-      "host": "",
-      "username": "",
-      "password": "",
-      "port": 5432
+  "discord": {
+    "username": "HLPugs.tf",
+    "webhooks": {
+      "channel-name": "webhook-url"
     }
-  },
-    "discord": {
-      "username": "HLPugs.tf",
-      "webhooks": {
-        "channel-name": "webhook-url"
-    }
-  },
-  "winston": {
-    "logDirectory": "logs"
   }
 }

@@ -1,0 +1,29 @@
+{
+  "name": "hlpugs.tf",
+  "version": "0.1.0",
+  "scripts": {
+    "install": "concurrently \"cd Intel && npm i\" \"cd Payload && npm i\"",
+    "start": "concurrently \"cd Intel && npm run watch-ts\" \"cd Intel && npm run watch-node\" \"cd Payload && npm start\"",
+    "build": "concurrently \"cd Intel && npm run build\" \"cd Payload && npm run build\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HLPugs/HLPugs.tf.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/HLPugs/HLPugs.tf/issues"
+  },
+  "homepage": "https://github.com/HLPugs/HLPugs.tf#readme",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^2.0.0",
+    "@typescript-eslint/parser": "^2.0.0",
+    "concurrently": "^4.1.2",
+    "eslint": "^6.2.2",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-react": "^7.14.3",
+    "prettier": "^1.18.2",
+    "typescript": "^3.5.3"
+  }
+}
