@@ -28,4 +28,4 @@ Now that you have everything ready, start the application in the base package.
 npm start
 ```
 
-The server should start up in development mode with hot reloading/compiling in both Intel and Payload. You make also want to configure the environment variables for Intel in the `Inte/.env` file. Setting offline to false will allow for logging in using Steam, but disables database seeding for offline use.
+The server should start up in development mode with hot reloading/compiling in both Intel and Payload. You may also want to configure the environment variables for Intel in the `Inte/.env` file. Setting offline to false will allow for logging in using Steam, but disables database seeding for offline use.
