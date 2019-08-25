@@ -5,6 +5,7 @@ import Gamemode from '../../../../Common/Enums/Gamemode';
 import MatchType from '../../../../Common/Enums/MatchType';
 import ClassStatisticsFilterOptions from '../../../../Common/Models/ClassStatisticsFilterOptions';
 
+
 const playerService = new PlayerService();
 
 @JsonController('/player')
@@ -21,6 +22,10 @@ export class PlayerController {
 			filterOptions.gamemode = gamemode;
 			filterOptions.region = region;
 			filterOptions.matchType = matchType;
+			const errors = validateSync(filterOptions);
+			if (errors.length) {
+				throw new ClassValidationError(errors);
+			}
 			return playerService.getClassStatistics(steamid, filterOptions);
 		} else {
 			return playerService.getClassStatistics(steamid);

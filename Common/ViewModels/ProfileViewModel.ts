@@ -1,6 +1,4 @@
 import Player from '../../Intel/src/entities/Player';
-import TFClassesTracker from '../Models/TFClassesTracker';
-import ClassStatistics from '../Models/ClassStatistics';
 
 export class ProfileViewModel {
 	alias: string;

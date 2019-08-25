@@ -1,7 +1,7 @@
 import * as winston from 'winston';
-import * as path    from 'path';
-import * as fs      from 'fs';
-import * as config  from 'config';
+import * as path from 'path';
+import * as fs from 'fs';
+import * as config from 'config';
 
 // Use /logs to store the .log files
 const logDir = path.join(config.get('winston.logDirectory'), '/');
@@ -14,7 +14,7 @@ const format = winston.format.combine(
   winston.format.colorize({ all: true }),
   winston.format.simple(),
   winston.format.timestamp({
-    format: 'YYYY-MM-DD HH:mm:ss',
+	format: 'YYYY-MM-DD HH:mm:ss',
   }),
 );
 
@@ -23,12 +23,12 @@ const logger = winston.createLogger({
   format,
   level: 'info',
   transports: [
-  //
-  // - Write to all logs with level `info` and below to `combined.log`
-  // - Write all logs error (and below) to `error.log`.
-  //
-    new winston.transports.File({ filename: path.join(logDir, 'error.log') }),
-    new winston.transports.File({ filename: path.join(logDir, 'combined.log') }),
+	//
+	// - Write to all logs with level `info` and below to `combined.log`
+	// - Write all logs error (and below) to `error.log`.
+	//
+	new winston.transports.File({ filename: path.join(logDir, 'error.log') }),
+	new winston.transports.File({ filename: path.join(logDir, 'combined.log') }),
   ],
 });
 
@@ -38,7 +38,7 @@ const logger = winston.createLogger({
 //
 if (process.env.NODE_ENV !== 'production') {
   logger.add(new winston.transports.Console({
-    format,
+	format,
   }));
 }
 

@@ -15,6 +15,7 @@ import CurrentUserChecker from './utils/CurrentUserChecker';
 import { useSocketServer } from 'socket-controllers';
 import Seed from './utils/Seed';
 import * as dotenv from 'dotenv';
+import { ErrorModel } from '../../Common/Models/ErrorModel';
 
 const env = dotenv.config().parsed;
 
@@ -42,7 +43,7 @@ app.use(sessionConfig);
 consoleLogStatus(`\n${Underscore}${FgBlue}HLPugs.tf Bootstrap Initializing`);
 consoleLogStatus(`Synchronizing models to database with ${FgYellow}TypeORM${Reset}...\n`);
 createConnection()
-	.then(async() => {
+	.then(async () => {
 		if (env.offline === 'true') {
 			await Seed();
 		}
@@ -63,7 +64,14 @@ createConnection()
 			middlewares: [__dirname + '/middlewares/*.js'],
 			controllers: [__dirname + '/controllers/*.js']
 		});
-
+		
+		app.use((req: express.Request, res: express.Response, next: express.NextFunction) => {
+			res.status(404);
+			const responseObject = new ErrorModel();
+			responseObject.httpCode = 404;
+			responseObject.message = `${req.path} did not match an endpoint`;
+			res.json(responseObject);
+		})
 		const server = new Server(app);
 
 		const io = socketIO(server);

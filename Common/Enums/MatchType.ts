@@ -1,5 +1,5 @@
 enum MatchType {
-	PUG,
-	MIX
+	PUG = 'Pug',
+	MIX = 'Mix'
 }
 export default MatchType;

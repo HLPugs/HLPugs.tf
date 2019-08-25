@@ -13,15 +13,19 @@ import Gamemode from '../../../Common/Enums/Gamemode';
 import Region from '../../../Common/Enums/Region';
 import MatchType from '../../../Common/Enums/MatchType';
 import DraftTFClass from '../../../Common/Enums/DraftTFClass';
+import { PlayerNotFoundError } from '../custom-errors/PlayerNotFoundError';
 export default class PlayerService {
 
 	async getPlayer(steamid: string): Promise<Player> {
 		const playerRepo = new LinqRepository(Player);
+
 		const player = await playerRepo
 			.getOne()
 			.where(p => p.steamid)
 			.equal(steamid);
-
+		if (player === undefined) {
+			throw new PlayerNotFoundError(steamid);
+		}
 		return player;
 	}
 
@@ -45,6 +49,9 @@ export default class PlayerService {
 			}
 		}
 		const db = await getManager();
+		if (!(await this.playerExists(steamid))) {
+			throw new PlayerNotFoundError(steamid);
+		}
 		// tslint:disable-next-line: max-line-length
 		const winsQuery = db.query(`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team = m.winningTeam AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`, [steamid, ...filters]);
 		// tslint:disable-next-line: max-line-length
@@ -74,6 +81,10 @@ export default class PlayerService {
 	}
 
 	async updateSettings(steamid: string, settings: PlayerSettings): Promise<void> {
+		if (!(await this.playerExists(steamid))) {
+			throw new PlayerNotFoundError(steamid);
+		}
+
 		const playerRepo = new LinqRepository(Player);
 
 		const player = await this.getPlayer(steamid)
@@ -82,6 +93,9 @@ export default class PlayerService {
 	}
 
 	async updateAlias(steamid: string, alias: string): Promise<void> {
+		if (!(await this.playerExists(steamid))) {
+			throw new PlayerNotFoundError(steamid);
+		}
 		const playerRepo = new LinqRepository(Player);
 
 		const player = await this.getPlayer(steamid);
@@ -90,6 +104,10 @@ export default class PlayerService {
 	}
 
 	async getSettings(steamid: string): Promise<PlayerSettings> {
+		if (!(await this.playerExists(steamid))) {
+			throw new PlayerNotFoundError(steamid);
+		}
+
 		const playerSettingsRepo = new LinqRepository(PlayerSettings);
 
 		const settings = await playerSettingsRepo
@@ -114,6 +132,10 @@ export default class PlayerService {
 	}
 
 	async getActivePunishments(steamid: string): Promise<Punishment[]> {
+		if (!(await this.playerExists(steamid))) {
+			throw new PlayerNotFoundError(steamid);
+		}
+
 		const punishmentRepo = new LinqRepository(Punishment);
 		const activePunishments = await punishmentRepo
 			.getAll()
@@ -126,6 +148,9 @@ export default class PlayerService {
 	};
 
 	async isCurrentlySiteBanned(steamid: string): Promise<boolean> {
+		if (!(await this.playerExists(steamid))) {
+			throw new PlayerNotFoundError(steamid);
+		}
 		const punishments = await this.getActivePunishments(steamid)
 		return punishments.some(p => p.punishmentType === PunishmentType.BAN);
 	}
