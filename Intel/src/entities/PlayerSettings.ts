@@ -4,29 +4,28 @@ import DraftTFClass from '../../../Common/Enums/DraftTFClass';
 
 @Entity()
 export default class PlayerSettings {
-
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@Column({ default: false})
+	@Column({ default: false })
 	isNotifiableByMention: boolean;
 
 	@Column({ default: 50 })
 	volume: number;
 
-	@Column('simple-array', { nullable: true})
+	@Column('simple-array', { nullable: true })
 	favoriteClasses: DraftTFClass[];
 
 	@Column({ default: false })
 	addToFavoritesAfterMatch: boolean;
 
-	@Column({ default: false})
+	@Column({ default: false })
 	addToFavoritesOnLogin: boolean;
 
 	@Column({ default: true })
 	audioCuesEnabled: boolean;
 
-	@Column({ default: 'default'})
+	@Column({ default: 'default' })
 	voicepack: string; // enum ?
 
 	@Column({ default: 'default' })

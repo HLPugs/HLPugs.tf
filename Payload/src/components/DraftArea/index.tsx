@@ -7,24 +7,27 @@ import './style.scss';
 import { SocketConsumer } from '../../pages/Home';
 
 interface DraftAreaProps {
-  classes: DraftTFClassList[];
-  steamid?: string;
+	classes: DraftTFClassList[];
+	steamid?: string;
 }
 
 class DraftArea extends React.PureComponent<DraftAreaProps, {}> {
-  render() {
-    return (
-      <SocketConsumer>
-        {(socket: SocketIOClient.Socket) => (
-          <main>
-            <Announcements socket={socket} />
-            <DraftState socket={socket} />
-            <ClassLists classes={this.props.classes} steamid={this.props.steamid} />
-          </main>
-        )}
-      </SocketConsumer>
-    );
-  }
+	render() {
+		return (
+			<SocketConsumer>
+				{(socket: SocketIOClient.Socket) => (
+					<main>
+						<Announcements socket={socket} />
+						<DraftState socket={socket} />
+						<ClassLists
+							classes={this.props.classes}
+							steamid={this.props.steamid}
+						/>
+					</main>
+				)}
+			</SocketConsumer>
+		);
+	}
 }
 
 export default DraftArea;

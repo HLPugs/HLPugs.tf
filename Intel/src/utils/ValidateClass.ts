@@ -7,6 +7,6 @@ const ValidateClass = (obj: any) => {
 	if (errors.length) {
 		throw new ClassValidationError(errors);
 	}
-}
+};
 
 export default ValidateClass;

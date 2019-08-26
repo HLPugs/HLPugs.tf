@@ -1,4 +1,3 @@
-
 import Player from '../entities/Player';
 import Punishment from '../entities/Punishment';
 import { LinqRepository } from 'typeorm-linq-repository';
@@ -15,7 +14,6 @@ import MatchType from '../../../Common/Enums/MatchType';
 import DraftTFClass from '../../../Common/Enums/DraftTFClass';
 import { PlayerNotFoundError } from '../custom-errors/PlayerNotFoundError';
 export default class PlayerService {
-
 	async getPlayer(steamid: string): Promise<Player> {
 		const playerRepo = new LinqRepository(Player);
 
@@ -29,13 +27,16 @@ export default class PlayerService {
 		return player;
 	}
 
-	async getClassStatistics(steamid: string, filterOptions?: ClassStatisticsFilterOptions): Promise<ClassStatistics> {
+	async getClassStatistics(
+		steamid: string,
+		filterOptions?: ClassStatisticsFilterOptions
+	): Promise<ClassStatistics> {
 		let filterQuery = '';
 		const filters: (MatchType | Region | Gamemode)[] = [];
 		if (filterOptions) {
 			if (filterOptions.gamemode) {
 				filterQuery += ' AND m.gamemode = ?';
-				filters.push(filterOptions.gamemode)
+				filters.push(filterOptions.gamemode);
 			}
 
 			if (filterOptions.matchType) {
@@ -53,11 +54,20 @@ export default class PlayerService {
 			throw new PlayerNotFoundError(steamid);
 		}
 		// tslint:disable-next-line: max-line-length
-		const winsQuery = db.query(`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team = m.winningTeam AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`, [steamid, ...filters]);
+		const winsQuery = db.query(
+			`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team = m.winningTeam AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`,
+			[steamid, ...filters]
+		);
 		// tslint:disable-next-line: max-line-length
-		const lossQuery = db.query(`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team != m.winningTeam AND mpd.team != '${Team.NONE}' AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`, [steamid, ...filters]);
+		const lossQuery = db.query(
+			`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team != m.winningTeam AND mpd.team != '${Team.NONE}' AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`,
+			[steamid, ...filters]
+		);
 		// tslint:disable-next-line: max-line-length
-		const tiesQuery = db.query(`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team != m.winningTeam AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`, [steamid, ...filters]);
+		const tiesQuery = db.query(
+			`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team != m.winningTeam AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`,
+			[steamid, ...filters]
+		);
 
 		const winResults = await winsQuery;
 		const lossResults = await lossQuery;
@@ -66,28 +76,34 @@ export default class PlayerService {
 		const classStatistics = new ClassStatistics();
 
 		winResults.forEach((classStatistic: any) => {
-			classStatistics.winsByClass[classStatistic.tf2class as DraftTFClass] = classStatistic.count;
+			classStatistics.winsByClass[classStatistic.tf2class as DraftTFClass] =
+				classStatistic.count;
 		});
 
 		lossResults.forEach((classStatistic: any) => {
-			classStatistics.lossesByClass[classStatistic.tf2class as DraftTFClass] = classStatistic.count;
+			classStatistics.lossesByClass[classStatistic.tf2class as DraftTFClass] =
+				classStatistic.count;
 		});
 
 		tieResults.forEach((classStatistic: any) => {
-			classStatistics.tiesByClass[classStatistic.tf2class as DraftTFClass] = classStatistic.count;
+			classStatistics.tiesByClass[classStatistic.tf2class as DraftTFClass] =
+				classStatistic.count;
 		});
 
 		return classStatistics;
 	}
 
-	async updateSettings(steamid: string, settings: PlayerSettings): Promise<void> {
+	async updateSettings(
+		steamid: string,
+		settings: PlayerSettings
+	): Promise<void> {
 		if (!(await this.playerExists(steamid))) {
 			throw new PlayerNotFoundError(steamid);
 		}
 
 		const playerRepo = new LinqRepository(Player);
 
-		const player = await this.getPlayer(steamid)
+		const player = await this.getPlayer(steamid);
 		player.settings = settings;
 		await playerRepo.update(player);
 	}
@@ -114,7 +130,7 @@ export default class PlayerService {
 			.getOne()
 			.join(s => s.player)
 			.where(player => player.steamid)
-			.equal(steamid)
+			.equal(steamid);
 
 		return settings;
 	}
@@ -145,30 +161,34 @@ export default class PlayerService {
 			.equal(steamid);
 
 		return activePunishments;
-	};
+	}
 
 	async isCurrentlySiteBanned(steamid: string): Promise<boolean> {
 		if (!(await this.playerExists(steamid))) {
 			throw new PlayerNotFoundError(steamid);
 		}
-		const punishments = await this.getActivePunishments(steamid)
+		const punishments = await this.getActivePunishments(steamid);
 		return punishments.some(p => p.punishmentType === PunishmentType.BAN);
 	}
 
 	async playerExists(identifier: string): Promise<boolean> {
 		const playerRepo = new LinqRepository(Player);
 		if (isSteamID(identifier)) {
-			return await playerRepo
-				.getOne()
-				.where(p => p.steamid)
-				.equal(identifier)
-				.count() > 0;
+			return (
+				(await playerRepo
+					.getOne()
+					.where(p => p.steamid)
+					.equal(identifier)
+					.count()) > 0
+			);
 		} else {
-			return await playerRepo
-				.getOne()
-				.where(p => p.alias)
-				.equal(identifier)
-				.count() > 0;
+			return (
+				(await playerRepo
+					.getOne()
+					.where(p => p.alias)
+					.equal(identifier)
+					.count()) > 0
+			);
 		}
 	}
 }

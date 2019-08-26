@@ -3,54 +3,49 @@ import './style.scss';
 import LoadingDots from '../LoadingDots';
 
 interface LoadingMessage {
-  message: string;
-  timeout: number;
+	message: string;
+	timeout: number;
 }
 
 interface LoadingProps {
-  loadingMessages: LoadingMessage[];
+	loadingMessages: LoadingMessage[];
 }
 
 interface LoadingState {
-  loadingMessage: string;
+	loadingMessage: string;
 }
 
 class Loading extends React.PureComponent<LoadingProps, LoadingState> {
-  messageTimeouts: number[];
+	messageTimeouts: number[];
 
-  constructor(props: LoadingProps) {
-    super(props);
+	constructor(props: LoadingProps) {
+		super(props);
 
-    this.messageTimeouts = this.props.loadingMessages.map(loadingMessage =>
-      window.setTimeout(
-        () => {
-          this.setState({
-            loadingMessage: loadingMessage.message
-          });
-        },
-        loadingMessage.timeout * 1000
-      )
-    );
+		this.messageTimeouts = this.props.loadingMessages.map(loadingMessage =>
+			window.setTimeout(() => {
+				this.setState({
+					loadingMessage: loadingMessage.message
+				});
+			}, loadingMessage.timeout * 1000)
+		);
 
-    this.state = {
-      loadingMessage: ''
-    };
-  }
+		this.state = {
+			loadingMessage: ''
+		};
+	}
 
-  componentWillUnmount() {
-    this.messageTimeouts.forEach(clearTimeout);
-  }
+	componentWillUnmount() {
+		this.messageTimeouts.forEach(clearTimeout);
+	}
 
-  render() {
-    return (
-      <div id="loadingHolder">
-        <LoadingDots/>
-        <div id="loadingDescription">
-          {this.state.loadingMessage}
-        </div>
-      </div>
-    );
-  }
+	render() {
+		return (
+			<div id="loadingHolder">
+				<LoadingDots />
+				<div id="loadingDescription">{this.state.loadingMessage}</div>
+			</div>
+		);
+	}
 }
 
 export default Loading;

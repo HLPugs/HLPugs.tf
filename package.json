@@ -2,9 +2,9 @@
   "name": "hlpugs.tf",
   "version": "0.1.0",
   "scripts": {
-    "install": "concurrently \"cd Intel && npm i\" \"cd Payload && npm i\"",
-    "start": "concurrently \"cd Intel && npm run watch-ts\" \"cd Intel && npm run watch-node\" \"cd Payload && npm start\"",
-    "build": "concurrently \"cd Intel && npm run build\" \"cd Payload && npm run build\""
+    "install": "concurrently -n Intel,Payload \"cd Intel && npm i\" \"cd Payload && npm i\"",
+    "start": "concurrently -n IntelCompile,IntelRun,Payload \"cd Intel && npm run watch-ts\" \"cd Intel && npm run watch-node\" \"cd Payload && npm start\"",
+    "build": "concurrently -n Intel,Payload\"cd Intel && npm run build\" \"cd Payload && npm run build\""
   },
   "repository": {
     "type": "git",

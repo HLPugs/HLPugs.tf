@@ -4,20 +4,19 @@ import Region from '../../../../Common/Enums/Region';
 import Gamemode from '../../../../Common/Enums/Gamemode';
 import MatchType from '../../../../Common/Enums/MatchType';
 import ClassStatisticsFilterOptions from '../../../../Common/Models/ClassStatisticsFilterOptions';
-import { ClassValidationError } from '../../custom-errors/ClassValidationError';
 import ValidateClass from '../../utils/ValidateClass';
 
 const playerService = new PlayerService();
 
 @JsonController('/player')
 export class PlayerController {
-
 	@Get('/:steamid/classStatistics')
 	getClassStatistics(
 		@Param('steamid') steamid: string,
 		@QueryParam('region', { required: false }) region: Region,
 		@QueryParam('gamemode', { required: false }) gamemode: Gamemode,
-		@QueryParam('matchType', { required: false }) matchType: MatchType) {
+		@QueryParam('matchType', { required: false }) matchType: MatchType
+	) {
 		if (region || gamemode || matchType) {
 			const filterOptions = new ClassStatisticsFilterOptions();
 			filterOptions.gamemode = gamemode;

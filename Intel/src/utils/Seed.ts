@@ -19,8 +19,7 @@ const SeedPlayers = async () => {
 	player.avatarUrl = 'n/a';
 	player.ip = '127.0.0.1';
 
-	await playerRepo
-		.create(player);
+	await playerRepo.create(player);
 };
 
 const SeedMatches = async () => {
@@ -28,12 +27,13 @@ const SeedMatches = async () => {
 	const matchRepo = new LinqRepository(Match);
 
 	const player = await playerService.getPlayer('76561198119135809');
-	
+
 	for (let i = 0; i < 50; i++) {
 		const match = new Match();
 		match.map = 'koth_ashville_rc1';
 		const matchPlayerData = new MatchPlayerData();
-		matchPlayerData.tf2class = (Math.random()*100) > 50 ? DraftTFClass.SOLDIER : DraftTFClass.DEMOMAN;
+		matchPlayerData.tf2class =
+			Math.random() * 100 > 50 ? DraftTFClass.SOLDIER : DraftTFClass.DEMOMAN;
 		matchPlayerData.player = player;
 		matchPlayerData.team = Team.RED;
 		matchPlayerData.wasCaptain = true;
@@ -45,10 +45,9 @@ const SeedMatches = async () => {
 		match.region = Region.NorthAmerica;
 		match.gamemode = Gamemode.Highlander;
 
-		await matchRepo
-			.create(match);
+		await matchRepo.create(match);
 	}
-}
+};
 
 const Seed = async () => {
 	consoleLogStatus('SEEDING LOCAL DATABASE');

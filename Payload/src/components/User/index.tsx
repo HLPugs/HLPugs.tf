@@ -6,32 +6,34 @@ import { UserViewModel } from '../../common/types';
 import './style.scss';
 
 interface UserProps {
-  user: UserViewModel;
-  settingsOnClick: Function;
+	user: UserViewModel;
+	settingsOnClick: Function;
 }
 
 class User extends React.PureComponent<UserProps, {}> {
-  
-  render() {
-    if (this.props.user.loggedIn) {
-      return (
-        <div id="User">
-          <UserInfo alias={this.props.user.alias} avatarUrl={this.props.user.avatarUrl} />
-          <UserDropDown
-            steamid={this.props.user.steamid}
-            settingsOnClick={this.props.settingsOnClick}
-          />
-        </div>
-      );
-    } else if (this.props.user.loggedIn === false) {
-      return (
-        <div id="User">
-          <SteamLogIn />
-        </div>
-      );
-    }
-    return null;
-  }
+	render() {
+		if (this.props.user.loggedIn) {
+			return (
+				<div id="User">
+					<UserInfo
+						alias={this.props.user.alias}
+						avatarUrl={this.props.user.avatarUrl}
+					/>
+					<UserDropDown
+						steamid={this.props.user.steamid}
+						settingsOnClick={this.props.settingsOnClick}
+					/>
+				</div>
+			);
+		} else if (this.props.user.loggedIn === false) {
+			return (
+				<div id="User">
+					<SteamLogIn />
+				</div>
+			);
+		}
+		return null;
+	}
 }
 
 export default User;

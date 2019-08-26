@@ -1,5 +1,5 @@
-import * as chai                    from 'chai';
-import * as chaiAsPromised          from 'chai-as-promised';
+import * as chai from 'chai';
+import * as chaiAsPromised from 'chai-as-promised';
 import 'mocha';
 // import db                           from '../database/db';
 // import { addFakePlayer, getPlayer } from '../modules/playerMap';

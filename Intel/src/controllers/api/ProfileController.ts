@@ -6,7 +6,6 @@ import ProfilePaginatedMatchesViewModel from '../../../../Common/ViewModels/Prof
 const profileService = new ProfileService();
 @JsonController('/profile')
 export class ProfileController {
-
 	@Get('/:steamid')
 	getProfile(@Param('steamid') steamid: string): Promise<ProfileViewModel> {
 		return profileService.getProfile(steamid);
@@ -16,7 +15,12 @@ export class ProfileController {
 	getPlayersMatches(
 		@Param('steamid') identifier: string,
 		@QueryParam('pageSize') pageSize: number,
-		@QueryParam('currentPage') currentPage: number): Promise<ProfilePaginatedMatchesViewModel> {
-		return profileService.getPaginatedMatches(identifier, pageSize, currentPage);
+		@QueryParam('currentPage') currentPage: number
+	): Promise<ProfilePaginatedMatchesViewModel> {
+		return profileService.getPaginatedMatches(
+			identifier,
+			pageSize,
+			currentPage
+		);
 	}
 }

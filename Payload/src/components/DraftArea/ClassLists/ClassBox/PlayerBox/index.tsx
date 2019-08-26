@@ -5,28 +5,38 @@ import './style.scss';
 import { PlayerDataConsumer } from '../../../../../pages/Home';
 
 interface PlayerBoxProps {
-  steamid: string;
+	steamid: string;
 }
 
 class PlayerBox extends React.PureComponent<PlayerBoxProps, {}> {
-  render() {
-    return (
-      <PlayerDataConsumer>
-        {(playerData: any) => playerData && (
-          <Link to={`/player/${this.props.steamid}`} target="blank" className="player">
-            <div
-              className="playerIcon"
-              style={{ backgroundImage: `url(${playerData[this.props.steamid].avatarUrl})` }}
-            />
-            <div className="playerName">{playerData[this.props.steamid].alias}</div>
-            <div className="captainStar">
-              <FontAwesomeIcon icon="star" />
-            </div>
-          </Link>
-        )}
-      </PlayerDataConsumer>
-    );
-  }
+	render() {
+		return (
+			<PlayerDataConsumer>
+				{(playerData: any) =>
+					playerData && (
+						<Link
+							to={`/player/${this.props.steamid}`}
+							target="blank"
+							className="player"
+						>
+							<div
+								className="playerIcon"
+								style={{
+									backgroundImage: `url(${playerData[this.props.steamid].avatarUrl})`
+								}}
+							/>
+							<div className="playerName">
+								{playerData[this.props.steamid].alias}
+							</div>
+							<div className="captainStar">
+								<FontAwesomeIcon icon="star" />
+							</div>
+						</Link>
+					)
+				}
+			</PlayerDataConsumer>
+		);
+	}
 }
 
 export default PlayerBox;

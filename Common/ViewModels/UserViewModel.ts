@@ -19,4 +19,4 @@ export default class UserViewModel {
 
 		return userViewModel;
 	}
-  }
+}

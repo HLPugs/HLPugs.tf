@@ -3,12 +3,17 @@ import MatchType from '../Enums/MatchType';
 import Team from '../Enums/Team';
 import DraftTFClass from '../Enums/DraftTFClass';
 import Outcome from '../Enums/Outcome';
-import { IsBoolean, IsOptional, IsDate, IsString, IsEnum, validateSync, IsNumber } from 'class-validator'
+import {
+	IsBoolean,
+	IsOptional,
+	IsDate,
+	IsString,
+	IsEnum,
+	IsNumber
+} from 'class-validator';
 import Validate from '../../Intel/src/utils/ValidateClass';
 
-
 export default class ProfileMatchViewModel {
-
 	@IsNumber()
 	id: number;
 
@@ -21,7 +26,7 @@ export default class ProfileMatchViewModel {
 	@IsEnum(Outcome)
 	outcome: Outcome;
 
-	@IsDate() 
+	@IsDate()
 	date: Date;
 
 	@IsOptional()

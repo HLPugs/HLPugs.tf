@@ -5,8 +5,12 @@ import Player from '../entities/Player';
 const playerService = new PlayerService();
 
 const CurrentUserChecker = async (action: Action) => {
-	const existingPlayer = await playerService.getPlayer(action.request.user.steamid);
-	const newIp = action.request.header('x-forwarded-for') || action.request.connection.remoteAddress;
+	const existingPlayer = await playerService.getPlayer(
+		action.request.user.steamid
+	);
+	const newIp =
+		action.request.header('x-forwarded-for') ||
+		action.request.connection.remoteAddress;
 	const newAvatarUrl = action.request.user.avatar.large;
 	if (existingPlayer) {
 		existingPlayer.ip = newIp;
@@ -19,6 +23,6 @@ const CurrentUserChecker = async (action: Action) => {
 		player.avatarUrl = newAvatarUrl;
 		return player;
 	}
-}
+};
 
 export default CurrentUserChecker;

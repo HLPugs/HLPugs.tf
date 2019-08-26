@@ -1,5 +1,19 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinColumn, JoinTable, OneToMany } from 'typeorm';
-import { IsNumberString, IsEnum, IsString, IsNotEmpty, IsDate } from 'class-validator';
+import {
+	Entity,
+	PrimaryGeneratedColumn,
+	Column,
+	CreateDateColumn,
+	ManyToMany,
+	JoinTable,
+	OneToMany
+} from 'typeorm';
+import {
+	IsNumberString,
+	IsEnum,
+	IsString,
+	IsNotEmpty,
+	IsDate
+} from 'class-validator';
 import Player from './Player';
 import MatchType from '../../../Common/Enums/MatchType';
 import Team from '../../../Common/Enums/Team';
@@ -9,7 +23,6 @@ import Gamemode from '../../../Common/Enums/Gamemode';
 
 @Entity('matches')
 export default class Match {
-	
 	@PrimaryGeneratedColumn()
 	id: number;
 
@@ -43,7 +56,7 @@ export default class Match {
 	logsId: number;
 
 	@ManyToMany(type => Player, player => player.matches)
-	@JoinTable({ 
+	@JoinTable({
 		name: 'match_players',
 		joinColumn: {
 			name: 'id',
@@ -52,12 +65,16 @@ export default class Match {
 		inverseJoinColumn: {
 			name: 'playerSteamid',
 			referencedColumnName: 'steamid'
-		},
+		}
 	})
 	players: Player[];
 
-	@OneToMany(type => MatchPlayerData, matchPlayerData => matchPlayerData.match, {
-		cascade: true
-	})
+	@OneToMany(
+		type => MatchPlayerData,
+		matchPlayerData => matchPlayerData.match,
+		{
+			cascade: true
+		}
+	)
 	matchPlayerData: MatchPlayerData[];
 }

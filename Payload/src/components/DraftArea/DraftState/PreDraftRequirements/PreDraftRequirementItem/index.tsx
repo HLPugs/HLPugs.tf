@@ -4,18 +4,21 @@ import { FontAwesomeIcon } from '../../../../../../node_modules/@fortawesome/rea
 import './style.scss';
 
 interface PreDraftRequirementItemProps {
-  state: PreDraftRequirementType;
+	state: PreDraftRequirementType;
 }
 
-class PreDraftRequirementItem extends React.Component<PreDraftRequirementItemProps, {}> {
-  render() {
-    return (
-      <div className="preDraftRequirementItem">
-        <FontAwesomeIcon icon={this.props.state.state ? 'check' : 'times'} />
-        <span>{this.props.state.name}</span>
-      </div>
-    );
-  }
+class PreDraftRequirementItem extends React.Component<
+	PreDraftRequirementItemProps,
+	{}
+> {
+	render() {
+		return (
+			<div className="preDraftRequirementItem">
+				<FontAwesomeIcon icon={this.props.state.state ? 'check' : 'times'} />
+				<span>{this.props.state.name}</span>
+			</div>
+		);
+	}
 }
 
 export default PreDraftRequirementItem;

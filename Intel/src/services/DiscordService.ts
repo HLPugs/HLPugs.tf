@@ -1,5 +1,5 @@
-import * as config                   from 'config';
-import * as request                  from 'request';
+import * as config from 'config';
+import * as request from 'request';
 
 /**
  * Posts a string to the HLPugs.tf Discord server as a webhook message.
@@ -10,23 +10,26 @@ import * as request                  from 'request';
  * @returns {string} Successful if no errors thrown
  */
 export class DiscordService {
+	static async postToDiscord(
+		message: string,
+		channel: string,
+		fancy = false
+	): Promise<void> {
+		const { username } = config.get('discord');
+		const url = config.get(`discord.webhooks.${channel}`);
 
-  static async postToDiscord(message: string, channel: string, fancy = false): Promise<void> {
-    const { username } = config.get('discord');
-    const url = config.get(`discord.webhooks.${channel}`);
+		const data = {
+			url,
+			username,
+			method: 'POST',
+			body: {
+				avatar_url: '',
+				content: fancy ? '' : message,
+				embeds: fancy ? [{ description: message }] : []
+			},
+			json: true
+		};
 
-    const data = {
-      url,
-      username,
-      method: 'POST',
-      body: {
-        avatar_url: '',
-        content: fancy ? '' : message,
-        embeds: fancy ? [{ description: message }] : [],
-      },
-      json: true,
-    };
-
-    await request(data);
-  }
+		await request(data);
+	}
 }

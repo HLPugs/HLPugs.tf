@@ -4,7 +4,6 @@ import { IsOptional, IsEnum } from 'class-validator';
 import MatchType from '../Enums/MatchType';
 
 class ClassStatisticsFilterOptions {
-
 	@IsOptional()
 	@IsEnum(Region)
 	region?: Region;

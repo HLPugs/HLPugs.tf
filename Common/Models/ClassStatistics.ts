@@ -1,9 +1,9 @@
 import TFClassesTracker from './TFClassesTracker';
 
 class ClassStatistics {
-	totalWins: number = 0;
-	totalLosses: number = 0;
-	totalTies: number = 0;
+	totalWins = 0;
+	totalLosses = 0;
+	totalTies = 0;
 	winsByClass: TFClassesTracker = new TFClassesTracker();
 	lossesByClass: TFClassesTracker = new TFClassesTracker();
 	tiesByClass: TFClassesTracker = new TFClassesTracker();

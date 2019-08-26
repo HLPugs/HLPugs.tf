@@ -11,20 +11,17 @@ import './buttons.scss';
 import './formElements.scss';
 
 WebFont.load({
-  google: {
-    families: ['Lato:400,700@display=swap']
-  }
+	google: {
+		families: ['Lato:400,700@display=swap']
+	}
 });
 
 moment.updateLocale('en', {
-  calendar: {
-    sameDay: 'LT'
-  }
+	calendar: {
+		sameDay: 'LT'
+	}
 });
 
 Notification.requestPermission();
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('root') as HTMLElement
-);
+ReactDOM.render(<App />, document.getElementById('root') as HTMLElement);

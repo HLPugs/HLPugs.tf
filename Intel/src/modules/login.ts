@@ -48,4 +48,4 @@ import * as session from 'express-session';
 };
 */
 
-export const loginUser = async(req: SteamRequest) => {}
+export const loginUser = async (req: SteamRequest) => {};

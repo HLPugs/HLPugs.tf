@@ -6,7 +6,7 @@ export class ProfileViewModel {
 	avatarUrl: string;
 	subsIn: number;
 	subsOut: number;
-	
+
 	static fromPlayer(player: Player): ProfileViewModel {
 		const profileViewModel = new ProfileViewModel();
 
@@ -15,7 +15,7 @@ export class ProfileViewModel {
 		profileViewModel.steamid = player.steamid;
 		profileViewModel.subsIn = player.subsIn;
 		profileViewModel.subsOut = player.subsOut;
-		
+
 		return profileViewModel;
 	}
 }
