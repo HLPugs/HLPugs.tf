@@ -1,16 +1,10 @@
 {
-    "name": "default",
-    "type": "sqlite",
-    "logging": true,
-    "synchronize": true,
-    "database": "localdb/database.sqlite",
-    "entities": [
-        "dist/Intel/src/entities/*.js"
-    ],
-    "migrations": [
-        "dist/migrations/*.js"
-    ],
-    "subscribers": [
-        "dist/subscribers/*.js"
-    ]
+	"name": "default",
+	"type": "sqlite",
+	"logging": true,
+	"synchronize": true,
+	"database": "localdb/database.sqlite",
+	"entities": ["dist/Intel/src/entities/*.js"],
+	"migrations": ["dist/migrations/*.js"],
+	"subscribers": ["dist/subscribers/*.js"]
 }
