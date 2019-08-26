@@ -4,7 +4,7 @@ import * as uuid from 'uuid';
 import { store } from './store';
 import Player from '../entities/Player';
 import DraftTFClass from '../../../Common/Enums/DraftTFClass';
-import GamemodeSchemes from '../../../common/Constants/GamemodeSchemes';
+import GamemodeSchemes from '../../../Common/Constants/GamemodeSchemes';
 import Gamemode from '../../../Common/Enums/Gamemode';
 
 /**

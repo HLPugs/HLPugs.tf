@@ -138,7 +138,7 @@ export default class PlayerService {
 	async updateOrInsertPlayer(player: Player): Promise<void> {
 		const playerRepo = new LinqRepository(Player);
 
-		const existingPlayer = await this.getPlayer(player.steamid);
+		const existingPlayer = await this.playerExists(player.steamid);
 		if (existingPlayer) {
 			await playerRepo.update(player);
 		} else {

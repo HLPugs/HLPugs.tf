@@ -264,7 +264,6 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 										</div>
 										<div>
 											<span>{moment(match.date).fromNow()}</span>
-											<span>{match.winningTeam}</span>
 										</div>
 									</div>
 								</div>
