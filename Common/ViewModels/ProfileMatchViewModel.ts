@@ -4,7 +4,7 @@ import Team from '../Enums/Team';
 import DraftTFClass from '../Enums/DraftTFClass';
 import Outcome from '../Enums/Outcome';
 import { IsBoolean, IsOptional, IsDate, IsString, IsEnum, validateSync, IsNumber } from 'class-validator'
-import { ClassValidationError } from '../../Intel/src/custom-errors/ClassValidationError';
+import Validate from '../../Intel/src/utils/ValidateClass';
 
 
 export default class ProfileMatchViewModel {
@@ -60,10 +60,7 @@ export default class ProfileMatchViewModel {
 		profileMatchViewModel.team = match.matchPlayerData[0].team;
 		profileMatchViewModel.tf2class = match.matchPlayerData[0].tf2class;
 
-		const errors = validateSync(profileMatchViewModel);
-			if (errors.length) {
-				throw new ClassValidationError(errors);
-			}
+		Validate(profileMatchViewModel);
 
 		return profileMatchViewModel;
 	}

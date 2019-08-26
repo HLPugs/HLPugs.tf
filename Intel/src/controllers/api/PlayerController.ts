@@ -4,9 +4,8 @@ import Region from '../../../../Common/Enums/Region';
 import Gamemode from '../../../../Common/Enums/Gamemode';
 import MatchType from '../../../../Common/Enums/MatchType';
 import ClassStatisticsFilterOptions from '../../../../Common/Models/ClassStatisticsFilterOptions';
-import { validateSync } from 'class-validator';
 import { ClassValidationError } from '../../custom-errors/ClassValidationError';
-
+import ValidateClass from '../../utils/ValidateClass';
 
 const playerService = new PlayerService();
 
@@ -24,10 +23,7 @@ export class PlayerController {
 			filterOptions.gamemode = gamemode;
 			filterOptions.region = region;
 			filterOptions.matchType = matchType;
-			const errors = validateSync(filterOptions);
-			if (errors.length) {
-				throw new ClassValidationError(errors);
-			}
+			ValidateClass(filterOptions);
 			return playerService.getClassStatistics(steamid, filterOptions);
 		} else {
 			return playerService.getClassStatistics(steamid);

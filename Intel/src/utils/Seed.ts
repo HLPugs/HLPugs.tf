@@ -28,7 +28,6 @@ const SeedMatches = async () => {
 	const matchRepo = new LinqRepository(Match);
 
 	const player = await playerService.getPlayer('76561198119135809');
-	const player2 = await playerService
 	
 	for (let i = 0; i < 50; i++) {
 		const match = new Match();
@@ -51,24 +50,8 @@ const SeedMatches = async () => {
 	}
 }
 
-const clearDatabase = async () => {
-	const playerRepo = new LinqRepository(Player);
-	const matchRepo = new LinqRepository(Match);
-
-	await playerRepo
-		.createQueryBuilder('players')
-		.delete()
-		.execute();
-
-	await matchRepo
-		.createQueryBuilder('matches')
-		.delete()
-		.execute();
-}
-
 const Seed = async () => {
 	consoleLogStatus('SEEDING LOCAL DATABASE');
-	await clearDatabase();
 	await SeedPlayers();
 	await SeedMatches();
 };
