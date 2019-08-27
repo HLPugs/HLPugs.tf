@@ -6,9 +6,9 @@ import MatchType from '../../../Common/Enums/MatchType';
 import Team from '../../../Common/Enums/Team';
 import MatchPlayerData from '../entities/MatchPlayerData';
 import { consoleLogStatus } from './ConsoleColors';
-import DraftTFClass from '../../../Common/Enums/DraftTFClass';
 import Region from '../../../Common/Enums/Region';
 import Gamemode from '../../../Common/Enums/Gamemode';
+import GamemodeSchemes from '../../../Common/Constants/GamemodeSchemes';
 
 const SeedPlayers = async () => {
 	const playerRepo = new LinqRepository(Player);
@@ -32,15 +32,22 @@ const SeedMatches = async () => {
 		const match = new Match();
 		match.map = 'koth_ashville_rc1';
 		const matchPlayerData = new MatchPlayerData();
-		matchPlayerData.tf2class =
-			Math.random() * 100 > 50 ? DraftTFClass.SOLDIER : DraftTFClass.DEMOMAN;
+		const gamemodeClassScheme = GamemodeSchemes.get(Gamemode.Highlander);
+		const test = Math.floor(Math.random() * 9);
+		console.log(test);
+		matchPlayerData.tf2class = gamemodeClassScheme[test].tf2class;
 		matchPlayerData.player = player;
 		matchPlayerData.team = Team.RED;
 		matchPlayerData.wasCaptain = true;
 		match.matchPlayerData = [matchPlayerData];
 		match.players = [player];
 		match.matchType = MatchType.PUG;
-		match.winningTeam = Team.BLU;
+		match.winningTeam =
+			Math.random() > 0.5
+				? Team.BLU
+				: Math.random() > 0.5
+				? Team.RED
+				: Team.NONE;
 		match.logsId = 12345867;
 		match.region = Region.NorthAmerica;
 		match.gamemode = Gamemode.Highlander;

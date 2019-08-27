@@ -1,12 +1,16 @@
-import TFClassesTracker from './TFClassesTracker';
+import DraftTFClass from '../Enums/DraftTFClass';
 
 class ClassStatistics {
 	totalWins = 0;
 	totalLosses = 0;
 	totalTies = 0;
-	winsByClass: TFClassesTracker = new TFClassesTracker();
-	lossesByClass: TFClassesTracker = new TFClassesTracker();
-	tiesByClass: TFClassesTracker = new TFClassesTracker();
+	statistics: Map<DraftTFClass, ClassStatistic> = new Map();
 }
 
-export default ClassStatistics;
+class ClassStatistic {
+	wins: number = 0;
+	ties: number = 0;
+	losses: number = 0;
+}
+
+export { ClassStatistics, ClassStatistic };
