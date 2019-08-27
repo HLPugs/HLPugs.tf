@@ -1,174 +1,205 @@
 main {
-  grid-area: main;
-  display: flex;
-  flex-direction: column;
+	grid-area: main;
+	display: flex;
+	flex-direction: column;
 
-  .loadingHolder {
-    height: 400px;
-    display: flex;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-  }
+	.loadingHolder {
+		height: 400px;
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		align-items: center;
+	}
 
-  .profileWindow {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    
-    .profile {
-      max-width: 750px;
-      width: 100%;
-      background: var(--background-dark);
-      box-shadow: var(--paper-2);
-      border-radius: 4px;
-      margin: 8px;
-      padding: 15px;
+	.profileWindow {
+		display: flex;
+		justify-content: center;
+		align-items: flex-start;
 
-      .identity {
-        display: flex;
+		.profile {
+			max-width: 750px;
+			width: 100%;
+			background: var(--background-dark);
+			box-shadow: var(--paper-2);
+			border-radius: 4px;
+			margin: 8px;
+			padding: 15px;
 
-        .profilePicture {
-          flex-shrink: 0;
-          width: 186px;
-          height: 186px;
-          border-radius: 93px;
-          margin: 10px;
-          background: var(--font-color);
-          box-shadow: var(--paper-1);
-          cursor: pointer;
-          transition: all .2s ease;
-          background-size: cover;
+			.identity {
+				display: flex;
 
-          &:hover {
-            box-shadow: var(--paper-3);
-          }
-        }
+				.profilePicture {
+					flex-shrink: 0;
+					width: 186px;
+					height: 186px;
+					border-radius: 93px;
+					margin: 10px;
+					background: var(--font-color);
+					box-shadow: var(--paper-1);
+					cursor: pointer;
+					transition: all 0.2s ease;
+					background-size: cover;
 
-        .profileInfo {
-          display: flex;
-          flex-direction: column;
-          flex-grow: 1;
+					&:hover {
+						box-shadow: var(--paper-3);
+					}
+				}
 
-          .alias {
-            display: flex;
-            font-size: 32px;
-            margin: 10px;
-            padding-right: 10px;
-            flex-shrink: 0;
-          }
+				.profileInfo {
+					display: flex;
+					flex-direction: column;
+					flex-grow: 1;
 
-          .quickLinks {
-            display: flex;
-            justify-content: flex-end;
-            flex-wrap: wrap;
-            align-items: flex-end;
-            margin: 10px;
-            flex-grow: 1;
+					.alias {
+						display: flex;
+						font-size: 32px;
+						margin: 10px;
+						padding-right: 10px;
+						flex-shrink: 0;
+					}
 
-            .quickLink {
-              width: 64px;
-              height: 64px;
-              flex-shrink: 0;
-              background: var(--background-light);
-              border-radius: 4px;
-              margin-left: 20px;
-              margin-bottom: 15px;
-              box-shadow: var(--paper-1);
-              cursor: pointer;
-              transition: all .2s ease;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              text-decoration: none;
-              color: var(--font-color-secondary);
+					.quickLinks {
+						display: flex;
+						justify-content: flex-end;
+						flex-wrap: wrap;
+						align-items: flex-end;
+						margin: 10px;
+						flex-grow: 1;
 
-              &:hover {
-                box-shadow: var(--paper-2);
-                color: var(--font-color);
-              }
-            }
-          }
-        }
-      }
-    }
+						.quickLink {
+							width: 64px;
+							height: 64px;
+							flex-shrink: 0;
+							background: var(--background-light);
+							border-radius: 4px;
+							margin-left: 20px;
+							margin-bottom: 15px;
+							box-shadow: var(--paper-1);
+							cursor: pointer;
+							transition: all 0.2s ease;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							text-decoration: none;
+							color: var(--font-color-secondary);
 
-    .matches {
-      background: var(--background-dark);
-      box-shadow: var(--paper-2);
-      border-radius: 4px;
-      margin: 8px;
-      padding: 15px;
-      max-width: 450px;
-      flex-grow: 1;
-      display: flex;
-      flex-direction: column;
+							&:hover {
+								box-shadow: var(--paper-2);
+								color: var(--font-color);
+							}
+						}
+					}
+				}
+			}
+		}
 
-      .title {
-        font-size: 24px;
-      }
+		.matches {
+			background: var(--background-dark);
+			box-shadow: var(--paper-2);
+			border-radius: 4px;
+			margin: 8px;
+			padding: 15px;
+			max-width: 450px;
+			flex-grow: 1;
+			display: flex;
+			flex-direction: column;
 
-      .matchHolder {
-        width: 100%;
+			.title {
+				font-size: 24px;
+			}
 
-        .match {
-          background: var(--background);
-          border-radius: 4px;
-          border: solid 2px #4caf50;
-          margin: 10px 0;
-          display: flex;
+			.matchHolder {
+				width: 100%;
 
-          .map {
-            height: 90px;
-            width: 140px;
-            background: white;
-            border-radius: 3px;
-          }
+				.match {
+					background: var(--background);
+					border-radius: 4px;
+					border: solid 2px #4caf50;
+					margin: 10px 0;
+					display: flex;
 
-          .matchDetail {
-            padding: 10px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            flex-grow: 1;
+					.logsLink {
+						position: relative;
+						border-radius: 3px;
+						overflow: hidden;
+						color: #ffffff;
 
-            > div {
-              display: flex;
-              justify-content: space-between;
-            }
-          }
-        }
-      }
+						.map {
+							height: 90px;
+							width: 140px;
+							background: #ffffff;
+						}
 
-      .pagination {
-        display: flex;
-        justify-content: center;
-        user-select: none;
-        font-size: 20px;
-        align-items: center;
+						.logs {
+							position: absolute;
+							top: 0;
+							left: 0;
+							display: flex;
+							justify-content: center;
+							align-items: center;
+							height: 100%;
+							width: 100%;
+							background: rgba(0, 0, 0, 0.5);
+							opacity: 0;
+							transition: opacity 0.3s ease;
+							font-size: 20px;
 
-        .pager {
-          cursor: pointer;
-          padding: 5px;
-        }
+							span {
+								margin-left: 10px;
+							}
+						}
 
-        .pager.disabled {
-          opacity: .5;
-          cursor: default;
-        }
+						&:hover {
+							.logs {
+								opacity: 1;
+							}
+						}
+					}
 
-        .pages {
-          width: 110px;
-          display: flex;
-          justify-content: center;
-        }
-      }
-    }
-  }
+					.matchDetail {
+						padding: 10px;
+						display: flex;
+						flex-direction: column;
+						justify-content: space-between;
+						flex-grow: 1;
+
+						> div {
+							display: flex;
+							justify-content: space-between;
+						}
+					}
+				}
+			}
+
+			.pagination {
+				display: flex;
+				justify-content: center;
+				user-select: none;
+				font-size: 20px;
+				align-items: center;
+
+				.pager {
+					cursor: pointer;
+					padding: 5px;
+				}
+
+				.pager.disabled {
+					opacity: 0.5;
+					cursor: default;
+				}
+
+				.pages {
+					width: 110px;
+					display: flex;
+					justify-content: center;
+				}
+			}
+		}
+	}
 }
 
 .recharts-tooltip-wrapper {
-  .recharts-default-tooltip {
-    background: var(--background-light);
-  }
+	.recharts-default-tooltip {
+		background: var(--background-light);
+	}
 }

@@ -33,7 +33,8 @@ import {
 	faStar,
 	faArrowDown,
 	faArrowLeft,
-	faArrowRight
+	faArrowRight,
+	faChartPie
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -54,7 +55,8 @@ library.add(
 	faStar,
 	faArrowDown,
 	faArrowLeft,
-	faArrowRight
+	faArrowRight,
+	faChartPie
 );
 
 interface AppState {
@@ -67,7 +69,7 @@ class App extends React.Component<{}, AppState> {
 	private socket: SocketIOClient.Socket;
 	private dummyConfiguration: SiteConfiguration;
 
-	constructor(props: Object) {
+	constructor(props: Record<string, any>) {
 		super(props);
 
 		this.socket = io(
