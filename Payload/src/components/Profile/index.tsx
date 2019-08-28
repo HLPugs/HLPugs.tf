@@ -1,13 +1,21 @@
 import React from 'react';
 
 import './style.scss';
+import 'reaviz/dist/index.css';
 import HttpClient from '../../common/HttpClient';
 import { ProfileViewModel } from '../../../../Common/ViewModels/ProfileViewModel';
 import LoadingDots from '../LoadingDots';
 import ProfilePaginatedMatchesViewModel from '../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
-import { StackedBarChart, StackedBarSeries, LinearXAxis } from 'reaviz';
+import {
+	StackedBarChart,
+	StackedBarSeries,
+	LinearXAxis,
+	Bar,
+	Gradient,
+	GradientStop
+} from 'reaviz';
 import ProfileClassStatisticsViewModel from '../../../../Common/ViewModels/ProfileClassStatisticsViewModel';
 import Region from '../../../../Common/Enums/Region';
 import Gamemode from '../../../../Common/Enums/Gamemode';
@@ -176,7 +184,24 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 								height={350}
 								data={this.state.classStats.statistics}
 								xAxis={<LinearXAxis type="category" />}
-								series={<StackedBarSeries />}
+								gridlines={null}
+								series={
+									<StackedBarSeries
+										colorScheme={['#f44336', '#ffeb3b', '#4caf50']}
+										bar={
+											<Bar
+												gradient={
+													<Gradient
+														stops={[
+															<GradientStop stopOpacity={1} key="start" />
+														]}
+													/>
+												}
+												rounded={false}
+											/>
+										}
+									/>
+								}
 							/>
 						</div>
 					</div>
@@ -184,7 +209,16 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 						<div className="title">Recent Matches</div>
 						<div className="matchHolder">
 							{this.state.matches.matches.map(match => (
-								<div key={match.id} className="match">
+								<div
+									key={match.id}
+									className={`match ${
+										match.outcome === 0
+											? 'Win'
+											: match.outcome === 1
+											? 'Loss'
+											: 'Tie'
+									}`}
+								>
 									<a
 										href={`https://logs.tf/${match.logsId}`}
 										target="_blank"
