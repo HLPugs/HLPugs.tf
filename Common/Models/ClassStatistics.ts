@@ -1,9 +1,9 @@
 import DraftTFClass from '../Enums/DraftTFClass';
 
 class ClassStatistics {
-	totalWins = 0;
-	totalLosses = 0;
-	totalTies = 0;
+	totalWinCount = 0;
+	totalLossCount = 0;
+	totalTieCount = 0;
 	statistics: Map<DraftTFClass, ClassStatistic> = new Map();
 }
 

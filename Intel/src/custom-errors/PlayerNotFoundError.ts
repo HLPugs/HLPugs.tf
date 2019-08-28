@@ -1,8 +1,8 @@
 export class PlayerNotFoundError extends Error {
-	constructor(steamid: string) {
-		super(steamid);
+	constructor(identifier: string) {
+		super(identifier);
 		this.name = 'PlayerNotFoundError';
-		this.message = `Player with steamid "${steamid}" does not exist`;
+		this.message = `Player ("${identifier}") does not exist`;
 		Error.captureStackTrace(this, PlayerNotFoundError);
 	}
 }

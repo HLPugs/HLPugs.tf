@@ -20,7 +20,7 @@ class DraftArea extends React.PureComponent<DraftAreaProps, {}> {
 						<Announcements socket={socket} />
 						<DraftState socket={socket} />
 						<ClassLists
-							classes={this.props.classes}
+							classes={this.props.classes || []}
 							steamid={this.props.steamid}
 						/>
 					</main>

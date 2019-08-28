@@ -4,49 +4,16 @@ import './style.scss';
 import HttpClient from '../../common/HttpClient';
 import { ProfileViewModel } from '../../../../Common/ViewModels/ProfileViewModel';
 import LoadingDots from '../LoadingDots';
-import ClassIcon from '../ClassIcon';
-import DraftTFClass from '../../../../Common/Enums/DraftTFClass';
 import ProfilePaginatedMatchesViewModel from '../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
 import {
 	StackedBarChart,
 	StackedBarSeries,
-	LinearXAxis,
-	LinearXAxisTickLabel
-} from 'reaviz';
-import ClassStatistics from '../../../../Common/Models/ClassStatistics';
-import Region from '../../../../Common/Enums/Region';
-import Gamemode from '../../../../Common/Enums/Gamemode';
-import MatchType from '../../../../Common/Enums/MatchType';
-import statConvert from './statConvert';
+	LinearXAxis} from 'reaviz';
+import { ClassStatistics } from '../../../../Common/Models/ClassStatistics';
+import ProfileClassStatisticsViewModel from '../../../../Common/ViewModels/ProfileClassStatisticsViewModel';
 
-const data = [
-	{
-		key: 'Scout',
-		data: [
-			{ key: 'Wins', data: 246 },
-			{ key: 'Ties', data: 20 },
-			{ key: 'Losses', data: 50 }
-		]
-	},
-	{
-		key: 'Soldier',
-		data: [
-			{ key: 'Wins', data: 246 },
-			{ key: 'Ties', data: 20 },
-			{ key: 'Losses', data: 50 }
-		]
-	},
-	{
-		key: 'Pyro',
-		data: [
-			{ key: 'Wins', data: 246 },
-			{ key: 'Ties', data: 20 },
-			{ key: 'Losses', data: 50 }
-		]
-	}
-];
 
 interface ProfileProps {
 	steamid: string;
@@ -60,7 +27,7 @@ interface ProfileState {
 	matchesPage: number;
 	matchesPageSize: number;
 	player?: ProfileViewModel;
-	classStats?: ClassStatistics;
+	classStats?: ProfileClassStatisticsViewModel;
 	matches?: ProfilePaginatedMatchesViewModel;
 }
 
@@ -102,11 +69,9 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 	};
 
 	getClassStatistics = async () => {
-		const classStats = await this.http.get(
-			`/player/${this.props.steamid}/classStatistics?region=${this.state.statRegion}&gamemode=${this.state.statGamemode}&matchtype=${this.state.statMatchType}`
+		const classStats: ProfileClassStatisticsViewModel = await this.http.get(
+			`/profile/${this.props.steamid}/classStatistics?region=${this.state.statRegion}&gamemode=${this.state.statGamemode}&matchtype=${this.state.statMatchType}`
 		);
-
-		console.log(statConvert(classStats));
 
 		this.setState({
 			classStats
@@ -211,7 +176,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 							<StackedBarChart
 								width={600}
 								height={350}
-								data={statConvert(this.state.classStats)}
+								data={this.state.classStats.statistics}
 								xAxis={<LinearXAxis type="category" />}
 								series={<StackedBarSeries />}
 							/>

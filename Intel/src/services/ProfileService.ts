@@ -2,28 +2,35 @@ import Match from '../entities/Match';
 import { LinqRepository } from 'typeorm-linq-repository';
 import Player from '../entities/Player';
 import { ProfileViewModel } from '../../../Common/ViewModels/ProfileViewModel';
-import { isSteamID } from '../utils/SteamIDChecker';
 import PlayerService from './PlayerService';
 import ProfilePaginatedMatchesViewModel from '../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
 import ProfileMatchViewModel from '../../../Common/ViewModels/ProfileMatchViewModel';
-import Team from '../../../Common/Enums/Team';
+import { isSteamID } from '../utils/SteamIDChecker';
 
 const playerService = new PlayerService();
 
-const playerRepo = new LinqRepository(Player);
 const matchRepo = new LinqRepository(Match);
 
 export class ProfileService {
 	async getPaginatedMatches(
-		steamid: string,
+		identifier: string,
 		pageSize: number,
 		currentPage: number
 	): Promise<ProfilePaginatedMatchesViewModel> {
-		const profileQuery = matchRepo
-			.getAll()
-			.join(m => m.players)
-			.where(player => player.steamid)
-			.in([steamid]);
+		let profileQuery;
+		if (isSteamID(identifier)) {
+			profileQuery = matchRepo
+				.getAll()
+				.join(m => m.players)
+				.where(player => player.steamid)
+				.in([identifier]);
+		} else {
+			profileQuery = matchRepo
+				.getAll()
+				.join(m => m.players)
+				.where(player => player.alias)
+				.equal(identifier);
+		}
 
 		const totalMatchCount = await profileQuery.count();
 
