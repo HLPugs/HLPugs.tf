@@ -5,7 +5,7 @@ export default class ProfileClassStatisticsViewModel {
 	statistics: ReaVizBar[] = [];
 	totalWinCount = 0;
 	totalTieCount = 0;
-	totalLossesCount = 0;
+	totalLossCount = 0;
 
 	static fromClassStatistics(classStatistics: ClassStatistics) {
 		const profileClassStatisticsViewModel = new ProfileClassStatisticsViewModel();
@@ -37,7 +37,7 @@ export default class ProfileClassStatisticsViewModel {
 			classStatistics.totalWinCount;
 		profileClassStatisticsViewModel.totalTieCount =
 			classStatistics.totalTieCount;
-		profileClassStatisticsViewModel.totalLossesCount =
+		profileClassStatisticsViewModel.totalLossCount =
 			classStatistics.totalLossCount;
 
 		return profileClassStatisticsViewModel;
