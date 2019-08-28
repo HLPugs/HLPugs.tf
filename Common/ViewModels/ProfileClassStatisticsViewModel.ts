@@ -3,9 +3,9 @@ import DraftTFClass from '../Enums/DraftTFClass';
 
 export default class ProfileClassStatisticsViewModel {
 	statistics: ReaVizBar[] = [];
-	totalWinCount: number = 0;
-	totalTieCount: number = 0;
-	totalLossesCount: number = 0;
+	totalWinCount = 0;
+	totalTieCount = 0;
+	totalLossesCount = 0;
 
 	static fromClassStatistics(classStatistics: ClassStatistics) {
 		const profileClassStatisticsViewModel = new ProfileClassStatisticsViewModel();
@@ -27,7 +27,7 @@ export default class ProfileClassStatisticsViewModel {
 			};
 			const reaVizBar: ReaVizBar = {
 				key: draftTFClass,
-				data: [winEntry, tieEntry, lossEntry]
+				data: [lossEntry, tieEntry, winEntry]
 			};
 
 			profileClassStatisticsViewModel.statistics.push(reaVizBar);

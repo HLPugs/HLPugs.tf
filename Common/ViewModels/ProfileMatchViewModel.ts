@@ -56,7 +56,7 @@ export default class ProfileMatchViewModel {
 
 		if (match.winningTeam === match.matchPlayerData[0].team) {
 			profileMatchViewModel.outcome = Outcome.WIN;
-		} else if (match.matchPlayerData[0].team === Team.NONE) {
+		} else if (match.winningTeam === Team.NONE) {
 			profileMatchViewModel.outcome = Outcome.TIE;
 		} else {
 			profileMatchViewModel.outcome = Outcome.LOSS;

@@ -7,13 +7,11 @@ import LoadingDots from '../LoadingDots';
 import ProfilePaginatedMatchesViewModel from '../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import moment from 'moment';
-import {
-	StackedBarChart,
-	StackedBarSeries,
-	LinearXAxis} from 'reaviz';
-import { ClassStatistics } from '../../../../Common/Models/ClassStatistics';
+import { StackedBarChart, StackedBarSeries, LinearXAxis } from 'reaviz';
 import ProfileClassStatisticsViewModel from '../../../../Common/ViewModels/ProfileClassStatisticsViewModel';
-
+import Region from '../../../../Common/Enums/Region';
+import Gamemode from '../../../../Common/Enums/Gamemode';
+import MatchType from '../../../../Common/Enums/MatchType';
 
 interface ProfileProps {
 	steamid: string;
@@ -21,9 +19,9 @@ interface ProfileProps {
 
 interface ProfileState {
 	loading: boolean;
-	statRegion: string;
-	statGamemode: string;
-	statMatchType: string;
+	statRegion: Region | 'all';
+	statGamemode: Gamemode | 'all';
+	statMatchType: MatchType | 'all';
 	matchesPage: number;
 	matchesPageSize: number;
 	player?: ProfileViewModel;
@@ -39,9 +37,9 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
 		this.state = {
 			loading: true,
-			statRegion: 'na',
-			statGamemode: 'Highlander',
-			statMatchType: 'PUG',
+			statRegion: Region.NorthAmerica,
+			statGamemode: Gamemode.Highlander,
+			statMatchType: MatchType.PUG,
 			matchesPage: 0,
 			matchesPageSize: 5
 		};

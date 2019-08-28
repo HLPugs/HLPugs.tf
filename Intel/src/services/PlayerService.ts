@@ -66,7 +66,9 @@ export default class PlayerService {
 		if (!(await this.playerExists(identifier))) {
 			throw new PlayerNotFoundError(identifier);
 		} else {
-			steamid = isSteamID(identifier) ? identifier : (await this.getPlayer(identifier)).steamid;
+			steamid = isSteamID(identifier)
+				? identifier
+				: (await this.getPlayer(identifier)).steamid;
 		}
 		const db = await getManager();
 		const winsQuery = db.query(
@@ -74,11 +76,11 @@ export default class PlayerService {
 			[steamid, ...filters]
 		);
 		const lossQuery = db.query(
-			`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team != m.winningTeam AND mpd.team != '${Team.NONE}' AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`,
+			`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team != m.winningTeam AND m.winningTeam != '${Team.NONE}' AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`,
 			[steamid, ...filters]
 		);
 		const tiesQuery = db.query(
-			`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team != m.winningTeam AND mpd.team = '${Team.NONE}' AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`,
+			`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND m.winningTeam = '${Team.NONE}' AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`,
 			[steamid, ...filters]
 		);
 
@@ -98,9 +100,9 @@ export default class PlayerService {
 			classStatistics.statistics.set(tf2class, new ClassStatistic());
 		});
 
-		let totalWinCount: number = 0,
-			totalLossCount: number = 0,
-			totalTieCount: number = 0;
+		let totalWinCount = 0,
+			totalLossCount = 0,
+			totalTieCount = 0;
 		winResults.forEach(result => {
 			classStatistics.statistics.get(result.tf2class).wins = result.count;
 			totalWinCount += result.count;

@@ -33,9 +33,8 @@ const SeedMatches = async () => {
 		match.map = 'koth_ashville_rc1';
 		const matchPlayerData = new MatchPlayerData();
 		const gamemodeClassScheme = GamemodeSchemes.get(Gamemode.Highlander);
-		const test = Math.floor(Math.random() * 9);
-		console.log(test);
-		matchPlayerData.tf2class = gamemodeClassScheme[test].tf2class;
+		const randClass = Math.floor(Math.random() * 9);
+		matchPlayerData.tf2class = gamemodeClassScheme[randClass].tf2class;
 		matchPlayerData.player = player;
 		matchPlayerData.team = Team.RED;
 		matchPlayerData.wasCaptain = true;
