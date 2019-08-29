@@ -5,21 +5,8 @@ import 'reaviz/dist/index.css';
 import HttpClient from '../../common/HttpClient';
 import { ProfileViewModel } from '../../../../Common/ViewModels/ProfileViewModel';
 import LoadingDots from '../LoadingDots';
-import ProfilePaginatedMatchesViewModel from '../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import moment from 'moment';
-import {
-	StackedBarChart,
-	StackedBarSeries,
-	LinearXAxis,
-	Bar,
-	Gradient,
-	GradientStop
-} from 'reaviz';
-import ProfileClassStatisticsViewModel from '../../../../Common/ViewModels/ProfileClassStatisticsViewModel';
-import Region from '../../../../Common/Enums/Region';
-import Gamemode from '../../../../Common/Enums/Gamemode';
-import MatchType from '../../../../Common/Enums/MatchType';
+import RecentMatches from './RecentMatches';
+import ProfileStatistics from './ProfileStatistics';
 
 interface ProfileProps {
 	steamid: string;
@@ -27,14 +14,7 @@ interface ProfileProps {
 
 interface ProfileState {
 	loading: boolean;
-	statRegion: Region | 'all';
-	statGamemode: Gamemode | 'all';
-	statMatchType: MatchType | 'all';
-	matchesPage: number;
-	matchesPageSize: number;
 	player?: ProfileViewModel;
-	classStats?: ProfileClassStatisticsViewModel;
-	matches?: ProfilePaginatedMatchesViewModel;
 }
 
 class Profile extends React.Component<ProfileProps, ProfileState> {
@@ -44,12 +24,7 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 		super(props);
 
 		this.state = {
-			loading: true,
-			statRegion: Region.NorthAmerica,
-			statGamemode: Gamemode.Highlander,
-			statMatchType: MatchType.PUG,
-			matchesPage: 0,
-			matchesPageSize: 5
+			loading: true
 		};
 
 		this.http = new HttpClient();
@@ -57,8 +32,6 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 
 	componentDidMount() {
 		this.getPlayerData();
-		this.getClassStatistics();
-		this.getMatches();
 	}
 
 	getPlayerData = async () => {
@@ -74,43 +47,8 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 		});
 	};
 
-	getClassStatistics = async () => {
-		const classStats: ProfileClassStatisticsViewModel = await this.http.get(
-			`/profile/${this.props.steamid}/classStatistics?region=${this.state.statRegion}&gamemode=${this.state.statGamemode}&matchtype=${this.state.statMatchType}`
-		);
-
-		this.setState({
-			classStats
-		});
-	};
-
-	getMatches = async () => {
-		const matches = await this.http.get(
-			`/profile/${this.props.steamid}/matches?pageSize=${this.state.matchesPageSize}&currentPage=${this.state.matchesPage}`
-		);
-
-		this.setState({
-			matches
-		});
-	};
-
-	changePage = async (delta: number) => {
-		const newPage = this.state.matchesPage + delta;
-		if (
-			newPage >= 0 &&
-			newPage < this.state.matches!.totalMatches / this.state.matchesPageSize
-		) {
-			this.setState(
-				{
-					matchesPage: this.state.matchesPage + delta
-				},
-				this.getMatches
-			);
-		}
-	};
-
 	render() {
-		return this.state.player && this.state.matches && this.state.classStats ? (
+		return this.state.player ? (
 			<main>
 				<div className="profileWindow">
 					<div className="profile">
@@ -178,116 +116,9 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 								</div>
 							</div>
 						</div>
-						<div>
-							<StackedBarChart
-								width={600}
-								height={350}
-								data={this.state.classStats.statistics}
-								xAxis={<LinearXAxis type="category" />}
-								gridlines={null}
-								series={
-									<StackedBarSeries
-										colorScheme={['#f44336', '#ffeb3b', '#4caf50']}
-										bar={
-											<Bar
-												gradient={
-													<Gradient
-														stops={[
-															<GradientStop stopOpacity={1} key="start" />
-														]}
-													/>
-												}
-												rounded={false}
-											/>
-										}
-									/>
-								}
-							/>
-						</div>
+						<ProfileStatistics steamid={this.props.steamid} />
 					</div>
-					<div className="matches">
-						<div className="title">Recent Matches</div>
-						<div className="matchHolder">
-							{this.state.matches.matches.map(match => (
-								<div
-									key={match.id}
-									className={`match ${
-										match.outcome === 0
-											? 'Win'
-											: match.outcome === 1
-											? 'Loss'
-											: 'Tie'
-									}`}
-								>
-									<a
-										href={`https://logs.tf/${match.logsId}`}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="logsLink"
-									>
-										<div
-											className="map"
-											style={{
-												backgroundImage: `url('/img/maps/${match.map}.jpg')`
-											}}
-										/>
-										<div className="logs">
-											<FontAwesomeIcon icon="chart-pie" />
-											<span>Logs.tf</span>
-										</div>
-									</a>
-									<div className="matchDetail">
-										<div>
-											<span>
-												{match.tf2class}
-												{match.wasCaptain ? ' - Captain' : ''}
-											</span>
-											<span>{match.map}</span>
-										</div>
-										<div>
-											<span>{moment(match.date).fromNow()}</span>
-											<span>
-												{match.outcome === 0
-													? 'Win'
-													: match.outcome === 1
-													? 'Loss'
-													: 'Tie'}
-											</span>
-										</div>
-									</div>
-								</div>
-							))}
-						</div>
-						<div className="pagination">
-							<div
-								className={`${
-									this.state.matchesPage === 0 ? 'disabled' : ''
-								} pager`}
-								onClick={() => this.changePage(-1)}
-							>
-								<FontAwesomeIcon icon="arrow-left" />
-							</div>
-							<div className="pages">
-								{this.state.matchesPage + 1} /{' '}
-								{Math.ceil(
-									this.state.matches.totalMatches / this.state.matchesPageSize
-								)}
-							</div>
-							<div
-								className={`${
-									this.state.matchesPage + 1 ===
-									Math.ceil(
-										this.state.matches.totalMatches / this.state.matchesPageSize
-									)
-										? 'disabled'
-										: ''
-								} pager`}
-								onClick={() => this.changePage(1)}
-							>
-								<FontAwesomeIcon icon="arrow-right" />
-							</div>
-						</div>
-					</div>
+					<RecentMatches steamid={this.props.steamid} />
 				</div>
 			</main>
 		) : (
