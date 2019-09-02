@@ -122,7 +122,7 @@ class Home extends React.Component<HomeProps, HomeState> {
 						/>
 						<Chat socket={this.props.socket} user={this.props.user} />
 						<Settings
-							settings={this.props.user.settings ? this.props.user.settings : {}}
+							settings={this.props.user.settings}
 							socket={this.props.socket}
 							visibility={this.state.settingsOpen}
 							classes={this.props.configuration.classes}

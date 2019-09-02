@@ -60,7 +60,7 @@ class Player extends React.Component<ProfileProps, ProfileState> {
 					classes={this.props.configuration.classes}
 					settingsOnClick={this.toggleSettings}
 					userAlias={this.props.user.alias}
-					settings={this.props.user.settings ? this.props.user.settings : {}}
+					settings={this.props.user.settings}
 				/>
 			</div>
 		);

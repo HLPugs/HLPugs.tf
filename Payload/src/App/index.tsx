@@ -152,7 +152,7 @@ class App extends React.Component<{}, AppState> {
 												? this.state.configuration
 												: this.dummyConfiguration
 										}
-										user={this.state.user ? this.state.user : {}}
+										user={this.state.user ? this.state.user : new UserViewModel()}
 									/>
 								)}
 							/>
@@ -166,7 +166,7 @@ class App extends React.Component<{}, AppState> {
 												? this.state.configuration
 												: this.dummyConfiguration
 										}
-										user={this.state.user ? this.state.user : {}}
+										user={this.state.user ? this.state.user : new UserViewModel()}
 										{...routeProps}
 									/>
 								)}

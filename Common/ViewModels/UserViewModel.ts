@@ -2,12 +2,12 @@ import PlayerSettings from '../../Intel/src/entities/PlayerSettings';
 import Player from '../../Intel/src/entities/Player';
 
 export default class UserViewModel {
-	loggedIn?: boolean;
-	alias?: string;
+	loggedIn: boolean = false;
+	alias?: string
 	steamid?: string;
 	avatarUrl?: string;
-	settings?: PlayerSettings;
-	isBanned?: boolean;
+	settings!: PlayerSettings;
+	isBanned!: boolean;
 
 	static fromPlayer(player: Player) {
 		const userViewModel = new UserViewModel();
