@@ -1,15 +1,15 @@
 import React from 'react';
 import './style.scss';
-import { DraftTFClassList } from '../../common/types';
 import ClassIcon from '../ClassIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SettingsViewModel } from '../../../../Common/ViewModels/SettingsViewModel';
+import GamemodeClassScheme from '../../../../Common/Models/GamemodeScheme';
 
 interface SettingsProps {
 	socket: SocketIOClient.Socket;
 	visibility: boolean;
 	settingsOnClick: Function;
-	classes: DraftTFClassList[];
+	classes: GamemodeClassScheme[];
 	userAlias?: string;
 	settings: SettingsViewModel;
 }
@@ -49,13 +49,13 @@ class Settings extends React.PureComponent<SettingsProps, {}> {
 						<div className="settingsTitle">Favorite Classes</div>
 						<div className="settingsBody">
 							<div className="favClassesHolder">
-								{this.props.classes.map((tfclass: DraftTFClassList, index) => {
+								{this.props.classes.map((tfclass: GamemodeClassScheme, index) => {
 									return (
 										<div className="favClass" key={index}>
-											<ClassIcon name={tfclass.name} />
-											<label htmlFor={`${tfclass}Check`}>{tfclass.name}</label>
-											<input id={`${tfclass.name}Check`} type="checkbox" />
-											<label htmlFor={`${tfclass.name}Check`} />
+											<ClassIcon name={tfclass.tf2class} />
+											<label htmlFor={`${tfclass}Check`}>{tfclass.tf2class}</label>
+											<input id={`${tfclass.tf2class}Check`} type="checkbox" />
+											<label htmlFor={`${tfclass.tf2class}Check`} />
 										</div>
 									);
 								})}

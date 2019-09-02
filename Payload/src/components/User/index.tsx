@@ -2,8 +2,8 @@ import React from 'react';
 import UserInfo from './UserInfo';
 import UserDropDown from './UserDropDown';
 import SteamLogIn from './SteamLogIn';
-import { UserViewModel } from '../../common/types';
 import './style.scss';
+import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
 
 interface UserProps {
 	user: UserViewModel;

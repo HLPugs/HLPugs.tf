@@ -1,10 +1,11 @@
 import { IconName, IconPrefix } from '@fortawesome/fontawesome-svg-core';
-import DraftTFClass from '../../../Common/Enums/DraftTFClass';
+import GamemodeClassScheme from '../../../Common/Models/GamemodeScheme';
+import Region from '../../../Common/Enums/Region';
 
 export interface SiteConfiguration {
 	branding: SiteBranding;
 	navigation: NavItem[];
-	classes: DraftTFClassList[];
+	classes: GamemodeClassScheme[];
 }
 
 export interface SiteBranding {
@@ -28,30 +29,6 @@ export interface NavItem {
 	};
 }
 
-export interface DraftTFClassList {
-	name: DraftTFClass;
-	numberPerTeam: number;
-}
-
-interface SettingsViewModel {
-	id: number;
-	isNotifiableByMention: boolean;
-	volume: number;
-	favoriteClasses: DraftTFClass[];
-	addToFavoritesAfterMatch: boolean;
-	addToFavoritesOnLogin: boolean;
-	audioCuesEnabled: boolean;
-	voicepack: string;
-	colorOfNameInChat: string;
-}
-export interface UserViewModel {
-	loggedIn?: boolean;
-	alias?: string;
-	steamid?: string;
-	avatarUrl?: string;
-	settings?: any;
-}
-
 export interface ChatMessageType {
 	username: string;
 	userid: string;
@@ -71,8 +48,6 @@ export interface CompletionItem {
 	url?: string;
 }
 
-export type region = 'na' | 'eu' | 'all';
-
 export interface BasicAnnouncement {
 	content: string;
 	priority: boolean;
@@ -80,7 +55,7 @@ export interface BasicAnnouncement {
 
 export interface FullAnnouncement extends BasicAnnouncement {
 	id: number;
-	region: region;
+	region: Region;
 	creator: string;
 	timestamp: Date;
 }

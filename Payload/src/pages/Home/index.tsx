@@ -1,5 +1,4 @@
 import React from 'react';
-import { SiteConfiguration, UserViewModel } from '../../common/types';
 import io from 'socket.io-client';
 import Header from '../../components/Header';
 import User from '../../components/User';
@@ -9,6 +8,8 @@ import Chat from '../../components/Chat';
 import AliasModal from '../../components/AliasModal';
 import Settings from '../../components/Settings';
 import './style.scss';
+import { SiteConfiguration } from '../../common/types';
+import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
 
 interface HomeProps {
 	socket: SocketIOClient.Socket;
@@ -121,7 +122,7 @@ class Home extends React.Component<HomeProps, HomeState> {
 						/>
 						<Chat socket={this.props.socket} user={this.props.user} />
 						<Settings
-							settings={this.props.user.settings}
+							settings={this.props.user.settings ? this.props.user.settings : {}}
 							socket={this.props.socket}
 							visibility={this.state.settingsOpen}
 							classes={this.props.configuration.classes}

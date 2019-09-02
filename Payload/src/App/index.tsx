@@ -6,7 +6,7 @@ import {
 	Route,
 	Redirect
 } from 'react-router-dom';
-import { SiteConfiguration, UserViewModel } from '../common/types';
+import { SiteConfiguration } from '../common/types';
 import Home from '../pages/Home';
 import Player from '../pages/Player';
 import Banned from '../pages/Banned';
@@ -36,6 +36,7 @@ import {
 	faArrowRight,
 	faChartPie
 } from '@fortawesome/free-solid-svg-icons';
+import UserViewModel from '../../../Common/ViewModels/UserViewModel';
 
 library.add(
 	faSteamSymbol,

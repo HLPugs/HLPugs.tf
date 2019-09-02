@@ -1,11 +1,11 @@
 import React from 'react';
 import ClassBox from './ClassBox';
-import { DraftTFClassList } from '../../../common/types';
 import './style.scss';
 import { SocketConsumer } from '../../../pages/Home';
+import GamemodeClassScheme from '../../../../../Common/Models/GamemodeScheme';
 
 interface ClassListsProps {
-	classes: DraftTFClassList[];
+	classes: GamemodeClassScheme[];
 	steamid?: string;
 }
 
@@ -15,10 +15,10 @@ class DraftArea extends React.Component<ClassListsProps, {}> {
 			<SocketConsumer>
 				{(socket: SocketIOClient.Socket) => (
 					<div id="classList">
-						{this.props.classes.map((tfclass: DraftTFClassList) => (
+						{this.props.classes.map(tfclass => (
 							<ClassBox
 								properties={tfclass}
-								key={tfclass.name}
+								key={tfclass.tf2class}
 								socket={socket}
 								steamid={this.props.steamid}
 							/>
