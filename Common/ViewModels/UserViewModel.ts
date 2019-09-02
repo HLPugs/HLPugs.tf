@@ -6,8 +6,8 @@ export default class UserViewModel {
 	alias?: string;
 	steamid?: string;
 	avatarUrl?: string;
-	settings: PlayerSettings;
-	isBanned: boolean;
+	settings?: PlayerSettings;
+	isBanned?: boolean;
 
 	static fromPlayer(player: Player) {
 		const userViewModel = new UserViewModel();
