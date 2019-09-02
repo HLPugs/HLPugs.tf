@@ -6,7 +6,7 @@ import {
 	Route,
 	Redirect
 } from 'react-router-dom';
-import { SiteConfiguration } from '../common/types';
+import { SiteConfiguration } from '../../../Common/Models/SiteConfiguration';
 import Home from '../pages/Home';
 import Player from '../pages/Player';
 import Banned from '../pages/Banned';
@@ -84,7 +84,7 @@ class App extends React.Component<{}, AppState> {
 				logoPath: ''
 			},
 			navigation: [],
-			classes: []
+			gamemodeClassSchemes: []
 		};
 
 		this.socket.on('siteConfiguration', (configuration: SiteConfiguration) => {

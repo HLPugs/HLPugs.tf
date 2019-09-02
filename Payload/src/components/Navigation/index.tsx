@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavItem } from '../../common/types';
+import { NavItem } from '../../../../Common/Models/SiteConfiguration';
 import NavigationItem from './NavigationItem';
 import './style.scss';
 

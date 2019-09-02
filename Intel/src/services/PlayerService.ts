@@ -15,7 +15,7 @@ import {
 	ClassStatistics,
 	ClassStatistic
 } from '../../../Common/Models/ClassStatistics';
-import GamemodeSchemes from '../../../Common/Constants/GamemodeSchemes';
+import GamemodeClassSchemes from '../../../Common/Constants/GamemodeClassSchemes';
 import ClassStatisticQueryResult from '../interfaces/ClassStatisticQueryResult';
 import GetAllDraftTFClasses from '../utils/GetAllDraftTFClasses';
 export default class PlayerService {
@@ -90,7 +90,7 @@ export default class PlayerService {
 
 		const tf2classes =
 			filterOptions && filterOptions.gamemode
-				? GamemodeSchemes.get(filterOptions.gamemode).map(
+				? GamemodeClassSchemes.get(filterOptions.gamemode).map(
 						scheme => scheme.tf2class
 				  )
 				: GetAllDraftTFClasses();

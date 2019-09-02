@@ -8,7 +8,7 @@ import MatchPlayerData from '../entities/MatchPlayerData';
 import { consoleLogStatus } from './ConsoleColors';
 import Region from '../../../Common/Enums/Region';
 import Gamemode from '../../../Common/Enums/Gamemode';
-import GamemodeSchemes from '../../../Common/Constants/GamemodeSchemes';
+import GamemodeClassSchemes from '../../../Common/Constants/GamemodeClassSchemes';
 
 const SeedPlayers = async () => {
 	const playerRepo = new LinqRepository(Player);
@@ -32,7 +32,7 @@ const SeedMatches = async () => {
 		const match = new Match();
 		match.map = 'koth_ashville_rc1';
 		const matchPlayerData = new MatchPlayerData();
-		const gamemodeClassScheme = GamemodeSchemes.get(Gamemode.Highlander);
+		const gamemodeClassScheme = GamemodeClassSchemes.get(Gamemode.Highlander);
 		const randClass = Math.floor(Math.random() * 9);
 		matchPlayerData.tf2class = gamemodeClassScheme[randClass].tf2class;
 		matchPlayerData.player = player;

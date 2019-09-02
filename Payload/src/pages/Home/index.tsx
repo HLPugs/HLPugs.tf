@@ -8,8 +8,8 @@ import Chat from '../../components/Chat';
 import AliasModal from '../../components/AliasModal';
 import Settings from '../../components/Settings';
 import './style.scss';
-import { SiteConfiguration } from '../../common/types';
 import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
+import { SiteConfiguration } from '../../../../Common/Models/SiteConfiguration';
 
 interface HomeProps {
 	socket: SocketIOClient.Socket;
@@ -117,7 +117,7 @@ class Home extends React.Component<HomeProps, HomeState> {
 						/>
 						<Navigation navigationGroup={this.props.configuration.navigation} />
 						<DraftArea
-							classes={this.props.configuration.classes}
+							classes={this.props.configuration.gamemodeClassSchemes}
 							steamid={this.props.user.steamid}
 						/>
 						<Chat socket={this.props.socket} user={this.props.user} />
@@ -125,7 +125,7 @@ class Home extends React.Component<HomeProps, HomeState> {
 							settings={this.props.user.settings}
 							socket={this.props.socket}
 							visibility={this.state.settingsOpen}
-							classes={this.props.configuration.classes}
+							classes={this.props.configuration.gamemodeClassSchemes}
 							settingsOnClick={this.toggleSettings}
 							userAlias={this.props.user.alias}
 						/>

@@ -15,5 +15,5 @@
 		"noEmit": true,
 		"jsx": "preserve"
 	},
-	"include": ["src/**/*", "../Common"]
+	"include": ["src/**/*", "../Common", "../Payload"]
 }

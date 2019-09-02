@@ -4,7 +4,7 @@ import * as uuid from 'uuid';
 import { store } from './store';
 import Player from '../entities/Player';
 import DraftTFClass from '../../../Common/Enums/DraftTFClass';
-import GamemodeSchemes from '../../../Common/Constants/GamemodeSchemes';
+import GamemodeClassSchemes from '../../../Common/Constants/GamemodeClassSchemes';
 import Gamemode from '../../../Common/Enums/Gamemode';
 
 /**
@@ -19,7 +19,7 @@ const players = new Map<string, string>();
 const draftTFClassLists = new Map<DraftTFClass, string[]>();
 
 const currentGamemode = process.env.gamemode as Gamemode;
-const gamemodeClassSchemes = GamemodeSchemes.get(currentGamemode);
+const gamemodeClassSchemes = GamemodeClassSchemes.get(currentGamemode);
 // Empty out every class in the draft class list
 
 gamemodeClassSchemes.forEach(scheme =>

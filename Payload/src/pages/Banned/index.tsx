@@ -1,7 +1,7 @@
 import React from 'react';
 import Header from '../../components/Header';
 import Navigation from '../../components/Navigation';
-import { SiteConfiguration } from '../../common/types';
+import { SiteConfiguration } from '../../../../Common/Models/SiteConfiguration';
 import moment from 'moment';
 import './style.scss';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { NavItem } from '../../../common/types';
+import { NavItem } from '../../../../../Common/Models/SiteConfiguration';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './style.scss';
 

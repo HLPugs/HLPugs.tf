@@ -1,10 +1,10 @@
 import Gamemode from '../Enums/Gamemode';
 import DraftTFClass from '../Enums/DraftTFClass';
-import GamemodeClassScheme from '../Models/GamemodeScheme';
+import GamemodeClassScheme from '../Models/GamemodeClassScheme';
 
-const GamemodeSchemes: Map<Gamemode, GamemodeClassScheme[]> = new Map();
+const GamemodeClassSchemes: Map<Gamemode, GamemodeClassScheme[]> = new Map();
 
-GamemodeSchemes.set(Gamemode.Highlander, [
+GamemodeClassSchemes.set(Gamemode.Highlander, [
 	new GamemodeClassScheme(1, DraftTFClass.SCOUT),
 	new GamemodeClassScheme(1, DraftTFClass.SOLDIER),
 	new GamemodeClassScheme(1, DraftTFClass.PYRO),
@@ -16,7 +16,7 @@ GamemodeSchemes.set(Gamemode.Highlander, [
 	new GamemodeClassScheme(1, DraftTFClass.SPY)
 ]);
 
-GamemodeSchemes.set(Gamemode.Prolander, [
+GamemodeClassSchemes.set(Gamemode.Prolander, [
 	new GamemodeClassScheme(1, DraftTFClass.SCOUT),
 	new GamemodeClassScheme(1, DraftTFClass.SOLDIER),
 	new GamemodeClassScheme(1, DraftTFClass.DEMOMAN),
@@ -25,7 +25,7 @@ GamemodeSchemes.set(Gamemode.Prolander, [
 	new GamemodeClassScheme(2, DraftTFClass.FLEX)
 ]);
 
-GamemodeSchemes.set(Gamemode.Sixes, [
+GamemodeClassSchemes.set(Gamemode.Sixes, [
 	new GamemodeClassScheme(2, DraftTFClass.SCOUT),
 	new GamemodeClassScheme(1, DraftTFClass.ROAMER),
 	new GamemodeClassScheme(1, DraftTFClass.POCKET),
@@ -33,16 +33,16 @@ GamemodeSchemes.set(Gamemode.Sixes, [
 	new GamemodeClassScheme(1, DraftTFClass.MEDIC)
 ]);
 
-GamemodeSchemes.set(Gamemode.Fours, [
+GamemodeClassSchemes.set(Gamemode.Fours, [
 	new GamemodeClassScheme(1, DraftTFClass.SCOUT),
 	new GamemodeClassScheme(1, DraftTFClass.DEMOMAN),
 	new GamemodeClassScheme(1, DraftTFClass.FLEX),
 	new GamemodeClassScheme(1, DraftTFClass.MEDIC)
 ]);
 
-GamemodeSchemes.set(Gamemode.Ultiduo, [
+GamemodeClassSchemes.set(Gamemode.Ultiduo, [
 	new GamemodeClassScheme(1, DraftTFClass.SOLDIER),
 	new GamemodeClassScheme(1, DraftTFClass.MEDIC)
 ]);
 
-export default GamemodeSchemes;
+export default GamemodeClassSchemes;

@@ -3,7 +3,7 @@ import './style.scss';
 import ClassIcon from '../ClassIcon';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SettingsViewModel } from '../../../../Common/ViewModels/SettingsViewModel';
-import GamemodeClassScheme from '../../../../Common/Models/GamemodeScheme';
+import GamemodeClassScheme from '../../../../Common/Models/GamemodeClassScheme';
 
 interface SettingsProps {
 	socket: SocketIOClient.Socket;

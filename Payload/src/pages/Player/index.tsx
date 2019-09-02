@@ -1,5 +1,5 @@
 import React from 'react';
-import { SiteConfiguration } from '../../common/types';
+import { SiteConfiguration } from '../../../../Common/Models/SiteConfiguration';
 import Header from '../../components/Header';
 import User from '../../components/User';
 import Navigation from '../../components/Navigation';
@@ -57,7 +57,7 @@ class Player extends React.Component<ProfileProps, ProfileState> {
 				<Settings
 					visibility={this.state.settingsOpen}
 					socket={this.props.socket}
-					classes={this.props.configuration.classes}
+					classes={this.props.configuration.gamemodeClassSchemes}
 					settingsOnClick={this.toggleSettings}
 					userAlias={this.props.user.alias}
 					settings={this.props.user.settings}

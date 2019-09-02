@@ -1,5 +1,5 @@
 import React from 'react';
-import { SiteBranding } from '../../common/types';
+import { SiteBranding } from '../../../../Common/Models/SiteConfiguration'
 import HeaderBranding from './HeaderBranding';
 import HeaderBackground from './HeaderBackground';
 import './style.scss';

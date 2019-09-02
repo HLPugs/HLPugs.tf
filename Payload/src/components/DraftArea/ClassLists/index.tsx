@@ -2,7 +2,7 @@ import React from 'react';
 import ClassBox from './ClassBox';
 import './style.scss';
 import { SocketConsumer } from '../../../pages/Home';
-import GamemodeClassScheme from '../../../../../Common/Models/GamemodeScheme';
+import GamemodeClassScheme from '../../../../../Common/Models/GamemodeClassScheme';
 
 interface ClassListsProps {
 	classes: GamemodeClassScheme[];

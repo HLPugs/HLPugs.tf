@@ -7,20 +7,19 @@ import {
 	SocketIO,
 	OnDisconnect
 } from 'socket-controllers';
-import config = require('config');
 import * as dotenv from 'dotenv';
 import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
 import PlayerService from '../../services/PlayerService';
-import GamemodeSchemes from '../../../../Common/Constants/GamemodeSchemes';
+import GamemodeClassSchemes from '../../../../Common/Constants/GamemodeClassSchemes';
+import GamemodeClassScheme from '../../../../Common/Models/GamemodeClassScheme';
+import { SiteConfiguration } from '../../constants/SiteConfiguration';
 import Gamemode from '../../../../Common/Enums/Gamemode';
-import GamemodeClassScheme from '../../../../Common/Models/GamemodeScheme';
 
 const env = dotenv.config().parsed;
 
-const siteConfiguration = config.get('app.configuration');
+const siteConfiguration = SiteConfiguration;
+const currentGamemode = env.gamemode as Gamemode;
 const playerService = new PlayerService();
-
-const currentGamemode = process.env.gamemode as Gamemode;
 
 @SocketController()
 export class HomeSocketController {
@@ -96,10 +95,10 @@ export class HomeSocketController {
 						socket.request.session.user.steamid
 					);
 
-					const gamemodeScheme: GamemodeClassScheme[] = GamemodeSchemes.get(
+					const gamemodeClassScheme: GamemodeClassScheme[] = GamemodeClassSchemes.get(
 						currentGamemode
 					);
-					gamemodeScheme.forEach(scheme => {
+					gamemodeClassScheme.forEach(scheme => {
 						io.emit(
 							'removeFromDraftTFClass',
 							scheme.tf2class,

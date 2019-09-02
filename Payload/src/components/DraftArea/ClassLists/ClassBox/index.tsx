@@ -3,7 +3,7 @@ import ClassIcon from '../../../ClassIcon';
 import './style.scss';
 import PlayerBox from './PlayerBox';
 import DraftTFClass from '../../../../../../Common/Enums/DraftTFClass';
-import GamemodeClassScheme from '../../../../../../Common/Models/GamemodeScheme';
+import GamemodeClassScheme from '../../../../../../Common/Models/GamemodeClassScheme';
 
 interface ClassBoxProps {
 	properties: GamemodeClassScheme;
