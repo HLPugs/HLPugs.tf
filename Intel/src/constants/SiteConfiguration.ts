@@ -1,18 +1,18 @@
-import * as dotenv from 'dotenv';
 import {
-	SiteConfiguration as SiteConfigurationModel,
+	SiteConfigurationModel,
 	NavItem,
 	SiteBranding
-} from '../../../Common/Models/SiteConfiguration';
+} from '../../../Common/Models/SiteConfigurationModel';
 import Gamemode from '../../../Common/Enums/Gamemode';
 import GamemodeClassSchemes from '../../../Common/Constants/GamemodeClassSchemes';
+import Region from '../../../Common/Enums/Region';
+import MatchType from '../../../Common/Enums/MatchType';
+import EnvironmentConfigModel from '../../../Common/Models/EnvironmentConfigModel';
 
-const currentGamemode = process.env.gamemode as Gamemode;
-const gamemodeClassSchemes = GamemodeClassSchemes.get(currentGamemode);
-
-const env = dotenv.config().parsed;
-
-const { gamemode, region, matchType } = env;
+const region = Region.NorthAmerica;
+const matchType = MatchType.PUG;
+const gamemode = Gamemode.Highlander;
+const gamemodeClassSchemes = GamemodeClassSchemes.get(gamemode);
 
 const branding: SiteBranding = {
 	siteName: 'HLPugs.tf',
@@ -95,8 +95,15 @@ const navigation: NavItem[] = [
 	}
 ];
 
+export const EnvironmentConfig: EnvironmentConfigModel = {
+	matchType,
+	region,
+	gamemode,
+} 
+
 export const SiteConfiguration: SiteConfigurationModel = {
 	branding,
 	navigation,
-	gamemodeClassSchemes
+	gamemodeClassSchemes,
+	environmentConfig: EnvironmentConfig
 };

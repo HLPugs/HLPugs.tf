@@ -9,11 +9,11 @@ import AliasModal from '../../components/AliasModal';
 import Settings from '../../components/Settings';
 import './style.scss';
 import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
-import { SiteConfiguration } from '../../../../Common/Models/SiteConfiguration';
+import { SiteConfigurationModel } from '../../../../Common/Models/SiteConfigurationModel';
 
 interface HomeProps {
 	socket: SocketIOClient.Socket;
-	configuration: SiteConfiguration;
+	configuration: SiteConfigurationModel;
 	user: UserViewModel;
 }
 

@@ -14,6 +14,7 @@ import {
 	GradientStop
 } from 'reaviz';
 import LoadingDots from '../../LoadingDots';
+import EnvironmentConfigModel from '../../../../../Common/Models/EnvironmentConfigModel';
 
 interface ProfileStatisticsProps {
 	steamid: string;
@@ -110,8 +111,8 @@ class ProfileStatistics extends React.Component<
 						onChange={this.handleChange}
 					>
 						<option value="all">All</option>
-						<option value="na">NA</option>
-						<option value="eu">EU</option>
+						<option value={Region.NorthAmerica}>NA</option>
+						<option value={Region.Europe}>EU</option>
 					</select>
 					<select
 						value={this.state.matchType}
@@ -119,19 +120,19 @@ class ProfileStatistics extends React.Component<
 						onChange={this.handleChange}
 					>
 						<option value="all">All</option>
-						<option value="PUG">PUG</option>
-						<option value="Mix">Mix</option>
+						<option value={MatchType.PUG}>PUG</option>
+						<option value={MatchType.MIX}>Mix</option>
 					</select>
 					<select
 						value={this.state.gamemode}
 						name="gamemode"
 						onChange={this.handleChange}
 					>
-						<option value="Highlander">Highlander</option>
-						<option value="Sixes">Sixes</option>
-						<option value="Prolander">Prolander</option>
-						<option value="Fours">Fours</option>
-						<option value="Ultiduo">Ultiduo</option>
+						<option value={Gamemode.Highlander}>Highlander</option>
+						<option value={Gamemode.Sixes}>Sixes</option>
+						<option value={Gamemode.Prolander}>Prolander</option>
+						<option value={Gamemode.Fours}>Fours</option>
+						<option value={Gamemode.Ultiduo}>Ultiduo</option>
 					</select>
 				</div>
 				<div className="totals">

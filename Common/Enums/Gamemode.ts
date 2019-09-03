@@ -1,8 +1,8 @@
 enum Gamemode {
-	Highlander = 'Highlander',
-	Sixes = 'Sixes',
-	Prolander = 'Prolander',
-	Fours = 'Fours',
+	Highlander = 'HL',
+	Sixes = '6s',
+	Prolander = '7s',
+	Fours = '4s',
 	Ultiduo = 'Ultiduo'
 }
 

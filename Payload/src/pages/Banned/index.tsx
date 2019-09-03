@@ -1,13 +1,13 @@
 import React from 'react';
 import Header from '../../components/Header';
 import Navigation from '../../components/Navigation';
-import { SiteConfiguration } from '../../../../Common/Models/SiteConfiguration';
+import { SiteConfigurationModel } from '../../../../Common/Models/SiteConfigurationModel';
 import moment from 'moment';
 import './style.scss';
 
 interface BannedProps {
 	socket: SocketIOClient.Socket;
-	configuration: SiteConfiguration;
+	configuration: SiteConfigurationModel;
 }
 
 interface BannedState {

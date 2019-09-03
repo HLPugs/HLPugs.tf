@@ -10,15 +10,11 @@ import {
 import * as dotenv from 'dotenv';
 import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
 import PlayerService from '../../services/PlayerService';
-import GamemodeClassSchemes from '../../../../Common/Constants/GamemodeClassSchemes';
-import GamemodeClassScheme from '../../../../Common/Models/GamemodeClassScheme';
 import { SiteConfiguration } from '../../constants/SiteConfiguration';
-import Gamemode from '../../../../Common/Enums/Gamemode';
 
 const env = dotenv.config().parsed;
 
 const siteConfiguration = SiteConfiguration;
-const currentGamemode = env.gamemode as Gamemode;
 const playerService = new PlayerService();
 
 @SocketController()
@@ -95,10 +91,7 @@ export class HomeSocketController {
 						socket.request.session.user.steamid
 					);
 
-					const gamemodeClassScheme: GamemodeClassScheme[] = GamemodeClassSchemes.get(
-						currentGamemode
-					);
-					gamemodeClassScheme.forEach(scheme => {
+					SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
 						io.emit(
 							'removeFromDraftTFClass',
 							scheme.tf2class,

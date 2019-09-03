@@ -1,5 +1,5 @@
 import React from 'react';
-import { SiteConfiguration } from '../../../../Common/Models/SiteConfiguration';
+import { SiteConfigurationModel } from '../../../../Common/Models/SiteConfigurationModel';
 import Header from '../../components/Header';
 import User from '../../components/User';
 import Navigation from '../../components/Navigation';
@@ -15,7 +15,7 @@ interface MatchParams {
 
 interface ProfileProps extends RouteComponentProps<MatchParams> {
 	socket: SocketIOClient.Socket;
-	configuration: SiteConfiguration;
+	configuration: SiteConfigurationModel;
 	user: UserViewModel;
 }
 

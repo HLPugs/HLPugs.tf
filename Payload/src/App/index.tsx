@@ -6,7 +6,7 @@ import {
 	Route,
 	Redirect
 } from 'react-router-dom';
-import { SiteConfiguration } from '../../../Common/Models/SiteConfiguration';
+import { SiteConfigurationModel } from '../../../Common/Models/SiteConfigurationModel';
 import Home from '../pages/Home';
 import Player from '../pages/Player';
 import Banned from '../pages/Banned';
@@ -37,6 +37,9 @@ import {
 	faChartPie
 } from '@fortawesome/free-solid-svg-icons';
 import UserViewModel from '../../../Common/ViewModels/UserViewModel';
+import Region from '../../../Common/Enums/Region';
+import Gamemode from '../../../Common/Enums/Gamemode';
+import MatchType from '../../../Common/Enums/MatchType';
 
 library.add(
 	faSteamSymbol,
@@ -61,14 +64,14 @@ library.add(
 );
 
 interface AppState {
-	configuration?: SiteConfiguration;
+	configuration?: SiteConfigurationModel;
 	user?: UserViewModel;
 	disconnected: boolean;
 }
 
 class App extends React.Component<{}, AppState> {
 	private socket: SocketIOClient.Socket;
-	private dummyConfiguration: SiteConfiguration;
+	private dummyConfiguration: SiteConfigurationModel;
 
 	constructor(props: Record<string, any>) {
 		super(props);
@@ -84,10 +87,15 @@ class App extends React.Component<{}, AppState> {
 				logoPath: ''
 			},
 			navigation: [],
-			gamemodeClassSchemes: []
+			gamemodeClassSchemes: [],
+			environmentConfig: {
+				region: Region.NorthAmerica,
+				gamemode: Gamemode.Highlander,
+				matchType: MatchType.PUG
+			}
 		};
 
-		this.socket.on('siteConfiguration', (configuration: SiteConfiguration) => {
+		this.socket.on('siteConfiguration', (configuration: SiteConfigurationModel) => {
 			this.setState({ configuration });
 		});
 

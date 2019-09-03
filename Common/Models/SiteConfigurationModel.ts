@@ -1,9 +1,11 @@
 import GamemodeClassScheme from './GamemodeClassScheme';
+import EnvironmentConfigModel from '../Models/EnvironmentConfigModel';
 
-export interface SiteConfiguration {
+export interface SiteConfigurationModel {
 	branding: SiteBranding;
 	navigation: NavItem[];
 	gamemodeClassSchemes: GamemodeClassScheme[];
+	environmentConfig: EnvironmentConfigModel;
 }
 
 export interface SiteBranding {

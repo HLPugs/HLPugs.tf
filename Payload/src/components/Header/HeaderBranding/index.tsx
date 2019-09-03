@@ -1,5 +1,5 @@
 import React from 'react';
-import { SiteBranding } from '../../../../../Common/Models/SiteConfiguration';
+import { SiteBranding } from '../../../../../Common/Models/SiteConfigurationModel';
 import { Link } from 'react-router-dom';
 import logo from '../../../img/logo.svg';
 import './style.scss';
