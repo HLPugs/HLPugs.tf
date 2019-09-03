@@ -14,14 +14,13 @@ import { SiteConfiguration } from '../../constants/SiteConfiguration';
 
 const env = dotenv.config().parsed;
 
-const siteConfiguration = SiteConfiguration;
 const playerService = new PlayerService();
 
 @SocketController()
 export class HomeSocketController {
 	@OnConnect()
 	async playerConnected(@ConnectedSocket() socket: any) {
-		socket.emit('siteConfiguration', siteConfiguration);
+		socket.emit('siteConfiguration', SiteConfiguration);
 		if (socket.request.session.err) {
 			socket.emit('serverError', socket.request.session.err);
 		}
