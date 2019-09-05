@@ -11,13 +11,11 @@ import Gamemode from '../../../Common/Enums/Gamemode';
 import Region from '../../../Common/Enums/Region';
 import MatchType from '../../../Common/Enums/MatchType';
 import PlayerNotFoundError from '../custom-errors/PlayerNotFoundError';
-import {
-	ClassStatistics,
-	ClassStatistic
-} from '../../../Common/Models/ClassStatistics';
+import { ClassStatistics, ClassStatistic } from '../../../Common/Models/ClassStatistics';
 import GamemodeClassSchemes from '../../../Common/Constants/GamemodeClassSchemes';
 import ClassStatisticQueryResult from '../interfaces/ClassStatisticQueryResult';
 import GetAllDraftTFClasses from '../utils/GetAllDraftTFClasses';
+import SteamID from '../../../Common/Types/SteamID';
 export default class PlayerService {
 	async getPlayer(identifier: string): Promise<Player> {
 		const playerRepo = new LinqRepository(Player);
@@ -39,10 +37,7 @@ export default class PlayerService {
 		return player;
 	}
 
-	async getClassStatistics(
-		identifier: string,
-		filterOptions?: ClassStatisticsFilterOptions
-	): Promise<ClassStatistics> {
+	async getClassStatistics(identifier: string, filterOptions?: ClassStatisticsFilterOptions): Promise<ClassStatistics> {
 		let filterQuery = '';
 		const filters: (MatchType | Region | Gamemode)[] = [];
 		if (filterOptions) {
@@ -62,13 +57,11 @@ export default class PlayerService {
 			}
 		}
 
-		let steamid: string;
+		let steamid: SteamID;
 		if (!(await this.playerExists(identifier))) {
 			throw new PlayerNotFoundError(identifier);
 		} else {
-			steamid = isSteamID(identifier)
-				? identifier
-				: (await this.getPlayer(identifier)).steamid;
+			steamid = isSteamID(identifier) ? identifier : (await this.getPlayer(identifier)).steamid;
 		}
 		const db = await getManager();
 		const winsQuery = db.query(
@@ -90,9 +83,7 @@ export default class PlayerService {
 
 		const tf2classes =
 			filterOptions && filterOptions.gamemode
-				? GamemodeClassSchemes.get(filterOptions.gamemode).map(
-						scheme => scheme.tf2class
-				  )
+				? GamemodeClassSchemes.get(filterOptions.gamemode).map(scheme => scheme.tf2class)
 				: GetAllDraftTFClasses();
 
 		const classStatistics = new ClassStatistics();
@@ -125,10 +116,7 @@ export default class PlayerService {
 		return classStatistics;
 	}
 
-	async updateSettings(
-		steamid: string,
-		settings: PlayerSettings
-	): Promise<void> {
+	async updateSettings(steamid: SteamID, settings: PlayerSettings): Promise<void> {
 		if (!(await this.playerExists(steamid))) {
 			throw new PlayerNotFoundError(steamid);
 		}
@@ -140,7 +128,7 @@ export default class PlayerService {
 		await playerRepo.update(player);
 	}
 
-	async updateAlias(steamid: string, alias: string): Promise<void> {
+	async updateAlias(steamid: SteamID, alias: string): Promise<void> {
 		if (!(await this.playerExists(steamid))) {
 			throw new PlayerNotFoundError(steamid);
 		}
@@ -151,7 +139,7 @@ export default class PlayerService {
 		await playerRepo.update(player);
 	}
 
-	async getSettings(steamid: string): Promise<PlayerSettings> {
+	async getSettings(steamid: SteamID): Promise<PlayerSettings> {
 		if (!(await this.playerExists(steamid))) {
 			throw new PlayerNotFoundError(steamid);
 		}
@@ -179,7 +167,7 @@ export default class PlayerService {
 		}
 	}
 
-	async getActivePunishments(steamid: string): Promise<Punishment[]> {
+	async getActivePunishments(steamid: SteamID): Promise<Punishment[]> {
 		if (!(await this.playerExists(steamid))) {
 			throw new PlayerNotFoundError(steamid);
 		}
@@ -195,7 +183,7 @@ export default class PlayerService {
 		return activePunishments;
 	}
 
-	async isCurrentlySiteBanned(steamid: string): Promise<boolean> {
+	async isCurrentlySiteBanned(steamid: SteamID): Promise<boolean> {
 		if (!(await this.playerExists(steamid))) {
 			throw new PlayerNotFoundError(steamid);
 		}

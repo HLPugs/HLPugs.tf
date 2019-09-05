@@ -3,9 +3,10 @@ import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './style.scss';
 import { PlayerDataConsumer } from '../../../../../pages/Home';
+import SteamID from '../../../../../../../Common/Types/SteamID';
 
 interface PlayerBoxProps {
-	steamid: string;
+	steamid: SteamID;
 }
 
 class PlayerBox extends React.PureComponent<PlayerBoxProps, {}> {

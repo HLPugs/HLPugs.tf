@@ -2,8 +2,8 @@
   "name": "hlpugs.tf",
   "version": "0.1.0",
   "scripts": {
-    "install": "concurrently -n Intel,Payload \"cd Intel && npm i\" \"cd Payload && npm i\"",
-    "start": "concurrently -n IntelCompile,IntelRun,Payload \"cd Intel && npm run watch-ts\" \"cd Intel && npm run watch-node\" \"cd Payload && npm start\"",
+    "install": "concurrently -n Intel,Payload,Common \"cd Intel && npm i\" \"cd Payload && npm i\" \"cd Common && npm i\"",
+    "start": "concurrently -n IntelCompile,IntelRun,Payload,Prettier \"cd Intel && npm run watch-ts && npm run watch-prettier\" \"cd Intel && npm run watch-node && npm run watch-prettier\" \"cd Payload && npm start && npm run prettier-watch\"",
     "build": "concurrently -n Intel,Payload\"cd Intel && npm run build\" \"cd Payload && npm run build\""
   },
   "repository": {
@@ -19,7 +19,7 @@
     "@typescript-eslint/eslint-plugin": "^2.0.0",
     "@typescript-eslint/parser": "^2.0.0",
     "concurrently": "^4.1.2",
-    "eslint": "^6.2.2",
+    "eslint": "^6.3.0",
     "eslint-config-prettier": "^6.1.0",
     "eslint-plugin-prettier": "^3.1.0",
     "eslint-plugin-react": "^7.14.3",

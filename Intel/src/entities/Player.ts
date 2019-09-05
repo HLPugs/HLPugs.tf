@@ -28,6 +28,7 @@ import PermissionGroupName from '../../../Common/Enums/PermissionGroup';
 import Role from '../../../Common/Enums/Role';
 import PlayerSettings from './PlayerSettings';
 import MatchPlayerData from './MatchPlayerData';
+import SteamID from '../../../Common/Types/SteamID';
 
 @Entity({ name: 'players' })
 export default class Player {
@@ -37,7 +38,7 @@ export default class Player {
 	@PrimaryColumn()
 	@Index({ unique: true })
 	@IsNumberString()
-	steamid: string;
+	steamid: SteamID;
 
 	@Column({ nullable: true })
 	@IsString()

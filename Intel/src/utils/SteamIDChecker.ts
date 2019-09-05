@@ -1,2 +1,1 @@
-export const isSteamID = (identifier: string): boolean =>
-	!isNaN(parseInt(identifier));
+export const isSteamID = (identifier: string): boolean => !isNaN(parseInt(identifier));

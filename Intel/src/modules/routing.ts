@@ -11,21 +11,13 @@ router.get('/', (req: Request, res: Response) => {
 	res.redirect(frontURL);
 });
 
-router.get(
-	'/verify',
-	steam.verify(),
-	async (req: steam.SteamRequest, res: Response) => {
-		await loginUser(req);
-		res.redirect('/');
-	}
-);
+router.get('/verify', steam.verify(), async (req: steam.SteamRequest, res: Response) => {
+	await loginUser(req);
+	res.redirect('/');
+});
 
-router.get(
-	'/auth',
-	steam.authenticate(),
-	(req: steam.SteamRequest, res: Response) => {
-		res.redirect(frontURL);
-	}
-);
+router.get('/auth', steam.authenticate(), (req: steam.SteamRequest, res: Response) => {
+	res.redirect(frontURL);
+});
 
 export const routing: Router = router;

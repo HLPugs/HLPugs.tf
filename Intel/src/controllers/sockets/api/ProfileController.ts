@@ -1,14 +1,14 @@
 import { Get, Param, QueryParam, JsonController } from 'routing-controllers';
-import { ProfileService } from '../../services/ProfileService';
-import { ProfileViewModel } from '../../../../Common/ViewModels/ProfileViewModel';
-import ProfilePaginatedMatchesViewModel from '../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
-import Region from '../../../../Common/Enums/Region';
-import Gamemode from '../../../../Common/Enums/Gamemode';
-import MatchType from '../../../../Common/Enums/MatchType';
-import ClassStatisticsFilterOptions from '../../../../Common/Models/ClassStatisticsFilterOptions';
-import ProfileClassStatisticsViewModel from '../../../../Common/ViewModels/ProfileClassStatisticsViewModel';
-import ValidateClass from '../../utils/ValidateClass';
-import PlayerService from '../../services/PlayerService';
+import { ProfileService } from '../../../services/ProfileService';
+import { ProfileViewModel } from '../../../../../Common/ViewModels/ProfileViewModel';
+import ProfilePaginatedMatchesViewModel from '../../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
+import Region from '../../../../../Common/Enums/Region';
+import Gamemode from '../../../../../Common/Enums/Gamemode';
+import MatchType from '../../../../../Common/Enums/MatchType';
+import ClassStatisticsFilterOptions from '../../../../../Common/Models/ClassStatisticsFilterOptions';
+import ProfileClassStatisticsViewModel from '../../../../../Common/ViewModels/ProfileClassStatisticsViewModel';
+import ValidateClass from '../../../utils/ValidateClass';
+import PlayerService from '../../../services/PlayerService';
 
 const playerService = new PlayerService();
 const profileService = new ProfileService();
@@ -36,23 +36,17 @@ export class ProfileController {
 		@QueryParam('matchType', { required: false }) matchType: MatchType
 	): Promise<ProfileClassStatisticsViewModel> {
 		if (region || gamemode || matchType) {
-			const filterOptions = new ClassStatisticsFilterOptions();
-			filterOptions.gamemode = gamemode;
-			filterOptions.region = region;
-			filterOptions.matchType = matchType;
+			const filterOptions: ClassStatisticsFilterOptions = {
+				gamemode,
+				region,
+				matchType
+			};
 			ValidateClass(filterOptions);
-			const classStatistics = await playerService.getClassStatistics(
-				identifier,
-				filterOptions
-			);
-			return ProfileClassStatisticsViewModel.fromClassStatistics(
-				classStatistics
-			);
+			const classStatistics = await playerService.getClassStatistics(identifier, filterOptions);
+			return ProfileClassStatisticsViewModel.fromClassStatistics(classStatistics);
 		} else {
 			const classStatistics = await playerService.getClassStatistics(identifier);
-			return ProfileClassStatisticsViewModel.fromClassStatistics(
-				classStatistics
-			);
+			return ProfileClassStatisticsViewModel.fromClassStatistics(classStatistics);
 		}
 	}
 }

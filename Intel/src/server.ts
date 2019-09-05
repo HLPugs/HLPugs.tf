@@ -9,16 +9,7 @@ import store from './modules/store';
 import { createConnection } from 'typeorm';
 import express = require('express');
 import { useExpressServer } from 'routing-controllers';
-import {
-	Bold,
-	Underscore,
-	FgYellow,
-	Reset,
-	consoleLogStatus,
-	FgRed,
-	FgGreen,
-	FgBlue
-} from './utils/ConsoleColors';
+import { Bold, Underscore, FgYellow, Reset, consoleLogStatus, FgRed, FgGreen, FgBlue } from './utils/ConsoleColors';
 import CurrentUserChecker from './utils/CurrentUserChecker';
 import { useSocketServer } from 'socket-controllers';
 import Seed from './utils/Seed';
@@ -50,27 +41,20 @@ const sessionConfig = expressSession({
 app.use(sessionConfig);
 
 consoleLogStatus(`\n${Underscore}${FgBlue}HLPugs.tf Bootstrap Initializing`);
-consoleLogStatus(
-	`Synchronizing models to database with ${FgYellow}TypeORM${Reset}...\n`
-);
+consoleLogStatus(`Synchronizing models to database with ${FgYellow}TypeORM${Reset}...\n`);
 createConnection()
 	.then(async () => {
 		if (env.offline === 'true') {
 			await Seed();
 		}
-		consoleLogStatus(
-			`\n${FgGreen}Success! Entities synchronized with database`
-		);
+		consoleLogStatus(`\n${FgGreen}Success! Entities synchronized with database`);
 
 		useExpressServer(app, {
 			defaultErrorHandler: false,
 			routePrefix: '/api',
 			currentUserChecker: CurrentUserChecker,
 			cors: true,
-			middlewares: [
-				__dirname + '/middlewares/*.js',
-				__dirname + '/middlewares/api/*.js'
-			],
+			middlewares: [__dirname + '/middlewares/*.js', __dirname + '/middlewares/api/*.js'],
 			controllers: [__dirname + '/controllers/api/*.js']
 		});
 
@@ -98,8 +82,6 @@ createConnection()
 		});
 	})
 	.catch(e => {
-		console.error(
-			`\n${FgRed}${Bold}Error occured in TypeORM synchronization${Reset}`
-		);
+		console.error(`\n${FgRed}${Bold}Error occured in TypeORM synchronization${Reset}`);
 		console.error(`${FgRed}${e.stack}${Reset}`);
 	});

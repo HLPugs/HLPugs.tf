@@ -14,10 +14,10 @@ import {
 	GradientStop
 } from 'reaviz';
 import LoadingDots from '../../LoadingDots';
-import EnvironmentConfigModel from '../../../../../Common/Models/EnvironmentConfigModel';
+import SteamID from '../../../../../Common/Types/SteamID';
 
 interface ProfileStatisticsProps {
-	steamid: string;
+	steamid: SteamID;
 }
 
 interface ProfileStatisticsState {

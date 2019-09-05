@@ -5,6 +5,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "class-validator": "^0.10.0"
+    "class-validator": "^0.10.0",
+    "onchange": "^6.0.0"
   }
 }

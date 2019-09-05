@@ -1,11 +1,4 @@
-import {
-	Controller,
-	Get,
-	Res,
-	UseBefore,
-	Req,
-	CurrentUser
-} from 'routing-controllers';
+import { Controller, Get, Res, UseBefore, Req, CurrentUser } from 'routing-controllers';
 import config = require('config');
 import { Response } from 'express';
 import * as steam from 'steam-login';
@@ -26,16 +19,10 @@ export class HomeController {
 
 	@Get('/verify')
 	@UseBefore(steam.verify())
-	async login(
-		@CurrentUser() player: Player,
-		@Req() req: RequestWithUser,
-		@Res() res: Response
-	): Promise<void> {
+	async login(@CurrentUser() player: Player, @Req() req: RequestWithUser, @Res() res: Response): Promise<void> {
 		await playerService.updateOrInsertPlayer(player);
 
-		const isCurrentlySiteBanned = await playerService.isCurrentlySiteBanned(
-			player.steamid
-		);
+		const isCurrentlySiteBanned = await playerService.isCurrentlySiteBanned(player.steamid);
 
 		const playerViewModel = PlayerViewModel.fromPlayer(player);
 

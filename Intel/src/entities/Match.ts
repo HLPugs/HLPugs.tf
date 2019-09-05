@@ -1,19 +1,5 @@
-import {
-	Entity,
-	PrimaryGeneratedColumn,
-	Column,
-	CreateDateColumn,
-	ManyToMany,
-	JoinTable,
-	OneToMany
-} from 'typeorm';
-import {
-	IsNumberString,
-	IsEnum,
-	IsString,
-	IsNotEmpty,
-	IsDate
-} from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm';
+import { IsNumberString, IsEnum, IsString, IsNotEmpty, IsDate } from 'class-validator';
 import Player from './Player';
 import MatchType from '../../../Common/Enums/MatchType';
 import Team from '../../../Common/Enums/Team';
@@ -69,12 +55,8 @@ export default class Match {
 	})
 	players: Player[];
 
-	@OneToMany(
-		type => MatchPlayerData,
-		matchPlayerData => matchPlayerData.match,
-		{
-			cascade: true
-		}
-	)
+	@OneToMany(type => MatchPlayerData, matchPlayerData => matchPlayerData.match, {
+		cascade: true
+	})
 	matchPlayerData: MatchPlayerData[];
 }

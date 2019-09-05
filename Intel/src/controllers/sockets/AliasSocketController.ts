@@ -1,9 +1,4 @@
-import {
-	SocketController,
-	OnMessage,
-	ConnectedSocket,
-	MessageBody
-} from 'socket-controllers';
+import { SocketController, OnMessage, ConnectedSocket, MessageBody } from 'socket-controllers';
 import PlayerService from '../../services/PlayerService';
 
 const playerService = new PlayerService();
@@ -15,8 +10,7 @@ export class AliasSocketController {
 		const alias: string = body.alias;
 		const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
 
-		if (!aliasRules.test(alias) || (await playerService.playerExists(alias)))
-			return;
+		if (!aliasRules.test(alias) || (await playerService.playerExists(alias))) return;
 
 		const steamid = socket.request.session.user.steamid;
 		await playerService.updateAlias(steamid, alias);

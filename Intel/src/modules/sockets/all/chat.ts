@@ -19,14 +19,9 @@ const cleanWord = (word: string) => {
 	const { blacklistWords, whitelistWords } = chatWords;
 	let tempWord = word;
 
-	whitelistWords.forEach(
-		whitelistedWord =>
-			(tempWord = tempWord.replace(new RegExp(whitelistedWord, 'ig'), ''))
-	);
+	whitelistWords.forEach(whitelistedWord => (tempWord = tempWord.replace(new RegExp(whitelistedWord, 'ig'), '')));
 
-	const wordNotClean = blacklistWords.some(blacklistedWord =>
-		tempWord.toLowerCase().includes(blacklistedWord)
-	);
+	const wordNotClean = blacklistWords.some(blacklistedWord => tempWord.toLowerCase().includes(blacklistedWord));
 
 	return wordNotClean ? '*'.repeat(word.length) : word;
 };
@@ -43,14 +38,9 @@ export const chat = (io: Server) => {
 					.map(w => cleanWord(w))
 					.join(' ');
 
-				if (Date.now() - socket.request.session.lastMessageSentTimestamp < 1000)
-					return;
+				if (Date.now() - socket.request.session.lastMessageSentTimestamp < 1000) return;
 
-				if (
-					cleanedMessage.length &&
-					cleanedMessage.length <= 300 &&
-					socket.request.session.user.alias
-				) {
+				if (cleanedMessage.length && cleanedMessage.length <= 300 && socket.request.session.user.alias) {
 					const messageObject: MessageObjectType = {
 						message: cleanedMessage,
 						username: socket.request.session.user.alias,
@@ -66,9 +56,7 @@ export const chat = (io: Server) => {
 					}
 
 					socket.request.session.lastMessageSentTimestamp = Date.now();
-					socket.request.session.save((err: any) =>
-						err ? console.log(err) : null
-					);
+					socket.request.session.save((err: any) => (err ? console.log(err) : null));
 
 					io.emit('newMessage', messageObject);
 				}

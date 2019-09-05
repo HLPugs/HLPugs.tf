@@ -7,6 +7,7 @@ import AddToDraftTFClassDTO from '../../../../../../Common/DTOs/AddToDraftClassL
 import GamemodeClassScheme from '../../../../../../Common/Models/GamemodeClassScheme';
 import GetDraftTFClassListDTO from '../../../../../../Common/DTOs/GetDraftTFClassListDTO';
 import RemovePlayerFromDraftTFClassDTO from '../../../../../../Common/DTOs/RemovePlayerFromDraftTFClassDTO';
+import SteamID from '../../../../../../Common/Types/SteamID';
 
 interface ClassBoxProps {
 	properties: GamemodeClassScheme;
@@ -47,7 +48,7 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 
 		this.props.socket.on(
 			'addPlayerToDraftTFClass',
-			(tfClass: DraftTFClass, steamid: string) => {
+			(tfClass: DraftTFClass, steamid: SteamID) => {
 				if (tfClass === this.props.properties.tf2class) {
 					this.setState({
 						players: [...this.state.players, steamid]
@@ -58,7 +59,7 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 
 		this.props.socket.on(
 			'removePlayerFromDraftTFClass',
-			(tfClass: DraftTFClass, steamid: string) => {
+			(tfClass: DraftTFClass, steamid: SteamID) => {
 				if (tfClass === this.props.properties.tf2class) {
 					const newPlayers = [...this.state.players];
 					const indexOfPlayer = newPlayers.indexOf(steamid);

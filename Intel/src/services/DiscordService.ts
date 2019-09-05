@@ -10,11 +10,7 @@ import * as request from 'request';
  * @returns {string} Successful if no errors thrown
  */
 export class DiscordService {
-	static async postToDiscord(
-		message: string,
-		channel: string,
-		fancy = false
-	): Promise<void> {
+	static async postToDiscord(message: string, channel: string, fancy = false): Promise<void> {
 		const { username } = config.get('discord');
 		const url = config.get(`discord.webhooks.${channel}`);
 

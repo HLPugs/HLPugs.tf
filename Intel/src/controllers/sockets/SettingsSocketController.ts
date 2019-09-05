@@ -14,10 +14,7 @@ const playerService = new PlayerService();
 @SocketController()
 export default class SettingsSocketController {
 	@OnMessage('loadSettings')
-	async loadSettings(
-		@ConnectedSocket() socket: Socket,
-		@MessageBody() body: any
-	) {
+	async loadSettings(@ConnectedSocket() socket: Socket, @MessageBody() body: any) {
 		const { alias } = body;
 		const settings = await playerService.getSettings(alias);
 		socket.emit('playerSettings', settings);
@@ -26,10 +23,7 @@ export default class SettingsSocketController {
 	@OnMessage('saveSettings')
 	@EmitOnSuccess('settingsSuccess')
 	@EmitOnFail('settingsError')
-	async saveSettings(
-		@ConnectedSocket() socket: Socket,
-		@MessageBody() body: any
-	) {
+	async saveSettings(@ConnectedSocket() socket: Socket, @MessageBody() body: any) {
 		const { alias, settings } = body;
 		await playerService.updateSettings(alias, settings);
 	}

@@ -4,4 +4,3 @@ export default interface ClassStatisticQueryResult {
 	tf2class: DraftTFClass;
 	count: number;
 }
-

@@ -11,6 +11,7 @@
 		"emoji-mart": "^2.11.1",
 		"moment": "^2.24",
 		"node-sass": "^4.12.0",
+		"onchange": "^6.0.0",
 		"react": "^16.8.6",
 		"react-dom": "^16.8.6",
 		"react-linkify": "^0.2.2",
@@ -25,6 +26,7 @@
 	"scripts": {
 		"start": "react-app-rewired start",
 		"build": "react-app-rewired build",
+		"prettier-watch": "onchange '**/*.ts' -- prettier --write {{changed}}",
 		"analyze": "source-map-explorer 'build/static/js/*.js'",
 		"test": "react-app-rewired test",
 		"eject": "react-scripts eject"

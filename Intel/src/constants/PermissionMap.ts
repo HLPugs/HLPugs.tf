@@ -3,10 +3,7 @@ import Permission from '../../../Common/Enums/Permission';
 
 export const ANY_PERMISSION_GROUP = 'ANY_PERMISSION_GROUP';
 
-export const PermissionMap: Map<
-	PermissionGroupName | string,
-	Permission[]
-> = new Map([
+export const PermissionMap: Map<PermissionGroupName | string, Permission[]> = new Map([
 	[
 		// Anyone with a permission group can execute these permissions
 		ANY_PERMISSION_GROUP,

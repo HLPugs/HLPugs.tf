@@ -6,6 +6,7 @@ import PlayerService from './PlayerService';
 import ProfilePaginatedMatchesViewModel from '../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
 import ProfileMatchViewModel from '../../../Common/ViewModels/ProfileMatchViewModel';
 import { isSteamID } from '../utils/SteamIDChecker';
+import SteamID from '../../../Common/Types/SteamID';
 
 const playerService = new PlayerService();
 
@@ -39,9 +40,7 @@ export class ProfileService {
 			.skip(currentPage * pageSize)
 			.take(Math.min(pageSize, 50));
 
-		const paginatedMatchesViewModel = paginatedMatches.map(match =>
-			ProfileMatchViewModel.fromMatch(match)
-		);
+		const paginatedMatchesViewModel = paginatedMatches.map(match => ProfileMatchViewModel.fromMatch(match));
 
 		const profilePaginatedMatchesViewModel = new ProfilePaginatedMatchesViewModel();
 		profilePaginatedMatchesViewModel.matches = paginatedMatchesViewModel;
@@ -50,7 +49,7 @@ export class ProfileService {
 		return profilePaginatedMatchesViewModel;
 	}
 
-	async getProfile(steamid: string): Promise<ProfileViewModel> {
+	async getProfile(steamid: SteamID): Promise<ProfileViewModel> {
 		const player = await playerService.getPlayer(steamid);
 		const profileViewModel = ProfileViewModel.fromPlayer(player);
 

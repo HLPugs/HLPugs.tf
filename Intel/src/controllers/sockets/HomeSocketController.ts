@@ -1,11 +1,4 @@
-import {
-	SocketController,
-	OnConnect,
-	ConnectedSocket,
-	OnMessage,
-	SocketIO,
-	OnDisconnect
-} from 'socket-controllers';
+import { SocketController, OnConnect, ConnectedSocket, OnMessage, SocketIO, OnDisconnect } from 'socket-controllers';
 import * as dotenv from 'dotenv';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import PlayerService from '../../services/PlayerService';
@@ -41,12 +34,9 @@ export class HomeSocketController {
 	}
 
 	@OnMessage('home')
-	async playerLoadedHomepage(
-		@ConnectedSocket() socket: any,
-		@SocketIO() io: any
-	) {
+	async playerLoadedHomepage(@ConnectedSocket() socket: any, @SocketIO() io: any) {
 		const loggedInPlayers = await sessionService.getAllPlayers();
-		const playerViewModels = loggedInPlayers.map(player => PlayerViewModel.fromPlayer(player))
+		const playerViewModels = loggedInPlayers.map(player => PlayerViewModel.fromPlayer(player));
 		socket.emit('getLoggedInPlayers', playerViewModels);
 
 		// Add new socket to session socket list
@@ -56,22 +46,15 @@ export class HomeSocketController {
 				if (e) throw e;
 			});
 			if (socket.request.session.sockets.length === 1) {
-				sessionService.addPlayer(
-					socket.request.session.id,
-					socket.request.session.user.steamid
-				);
-				io.emit(
-					'addPlayerToSession',
-					await sessionService.getPlayer(socket.request.session.user.steamid)
-				);
+				sessionService.addPlayer(socket.request.session.id, socket.request.session.user.steamid);
+				io.emit('addPlayerToSession', await sessionService.getPlayer(socket.request.session.user.steamid));
 			}
 		}
 	}
 
 	@OnDisconnect()
 	playerDisconnected(@ConnectedSocket() socket: any, @SocketIO() io: any) {
-		if (!socket.request.session || socket.request.session.sockets === undefined)
-			return;
+		if (!socket.request.session || socket.request.session.sockets === undefined) return;
 
 		socket.request.session.reload((e: any) => {
 			if (e !== undefined) throw e;
@@ -92,11 +75,7 @@ export class HomeSocketController {
 					//);
 
 					SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-						io.emit(
-							'removePlayerFromDraftTFClass',
-							scheme.tf2class,
-							socket.request.session.user.steamid
-						);
+						io.emit('removePlayerFromDraftTFClass', scheme.tf2class, socket.request.session.user.steamid);
 					});
 
 					sessionService.removePlayer(socket.request.session.user.steamid);

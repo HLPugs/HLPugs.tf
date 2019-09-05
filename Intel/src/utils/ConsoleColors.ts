@@ -24,5 +24,4 @@ export const BgBlue = '\x1b[44m';
 export const BgWhite = '\x1b[47m';
 export const BgCyan = '\x1b[46m';
 
-export const consoleLogStatus = (text: string) =>
-	console.log(`${Reset}${Bold}${text}${Reset}`);
+export const consoleLogStatus = (text: string) => console.log(`${Reset}${Bold}${text}${Reset}`);

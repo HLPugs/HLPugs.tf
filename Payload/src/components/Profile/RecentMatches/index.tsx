@@ -6,9 +6,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ProfilePaginatedMatchesViewModel from '../../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
 import HttpClient from '../../../common/HttpClient';
 import LoadingDots from '../../LoadingDots';
+import SteamID from '../../../../../Common/Types/SteamID';
 
 interface RecentMatchesProps {
-	steamid: string;
+	steamid: SteamID;
 }
 
 interface RecentMatchesState {

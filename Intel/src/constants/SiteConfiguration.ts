@@ -1,8 +1,4 @@
-import {
-	SiteConfigurationModel,
-	NavItem,
-	SiteBranding
-} from '../../../Common/Models/SiteConfigurationModel';
+import { SiteConfigurationModel, NavItem, SiteBranding } from '../../../Common/Models/SiteConfigurationModel';
 import Gamemode from '../../../Common/Enums/Gamemode';
 import GamemodeClassSchemes from '../../../Common/Constants/GamemodeClassSchemes';
 import Region from '../../../Common/Enums/Region';
@@ -12,7 +8,6 @@ import EnvironmentConfigModel from '../../../Common/Models/EnvironmentConfigMode
 const region = Region.NorthAmerica;
 const matchType = MatchType.PUG;
 const gamemode = Gamemode.Highlander;
-
 
 const gamemodeClassSchemes = GamemodeClassSchemes.get(gamemode);
 
@@ -100,8 +95,8 @@ const navigation: NavItem[] = [
 export const EnvironmentConfig: EnvironmentConfigModel = {
 	matchType,
 	region,
-	gamemode,
-}
+	gamemode
+};
 
 export const SiteConfiguration: SiteConfigurationModel = {
 	branding,

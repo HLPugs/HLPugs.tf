@@ -7,9 +7,10 @@ import { ProfileViewModel } from '../../../../Common/ViewModels/ProfileViewModel
 import LoadingDots from '../LoadingDots';
 import RecentMatches from './RecentMatches';
 import ProfileStatistics from './ProfileStatistics';
+import SteamID from '../../../../Common/Types/SteamID';
 
 interface ProfileProps {
-	steamid: string;
+	steamid: SteamID;
 }
 
 interface ProfileState {

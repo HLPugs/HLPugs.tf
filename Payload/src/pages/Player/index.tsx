@@ -10,7 +10,7 @@ import { RouteComponentProps } from 'react-router';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 
 interface MatchParams {
-	steamid: string;
+	steamid: SteamID;
 }
 
 interface ProfileProps extends RouteComponentProps<MatchParams> {

@@ -36,7 +36,7 @@ const SeedMatches = async () => {
 			tf2class: gamemodeClassScheme[Math.floor(Math.random() * 9)].tf2class,
 			team: Math.floor(Math.random() * 2) === 1 ? Team.RED : Team.BLU,
 			wasCaptain: Math.floor(Math.random() * 2) === 1,
-			player,
+			player
 		};
 
 		// @ts-ignore
@@ -46,12 +46,7 @@ const SeedMatches = async () => {
 			matchPlayerData: [matchPlayerData],
 			players: [player],
 			matchType: MatchType.PUG,
-			winningTeam:
-				Math.random() > 0.5
-					? Team.BLU
-					: Math.random() > 0.5
-						? Team.RED
-						: Team.NONE,
+			winningTeam: Math.random() > 0.5 ? Team.BLU : Math.random() > 0.5 ? Team.RED : Team.NONE,
 			logsId: 12345867,
 			region: Region.NorthAmerica,
 			gamemode: Gamemode.Highlander

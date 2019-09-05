@@ -1,6 +1,8 @@
+import SteamID from '../Types/SteamID';
+
 class BanViewModel {
 	id: number;
-	creatorSteamId: string;
+	creatorSteamid: SteamID;
 	reason: string;
 	expirationDate: Date;
 }

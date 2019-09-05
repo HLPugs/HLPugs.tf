@@ -5,11 +5,8 @@ import Player from '../entities/Player';
 const playerService = new PlayerService();
 
 const CurrentUserChecker = async (action: Action) => {
-	const playerExists = await playerService.playerExists(
-		action.request.user.steamid);
-	const newIp =
-		action.request.header('x-forwarded-for') ||
-		action.request.connection.remoteAddress;
+	const playerExists = await playerService.playerExists(action.request.user.steamid);
+	const newIp = action.request.header('x-forwarded-for') || action.request.connection.remoteAddress;
 	const newAvatarUrl = action.request.user.avatar.large;
 
 	if (playerExists) {

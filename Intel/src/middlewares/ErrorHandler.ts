@@ -1,8 +1,4 @@
-import {
-	Middleware,
-	ExpressErrorMiddlewareInterface,
-	HttpError
-} from 'routing-controllers';
+import { Middleware, ExpressErrorMiddlewareInterface, HttpError } from 'routing-controllers';
 import { Response, Request, NextFunction } from 'express';
 import { ValidationError } from 'class-validator';
 import { ErrorModel } from '../../../Common/Models/ErrorModel';
@@ -15,13 +11,9 @@ export default class ErrorHandler implements ExpressErrorMiddlewareInterface {
 
 		// if its an array of ValidationError
 		const developmentMode: boolean = process.env.NODE_ENV === 'dev';
-		if (
-			Array.isArray(error) &&
-			error.every(element => element instanceof ValidationError)
-		) {
+		if (Array.isArray(error) && error.every(element => element instanceof ValidationError)) {
 			res.status(400);
-			responseObject.message =
-				"You have an error in your request's body. Check 'errors' field for more details!";
+			responseObject.message = "You have an error in your request's body. Check 'errors' field for more details!";
 			responseObject.errors = error;
 		} else if ((error as any).name === 'ClassValidationError') {
 			res.status(400);

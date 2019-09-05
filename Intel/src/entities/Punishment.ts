@@ -1,12 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import {
-	IsNumberString,
-	IsString,
-	MinDate,
-	IsDate,
-	IsEnum
-} from 'class-validator';
+import { IsNumberString, IsString, MinDate, IsDate, IsEnum } from 'class-validator';
 import PunishmentType from '../../../Common/Enums/PunishmentType';
+import SteamID from '../../../Common/Types/SteamID';
 
 @Entity()
 export default class Punishment {
@@ -19,11 +14,11 @@ export default class Punishment {
 
 	@Column()
 	@IsNumberString()
-	offenderSteamid: string;
+	offenderSteamid: SteamID;
 
 	@Column()
 	@IsNumberString()
-	creatorSteamid: string;
+	creatorSteamid: SteamID;
 
 	@Column()
 	@IsString()
