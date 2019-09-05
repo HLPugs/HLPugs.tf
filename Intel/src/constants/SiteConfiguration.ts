@@ -12,6 +12,8 @@ import EnvironmentConfigModel from '../../../Common/Models/EnvironmentConfigMode
 const region = Region.NorthAmerica;
 const matchType = MatchType.PUG;
 const gamemode = Gamemode.Highlander;
+
+
 const gamemodeClassSchemes = GamemodeClassSchemes.get(gamemode);
 
 const branding: SiteBranding = {
@@ -99,7 +101,7 @@ export const EnvironmentConfig: EnvironmentConfigModel = {
 	matchType,
 	region,
 	gamemode,
-} 
+}
 
 export const SiteConfiguration: SiteConfigurationModel = {
 	branding,

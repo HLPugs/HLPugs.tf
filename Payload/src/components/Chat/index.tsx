@@ -5,11 +5,11 @@ import { CustomEmoji } from 'emoji-mart';
 import './style.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { PlayerDataConsumer } from '../../pages/Home';
-import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
+import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 
 interface ChatProps {
 	socket: SocketIOClient.Socket;
-	user: UserViewModel;
+	user: PlayerViewModel;
 }
 
 interface ChatState {
@@ -57,7 +57,7 @@ class Chat extends React.PureComponent<ChatProps, ChatState> {
 						/>
 						<ChatInput
 							socket={this.props.socket}
-							loggedIn={this.props.user.loggedIn}
+							loggedIn={this.props.user.isLoggedIn}
 							customEmojis={this.state.customEmojis}
 							mentions={
 								playerData

@@ -5,7 +5,7 @@ import { Server } from 'http';
 import 'reflect-metadata';
 import * as uuid from 'uuid';
 import * as socketIO from 'socket.io';
-import { store } from './modules/store';
+import store from './modules/store';
 import { createConnection } from 'typeorm';
 import express = require('express');
 import { useExpressServer } from 'routing-controllers';

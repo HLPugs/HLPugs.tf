@@ -36,7 +36,7 @@ import {
 	faArrowRight,
 	faChartPie
 } from '@fortawesome/free-solid-svg-icons';
-import UserViewModel from '../../../Common/ViewModels/UserViewModel';
+import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 import Region from '../../../Common/Enums/Region';
 import Gamemode from '../../../Common/Enums/Gamemode';
 import MatchType from '../../../Common/Enums/MatchType';
@@ -65,7 +65,7 @@ library.add(
 
 interface AppState {
 	configuration?: SiteConfigurationModel;
-	user?: UserViewModel;
+	user?: PlayerViewModel;
 	disconnected: boolean;
 }
 
@@ -99,7 +99,7 @@ class App extends React.Component<{}, AppState> {
 			this.setState({ configuration });
 		});
 
-		this.socket.on('user', (user: UserViewModel) => {
+		this.socket.on('user', (user: PlayerViewModel) => {
 			this.setState({ user });
 		});
 
@@ -160,7 +160,7 @@ class App extends React.Component<{}, AppState> {
 												? this.state.configuration
 												: this.dummyConfiguration
 										}
-										user={this.state.user ? this.state.user : new UserViewModel()}
+										currentPlayer={this.state.user ? this.state.user : new PlayerViewModel()}
 									/>
 								)}
 							/>
@@ -174,7 +174,7 @@ class App extends React.Component<{}, AppState> {
 												? this.state.configuration
 												: this.dummyConfiguration
 										}
-										user={this.state.user ? this.state.user : new UserViewModel()}
+										user={this.state.user ? this.state.user : new PlayerViewModel()}
 										{...routeProps}
 									/>
 								)}

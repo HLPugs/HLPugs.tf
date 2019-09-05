@@ -3,7 +3,10 @@ import ClassIcon from '../../../ClassIcon';
 import './style.scss';
 import PlayerBox from './PlayerBox';
 import DraftTFClass from '../../../../../../Common/Enums/DraftTFClass';
+import AddToDraftTFClassDTO from '../../../../../../Common/DTOs/AddToDraftClassListDTO';
 import GamemodeClassScheme from '../../../../../../Common/Models/GamemodeClassScheme';
+import GetDraftTFClassListDTO from '../../../../../../Common/DTOs/GetDraftTFClassListDTO';
+import RemovePlayerFromDraftTFClassDTO from '../../../../../../Common/DTOs/RemovePlayerFromDraftTFClassDTO';
 
 interface ClassBoxProps {
 	properties: GamemodeClassScheme;
@@ -19,10 +22,16 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 	constructor(props: ClassBoxProps) {
 		super(props);
 
-		this.props.socket.emit('getDraftTFClassList', this.props.properties.tf2class);
+		const getDraftTFClassListDTO: GetDraftTFClassListDTO = {
+			draftTFClass: this.props.properties.tf2class
+		};
+		this.props.socket.emit('getDraftTFClassList', getDraftTFClassListDTO);
 
 		this.props.socket.on('reconnect', () => {
-			this.props.socket.emit('getDraftTFClassList', this.props.properties.tf2class);
+			const getDraftTFClassListDTO: GetDraftTFClassListDTO = {
+				draftTFClass: this.props.properties.tf2class
+			};
+			this.props.socket.emit('getDraftTFClassList', getDraftTFClassListDTO);
 		});
 
 		this.props.socket.on(
@@ -37,7 +46,7 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 		);
 
 		this.props.socket.on(
-			'addToDraftTFClass',
+			'addPlayerToDraftTFClass',
 			(tfClass: DraftTFClass, steamid: string) => {
 				if (tfClass === this.props.properties.tf2class) {
 					this.setState({
@@ -48,7 +57,7 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 		);
 
 		this.props.socket.on(
-			'removeFromDraftTFClass',
+			'removePlayerFromDraftTFClass',
 			(tfClass: DraftTFClass, steamid: string) => {
 				if (tfClass === this.props.properties.tf2class) {
 					const newPlayers = [...this.state.players];
@@ -76,12 +85,17 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 		}
 
 		if (this.state.players.indexOf(this.props.steamid) >= 0) {
-			this.props.socket.emit(
-				'removeFromDraftTFClass',
-				this.props.properties.tf2class
-			);
+			const removePlayerFromDraftTFClassDTO: RemovePlayerFromDraftTFClassDTO = {
+				draftTFClass: this.props.properties.tf2class
+			};
+
+			this.props.socket.emit('removePlayerFromDraftTFClass', removePlayerFromDraftTFClassDTO);
 		} else {
-			this.props.socket.emit('addToDraftTFClass', this.props.properties.tf2class);
+			const addToDraftTFClassDTO: AddToDraftTFClassDTO = {
+				draftTFClass: this.props.properties.tf2class
+			};
+
+			this.props.socket.emit('addPlayerToDraftTFClass', addToDraftTFClassDTO);
 		}
 	};
 

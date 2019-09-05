@@ -3,16 +3,16 @@ import UserInfo from './UserInfo';
 import UserDropDown from './UserDropDown';
 import SteamLogIn from './SteamLogIn';
 import './style.scss';
-import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
+import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 
 interface UserProps {
-	user: UserViewModel;
+	user: PlayerViewModel;
 	settingsOnClick: Function;
 }
 
 class User extends React.PureComponent<UserProps, {}> {
 	render() {
-		if (this.props.user.loggedIn) {
+		if (this.props.user.isLoggedIn) {
 			return (
 				<div id="User">
 					<UserInfo
@@ -25,7 +25,7 @@ class User extends React.PureComponent<UserProps, {}> {
 					/>
 				</div>
 			);
-		} else if (this.props.user.loggedIn === false) {
+		} else if (this.props.user.isLoggedIn === false) {
 			return (
 				<div id="User">
 					<SteamLogIn />

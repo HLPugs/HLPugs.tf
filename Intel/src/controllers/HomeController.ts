@@ -10,7 +10,7 @@ import config = require('config');
 import { Response } from 'express';
 import * as steam from 'steam-login';
 import PlayerService from '../services/PlayerService';
-import UserViewModel from '../../../Common/ViewModels/UserViewModel';
+import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 import Player from '../entities/Player';
 import { RequestWithUser } from '../interfaces/RequestWithUser';
 
@@ -37,14 +37,14 @@ export class HomeController {
 			player.steamid
 		);
 
-		const userViewModel = UserViewModel.fromPlayer(player);
+		const playerViewModel = PlayerViewModel.fromPlayer(player);
 
-		userViewModel.loggedIn = !isCurrentlySiteBanned;
-		userViewModel.isBanned = isCurrentlySiteBanned;
+		playerViewModel.isLoggedIn = !isCurrentlySiteBanned;
+		playerViewModel.isBanned = isCurrentlySiteBanned;
 
 		req.session.sockets = [];
-		req.session.user = userViewModel;
-		req.user = userViewModel;
+		req.session.user = playerViewModel;
+		req.user = playerViewModel;
 
 		res.redirect('/');
 	}

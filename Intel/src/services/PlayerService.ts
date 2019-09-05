@@ -10,7 +10,7 @@ import { getManager } from 'typeorm';
 import Gamemode from '../../../Common/Enums/Gamemode';
 import Region from '../../../Common/Enums/Region';
 import MatchType from '../../../Common/Enums/MatchType';
-import { PlayerNotFoundError } from '../custom-errors/PlayerNotFoundError';
+import PlayerNotFoundError from '../custom-errors/PlayerNotFoundError';
 import {
 	ClassStatistics,
 	ClassStatistic

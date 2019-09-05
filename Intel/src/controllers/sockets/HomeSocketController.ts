@@ -1,4 +1,3 @@
-import * as playerMap from '../../modules/playerMap';
 import {
 	SocketController,
 	OnConnect,
@@ -8,13 +7,15 @@ import {
 	OnDisconnect
 } from 'socket-controllers';
 import * as dotenv from 'dotenv';
-import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
+import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import PlayerService from '../../services/PlayerService';
+import SessionService from '../../services/SessionService';
 import { SiteConfiguration } from '../../constants/SiteConfiguration';
 
 const env = dotenv.config().parsed;
 
 const playerService = new PlayerService();
+const sessionService = new SessionService();
 
 @SocketController()
 export class HomeSocketController {
@@ -26,7 +27,7 @@ export class HomeSocketController {
 		}
 
 		if (socket.request.session.user) {
-			const user: UserViewModel = socket.request.session.user;
+			const user: PlayerViewModel = socket.request.session.user;
 			socket.emit('user', user);
 		} else {
 			// Used for development
@@ -44,9 +45,9 @@ export class HomeSocketController {
 		@ConnectedSocket() socket: any,
 		@SocketIO() io: any
 	) {
-		// Send socket all online users' information
-		const playerList = await playerMap.getAllPlayers();
-		socket.emit('playerData', await playerList);
+		const loggedInPlayers = await sessionService.getAllPlayers();
+		const playerViewModels = loggedInPlayers.map(player => PlayerViewModel.fromPlayer(player))
+		socket.emit('getLoggedInPlayers', playerViewModels);
 
 		// Add new socket to session socket list
 		if (socket.request.session.sockets !== undefined) {
@@ -55,13 +56,13 @@ export class HomeSocketController {
 				if (e) throw e;
 			});
 			if (socket.request.session.sockets.length === 1) {
-				playerMap.addPlayer(
+				sessionService.addPlayer(
 					socket.request.session.id,
 					socket.request.session.user.steamid
 				);
 				io.emit(
-					'addPlayerToData',
-					await playerMap.getPlayer(socket.request.session.user.steamid)
+					'addPlayerToSession',
+					await sessionService.getPlayer(socket.request.session.user.steamid)
 				);
 			}
 		}
@@ -86,20 +87,20 @@ export class HomeSocketController {
 				});
 
 				if (socket.request.session.sockets.length === 0) {
-					playerMap.removePlayerAllDraftTFClasses(
-						socket.request.session.user.steamid
-					);
+					//playerMap.removePlayerAllDraftTFClasses(
+					//	socket.request.session.user.steamid
+					//);
 
 					SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
 						io.emit(
-							'removeFromDraftTFClass',
+							'removePlayerFromDraftTFClass',
 							scheme.tf2class,
 							socket.request.session.user.steamid
 						);
 					});
 
-					playerMap.removePlayer(socket.request.session.user.steamid);
-					io.emit('removePlayerFromData', socket.request.session.user.steamid);
+					sessionService.removePlayer(socket.request.session.user.steamid);
+					io.emit('removePlayerFromSession', socket.request.session.user.steamid);
 				}
 			}
 		});

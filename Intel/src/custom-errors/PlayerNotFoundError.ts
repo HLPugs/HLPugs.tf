@@ -1,4 +1,4 @@
-export class PlayerNotFoundError extends Error {
+class PlayerNotFoundError extends Error {
 	constructor(identifier: string) {
 		super(identifier);
 		this.name = 'PlayerNotFoundError';
@@ -6,3 +6,5 @@ export class PlayerNotFoundError extends Error {
 		Error.captureStackTrace(this, PlayerNotFoundError);
 	}
 }
+
+export default PlayerNotFoundError;

@@ -7,7 +7,7 @@ import Settings from '../../components/Settings';
 import Profile from '../../components/Profile';
 import './style.scss';
 import { RouteComponentProps } from 'react-router';
-import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
+import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 
 interface MatchParams {
 	steamid: string;
@@ -16,7 +16,7 @@ interface MatchParams {
 interface ProfileProps extends RouteComponentProps<MatchParams> {
 	socket: SocketIOClient.Socket;
 	configuration: SiteConfigurationModel;
-	user: UserViewModel;
+	user: PlayerViewModel;
 }
 
 interface ProfileState {
@@ -50,7 +50,7 @@ class Player extends React.Component<ProfileProps, ProfileState> {
 					siteSubTitle={this.props.configuration.branding.siteSubTitle}
 					logoPath={this.props.configuration.branding.logoPath}
 				/>
-				
+
 				<User user={this.props.user} settingsOnClick={this.toggleSettings} />
 				<Navigation navigationGroup={this.props.configuration.navigation} />
 				<Profile steamid={steamid} />

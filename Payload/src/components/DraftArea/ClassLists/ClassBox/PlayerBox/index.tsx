@@ -13,7 +13,7 @@ class PlayerBox extends React.PureComponent<PlayerBoxProps, {}> {
 		return (
 			<PlayerDataConsumer>
 				{(playerData: any) =>
-					playerData && (
+					playerData && playerData[this.props.steamid] && (
 						<Link
 							to={`/player/${this.props.steamid}`}
 							target="blank"

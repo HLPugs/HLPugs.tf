@@ -1,6 +1,6 @@
 import { Request } from 'express';
-import UserViewModel from '../../../Common/ViewModels/UserViewModel';
+import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 
 export interface RequestWithUser extends Request {
-	user: UserViewModel;
+	user: PlayerViewModel;
 }

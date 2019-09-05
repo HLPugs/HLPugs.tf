@@ -8,18 +8,18 @@ import Chat from '../../components/Chat';
 import AliasModal from '../../components/AliasModal';
 import Settings from '../../components/Settings';
 import './style.scss';
-import UserViewModel from '../../../../Common/ViewModels/UserViewModel';
+import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import { SiteConfigurationModel } from '../../../../Common/Models/SiteConfigurationModel';
 
 interface HomeProps {
 	socket: SocketIOClient.Socket;
 	configuration: SiteConfigurationModel;
-	user: UserViewModel;
+	currentPlayer: PlayerViewModel;
 }
 
 interface HomeState {
-	settingsOpen: boolean;
-	playerData: any;
+	isSettingsOpen: boolean;
+	loggedInPlayers: PlayerViewModel[];
 }
 
 const PlayerCtxt = React.createContext<Object | null>(null);
@@ -39,43 +39,27 @@ class Home extends React.Component<HomeProps, HomeState> {
 		super(props);
 
 		this.state = {
-			settingsOpen: false,
-			playerData: {}
+			isSettingsOpen: false,
+			loggedInPlayers: []
 		};
 
-		this.props.socket.on('playerData', (playerData: Array<UserViewModel>) => {
-			let newPlayerData = { ...this.state.playerData };
+		this.props.socket.on('getLoggedInUsers', (loggedInPlayers: PlayerViewModel[]) => {
+			this.setState({ loggedInPlayers });
+		});
 
-			for (const player of playerData) {
-				if (player && player.steamid) {
-					newPlayerData[player.steamid] = player;
-				}
-			}
-
+		this.props.socket.on('addPlayerToSession', (player: PlayerViewModel) => {
 			this.setState({
-				playerData: newPlayerData
+				loggedInPlayers: [...this.state.loggedInPlayers, player]
 			});
 		});
 
-		this.props.socket.on('addPlayerToData', (player: UserViewModel) => {
-			let newPlayerData = { ...this.state.playerData };
-
-			if (player.steamid) {
-				newPlayerData[player.steamid] = player;
-			}
-
-			this.setState({
-				playerData: newPlayerData
-			});
-		});
-
-		this.props.socket.on('removePlayerFromData', (playerId: string) => {
-			let newPlayerData = { ...this.state.playerData };
+		this.props.socket.on('removePlayerFromSession', (playerId: string) => {
+			let newPlayerData = { ...this.state.loggedInPlayers };
 
 			delete newPlayerData[playerId];
 
 			this.setState({
-				playerData: newPlayerData
+				loggedInPlayers: newPlayerData
 			});
 		});
 
@@ -88,7 +72,7 @@ class Home extends React.Component<HomeProps, HomeState> {
 	}
 
 	AliasModal = () => {
-		if (!this.props.user.alias && this.props.user.loggedIn) {
+		if (!this.props.currentPlayer.alias && this.props.currentPlayer.isLoggedIn) {
 			return <AliasModal socket={this.props.socket} />;
 		}
 
@@ -97,14 +81,14 @@ class Home extends React.Component<HomeProps, HomeState> {
 
 	toggleSettings = () => {
 		this.setState({
-			settingsOpen: !this.state.settingsOpen
+			isSettingsOpen: !this.state.isSettingsOpen
 		});
 	};
 
 	render() {
 		return (
 			<div id="Home">
-				<PlayerDataProvider value={this.state.playerData}>
+				<PlayerDataProvider value={this.state.loggedInPlayers}>
 					<SocketProvider value={this.props.socket}>
 						<Header
 							siteName={this.props.configuration.branding.siteName}
@@ -112,22 +96,22 @@ class Home extends React.Component<HomeProps, HomeState> {
 							logoPath={this.props.configuration.branding.logoPath}
 						/>
 						<User
-							user={this.props.user}
+							user={this.props.currentPlayer}
 							settingsOnClick={this.toggleSettings}
 						/>
 						<Navigation navigationGroup={this.props.configuration.navigation} />
 						<DraftArea
 							classes={this.props.configuration.gamemodeClassSchemes}
-							steamid={this.props.user.steamid}
+							steamid={this.props.currentPlayer.steamid}
 						/>
-						<Chat socket={this.props.socket} user={this.props.user} />
+						<Chat socket={this.props.socket} user={this.props.currentPlayer} />
 						<Settings
-							settings={this.props.user.settings}
+							settings={this.props.currentPlayer.settings}
 							socket={this.props.socket}
-							visibility={this.state.settingsOpen}
+							visibility={this.state.isSettingsOpen}
 							classes={this.props.configuration.gamemodeClassSchemes}
 							settingsOnClick={this.toggleSettings}
-							userAlias={this.props.user.alias}
+							userAlias={this.props.currentPlayer.alias}
 						/>
 						{this.AliasModal()}
 					</SocketProvider>

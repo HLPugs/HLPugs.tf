@@ -1,6 +1,6 @@
 import * as chai from 'chai';
 import 'mocha';
-import { addFakePlayer, getPlayer } from '../modules/playerMap';
+// import { addFakePlayer, getPlayer } from '../modules/playerMap';
 
 const expect = chai.expect;
 const steamid = 'steamid';

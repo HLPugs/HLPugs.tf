@@ -24,34 +24,40 @@ const SeedPlayers = async () => {
 
 const SeedMatches = async () => {
 	const playerService = new PlayerService();
-	const matchRepo = new LinqRepository(Match);
+	const matchRepository = new LinqRepository(Match);
 
 	const player = await playerService.getPlayer('76561198119135809');
 
-	for (let i = 0; i < 50; i++) {
-		const match = new Match();
-		match.map = 'koth_ashville_rc1';
-		const matchPlayerData = new MatchPlayerData();
+	for (let i = 0; i < 100; i++) {
 		const gamemodeClassScheme = GamemodeClassSchemes.get(Gamemode.Highlander);
-		const randClass = Math.floor(Math.random() * 9);
-		matchPlayerData.tf2class = gamemodeClassScheme[randClass].tf2class;
-		matchPlayerData.player = player;
-		matchPlayerData.team = Team.RED;
-		matchPlayerData.wasCaptain = true;
-		match.matchPlayerData = [matchPlayerData];
-		match.players = [player];
-		match.matchType = MatchType.PUG;
-		match.winningTeam =
-			Math.random() > 0.5
-				? Team.BLU
-				: Math.random() > 0.5
-				? Team.RED
-				: Team.NONE;
-		match.logsId = 12345867;
-		match.region = Region.NorthAmerica;
-		match.gamemode = Gamemode.Highlander;
 
-		await matchRepo.create(match);
+		// @ts-ignore
+		const matchPlayerData: MatchPlayerData = {
+			tf2class: gamemodeClassScheme[Math.floor(Math.random() * 9)].tf2class,
+			team: Math.floor(Math.random() * 2) === 1 ? Team.RED : Team.BLU,
+			wasCaptain: Math.floor(Math.random() * 2) === 1,
+			player,
+		};
+
+		// @ts-ignore
+		const match: Match = {
+			date: new Date(),
+			map: 'koth_ashville_rc1',
+			matchPlayerData: [matchPlayerData],
+			players: [player],
+			matchType: MatchType.PUG,
+			winningTeam:
+				Math.random() > 0.5
+					? Team.BLU
+					: Math.random() > 0.5
+						? Team.RED
+						: Team.NONE,
+			logsId: 12345867,
+			region: Region.NorthAmerica,
+			gamemode: Gamemode.Highlander
+		};
+
+		await matchRepository.create(match);
 	}
 };
 
