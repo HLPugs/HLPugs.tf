@@ -1,5 +1,9 @@
 {
 	"singleQuote": true,
-	"printWidth": 80,
-	"useTabs": true
+	"printWidth": 120,
+	"useTabs": true,
+	"endOfLine": "crlf",
+	"arrowParens": "avoid",
+	"bracketSpacing": true,
+	"semi": true
 }
