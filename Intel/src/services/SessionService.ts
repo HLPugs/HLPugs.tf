@@ -9,7 +9,6 @@ import SessionID from '../../../Common/Types/SessionID';
 import PlayerService from './PlayerService';
 import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 
-// this collection maps a SteamID to a session ID
 const PlayerSessionMap = new Map<SteamID, SessionID>();
 
 /**
