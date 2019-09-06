@@ -12,7 +12,7 @@ import { useExpressServer } from 'routing-controllers';
 import { Bold, Underscore, FgYellow, Reset, consoleLogStatus, FgRed, FgGreen, FgBlue } from './utils/ConsoleColors';
 import CurrentUserChecker from './utils/CurrentUserChecker';
 import { useSocketServer } from 'socket-controllers';
-import Seed from './utils/Seed';
+import SeedOfflineData from './utils/SeedOfflineData';
 import * as dotenv from 'dotenv';
 import { ErrorModel } from '../../Common/Models/ErrorModel';
 
@@ -45,7 +45,7 @@ consoleLogStatus(`Synchronizing models to database with ${FgYellow}TypeORM${Rese
 createConnection()
 	.then(async () => {
 		if (env.offline === 'true') {
-			await Seed();
+			await SeedOfflineData();
 		}
 		consoleLogStatus(`\n${FgGreen}Success! Entities synchronized with database`);
 

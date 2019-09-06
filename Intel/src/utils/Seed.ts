@@ -9,6 +9,7 @@ import { consoleLogStatus } from './ConsoleColors';
 import Region from '../../../Common/Enums/Region';
 import Gamemode from '../../../Common/Enums/Gamemode';
 import GamemodeClassSchemes from '../../../Common/Constants/GamemodeClassSchemes';
+import { createConnection } from 'typeorm';
 
 const SeedPlayers = async () => {
 	const playerRepo = new LinqRepository(Player);
@@ -28,9 +29,8 @@ const SeedMatches = async () => {
 
 	const player = await playerService.getPlayer('76561198119135809');
 
+	const gamemodeClassScheme = GamemodeClassSchemes.get(Gamemode.Highlander);
 	for (let i = 0; i < 100; i++) {
-		const gamemodeClassScheme = GamemodeClassSchemes.get(Gamemode.Highlander);
-
 		// @ts-ignore
 		const matchPlayerData: MatchPlayerData = {
 			tf2class: gamemodeClassScheme[Math.floor(Math.random() * 9)].tf2class,
@@ -57,9 +57,12 @@ const SeedMatches = async () => {
 };
 
 const Seed = async () => {
-	consoleLogStatus('SEEDING LOCAL DATABASE');
 	await SeedPlayers();
 	await SeedMatches();
 };
 
-export default Seed;
+createConnection().then(async () => {
+	await Seed();
+}).then(() => {
+	consoleLogStatus('Finished seeding database');
+});

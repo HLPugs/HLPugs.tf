@@ -3,11 +3,13 @@ import * as dotenv from 'dotenv';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import PlayerService from '../../services/PlayerService';
 import SessionService from '../../services/SessionService';
+import DraftService from '../../services/DraftService';
 import { SiteConfiguration } from '../../constants/SiteConfiguration';
 
 const env = dotenv.config().parsed;
 
 const playerService = new PlayerService();
+const draftService = new DraftService();
 const sessionService = new SessionService();
 
 @SocketController()
@@ -33,7 +35,7 @@ export class HomeSocketController {
 		}
 	}
 
-	@OnMessage('home')
+	@OnMessage('playerLoadedHomepage')
 	async playerLoadedHomepage(@ConnectedSocket() socket: any, @SocketIO() io: any) {
 		const loggedInPlayers = await sessionService.getAllPlayers();
 		const playerViewModels = loggedInPlayers.map(player => PlayerViewModel.fromPlayer(player));
@@ -70,9 +72,7 @@ export class HomeSocketController {
 				});
 
 				if (socket.request.session.sockets.length === 0) {
-					//playerMap.removePlayerAllDraftTFClasses(
-					//	socket.request.session.user.steamid
-					//);
+					draftService.removePlayerFromAllDraftTFClasses(socket.request.session.user.steamid);
 
 					SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
 						io.emit('removePlayerFromDraftTFClass', scheme.tf2class, socket.request.session.user.steamid);

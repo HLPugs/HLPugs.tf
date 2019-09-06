@@ -8,6 +8,7 @@ import Profile from '../../components/Profile';
 import './style.scss';
 import { RouteComponentProps } from 'react-router';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
+import SteamID from '../../../../Common/Types/SteamID';
 
 interface MatchParams {
 	steamid: SteamID;

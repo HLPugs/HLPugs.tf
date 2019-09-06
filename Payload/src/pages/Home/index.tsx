@@ -10,6 +10,7 @@ import Settings from '../../components/Settings';
 import './style.scss';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import { SiteConfigurationModel } from '../../../../Common/Models/SiteConfigurationModel';
+import SteamID from '../../../../Common/Types/SteamID';
 
 interface HomeProps {
 	socket: SocketIOClient.Socket;
@@ -48,26 +49,20 @@ class Home extends React.Component<HomeProps, HomeState> {
 		});
 
 		this.props.socket.on('addPlayerToSession', (player: PlayerViewModel) => {
-			this.setState({
-				loggedInPlayers: [...this.state.loggedInPlayers, player]
-			});
+			this.setState({ loggedInPlayers: [...this.state.loggedInPlayers, player] });
 		});
 
-		this.props.socket.on('removePlayerFromSession', (playerId: string) => {
-			let newPlayerData = { ...this.state.loggedInPlayers };
-
-			delete newPlayerData[playerId];
-
+		this.props.socket.on('removePlayerFromSession', (steamid: SteamID) => {
 			this.setState({
-				loggedInPlayers: newPlayerData
+				loggedInPlayers: this.state.loggedInPlayers.filter(x => x.steamid !== steamid)
 			});
 		});
 
 		// Tell server that this socket connection is on the homepage
-		this.props.socket.emit('home');
+		this.props.socket.emit('playedLoadedHomepage');
 
 		this.props.socket.on('reconnect', () => {
-			this.props.socket.emit('home');
+			this.props.socket.emit('playerLoadedHomepage');
 		});
 	}
 
@@ -95,10 +90,7 @@ class Home extends React.Component<HomeProps, HomeState> {
 							siteSubTitle={this.props.configuration.branding.siteSubTitle}
 							logoPath={this.props.configuration.branding.logoPath}
 						/>
-						<User
-							user={this.props.currentPlayer}
-							settingsOnClick={this.toggleSettings}
-						/>
+						<User user={this.props.currentPlayer} settingsOnClick={this.toggleSettings} />
 						<Navigation navigationGroup={this.props.configuration.navigation} />
 						<DraftArea
 							classes={this.props.configuration.gamemodeClassSchemes}
