@@ -9,10 +9,11 @@ import { RequestWithUser as RequestWithPlayer } from '../interfaces/RequestWithU
 import ValidateClass from '../utils/ValidateClass';
 
 const frontURL: string = config.get('app.frontURL');
-const playerService = new PlayerService();
 
 @Controller()
 export class HomeController {
+	private readonly playerService = new PlayerService();
+
 	@Get('/')
 	frontURL(@Res() res: Response): void {
 		res.redirect(frontURL);
@@ -21,9 +22,9 @@ export class HomeController {
 	@Get('/verify')
 	@UseBefore(steam.verify())
 	async login(@CurrentUser() player: Player, @Req() req: RequestWithPlayer, @Res() res: Response): Promise<void> {
-		await playerService.updateOrInsertPlayer(player);
+		await this.playerService.updateOrInsertPlayer(player);
 
-		const isCurrentlySiteBanned = await playerService.isCurrentlySiteBanned(player.steamid);
+		const isCurrentlySiteBanned = await this.playerService.isCurrentlySiteBanned(player.steamid);
 		req.session.sockets = [];
 
 		const playerViewModel = PlayerViewModel.fromPlayer(player);

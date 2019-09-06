@@ -7,20 +7,20 @@ import ValidateClass from '../../utils/ValidateClass';
 import SessionService from '../../services/SessionService';
 import { Socket, Server } from 'socket.io';
 
-const playerService = new PlayerService();
-const sessionService = new SessionService();
-
 @SocketController()
 export class AliasSocketController {
+	private readonly playerService = new PlayerService();
+	private readonly sessionService = new SessionService();
+
 	@OnMessage('submitAlias')
 	async submitAlias(@ConnectedSocket() socket: Socket, @SocketIO() io: Server, @MessageBody() body: any) {
 		const alias: string = body.alias;
 		const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
 
-		if (!aliasRules.test(alias) || (await playerService.playerExists(alias))) return;
+		if (!aliasRules.test(alias) || (await this.playerService.playerExists(alias))) return;
 
 		const steamid = socket.request.session.player.steamid;
-		await playerService.updateAlias(steamid, alias);
+		await this.playerService.updateAlias(steamid, alias);
 
 		socket.request.session.player.alias = alias;
 		socket.request.session.save();
@@ -28,8 +28,8 @@ export class AliasSocketController {
 		user.isLoggedIn = true;
 		ValidateClass(user);
 		socket.emit('user', user);
-		sessionService.addPlayer(socket.request.session.id, steamid);
-		io.emit('addPlayerToSession', await sessionService.getPlayer(steamid));
+		this.sessionService.addPlayer(socket.request.session.id, steamid);
+		io.emit('addPlayerToSession', await this.sessionService.getPlayer(steamid));
 	}
 
 	@OnMessage('checkAlias')

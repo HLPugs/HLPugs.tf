@@ -11,12 +11,12 @@ import Player from '../../entities/Player';
 
 const env = dotenv.config().parsed;
 
-const playerService = new PlayerService();
-const draftService = new DraftService();
-const sessionService = new SessionService();
-
 @SocketController()
 export class HomeSocketController {
+	private readonly playerService = new PlayerService();
+	private readonly sessionService = new SessionService();
+	private readonly draftService = new DraftService();
+
 	@OnConnect()
 	async playerConnected(@ConnectedSocket() socket: Socket) {
 		socket.emit('siteConfiguration', SiteConfiguration);
@@ -30,8 +30,8 @@ export class HomeSocketController {
 		} else {
 			// Used for development
 			if (env.offline.toLowerCase() === 'true') {
-				const player = await playerService.getPlayer('76561198119135809');
-				sessionService.addFakePlayer(player, socket.request.session.id);
+				const player = await this.playerService.getPlayer('76561198119135809');
+				this.sessionService.addFakePlayer(player, socket.request.session.id);
 				const playerViewModel = PlayerViewModel.fromPlayer(player);
 				playerViewModel.isLoggedIn = true;
 				ValidateClass(playerViewModel);
@@ -45,7 +45,7 @@ export class HomeSocketController {
 
 	@OnMessage('playerLoadedHomepage')
 	async playerLoadedHomepage(@ConnectedSocket() socket: Socket, @SocketIO() io: Server) {
-		const loggedInPlayers = await sessionService.getAllPlayers();
+		const loggedInPlayers = await this.sessionService.getAllPlayers();
 		const playerViewModels = loggedInPlayers.map(player => PlayerViewModel.fromPlayer(player));
 		socket.emit('getLoggedInPlayers', playerViewModels);
 
@@ -56,10 +56,10 @@ export class HomeSocketController {
 				if (e) throw e;
 			});
 			if (socket.request.session.sockets.length === 1) {
-				sessionService.addPlayer(socket.request.session.id, socket.request.session.player.steamid);
+				this.sessionService.addPlayer(socket.request.session.id, socket.request.session.player.steamid);
 				if (socket.request.session.player.alias) {
 					ValidateClass(socket.request.session.player as Player);
-					io.emit('addPlayerToSession', await sessionService.getPlayer(socket.request.session.player.steamid));
+					io.emit('addPlayerToSession', await this.sessionService.getPlayer(socket.request.session.player.steamid));
 				}
 			}
 		}
@@ -83,13 +83,13 @@ export class HomeSocketController {
 				});
 
 				if (socket.request.session.sockets.length === 0) {
-					draftService.removePlayerFromAllDraftTFClasses(socket.request.session.player.steamid);
+					this.draftService.removePlayerFromAllDraftTFClasses(socket.request.session.player.steamid);
 
 					SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
 						io.emit('removePlayerFromDraftTFClass', scheme.tf2class, socket.request.session.player.steamid);
 					});
 
-					sessionService.removePlayer(socket.request.session.player.steamid);
+					this.sessionService.removePlayer(socket.request.session.player.steamid);
 					io.emit('removePlayerFromSession', socket.request.session.player.steamid);
 				}
 			}

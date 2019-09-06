@@ -7,10 +7,10 @@ import ClassStatisticsFilterOptions from '../../../../Common/Models/ClassStatist
 import ValidateClass from '../../utils/ValidateClass';
 import SteamID from '../../../../Common/Types/SteamID';
 
-const playerService = new PlayerService();
-
 @JsonController('/player')
 export class PlayerController {
+	private readonly playerService = new PlayerService();
+	
 	@Get('/:steamid/classStatistics')
 	getClassStatistics(
 		@Param('steamid') steamid: SteamID,
@@ -24,9 +24,9 @@ export class PlayerController {
 			filterOptions.region = region;
 			filterOptions.matchType = matchType;
 			ValidateClass(filterOptions);
-			return playerService.getClassStatistics(steamid, filterOptions);
+			return this.playerService.getClassStatistics(steamid, filterOptions);
 		} else {
-			return playerService.getClassStatistics(steamid);
+			return this.playerService.getClassStatistics(steamid);
 		}
 	}
 }
