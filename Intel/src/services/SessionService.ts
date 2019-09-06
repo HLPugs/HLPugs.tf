@@ -6,7 +6,6 @@ import Player from '../entities/Player';
 import PlayerNotFoundError from '../custom-errors/PlayerNotFoundError';
 import SteamID from '../../../Common/Types/SteamID';
 import SessionID from '../../../Common/Types/SessionID';
-import PlayerService from './PlayerService';
 import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 
 const PlayerSessionMap = new Map<SteamID, SessionID>();

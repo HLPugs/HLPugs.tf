@@ -17,27 +17,26 @@ import ClassStatisticQueryResult from '../interfaces/ClassStatisticQueryResult';
 import GetAllDraftTFClasses from '../utils/GetAllDraftTFClasses';
 import SteamID from '../../../Common/Types/SteamID';
 import SessionService from './SessionService';
+import ValidateClass from '../utils/ValidateClass';
 
 const sessionService = new SessionService();
 export default class PlayerService {
-	async getPlayer(identifier: string): Promise<Player> {
-		const playerRepository = new LinqRepository(Player);
-		let player: Player;
-		if (isSteamID(identifier)) {
-			player = await playerRepository
+	async getPlayer(steamid: string): Promise<Player> {
+		try {
+			const player = await sessionService.getPlayer(steamid);
+			ValidateClass(player);
+			return player;
+		} catch (error) {
+			const playerRepository = new LinqRepository(Player);
+			const player = await playerRepository
 				.getOne()
 				.where(p => p.steamid)
-				.equal(identifier);
-		} else {
-			player = await playerRepository
-				.getOne()
-				.where(p => p.alias)
-				.equal(identifier);
+				.equal(steamid);
+			if (player === undefined) {
+				throw new PlayerNotFoundError(steamid);
+			}
+			return player;
 		}
-		if (player === undefined) {
-			throw new PlayerNotFoundError(identifier);
-		}
-		return player;
 	}
 
 	async getClassStatistics(identifier: string, filterOptions?: ClassStatisticsFilterOptions): Promise<ClassStatistics> {
