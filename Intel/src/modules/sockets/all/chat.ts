@@ -40,11 +40,11 @@ export const chat = (io: Server) => {
 
 				if (Date.now() - socket.request.session.lastMessageSentTimestamp < 1000) return;
 
-				if (cleanedMessage.length && cleanedMessage.length <= 300 && socket.request.session.user.alias) {
+				if (cleanedMessage.length && cleanedMessage.length <= 300 && socket.request.session.player.alias) {
 					const messageObject: MessageObjectType = {
 						message: cleanedMessage,
-						username: socket.request.session.user.alias,
-						userid: socket.request.session.user.steamid,
+						username: socket.request.session.player.alias,
+						userid: socket.request.session.player.steamid,
 						id: uuid(),
 						timestamp: new Date().getTime()
 					};

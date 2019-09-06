@@ -4,7 +4,7 @@ import ChatInput from './ChatInput';
 import { CustomEmoji } from 'emoji-mart';
 import './style.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { PlayerDataConsumer } from '../../pages/Home';
+import { LoggedInPlayersConsumer } from '../../pages/Home';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 
 interface ChatProps {
@@ -43,7 +43,7 @@ class Chat extends React.PureComponent<ChatProps, ChatState> {
 
 	render() {
 		return (
-			<PlayerDataConsumer>
+			<LoggedInPlayersConsumer>
 				{(playerData: any) => (
 					<aside className={this.state.active ? 'chatActive' : ''}>
 						<div id="chatOpener" onClick={this.toggleChat}>
@@ -67,7 +67,7 @@ class Chat extends React.PureComponent<ChatProps, ChatState> {
 						/>
 					</aside>
 				)}
-			</PlayerDataConsumer>
+			</LoggedInPlayersConsumer>
 		);
 	}
 }

@@ -16,17 +16,20 @@ import GamemodeClassSchemes from '../../../Common/Constants/GamemodeClassSchemes
 import ClassStatisticQueryResult from '../interfaces/ClassStatisticQueryResult';
 import GetAllDraftTFClasses from '../utils/GetAllDraftTFClasses';
 import SteamID from '../../../Common/Types/SteamID';
+import SessionService from './SessionService';
+
+const sessionService = new SessionService();
 export default class PlayerService {
 	async getPlayer(identifier: string): Promise<Player> {
-		const playerRepo = new LinqRepository(Player);
+		const playerRepository = new LinqRepository(Player);
 		let player: Player;
 		if (isSteamID(identifier)) {
-			player = await playerRepo
+			player = await playerRepository
 				.getOne()
 				.where(p => p.steamid)
 				.equal(identifier);
 		} else {
-			player = await playerRepo
+			player = await playerRepository
 				.getOne()
 				.where(p => p.alias)
 				.equal(identifier);
@@ -121,22 +124,22 @@ export default class PlayerService {
 			throw new PlayerNotFoundError(steamid);
 		}
 
-		const playerRepo = new LinqRepository(Player);
+		const playerRepository = new LinqRepository(Player);
 
 		const player = await this.getPlayer(steamid);
 		player.settings = settings;
-		await playerRepo.update(player);
+		await playerRepository.update(player);
 	}
 
 	async updateAlias(steamid: SteamID, alias: string): Promise<void> {
 		if (!(await this.playerExists(steamid))) {
 			throw new PlayerNotFoundError(steamid);
 		}
-		const playerRepo = new LinqRepository(Player);
+		const playerRepository = new LinqRepository(Player);
 
 		const player = await this.getPlayer(steamid);
 		player.alias = alias;
-		await playerRepo.update(player);
+		await playerRepository.update(player);
 	}
 
 	async getSettings(steamid: SteamID): Promise<PlayerSettings> {
@@ -144,9 +147,9 @@ export default class PlayerService {
 			throw new PlayerNotFoundError(steamid);
 		}
 
-		const playerSettingsRepo = new LinqRepository(PlayerSettings);
+		const playerSettingsRepository = new LinqRepository(PlayerSettings);
 
-		const settings = await playerSettingsRepo
+		const settings = await playerSettingsRepository
 			.getOne()
 			.join(s => s.player)
 			.where(player => player.steamid)
@@ -156,14 +159,14 @@ export default class PlayerService {
 	}
 
 	async updateOrInsertPlayer(player: Player): Promise<void> {
-		const playerRepo = new LinqRepository(Player);
+		const playerRepository = new LinqRepository(Player);
 
 		const existingPlayer = await this.playerExists(player.steamid);
 		if (existingPlayer) {
-			await playerRepo.update(player);
+			await playerRepository.update(player);
 		} else {
 			player.settings = new PlayerSettings();
-			await playerRepo.create(player);
+			await playerRepository.create(player);
 		}
 	}
 
@@ -172,8 +175,8 @@ export default class PlayerService {
 			throw new PlayerNotFoundError(steamid);
 		}
 
-		const punishmentRepo = new LinqRepository(Punishment);
-		const activePunishments = await punishmentRepo
+		const punishmentRepository = new LinqRepository(Punishment);
+		const activePunishments = await punishmentRepository
 			.getAll()
 			.where(p => p.expirationDate)
 			.greaterThan(new Date())
@@ -191,24 +194,18 @@ export default class PlayerService {
 		return punishments.some(p => p.punishmentType === PunishmentType.BAN);
 	}
 
-	async playerExists(identifier: string): Promise<boolean> {
-		const playerRepo = new LinqRepository(Player);
-		if (isSteamID(identifier)) {
-			return (
-				(await playerRepo
-					.getOne()
-					.where(p => p.steamid)
-					.equal(identifier)
-					.count()) > 0
-			);
-		} else {
-			return (
-				(await playerRepo
-					.getOne()
-					.where(p => p.alias)
-					.equal(identifier)
-					.count()) > 0
-			);
+	async playerExists(steamid: string): Promise<boolean> {
+		if (sessionService.playerExists(steamid)) {
+			return true;
 		}
+
+		const playerRepository = new LinqRepository(Player);
+		return (
+			(await playerRepository
+				.getOne()
+				.where(p => p.steamid)
+				.equal(steamid)
+				.count()) > 0
+		);
 	}
 }

@@ -2,14 +2,15 @@ import SessionService from '../services/SessionService';
 import DraftTFClass from '../../../Common/Enums/DraftTFClass';
 import SteamID from '../../../Common/Types/SteamID';
 import { SiteConfiguration } from '../constants/SiteConfiguration';
+import PlayerService from './PlayerService';
+import Player from '../entities/Player';
 
-const sessionService = new SessionService();
+const playerService = new PlayerService();
 
 const DraftTFClassLists = new Map<DraftTFClass, SteamID[]>();
 SiteConfiguration.gamemodeClassSchemes.forEach(scheme => DraftTFClassLists.set(scheme.tf2class, []));
 
 class DraftService {
-
 
 	isPlayerAddedToDraftTFClass(steamid: SteamID, draftTFClass: DraftTFClass):  boolean {
 		return DraftTFClassLists.get(draftTFClass).indexOf(steamid) !== -1;
@@ -23,7 +24,7 @@ class DraftService {
 	addPlayerToDraftTFClass(steamid: SteamID, draftTFClass: DraftTFClass) {
 		if (!this.isPlayerAddedToDraftTFClass(steamid, draftTFClass)) {
 			DraftTFClassLists.get(draftTFClass).push(steamid);
-			const player = sessionService.getPlayer(steamid);
+			const player = playerService.getPlayer(steamid);
 			// logger.info(`${player.alias} added to ${draftTFClass}!`);
 		}
 	}
@@ -39,7 +40,7 @@ class DraftService {
 		if (indexOfPlayer >= 0) {
 			DraftTFClassLists.get(draftTFClass).splice(indexOfPlayer, 1);
 
-			const player = sessionService.getPlayer(steamid);
+			const player = playerService.getPlayer(steamid);
 			// logger.info(`${player.alias} removed from ${draftTFClass}`);
 		}
 	}
@@ -59,7 +60,7 @@ class DraftService {
 	 * @param {DraftTFClass} draftTFClass
 	 * @returns {string[]} An array of the added players SteamIDs as strings
 	 */
-	getAllPlayersByDraftTFClass(draftTFClass: DraftTFClass): string[] {
+	getAllPlayersByDraftTFClass(draftTFClass: DraftTFClass): SteamID[] {
 		return DraftTFClassLists.get(draftTFClass);
 	}
 }

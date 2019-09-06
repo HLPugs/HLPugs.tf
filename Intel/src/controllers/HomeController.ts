@@ -5,7 +5,8 @@ import * as steam from 'steam-login';
 import PlayerService from '../services/PlayerService';
 import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 import Player from '../entities/Player';
-import { RequestWithUser } from '../interfaces/RequestWithUser';
+import { RequestWithUser as RequestWithPlayer } from '../interfaces/RequestWithUser';
+import ValidateClass from '../utils/ValidateClass';
 
 const frontURL: string = config.get('app.frontURL');
 const playerService = new PlayerService();
@@ -19,19 +20,18 @@ export class HomeController {
 
 	@Get('/verify')
 	@UseBefore(steam.verify())
-	async login(@CurrentUser() player: Player, @Req() req: RequestWithUser, @Res() res: Response): Promise<void> {
+	async login(@CurrentUser() player: Player, @Req() req: RequestWithPlayer, @Res() res: Response): Promise<void> {
 		await playerService.updateOrInsertPlayer(player);
 
 		const isCurrentlySiteBanned = await playerService.isCurrentlySiteBanned(player.steamid);
+		req.session.sockets = [];
 
 		const playerViewModel = PlayerViewModel.fromPlayer(player);
-
 		playerViewModel.isLoggedIn = !isCurrentlySiteBanned;
 		playerViewModel.isBanned = isCurrentlySiteBanned;
-
-		req.session.sockets = [];
-		req.session.user = playerViewModel;
-		req.user = playerViewModel;
+		ValidateClass(playerViewModel);
+		req.player = playerViewModel;
+		req.session.player = playerViewModel;
 
 		res.redirect('/');
 	}

@@ -15,8 +15,8 @@ import * as session from 'express-session';
 /*export const loginUser = async (req: SteamRequest): Promise<void> => {
   req.session.sockets = [];
 
-  const steamid = req.user.steamid;
-  const avatar = req.user.avatar.medium;
+  const steamid = req.player.steamid;
+  const avatar = req.player.avatar.medium;
 
   const player = new Player(steamid, avatar);
   // PostgreSQL forces lowercase table names
@@ -44,7 +44,7 @@ import * as session from 'express-session';
     logger.info(`${alias} logged in`, { steamid });
   }
 
-  req.session.user = player;
+  req.session.player = player;
 };
 */
 

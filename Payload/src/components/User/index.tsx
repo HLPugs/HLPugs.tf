@@ -12,27 +12,16 @@ interface UserProps {
 
 class User extends React.PureComponent<UserProps, {}> {
 	render() {
-		if (this.props.user.isLoggedIn) {
-			return (
-				<div id="User">
-					<UserInfo
-						alias={this.props.user.alias}
-						avatarUrl={this.props.user.avatarUrl}
-					/>
-					<UserDropDown
-						steamid={this.props.user.steamid}
-						settingsOnClick={this.props.settingsOnClick}
-					/>
-				</div>
-			);
-		} else if (this.props.user.isLoggedIn === false) {
-			return (
-				<div id="User">
-					<SteamLogIn />
-				</div>
-			);
-		}
-		return null;
+		return this.props.user.isLoggedIn ? (
+			<div id="User">
+				<UserInfo alias={this.props.user.alias} avatarUrl={this.props.user.avatarUrl} />
+				<UserDropDown steamid={this.props.user.steamid} settingsOnClick={this.props.settingsOnClick} />
+			</div>
+		) : (
+			<div id="User">
+				<SteamLogIn />
+			</div>
+		);
 	}
 }
 

@@ -11,8 +11,8 @@ export const classLists = (io: Server) => {
 		});
 
 		socket.on('addToDraftTFClass', async (tfClass: DraftTFClass) => {
-			await draftService.addPlayerToDraftTFClass(socket.request.session.user.steamid, tfClass);
-			io.emit('addToDraftTFClass', tfClass, socket.request.session.user.steamid);
+			await draftService.addPlayerToDraftTFClass(socket.request.session.player.steamid, tfClass);
+			io.emit('addToDraftTFClass', tfClass, socket.request.session.player.steamid);
 		});
 	});
 };

@@ -23,11 +23,11 @@ interface HomeState {
 	loggedInPlayers: PlayerViewModel[];
 }
 
-const PlayerCtxt = React.createContext<Object | null>(null);
+const PlayerCtxt = React.createContext<PlayerViewModel[]>([]);
 
-const PlayerDataProvider = PlayerCtxt.Provider;
+const LoggedInPlayersProvider = PlayerCtxt.Provider;
 
-export const PlayerDataConsumer = PlayerCtxt.Consumer;
+export const LoggedInPlayersConsumer = PlayerCtxt.Consumer;
 
 const SocketCtxt = React.createContext<SocketIOClient.Socket>(io());
 
@@ -44,7 +44,7 @@ class Home extends React.Component<HomeProps, HomeState> {
 			loggedInPlayers: []
 		};
 
-		this.props.socket.on('getLoggedInUsers', (loggedInPlayers: PlayerViewModel[]) => {
+		this.props.socket.on('getLoggedInPlayers', (loggedInPlayers: PlayerViewModel[]) => {
 			this.setState({ loggedInPlayers });
 		});
 
@@ -59,7 +59,7 @@ class Home extends React.Component<HomeProps, HomeState> {
 		});
 
 		// Tell server that this socket connection is on the homepage
-		this.props.socket.emit('playedLoadedHomepage');
+		this.props.socket.emit('playerLoadedHomepage');
 
 		this.props.socket.on('reconnect', () => {
 			this.props.socket.emit('playerLoadedHomepage');
@@ -83,31 +83,31 @@ class Home extends React.Component<HomeProps, HomeState> {
 	render() {
 		return (
 			<div id="Home">
-				<PlayerDataProvider value={this.state.loggedInPlayers}>
-					<SocketProvider value={this.props.socket}>
-						<Header
-							siteName={this.props.configuration.branding.siteName}
-							siteSubTitle={this.props.configuration.branding.siteSubTitle}
-							logoPath={this.props.configuration.branding.logoPath}
-						/>
-						<User user={this.props.currentPlayer} settingsOnClick={this.toggleSettings} />
-						<Navigation navigationGroup={this.props.configuration.navigation} />
-						<DraftArea
-							classes={this.props.configuration.gamemodeClassSchemes}
-							steamid={this.props.currentPlayer.steamid}
-						/>
-						<Chat socket={this.props.socket} user={this.props.currentPlayer} />
-						<Settings
-							settings={this.props.currentPlayer.settings}
-							socket={this.props.socket}
-							visibility={this.state.isSettingsOpen}
-							classes={this.props.configuration.gamemodeClassSchemes}
-							settingsOnClick={this.toggleSettings}
-							userAlias={this.props.currentPlayer.alias}
-						/>
-						{this.AliasModal()}
-					</SocketProvider>
-				</PlayerDataProvider>
+				<LoggedInPlayersProvider value={this.state.loggedInPlayers}>
+						<SocketProvider value={this.props.socket}>
+							<Header
+								siteName={this.props.configuration.branding.siteName}
+								siteSubTitle={this.props.configuration.branding.siteSubTitle}
+								logoPath={this.props.configuration.branding.logoPath}
+							/>
+							<User user={this.props.currentPlayer} settingsOnClick={this.toggleSettings} />
+							<Navigation navigationGroup={this.props.configuration.navigation} />
+							<DraftArea
+								classes={this.props.configuration.gamemodeClassSchemes}
+								steamid={this.props.currentPlayer.steamid}
+							/>
+							<Chat socket={this.props.socket} user={this.props.currentPlayer} />
+							<Settings
+								settings={this.props.currentPlayer.settings}
+								socket={this.props.socket}
+								visibility={this.state.isSettingsOpen}
+								classes={this.props.configuration.gamemodeClassSchemes}
+								settingsOnClick={this.toggleSettings}
+								userAlias={this.props.currentPlayer.alias}
+							/>
+							{this.AliasModal()}
+						</SocketProvider>
+				</LoggedInPlayersProvider>
 			</div>
 		);
 	}

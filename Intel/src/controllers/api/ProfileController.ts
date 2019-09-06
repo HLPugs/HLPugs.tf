@@ -1,14 +1,14 @@
 import { Get, Param, QueryParam, JsonController } from 'routing-controllers';
-import { ProfileService } from '../../../services/ProfileService';
-import { ProfileViewModel } from '../../../../../Common/ViewModels/ProfileViewModel';
-import ProfilePaginatedMatchesViewModel from '../../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
-import Region from '../../../../../Common/Enums/Region';
-import Gamemode from '../../../../../Common/Enums/Gamemode';
-import MatchType from '../../../../../Common/Enums/MatchType';
-import ClassStatisticsFilterOptions from '../../../../../Common/Models/ClassStatisticsFilterOptions';
-import ProfileClassStatisticsViewModel from '../../../../../Common/ViewModels/ProfileClassStatisticsViewModel';
-import ValidateClass from '../../../utils/ValidateClass';
-import PlayerService from '../../../services/PlayerService';
+import { ProfileService } from '../../services/ProfileService';
+import { ProfileViewModel } from '../../../../Common/ViewModels/ProfileViewModel';
+import ProfilePaginatedMatchesViewModel from '../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
+import Region from '../../../../Common/Enums/Region';
+import Gamemode from '../../../../Common/Enums/Gamemode';
+import MatchType from '../../../../Common/Enums/MatchType';
+import ClassStatisticsFilterOptions from '../../../../Common/Models/ClassStatisticsFilterOptions';
+import ProfileClassStatisticsViewModel from '../../../../Common/ViewModels/ProfileClassStatisticsViewModel';
+import ValidateClass from '../../utils/ValidateClass';
+import PlayerService from '../../services/PlayerService';
 
 const playerService = new PlayerService();
 const profileService = new ProfileService();

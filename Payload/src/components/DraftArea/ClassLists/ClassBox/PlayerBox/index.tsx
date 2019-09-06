@@ -2,8 +2,9 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './style.scss';
-import { PlayerDataConsumer } from '../../../../../pages/Home';
+import { LoggedInPlayersConsumer } from '../../../../../pages/Home';
 import SteamID from '../../../../../../../Common/Types/SteamID';
+import PlayerViewModel from '../../../../../../../Common/ViewModels/PlayerViewModel';
 
 interface PlayerBoxProps {
 	steamid: SteamID;
@@ -12,22 +13,18 @@ interface PlayerBoxProps {
 class PlayerBox extends React.PureComponent<PlayerBoxProps, {}> {
 	render() {
 		return (
-			<PlayerDataConsumer>
-				{(playerData: any) =>
-					playerData && playerData[this.props.steamid] && (
-						<Link
-							to={`/player/${this.props.steamid}`}
-							target="blank"
-							className="player"
-						>
+			<LoggedInPlayersConsumer>
+				{(loggedInPlayers: PlayerViewModel[]) =>
+					loggedInPlayers.length > 0 && (
+						<Link to={`/player/${this.props.steamid}`} target="blank" className="player">
 							<div
 								className="playerIcon"
 								style={{
-									backgroundImage: `url(${playerData[this.props.steamid].avatarUrl})`
+									backgroundImage: `url(${loggedInPlayers.find(p => p.steamid === this.props.steamid)!.avatarUrl})`
 								}}
 							/>
 							<div className="playerName">
-								{playerData[this.props.steamid].alias}
+								{loggedInPlayers.find(player => player.steamid === this.props.steamid)!.alias}
 							</div>
 							<div className="captainStar">
 								<FontAwesomeIcon icon="star" />
@@ -35,7 +32,7 @@ class PlayerBox extends React.PureComponent<PlayerBoxProps, {}> {
 						</Link>
 					)
 				}
-			</PlayerDataConsumer>
+			</LoggedInPlayersConsumer>
 		);
 	}
 }

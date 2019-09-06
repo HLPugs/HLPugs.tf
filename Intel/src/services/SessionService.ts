@@ -6,8 +6,9 @@ import Player from '../entities/Player';
 import PlayerNotFoundError from '../custom-errors/PlayerNotFoundError';
 import SteamID from '../../../Common/Types/SteamID';
 import SessionID from '../../../Common/Types/SessionID';
+import PlayerService from './PlayerService';
+import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 
-// this collection maps a SteamID to a session ID
 // this collection maps a SteamID to a session ID
 const PlayerSessionMap = new Map<SteamID, SessionID>();
 
@@ -23,9 +24,14 @@ class SessionService {
 	 * @param {SessionID} sessionId - The Player's sessionId to add (or update if existing).
 	 * @param {SteamID} steamid - The SteamID that references the session ID.
 	 */
-	addPlayer(sessionId: SessionID, steamid: SteamID) {
+	async addPlayer(sessionId: SessionID, steamid: SteamID) {
 		PlayerSessionMap.set(steamid, sessionId);
 	}
+
+	playerExists(steamid: SteamID): boolean {
+		return PlayerSessionMap.has(steamid);
+	}
+
 
 	/**
 	 * Retrieves a session ID from the map using a SteamID.
@@ -38,8 +44,8 @@ class SessionService {
 			} else {
 				const sessionId = PlayerSessionMap.get(steamid);
 				store.get(sessionId, (err, session) => {
-					if (err) throw err;
-					if (!session.player) {
+					if (err) throw new Error(err);
+					if (!(session && session.player)) {
 						reject(new PlayerNotFoundError(steamid));
 					} else {
 						resolve(session.player);
@@ -81,7 +87,7 @@ class SessionService {
 	 * @return {Promise<void>} - Resolves once the Player is successfully added
 	 */
 
-	addFakePlayer(steamid: SteamID): Promise<void> {
+	addFakePlayer(player: Player | PlayerViewModel, sessionId?: SessionID): Promise<void> {
 		if (process.env.NODE_ENV !== 'production') {
 			return new Promise((resolve, reject) => {
 				const fakeSess = {
@@ -91,24 +97,21 @@ class SessionService {
 					}
 				};
 				const fakeRequest = {
-					sessionID: crypto
-						.createHash('sha256')
-						.update(uuid.v1())
-						.update(crypto.randomBytes(256))
-						.digest('hex')
+					sessionID: sessionId
+						? sessionId
+						: crypto
+								.createHash('sha256')
+								.update(uuid.v1())
+								.update(crypto.randomBytes(256))
+								.digest('hex')
 				};
 
 				// @ts-ignore
 				const fakeSession = store.createSession(fakeRequest, fakeSess);
-				// @ts-ignore
-				const fakePlayer: Player = {
-					steamid,
-					alias: ''
-				};
-				fakeSession.user = fakePlayer;
+				fakeSession.player = player;
 				store.set(fakeSession.id, fakeSession, err => {
 					if (err) reject(err);
-					this.addPlayer(fakeSession.id, steamid);
+					this.addPlayer(fakeSession.id, player.steamid);
 					resolve();
 				});
 			});

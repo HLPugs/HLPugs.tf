@@ -10,7 +10,7 @@ import SteamID from '../../../Common/Types/SteamID';
 
 const playerService = new PlayerService();
 
-const matchRepo = new LinqRepository(Match);
+const matchRepository = new LinqRepository(Match);
 
 export class ProfileService {
 	async getPaginatedMatches(
@@ -20,13 +20,13 @@ export class ProfileService {
 	): Promise<ProfilePaginatedMatchesViewModel> {
 		let profileQuery;
 		if (isSteamID(identifier)) {
-			profileQuery = matchRepo
+			profileQuery = matchRepository
 				.getAll()
 				.join(m => m.players)
 				.where(player => player.steamid)
 				.in([identifier]);
 		} else {
-			profileQuery = matchRepo
+			profileQuery = matchRepository
 				.getAll()
 				.join(m => m.players)
 				.where(player => player.alias)

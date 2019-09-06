@@ -8,15 +8,16 @@ import GamemodeClassScheme from '../../../../../../Common/Models/GamemodeClassSc
 import GetDraftTFClassListDTO from '../../../../../../Common/DTOs/GetDraftTFClassListDTO';
 import RemovePlayerFromDraftTFClassDTO from '../../../../../../Common/DTOs/RemovePlayerFromDraftTFClassDTO';
 import SteamID from '../../../../../../Common/Types/SteamID';
+import PlayerViewModel from '../../../../../../Common/ViewModels/PlayerViewModel';
 
 interface ClassBoxProps {
 	properties: GamemodeClassScheme;
 	socket: SocketIOClient.Socket;
-	steamid?: string;
+	steamid?: SteamID;
 }
 
 interface ClassBoxState {
-	players: string[];
+	playersAddedToClass: SteamID[];
 }
 
 class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
@@ -35,48 +36,37 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 			this.props.socket.emit('getDraftTFClassList', getDraftTFClassListDTO);
 		});
 
-		this.props.socket.on(
-			'draftTFClassList',
-			(tfClass: DraftTFClass, tfClassList: string[]) => {
-				if (tfClass === this.props.properties.tf2class) {
+		this.props.socket.on('draftTFClassList', (tfClass: DraftTFClass, playersAddedToClass: SteamID[]) => {
+			if (tfClass === this.props.properties.tf2class) {
+				this.setState({ playersAddedToClass });
+			}
+		});
+
+		this.props.socket.on('addPlayerToDraftTFClass', (tfClass: DraftTFClass, steamid: SteamID) => {
+			if (tfClass === this.props.properties.tf2class) {
+				this.setState({
+					playersAddedToClass: [...this.state.playersAddedToClass, steamid]
+				});
+			}
+		});
+
+		this.props.socket.on('removePlayerFromDraftTFClass', (tfClass: DraftTFClass, steamid: SteamID) => {
+			if (tfClass === this.props.properties.tf2class) {
+				const newPlayers = [...this.state.playersAddedToClass];
+				const indexOfPlayer = newPlayers.indexOf(steamid);
+
+				if (indexOfPlayer >= 0) {
+					newPlayers.splice(indexOfPlayer, 1);
+
 					this.setState({
-						players: tfClassList
+						playersAddedToClass: newPlayers
 					});
 				}
 			}
-		);
-
-		this.props.socket.on(
-			'addPlayerToDraftTFClass',
-			(tfClass: DraftTFClass, steamid: SteamID) => {
-				if (tfClass === this.props.properties.tf2class) {
-					this.setState({
-						players: [...this.state.players, steamid]
-					});
-				}
-			}
-		);
-
-		this.props.socket.on(
-			'removePlayerFromDraftTFClass',
-			(tfClass: DraftTFClass, steamid: SteamID) => {
-				if (tfClass === this.props.properties.tf2class) {
-					const newPlayers = [...this.state.players];
-					const indexOfPlayer = newPlayers.indexOf(steamid);
-
-					if (indexOfPlayer >= 0) {
-						newPlayers.splice(indexOfPlayer, 1);
-
-						this.setState({
-							players: newPlayers
-						});
-					}
-				}
-			}
-		);
+		});
 
 		this.state = {
-			players: []
+			playersAddedToClass: []
 		};
 	}
 
@@ -85,7 +75,7 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 			return;
 		}
 
-		if (this.state.players.indexOf(this.props.steamid) >= 0) {
+		if (this.state.playersAddedToClass.includes(this.props.steamid)) {
 			const removePlayerFromDraftTFClassDTO: RemovePlayerFromDraftTFClassDTO = {
 				draftTFClass: this.props.properties.tf2class
 			};
@@ -108,7 +98,7 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 		return (
 			<div
 				className={
-					this.state.players.indexOf(this.props.steamid) >= 0
+					this.state.playersAddedToClass.includes(this.props.steamid)
 						? 'classCheckbox checked'
 						: 'classCheckbox'
 				}
@@ -127,17 +117,15 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 					<span />
 					<span className="className">{this.props.properties.tf2class}</span>
 					<span className="count">
-						<span className="added">{this.state.players.length}</span>
+						<span className="added">{this.state.playersAddedToClass.length}</span>
 						<span>/</span>
-						<span className="needed">
-							{this.props.properties.numberPerTeam * 2}
-						</span>
+						<span className="needed">{this.props.properties.numberPerTeam * 2}</span>
 					</span>
 					{this.checkbox()}
 				</div>
 				<div className="playerList">
-					{this.state.players.map(player => (
-						<PlayerBox steamid={player} key={player} />
+					{this.state.playersAddedToClass.map(steamid => (
+						<PlayerBox steamid={steamid} />
 					))}
 				</div>
 			</div>

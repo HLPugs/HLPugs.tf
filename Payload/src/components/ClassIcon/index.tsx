@@ -82,7 +82,6 @@ const Icons: IconSVGs = {
 
 class ClassIcon extends React.PureComponent<ClassIconProps, {}> {
 	render() {
-		console.log(this.props.name);
 		return Icons[this.props.name];
 	}
 }

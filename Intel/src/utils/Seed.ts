@@ -12,7 +12,7 @@ import GamemodeClassSchemes from '../../../Common/Constants/GamemodeClassSchemes
 import { createConnection } from 'typeorm';
 
 const SeedPlayers = async () => {
-	const playerRepo = new LinqRepository(Player);
+	const playerRepository = new LinqRepository(Player);
 
 	const player = new Player();
 	player.steamid = '76561198119135809';
@@ -20,7 +20,7 @@ const SeedPlayers = async () => {
 	player.avatarUrl = 'n/a';
 	player.ip = '127.0.0.1';
 
-	await playerRepo.create(player);
+	await playerRepository.create(player);
 };
 
 const SeedMatches = async () => {
@@ -61,8 +61,10 @@ const Seed = async () => {
 	await SeedMatches();
 };
 
-createConnection().then(async () => {
-	await Seed();
-}).then(() => {
-	consoleLogStatus('Finished seeding database');
-});
+createConnection()
+	.then(async () => {
+		await Seed();
+	})
+	.then(() => {
+		consoleLogStatus('Finished seeding database');
+	});
