@@ -1,20 +1,33 @@
 {
-  "version": "0.2.0",
-  "configurations": [
-    {
-      "type": "node",
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "node",
+			"request": "launch",
+			"name": "Debug Intel",
+			"program": "${workspaceFolder}/Intel/src/server.ts",
+			"preLaunchTask": "npm: build - Intel",
+			"cwd": "${workspaceFolder}/Intel",
+			"sourceMaps": true,
+			"smartStep": true,
+			"skipFiles": ["${workspaceFolder}/Intel/dist/Intel/src/**/*.js"],
+			"internalConsoleOptions": "openOnSessionStart",
+			"outFiles": ["${workspaceFolder}/Intel/dist/Intel/src/**/*.js"]
+		},
+		{
+      "type": "edge",
       "request": "launch",
-      "name": "Debug Intel",
-      "program": "${workspaceFolder}/Intel/src/server.ts",
-      "preLaunchTask": "npm: build - Intel",
-      "cwd": "${workspaceFolder}/Intel",
-      "sourceMaps": true,
+      "version": "canary",
+      "name": "Debug Payload",
+      "url": "http://localhost:3000",
       "smartStep": true,
-      "skipFiles": ["${workspaceFolder}/Intel/dist/Intel/src/**/*.js"],
-      "internalConsoleOptions": "openOnSessionStart",
-      "outFiles": [
-        "${workspaceFolder}/Intel/dist/Intel/src/**/*.js"
-      ]
-    }
-  ]
+      "webRoot": "${workspaceFolder}/Payload/src",
+      "sourceMapPathOverrides": {
+        "webpack:///*": "*",
+        "webpack:///./*": "${webRoot}/*",
+        "webpack:///src/*": "${webRoot}/*",
+        "webpack:///./~/*": "${webRoot}/node_modules/*"
+      }
+		}
+	]
 }
