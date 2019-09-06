@@ -15,7 +15,7 @@ interface ProfileProps {
 
 interface ProfileState {
 	loading: boolean;
-	player?: ProfileViewModel;
+	profile?: ProfileViewModel;
 }
 
 class Profile extends React.Component<ProfileProps, ProfileState> {
@@ -40,16 +40,16 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 			loading: true
 		});
 
-		const player = await this.http.get(`/profile/${this.props.steamid}`);
+		const profile: ProfileViewModel = await this.http.get(`/profile/${this.props.steamid}`);
 
 		this.setState({
 			loading: false,
-			player
+			profile
 		});
 	};
 
 	render() {
-		return this.state.player ? (
+		return this.state.profile ? (
 			<main>
 				<div className="profileWindow">
 					<div className="profile">
@@ -57,14 +57,14 @@ class Profile extends React.Component<ProfileProps, ProfileState> {
 							<a
 								href={`https://steamcommunity.com/profiles/${this.props.steamid}`}
 								style={{
-									backgroundImage: `url('${this.state.player.avatarUrl}')`
+									backgroundImage: `url('${this.state.profile.avatarUrl}')`
 								}}
 								className="profilePicture"
 								target="_blank"
 								rel="noopener noreferrer"
 							/>
 							<div className="profileInfo">
-								<div className="alias">{this.state.player.alias}</div>
+								<div className="alias">{this.state.profile.alias}</div>
 								<div className="quickLinks">
 									<a
 										className="quickLink"

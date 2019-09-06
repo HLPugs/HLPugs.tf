@@ -15,9 +15,6 @@ interface SettingsProps {
 }
 
 class Settings extends React.PureComponent<SettingsProps, {}> {
-	constructor(props: SettingsProps) {
-		super(props);
-	}
 
 	componentDidMount() {
 		this.props.socket.on('playerSettings', (settings: SettingsViewModel) => {

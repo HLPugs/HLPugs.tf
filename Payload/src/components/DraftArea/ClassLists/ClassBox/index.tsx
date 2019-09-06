@@ -8,7 +8,6 @@ import GamemodeClassScheme from '../../../../../../Common/Models/GamemodeClassSc
 import GetDraftTFClassListDTO from '../../../../../../Common/DTOs/GetDraftTFClassListDTO';
 import RemovePlayerFromDraftTFClassDTO from '../../../../../../Common/DTOs/RemovePlayerFromDraftTFClassDTO';
 import SteamID from '../../../../../../Common/Types/SteamID';
-import PlayerViewModel from '../../../../../../Common/ViewModels/PlayerViewModel';
 
 interface ClassBoxProps {
 	properties: GamemodeClassScheme;
