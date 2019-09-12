@@ -41,6 +41,7 @@ export default class Player {
 	steamid: SteamID;
 
 	@Column({ nullable: true })
+	@IsOptional()
 	@IsString()
 	@Index({ unique: true })
 	@Matches(/^[a-zA-Z0-9_]{2,17}$/)
@@ -62,7 +63,7 @@ export default class Player {
 	roles: Role[];
 
 	@Column()
-	@IsIP('4')
+	@IsIP(4)
 	ip: string;
 
 	@Column({ default: 0 })

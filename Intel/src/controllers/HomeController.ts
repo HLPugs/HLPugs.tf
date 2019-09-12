@@ -1,12 +1,11 @@
 import { Controller, Get, Res, UseBefore, Req, CurrentUser } from 'routing-controllers';
 import config = require('config');
-import { Response } from 'express';
+import { Response, Request } from 'express';
 import * as steam from 'steam-login';
 import PlayerService from '../services/PlayerService';
 import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 import Player from '../entities/Player';
-import { RequestWithUser as RequestWithPlayer } from '../interfaces/RequestWithUser';
-import ValidateClass from '../utils/ValidateClass';
+import RequestWithPlayer from '../interfaces/RequestWithPlayer';
 
 const frontURL: string = config.get('app.frontURL');
 
@@ -21,18 +20,14 @@ export class HomeController {
 
 	@Get('/verify')
 	@UseBefore(steam.verify())
-	async login(@CurrentUser() player: Player, @Req() req: RequestWithPlayer, @Res() res: Response): Promise<void> {
+	async login(
+		@CurrentUser() player: Player,
+		@Req() req: RequestWithPlayer,
+		@Res() res: Response
+	): Promise<void> {
 		await this.playerService.updateOrInsertPlayer(player);
-
-		const isCurrentlySiteBanned = await this.playerService.isCurrentlySiteBanned(player.steamid);
-		req.session.sockets = [];
-
-		const playerViewModel = PlayerViewModel.fromPlayer(player);
-		playerViewModel.isLoggedIn = !isCurrentlySiteBanned;
-		playerViewModel.isBanned = isCurrentlySiteBanned;
-		ValidateClass(playerViewModel);
-		req.player = playerViewModel;
-		req.session.player = playerViewModel;
+		req.player = player;
+		req.session.player = player;
 
 		res.redirect('/');
 	}

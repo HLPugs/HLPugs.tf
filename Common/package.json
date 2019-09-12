@@ -5,7 +5,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/uuid": "^3.4.5",
     "class-validator": "^0.10.0",
-    "onchange": "^6.0.0"
+    "onchange": "^6.0.0",
+    "uuid": "^3.3.3"
   }
 }

@@ -5,11 +5,12 @@ import { EmojiData, CustomEmoji } from 'emoji-mart';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CompletionItem } from '../../../common/types';
 import { SearchEmojis, SearchMentions } from './SearchCompletions';
+import SendMessageRequest from '../../../../../Common/Requests/SendMessageRequest';
 import './style.scss';
 
 interface ChatInputProps {
 	socket: SocketIOClient.Socket;
-	loggedIn?: boolean;
+	isLoggedIn?: boolean;
 	customEmojis: CustomEmoji[];
 	mentions: string[];
 }
@@ -49,11 +50,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 		let prefix = '';
 
 		if (this.messageInput.current.value) {
-			if (
-				this.messageInput.current.value.substring(
-					this.messageInput.current.value.length - 1
-				) !== ' '
-			) {
+			if (this.messageInput.current.value.substring(this.messageInput.current.value.length - 1) !== ' ') {
 				// if last character in message isn't a space, put one before the emoji
 				prefix = ' ';
 			}
@@ -88,10 +85,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 				? this.state.emojiCompletions[index].name
 				: this.state.emojiCompletions[index].customName;
 			completion = `:${emojiName}: `;
-		} else if (
-			fragment.startsWith('@') &&
-			this.state.mentionCompletions.length
-		) {
+		} else if (fragment.startsWith('@') && this.state.mentionCompletions.length) {
 			completion = `@${this.state.mentionCompletions[index]} `;
 		}
 
@@ -137,10 +131,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 
 		const fragment: string = tokens[tokens.length - 1];
 
-		if (
-			this.state.emojiCompletions.length ||
-			this.state.mentionCompletions.length
-		) {
+		if (this.state.emojiCompletions.length || this.state.mentionCompletions.length) {
 			// If completions are active
 			if (event.key === 'Enter' || event.key === 'Tab') {
 				// Execute current completion
@@ -167,11 +158,11 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 			return;
 		}
 
-		if (
-			this.messageInput.current.value.length &&
-			Date.now() - this.state.lastMessageSentTimestamp > 1000
-		) {
-			this.props.socket.emit('sendMessage', this.messageInput.current.value);
+		if (this.messageInput.current.value.length && Date.now() - this.state.lastMessageSentTimestamp > 1000) {
+			const sendMessageRequest: SendMessageRequest = {
+				messageContent: this.messageInput.current.value
+			};
+			this.props.socket.emit('sendMessage', sendMessageRequest);
 
 			this.setState({
 				lastMessageSentTimestamp: Date.now()
@@ -184,10 +175,7 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 
 	shiftCompletionIndex = (fragment: string, delta: number) => {
 		const newIndex = this.state.autoCompleteIndex + delta;
-		const completionsLength = Math.max(
-			this.state.emojiCompletions.length,
-			this.state.mentionCompletions.length
-		);
+		const completionsLength = Math.max(this.state.emojiCompletions.length, this.state.mentionCompletions.length);
 		let newAutoCompleteIndex = 0;
 
 		if (newIndex < 0) {
@@ -224,17 +212,13 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 		return (
 			<div id="inputHolder">
 				<textarea
-					placeholder={
-						this.props.loggedIn
-							? '@Support for serious concerns'
-							: 'Login to chat!'
-					}
+					placeholder={this.props.isLoggedIn ? '@Support for serious concerns' : 'Login to chat!'}
 					id="messageInput"
 					ref={this.messageInput}
 					onChange={this.handleChange}
 					onKeyDown={this.handleKeyPress}
 					maxLength={300}
-					disabled={!this.props.loggedIn}
+					disabled={!this.props.isLoggedIn}
 				/>
 				<AutoCompletions
 					autoCompleteIndex={this.state.autoCompleteIndex}
@@ -242,16 +226,12 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 					mentionCompletions={this.state.mentionCompletions}
 					completionClick={this.executeCompletion}
 				/>
-				<div
-					id="emojiPickerToggle"
-					onClick={this.props.loggedIn ? this.togglePicker : undefined}
-				>
+				<div id="emojiPickerToggle" onClick={this.props.isLoggedIn ? this.togglePicker : undefined}>
 					<FontAwesomeIcon icon="grin-alt" />
 				</div>
 				<div id="messageCharacterCount">
 					{this.messageInput.current
-						? this.messageInput.current.maxLength -
-						  this.messageInput.current.value.length
+						? this.messageInput.current.maxLength - this.messageInput.current.value.length
 						: 300}
 				</div>
 				<div id="emojiPickerHolder">

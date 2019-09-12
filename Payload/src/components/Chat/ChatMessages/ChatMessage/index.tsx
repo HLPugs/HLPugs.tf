@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Linkify from 'react-linkify';
-import { ChatMessageType } from '../../../../common/types';
+import Message from '../../../../../../Common/Models/Message';
 import { NimbleEmoji } from 'emoji-mart';
 import data from 'emoji-mart/data/twitter.json';
 import { CustomEmoji } from 'emoji-mart';
@@ -23,7 +23,7 @@ interface ChatMessageProps {
 }
 
 class ChatMessage extends React.PureComponent<
-	ChatMessageType & ChatMessageProps,
+	Message & ChatMessageProps,
 	{}
 > {
 	renderMessage = (message: string, id: string) => {
@@ -133,11 +133,11 @@ class ChatMessage extends React.PureComponent<
 	highlight = () => {
 		if (
 			this.props.alias &&
-			this.props.message.split(' ').indexOf(`@${this.props.alias}`) > -1
+			this.props.messageContent.split(' ').indexOf(`@${this.props.alias}`) > -1
 		) {
 			if (moment(new Date()).diff(moment(this.props.timestamp)) < 1000) {
 				new Notification(`${this.props.username} sent a message!`, {
-					body: this.props.message
+					body: this.props.messageContent
 				});
 			}
 			return 'highlight';
@@ -151,7 +151,7 @@ class ChatMessage extends React.PureComponent<
 			<div className={'message ' + this.highlight()}>
 				<div className="info">
 					<Link
-						to={`/player/${this.props.userid}`}
+						to={`/player/${this.props.authorSteamid}`}
 						target="blank"
 						className="username"
 					>
@@ -163,7 +163,7 @@ class ChatMessage extends React.PureComponent<
 				</div>
 				<div className="messageContent">
 					<Linkify properties={{ target: 'blank' }}>
-						{this.renderMessage(this.props.message, this.props.id)}
+						{this.renderMessage(this.props.messageContent, this.props.id)}
 					</Linkify>
 				</div>
 			</div>

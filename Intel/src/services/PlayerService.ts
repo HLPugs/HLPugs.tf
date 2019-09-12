@@ -19,13 +19,13 @@ import SteamID from '../../../Common/Types/SteamID';
 import SessionService from './SessionService';
 import ValidateClass from '../utils/ValidateClass';
 
-const sessionService = new SessionService();
 export default class PlayerService {
-	async getPlayer(steamid: string): Promise<Player> {
+	private readonly sessionService = new SessionService();
+
+	async getPlayer(steamid: SteamID): Promise<Player> {
 		try {
-			const player = await sessionService.getPlayer(steamid);
-			ValidateClass(player);
-			return player;
+			const player = await this.sessionService.getPlayer(steamid);
+			return ValidateClass(player);
 		} catch (error) {
 			const playerRepository = new LinqRepository(Player);
 			const player = await playerRepository
@@ -35,7 +35,7 @@ export default class PlayerService {
 			if (player === undefined) {
 				throw new PlayerNotFoundError(steamid);
 			}
-			return player;
+			return ValidateClass(player);
 		}
 	}
 
@@ -138,6 +138,7 @@ export default class PlayerService {
 
 		const player = await this.getPlayer(steamid);
 		player.alias = alias;
+		await this.sessionService.updatePlayer(player);
 		await playerRepository.update(player);
 	}
 
@@ -160,8 +161,7 @@ export default class PlayerService {
 	async updateOrInsertPlayer(player: Player): Promise<void> {
 		const playerRepository = new LinqRepository(Player);
 
-		const existingPlayer = await this.playerExists(player.steamid);
-		if (existingPlayer) {
+		if (await this.playerExists(player.steamid)) {
 			await playerRepository.update(player);
 		} else {
 			player.settings = new PlayerSettings();
@@ -194,17 +194,17 @@ export default class PlayerService {
 	}
 
 	async playerExists(steamid: string): Promise<boolean> {
-		if (sessionService.playerExists(steamid)) {
+		if (this.sessionService.playerExists(steamid)) {
 			return true;
 		}
 
 		const playerRepository = new LinqRepository(Player);
-		return (
+		const playerExists =
 			(await playerRepository
 				.getOne()
 				.where(p => p.steamid)
 				.equal(steamid)
-				.count()) > 0
-		);
+				.count()) > 0;
+		return playerExists;
 	}
 }

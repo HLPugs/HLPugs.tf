@@ -17,19 +17,23 @@ export class AliasSocketController {
 		const alias: string = body.alias;
 		const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
 
-		if (!aliasRules.test(alias) || (await this.playerService.playerExists(alias))) return;
+		if (!aliasRules.test(alias) || (await this.aliasExists(alias))) return;
 
 		const steamid = socket.request.session.player.steamid;
 		await this.playerService.updateAlias(steamid, alias);
 
 		socket.request.session.player.alias = alias;
 		socket.request.session.save();
-		const user: PlayerViewModel = socket.request.session.player;
-		user.isLoggedIn = true;
-		ValidateClass(user);
-		socket.emit('user', user);
-		this.sessionService.addPlayer(socket.request.session.id, steamid);
-		io.emit('addPlayerToSession', await this.sessionService.getPlayer(steamid));
+		socket.request.session.reload(async (err: string) => {
+			if (err) throw new Error(err);
+			const player: Player = socket.request.session.player;
+			await this.sessionService.upsertPlayer(socket.request.session.id, steamid);
+			const playerViewModel = PlayerViewModel.fromPlayer(player);
+			playerViewModel.isLoggedIn = true;
+			ValidateClass(playerViewModel);
+			socket.emit('updateCurrentPlayer', playerViewModel);
+			io.emit('addPlayerToSession', playerViewModel);
+		});
 	}
 
 	@OnMessage('checkAlias')

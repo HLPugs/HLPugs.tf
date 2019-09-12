@@ -2,5 +2,5 @@
     "compilerOptions": {
         "experimentalDecorators": true,
         "lib": ["es6"]
-    },
+    }
 }

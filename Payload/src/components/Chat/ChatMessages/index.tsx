@@ -1,5 +1,5 @@
 import React from 'react';
-import { ChatMessageType } from '../../../common/types';
+import Message from '../../../../../Common/Models/Message';
 import ChatMessage from './ChatMessage';
 import { CustomEmoji } from 'emoji-mart';
 import './style.scss';
@@ -13,14 +13,11 @@ interface ChatMessagesProps {
 }
 
 interface ChatMessagesState {
-	messages: ChatMessageType[];
+	messages: Message[];
 	showNewMessage: boolean;
 }
 
-class ChatMessages extends React.Component<
-	ChatMessagesProps,
-	ChatMessagesState
-> {
+class ChatMessages extends React.Component<ChatMessagesProps, ChatMessagesState> {
 	private messageList: React.RefObject<HTMLDivElement>;
 
 	constructor(props: ChatMessagesProps) {
@@ -30,35 +27,28 @@ class ChatMessages extends React.Component<
 
 		this.props.socket.emit('requestMessageHistory');
 
-		this.props.socket.on(
-			'messageHistory',
-			(messageHistory: ChatMessageType[]) => {
-				this.setState({
-					messages: messageHistory
-				});
+		this.props.socket.on('messageHistory', (messageHistory: Message[]) => {
+			this.setState({
+				messages: messageHistory
+			});
 
-				this.scrollToBottom();
-			}
-		);
+			this.scrollToBottom();
+		});
 
-		this.props.socket.on('newMessage', (messageObject: ChatMessageType) => {
+		this.props.socket.on('newMessage', (message: Message) => {
 			if (this.messageList.current) {
 				const scrollPosition = this.messageList.current.scrollTop;
-				const scrollHeight =
-					this.messageList.current.scrollHeight -
-					this.messageList.current.clientHeight;
+				const scrollHeight = this.messageList.current.scrollHeight - this.messageList.current.clientHeight;
 
 				this.setState({
-					messages: this.state.messages.concat([messageObject])
+					messages: [...this.state.messages, message]
 				});
 
-				if (this.props.steamid === messageObject.userid) {
+				if (this.props.steamid === message.authorSteamid) {
 					this.scrollToBottom();
 				}
 
-				const newScrollHeight =
-					this.messageList.current.scrollHeight -
-					this.messageList.current.clientHeight;
+				const newScrollHeight = this.messageList.current.scrollHeight - this.messageList.current.clientHeight;
 
 				if (scrollHeight - scrollPosition > 25) {
 					this.setState({
@@ -79,9 +69,7 @@ class ChatMessages extends React.Component<
 	handleScroll = () => {
 		if (this.messageList.current) {
 			const scrollPosition = this.messageList.current.scrollTop;
-			const scrollHeight =
-				this.messageList.current.scrollHeight -
-				this.messageList.current.clientHeight;
+			const scrollHeight = this.messageList.current.scrollHeight - this.messageList.current.clientHeight;
 
 			if (scrollHeight - scrollPosition < 25) {
 				this.setState({
@@ -96,9 +84,7 @@ class ChatMessages extends React.Component<
 			return;
 		}
 
-		const scrollHeight =
-			this.messageList.current.scrollHeight -
-			this.messageList.current.clientHeight;
+		const scrollHeight = this.messageList.current.scrollHeight - this.messageList.current.clientHeight;
 		this.messageList.current.scrollTop = scrollHeight;
 	};
 
@@ -117,12 +103,8 @@ class ChatMessages extends React.Component<
 	render() {
 		return (
 			<>
-				<div
-					id="messageList"
-					ref={this.messageList}
-					onScroll={this.handleScroll}
-				>
-					{this.state.messages.map((message: ChatMessageType) => (
+				<div id="messageList" ref={this.messageList} onScroll={this.handleScroll}>
+					{this.state.messages.map((message: Message) => (
 						<ChatMessage
 							{...message}
 							key={message.id}

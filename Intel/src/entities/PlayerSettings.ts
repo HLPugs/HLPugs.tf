@@ -1,4 +1,4 @@
-import { Entity, Column, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, OneToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
 import Player from './Player';
 import DraftTFClass from '../../../Common/Enums/DraftTFClass';
 
@@ -32,5 +32,6 @@ export default class PlayerSettings {
 	colorOfNameInChat: string; // enum?
 
 	@OneToOne(type => Player, player => player.settings)
+	@JoinColumn()
 	player: Player;
 }

@@ -57,7 +57,7 @@ class Chat extends React.PureComponent<ChatProps, ChatState> {
 						/>
 						<ChatInput
 							socket={this.props.socket}
-							loggedIn={this.props.user.isLoggedIn}
+							isLoggedIn={this.props.user.isLoggedIn}
 							customEmojis={this.state.customEmojis}
 							mentions={
 								playerData

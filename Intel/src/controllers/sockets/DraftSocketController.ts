@@ -6,17 +6,17 @@ import GetDraftTFClassListDTO from '../../../../Common/DTOs/GetDraftTFClassListD
 import RemovePlayerFromDraftTFClassDTO from '../../../../Common/DTOs/RemovePlayerFromDraftTFClassDTO';
 import ValidateClass from '../../utils/ValidateClass';
 import PlayerService from '../../services/PlayerService';
-
+import SteamID from '../../../../Common/Types/SteamID';
 
 @SocketController()
 export default class DraftSocketController {
 	private readonly draftService = new DraftService();
-	
+
 	@OnMessage('getDraftTFClassList')
 	async getDraftTFClassList(@ConnectedSocket() socket: Socket, @MessageBody() body: GetDraftTFClassListDTO) {
 		ValidateClass(body);
-		const steamids = this.draftService.getAllPlayersByDraftTFClass(body.draftTFClass);
-		socket.emit('draftTFClassList', body.draftTFClass, steamids);
+		const players: SteamID[] = this.draftService.getAllPlayersByDraftTFClass(body.draftTFClass);
+		socket.emit('draftTFClassList', body.draftTFClass, players);
 	}
 
 	@OnMessage('addPlayerToDraftTFClass')

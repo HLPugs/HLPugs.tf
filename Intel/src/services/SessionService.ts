@@ -22,7 +22,7 @@ class SessionService {
 	 * @param {SessionID} sessionId - The Player's sessionId to add (or update if existing).
 	 * @param {SteamID} steamid - The SteamID that references the session ID.
 	 */
-	async addPlayer(sessionId: SessionID, steamid: SteamID) {
+	async upsertPlayer(sessionId: SessionID, steamid: SteamID) {
 		PlayerSessionMap.set(steamid, sessionId);
 	}
 
@@ -30,27 +30,25 @@ class SessionService {
 		return PlayerSessionMap.has(steamid);
 	}
 
-
 	/**
 	 * Retrieves a session ID from the map using a SteamID.
 	 * @param {string} steamid - The Player to retrieve.
 	 */
 	getPlayer(steamid: SteamID): Promise<Player> {
-		return new Promise((resolve, reject) => {
-			if (!PlayerSessionMap.has(steamid)) {
-				throw new PlayerNotFoundError(steamid);
-			} else {
+		return new Promise(resolve => {
+			if (PlayerSessionMap.has(steamid)) {
 				const sessionId = PlayerSessionMap.get(steamid);
 				store.get(sessionId, (err, session) => {
 					if (err) throw new Error(err);
-					if (!(session && session.player)) {
-						reject(new PlayerNotFoundError(steamid));
-					} else {
-						resolve(session.player);
-					}
+					resolve(session.player);
 				});
 			}
 		});
+	}
+
+	async updatePlayer(player: Player) {
+		const sessionId = PlayerSessionMap.get(player.steamid);
+		await this.upsertPlayer(sessionId, player.steamid);
 	}
 
 	/**
@@ -85,7 +83,7 @@ class SessionService {
 	 * @return {Promise<void>} - Resolves once the Player is successfully added
 	 */
 
-	addFakePlayer(player: Player | PlayerViewModel, sessionId?: SessionID): Promise<void> {
+	addFakePlayer(steamid: SteamID, sessionId?: SessionID): Promise<void> {
 		if (process.env.NODE_ENV !== 'production') {
 			return new Promise((resolve, reject) => {
 				const fakeSess = {
@@ -106,10 +104,13 @@ class SessionService {
 
 				// @ts-ignore
 				const fakeSession = store.createSession(fakeRequest, fakeSess);
-				fakeSession.player = player;
+				const fakePlayer = new Player();
+				fakePlayer.steamid = steamid;
+				fakePlayer.alias = 'Gabe';
+				fakeSession.player = fakePlayer;
 				store.set(fakeSession.id, fakeSession, err => {
 					if (err) reject(err);
-					this.addPlayer(fakeSession.id, player.steamid);
+					this.upsertPlayer(fakeSession.id, fakePlayer.steamid);
 					resolve();
 				});
 			});

@@ -52,7 +52,7 @@ class Player extends React.Component<ProfileProps, ProfileState> {
 					logoPath={this.props.configuration.branding.logoPath}
 				/>
 
-				<User user={this.props.user} settingsOnClick={this.toggleSettings} />
+				<User currentPlayer={this.props.user} settingsOnClick={this.toggleSettings} />
 				<Navigation navigationGroup={this.props.configuration.navigation} />
 				<Profile steamid={steamid} />
 				<Settings

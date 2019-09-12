@@ -6,16 +6,16 @@ import './style.scss';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 
 interface UserProps {
-	user: PlayerViewModel;
+	currentPlayer: PlayerViewModel;
 	settingsOnClick: Function;
 }
 
 class User extends React.PureComponent<UserProps, {}> {
 	render() {
-		return this.props.user.isLoggedIn ? (
+		return this.props.currentPlayer.isLoggedIn ? (
 			<div id="User">
-				<UserInfo alias={this.props.user.alias} avatarUrl={this.props.user.avatarUrl} />
-				<UserDropDown steamid={this.props.user.steamid} settingsOnClick={this.props.settingsOnClick} />
+				<UserInfo alias={this.props.currentPlayer.alias} avatarUrl={this.props.currentPlayer.avatarUrl} />
+				<UserDropDown steamid={this.props.currentPlayer.steamid} settingsOnClick={this.props.settingsOnClick} />
 			</div>
 		) : (
 			<div id="User">

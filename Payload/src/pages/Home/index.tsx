@@ -48,6 +48,16 @@ class Home extends React.Component<HomeProps, HomeState> {
 			this.setState({ loggedInPlayers });
 		});
 
+		this.props.socket.on('updatePlayerGlobally', (updatedPlayer: PlayerViewModel) => {
+			const indexOfPlayer = this.state.loggedInPlayers.findIndex(player => player.steamid === updatedPlayer.steamid);
+			const newLoggedInPlayers = this.state.loggedInPlayers;
+			newLoggedInPlayers[indexOfPlayer] = updatedPlayer;
+
+			this.setState({
+				loggedInPlayers: newLoggedInPlayers
+			});
+		});
+
 		this.props.socket.on('addPlayerToSession', (player: PlayerViewModel) => {
 			this.setState({ loggedInPlayers: [...this.state.loggedInPlayers, player] });
 		});
@@ -84,29 +94,29 @@ class Home extends React.Component<HomeProps, HomeState> {
 		return (
 			<div id="Home">
 				<LoggedInPlayersProvider value={this.state.loggedInPlayers}>
-						<SocketProvider value={this.props.socket}>
-							<Header
-								siteName={this.props.configuration.branding.siteName}
-								siteSubTitle={this.props.configuration.branding.siteSubTitle}
-								logoPath={this.props.configuration.branding.logoPath}
-							/>
-							<User user={this.props.currentPlayer} settingsOnClick={this.toggleSettings} />
-							<Navigation navigationGroup={this.props.configuration.navigation} />
-							<DraftArea
-								classes={this.props.configuration.gamemodeClassSchemes}
-								steamid={this.props.currentPlayer.steamid}
-							/>
-							<Chat socket={this.props.socket} user={this.props.currentPlayer} />
-							<Settings
-								settings={this.props.currentPlayer.settings}
-								socket={this.props.socket}
-								visibility={this.state.isSettingsOpen}
-								classes={this.props.configuration.gamemodeClassSchemes}
-								settingsOnClick={this.toggleSettings}
-								userAlias={this.props.currentPlayer.alias}
-							/>
-							{this.AliasModal()}
-						</SocketProvider>
+					<SocketProvider value={this.props.socket}>
+						<Header
+							siteName={this.props.configuration.branding.siteName}
+							siteSubTitle={this.props.configuration.branding.siteSubTitle}
+							logoPath={this.props.configuration.branding.logoPath}
+						/>
+						<User currentPlayer={this.props.currentPlayer} settingsOnClick={this.toggleSettings} />
+						<Navigation navigationGroup={this.props.configuration.navigation} />
+						<DraftArea
+							classes={this.props.configuration.gamemodeClassSchemes}
+							steamid={this.props.currentPlayer.steamid}
+						/>
+						<Chat socket={this.props.socket} user={this.props.currentPlayer} />
+						<Settings
+							settings={this.props.currentPlayer.settings}
+							socket={this.props.socket}
+							visibility={this.state.isSettingsOpen}
+							classes={this.props.configuration.gamemodeClassSchemes}
+							settingsOnClick={this.toggleSettings}
+							userAlias={this.props.currentPlayer.alias}
+						/>
+						{this.AliasModal()}
+					</SocketProvider>
 				</LoggedInPlayersProvider>
 			</div>
 		);

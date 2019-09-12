@@ -1,11 +1,6 @@
 import React from 'react';
 import io from 'socket.io-client';
-import {
-	BrowserRouter as Router,
-	Switch,
-	Route,
-	Redirect
-} from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { SiteConfigurationModel } from '../../../Common/Models/SiteConfigurationModel';
 import Home from '../pages/Home';
 import Player from '../pages/Player';
@@ -13,11 +8,7 @@ import Banned from '../pages/Banned';
 import Loading from '../components/Loading';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-	faSteamSymbol,
-	faDiscord,
-	faPatreon
-} from '@fortawesome/free-brands-svg-icons';
+import { faSteamSymbol, faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
 import {
 	faUser,
 	faCog,
@@ -65,7 +56,7 @@ library.add(
 
 interface AppState {
 	configuration?: SiteConfigurationModel;
-	user?: PlayerViewModel;
+	currentPlayer?: PlayerViewModel;
 	disconnected: boolean;
 }
 
@@ -76,9 +67,7 @@ class App extends React.Component<{}, AppState> {
 	constructor(props: Record<string, any>) {
 		super(props);
 
-		this.socket = io(
-			`${window.location.protocol}//${window.location.hostname}:3001`
-		);
+		this.socket = io(`${window.location.protocol}//${window.location.hostname}:3001`);
 
 		this.dummyConfiguration = {
 			branding: {
@@ -99,8 +88,8 @@ class App extends React.Component<{}, AppState> {
 			this.setState({ configuration });
 		});
 
-		this.socket.on('user', (user: PlayerViewModel) => {
-			this.setState({ user });
+		this.socket.on('updateCurrentPlayer', (currentPlayer: PlayerViewModel) => {
+			this.setState({ currentPlayer });
 		});
 
 		this.socket.on('disconnect', () => {
@@ -130,8 +119,7 @@ class App extends React.Component<{}, AppState> {
 							timeout: 0
 						},
 						{
-							message:
-								'Server may be experiencing issues. Contact site admins for help.',
+							message: 'Server may be experiencing issues. Contact site admins for help.',
 							timeout: 10
 						}
 					]}
@@ -143,7 +131,7 @@ class App extends React.Component<{}, AppState> {
 	};
 
 	render() {
-		if (this.state.configuration && this.state.user) {
+		if (this.state.configuration && this.state.currentPlayer) {
 			return (
 				<>
 					{this.reconnectMessage()}
@@ -155,12 +143,8 @@ class App extends React.Component<{}, AppState> {
 								render={() => (
 									<Home
 										socket={this.socket}
-										configuration={
-											this.state.configuration
-												? this.state.configuration
-												: this.dummyConfiguration
-										}
-										currentPlayer={this.state.user ? this.state.user : new PlayerViewModel()}
+										configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
+										currentPlayer={this.state.currentPlayer ? this.state.currentPlayer : new PlayerViewModel()}
 									/>
 								)}
 							/>
@@ -169,12 +153,8 @@ class App extends React.Component<{}, AppState> {
 								render={routeProps => (
 									<Player
 										socket={this.socket}
-										configuration={
-											this.state.configuration
-												? this.state.configuration
-												: this.dummyConfiguration
-										}
-										user={this.state.user ? this.state.user : new PlayerViewModel()}
+										configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
+										user={this.state.currentPlayer ? this.state.currentPlayer : new PlayerViewModel()}
 										{...routeProps}
 									/>
 								)}
@@ -185,11 +165,7 @@ class App extends React.Component<{}, AppState> {
 								render={() => (
 									<Banned
 										socket={this.socket}
-										configuration={
-											this.state.configuration
-												? this.state.configuration
-												: this.dummyConfiguration
-										}
+										configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
 									/>
 								)}
 							/>
@@ -208,8 +184,7 @@ class App extends React.Component<{}, AppState> {
 						timeout: 0
 					},
 					{
-						message:
-							'Server may be experiencing issues. Contact site admins for help.',
+						message: 'Server may be experiencing issues. Contact site admins for help.',
 						timeout: 10
 					}
 				]}
