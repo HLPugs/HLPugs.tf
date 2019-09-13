@@ -169,6 +169,12 @@ class App extends React.Component<{}, AppState> {
 									/>
 								)}
 							/>
+							<Route
+								path="/admin"
+								render={() =>
+									this.state.currentPlayer!.permissionGroup ? <div>Admin Placeholder</div> : <Redirect to="/" />
+								}
+							/>
 							<Redirect from="*" to="/" />
 						</Switch>
 					</Router>

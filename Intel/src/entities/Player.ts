@@ -24,7 +24,7 @@ import {
 	ArrayUnique
 } from 'class-validator';
 import Match from './Match';
-import PermissionGroupName from '../../../Common/Enums/PermissionGroup';
+import PermissionGroup from '../../../Common/Enums/PermissionGroup';
 import Role from '../../../Common/Enums/Role';
 import PlayerSettings from './PlayerSettings';
 import MatchPlayerData from './MatchPlayerData';
@@ -54,8 +54,8 @@ export default class Player {
 
 	@Column({ nullable: true })
 	@IsOptional()
-	@IsEnum(PermissionGroupName)
-	permissionGroup: PermissionGroupName;
+	@IsEnum(PermissionGroup)
+	permissionGroup: PermissionGroup;
 
 	@Column('simple-array', { nullable: true })
 	@IsOptional()
