@@ -65,7 +65,7 @@ export default class PlayerService {
 		} else {
 			steamid = isSteamID(identifier) ? identifier : (await this.getPlayer(identifier)).steamid;
 		}
-		const db = await getManager();
+		const db = getManager();
 		const winsQuery = db.query(
 			`SELECT tf2class, COUNT(1) as count FROM matches m INNER JOIN match_player_data mpd WHERE mpd.playerSteamid = ? AND mpd.team = m.winningTeam AND m.id = mpd.matchId ${filterQuery} GROUP BY tf2class`,
 			[steamid, ...filters]
