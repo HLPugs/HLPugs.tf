@@ -3,7 +3,7 @@ import Gamemode from '../Enums/Gamemode'
 import MatchType from '../Enums/MatchType'
 
 class EnvironmentConfigModel {
-	region!: Region;
+	region!: Exclude<Region, Region.All>;
 	gamemode!: Gamemode;
 	matchType!: MatchType;
 }

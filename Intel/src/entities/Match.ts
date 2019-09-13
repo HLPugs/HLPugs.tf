@@ -27,7 +27,7 @@ export default class Match {
 
 	@Column()
 	@IsEnum(Region)
-	region: Region;
+	region: Exclude<Region, Region.All>;
 
 	@Column()
 	@IsEnum(Team)
