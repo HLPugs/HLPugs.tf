@@ -10,7 +10,7 @@ import Gamemode from '../../../Common/Enums/Gamemode';
 @Entity('matches')
 export default class Match {
 	@PrimaryGeneratedColumn()
-	id: number;
+	id?: number;
 
 	@Column()
 	@IsEnum(MatchType)

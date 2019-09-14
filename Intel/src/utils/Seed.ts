@@ -11,12 +11,14 @@ import Gamemode from '../../../Common/Enums/Gamemode';
 import GamemodeClassSchemes from '../../../Common/Constants/GamemodeClassSchemes';
 import { createConnection } from 'typeorm';
 import Announcement from '../entities/Announcement';
+import SessionService from '../services/SessionService';
 
 export const FAKE_OFFLINE_STEAMID = '76561198119135809';
 export const DEFAULT_STEAM_AVATAR =
 	'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
 
 const SeedPlayers = async () => {
+	const sessionService = new SessionService();
 	consoleLogStatus('SEEDING PLAYERS');
 	const playerRepository = new LinqRepository(Player);
 
@@ -26,6 +28,7 @@ const SeedPlayers = async () => {
 	player.avatarUrl = DEFAULT_STEAM_AVATAR;
 	player.ip = '127.0.0.1';
 
+	sessionService.addFakePlayer(FAKE_OFFLINE_STEAMID);
 	await playerRepository.create(player);
 };
 
@@ -56,8 +59,8 @@ const SeedMatches = async () => {
 	const player = await playerService.getPlayer(FAKE_OFFLINE_STEAMID);
 
 	const gamemodeClassScheme = GamemodeClassSchemes.get(Gamemode.Highlander);
+
 	for (let i = 0; i < 100; i++) {
-		// @ts-ignore
 		const matchPlayerData: MatchPlayerData = {
 			tf2class: gamemodeClassScheme[Math.floor(Math.random() * 9)].tf2class,
 			team: Math.floor(Math.random() * 2) === 1 ? Team.RED : Team.BLU,
@@ -65,16 +68,15 @@ const SeedMatches = async () => {
 			player
 		};
 
-		// @ts-ignore
 		const match: Match = {
 			date: new Date(),
 			map: 'koth_ashville_rc1',
 			matchPlayerData: [matchPlayerData],
 			players: [player],
-			matchType: MatchType.PUG,
+			matchType: Math.random() > 0.5 ? MatchType.PUG : MatchType.MIX,
 			winningTeam: Math.random() > 0.5 ? Team.BLU : Math.random() > 0.5 ? Team.RED : Team.NONE,
 			logsId: 12345867,
-			region: Region.NorthAmerica,
+			region: Math.random() > 0.5 ? Region.NorthAmerica : Region.Europe,
 			gamemode: Gamemode.Highlander
 		};
 
@@ -83,9 +85,9 @@ const SeedMatches = async () => {
 };
 
 const Seed = async () => {
+	await SeedAnnouncements();
 	await SeedPlayers();
 	await SeedMatches();
-	await SeedAnnouncements();
 };
 
 createConnection()

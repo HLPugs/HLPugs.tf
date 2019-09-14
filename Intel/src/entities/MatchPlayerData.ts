@@ -16,7 +16,7 @@ export default class MatchPlayerData {
 	wasCaptain: boolean;
 
 	@ManyToOne(type => Match, match => match.matchPlayerData, { primary: true })
-	match!: Match;
+	match?: Match;
 
 	@ManyToOne(type => Player, player => player.matchPlayerData, {
 		primary: true
