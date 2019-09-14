@@ -32,8 +32,7 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
 			announcements: [
 				{
 					messageContent: '',
-					priority: false,
-					order: 0
+					priority: false
 				}
 			],
 			index: 0,
