@@ -130,11 +130,26 @@
     box-shadow: var(--paper-1);
     z-index: 99;
 
+    &::placeholder {
+        color: var(--font-color-tertiary);
+    }
+
     &:focus {
         border-color: var(--color);
         box-shadow: var(--paper-2);
     }
 }
+
+.emoji-mart-search input,
+.emoji-mart-search input::-webkit-search-decoration,
+.emoji-mart-search input::-webkit-search-cancel-button,
+.emoji-mart-search input::-webkit-search-results-button,
+.emoji-mart-search input::-webkit-search-results-decoration {
+  /* remove webkit/blink styles for <input type="search">
+   * via https://stackoverflow.com/a/9422689 */
+  -webkit-appearance: none;
+}
+
 
 .emoji-mart-search-icon {
   display: none;
@@ -214,4 +229,15 @@
 
 .emoji-mart-preview {
     display: none;
+}
+
+.emoji-mart-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
 }

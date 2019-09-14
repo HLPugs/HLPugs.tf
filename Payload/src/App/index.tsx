@@ -31,6 +31,7 @@ import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 import Region from '../../../Common/Enums/Region';
 import Gamemode from '../../../Common/Enums/Gamemode';
 import MatchType from '../../../Common/Enums/MatchType';
+import Admin from '../pages/Admin';
 
 library.add(
 	faSteamSymbol,
@@ -154,7 +155,7 @@ class App extends React.Component<{}, AppState> {
 									<Player
 										socket={this.socket}
 										configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
-										user={this.state.currentPlayer ? this.state.currentPlayer : new PlayerViewModel()}
+										currentPlayer={this.state.currentPlayer ? this.state.currentPlayer : new PlayerViewModel()}
 										{...routeProps}
 									/>
 								)}
@@ -172,7 +173,15 @@ class App extends React.Component<{}, AppState> {
 							<Route
 								path="/admin"
 								render={() =>
-									this.state.currentPlayer!.permissionGroup ? <div>Admin Placeholder</div> : <Redirect to="/" />
+									this.state.currentPlayer!.permissionGroup ? (
+										<Admin
+											socket={this.socket}
+											configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
+											currentPlayer={this.state.currentPlayer ? this.state.currentPlayer : new PlayerViewModel()}
+										/>
+									) : (
+										<Redirect to="/" />
+									)
 								}
 							/>
 							<Redirect from="*" to="/" />

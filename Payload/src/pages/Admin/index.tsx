@@ -4,28 +4,21 @@ import Header from '../../components/Header';
 import User from '../../components/User';
 import Navigation from '../../components/Navigation';
 import Settings from '../../components/Settings';
-import Profile from '../../components/Profile';
 import './style.scss';
-import { RouteComponentProps } from 'react-router';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
-import SteamID from '../../../../Common/Types/SteamID';
 
-interface MatchParams {
-	steamid: SteamID;
-}
-
-interface ProfileProps extends RouteComponentProps<MatchParams> {
+interface AdminProps {
 	socket: SocketIOClient.Socket;
 	configuration: SiteConfigurationModel;
 	currentPlayer: PlayerViewModel;
 }
 
-interface ProfileState {
+interface AdminState {
 	settingsOpen: boolean;
 }
 
-class Player extends React.Component<ProfileProps, ProfileState> {
-	constructor(props: ProfileProps) {
+class Admin extends React.Component<AdminProps, AdminState> {
+	constructor(props: AdminProps) {
 		super(props);
 
 		this.state = {
@@ -40,19 +33,15 @@ class Player extends React.Component<ProfileProps, ProfileState> {
 	};
 
 	render() {
-		const { steamid } = this.props.match.params;
-
 		return (
-			<div id="Profile">
+			<div id="Admin">
 				<Header
 					siteName={this.props.configuration.branding.siteName}
 					siteSubTitle={this.props.configuration.branding.siteSubTitle}
 					logoPath={this.props.configuration.branding.logoPath}
 				/>
-
 				<User currentPlayer={this.props.currentPlayer} settingsOnClick={this.toggleSettings} />
 				<Navigation navigationGroup={this.props.configuration.navigation} />
-				<Profile steamid={steamid} />
 				<Settings
 					visibility={this.state.settingsOpen}
 					socket={this.props.socket}
@@ -66,4 +55,4 @@ class Player extends React.Component<ProfileProps, ProfileState> {
 	}
 }
 
-export default Player;
+export default Admin;

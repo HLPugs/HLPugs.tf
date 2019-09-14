@@ -11,10 +11,7 @@ interface EmojiPickerProps {
 	customEmojis: CustomEmoji[];
 }
 
-class EmojiPicker extends React.Component<
-	EmojiPickerProps & InjectedOnClickOutProps,
-	{}
-> {
+class EmojiPicker extends React.Component<EmojiPickerProps & InjectedOnClickOutProps, {}> {
 	handleClickOutside = () => {
 		this.props.handleClickOutside();
 	};
@@ -37,18 +34,7 @@ class EmojiPicker extends React.Component<
 				onClick={(emoji: EmojiData) => {
 					this.props.addEmoji(emoji);
 				}}
-				include={[
-					'recent',
-					'custom',
-					'people',
-					'nature',
-					'foods',
-					'activity',
-					'places',
-					'objects',
-					'symbols',
-					'flags'
-				]}
+				include={['recent', 'custom', 'people', 'nature', 'foods', 'activity', 'places', 'objects', 'symbols', 'flags']}
 			/>
 		);
 	}

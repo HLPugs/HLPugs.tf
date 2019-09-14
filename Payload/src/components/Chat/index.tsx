@@ -9,7 +9,7 @@ import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 
 interface ChatProps {
 	socket: SocketIOClient.Socket;
-	user: PlayerViewModel;
+	currentPlayer: PlayerViewModel;
 }
 
 interface ChatState {
@@ -52,18 +52,14 @@ class Chat extends React.PureComponent<ChatProps, ChatState> {
 						<ChatMessages
 							socket={this.props.socket}
 							customEmojis={this.state.customEmojis}
-							steamid={this.props.user.steamid}
-							alias={this.props.user.alias}
+							steamid={this.props.currentPlayer.steamid}
+							alias={this.props.currentPlayer.alias}
 						/>
 						<ChatInput
 							socket={this.props.socket}
-							isLoggedIn={this.props.user.isLoggedIn}
+							isLoggedIn={this.props.currentPlayer.isLoggedIn}
 							customEmojis={this.state.customEmojis}
-							mentions={
-								playerData
-									? Object.keys(playerData).map(p => playerData[p].alias)
-									: []
-							}
+							mentions={playerData ? Object.keys(playerData).map(p => playerData[p].alias) : []}
 						/>
 					</aside>
 				)}

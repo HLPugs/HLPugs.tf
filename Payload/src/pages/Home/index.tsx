@@ -106,7 +106,7 @@ class Home extends React.Component<HomeProps, HomeState> {
 							classes={this.props.configuration.gamemodeClassSchemes}
 							steamid={this.props.currentPlayer.steamid}
 						/>
-						<Chat socket={this.props.socket} user={this.props.currentPlayer} />
+						<Chat socket={this.props.socket} currentPlayer={this.props.currentPlayer} />
 						<Settings
 							settings={this.props.currentPlayer.settings}
 							socket={this.props.socket}
