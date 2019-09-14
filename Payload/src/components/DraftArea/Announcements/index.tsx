@@ -2,46 +2,38 @@ import React from 'react';
 import Linkify from 'react-linkify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import './style.scss';
-import { BasicAnnouncement } from '../../../common/types';
+import HomepageAnnouncementViewModel from '../../../../../Common/ViewModels/HomepageAnnouncementViewModel';
 
 interface AnnouncementsProps {
 	socket: SocketIOClient.Socket;
 }
 
 interface AnnouncementsState {
-	announcements: BasicAnnouncement[];
+	announcements: HomepageAnnouncementViewModel[];
 	index: number;
 	transitioning: boolean;
 }
 
-class Announcements extends React.Component<
-	AnnouncementsProps,
-	AnnouncementsState
-> {
+class Announcements extends React.Component<AnnouncementsProps, AnnouncementsState> {
 	private announcementsTimer: number;
 
 	constructor(props: AnnouncementsProps) {
 		super(props);
 
-		this.props.socket.emit('loadAnnouncements');
+		this.props.socket.emit('getHomepageAnnouncements');
 
-		this.props.socket.on(
-			'receiveAnnouncements',
-			(announcements: BasicAnnouncement[]) => {
-				this.setState({ announcements });
-			}
-		);
+		this.props.socket.on('getHomepageAnnouncements', (announcements: HomepageAnnouncementViewModel[]) => {
+			this.setState({ announcements });
+		});
 
-		this.announcementsTimer = window.setInterval(
-			this.cycleAnnouncements,
-			15000
-		);
+		this.announcementsTimer = window.setInterval(this.cycleAnnouncements, 15000);
 
 		this.state = {
 			announcements: [
 				{
-					content: '',
-					priority: false
+					messageContent: '',
+					priority: false,
+					order: 0
 				}
 			],
 			index: 0,
@@ -51,10 +43,7 @@ class Announcements extends React.Component<
 
 	cycleAnnouncements = () => {
 		if (this.state.announcements.length > 1) {
-			const newIndex: number =
-				this.state.index + 1 === this.state.announcements.length
-					? 0
-					: this.state.index + 1;
+			const newIndex: number = this.state.index + 1 === this.state.announcements.length ? 0 : this.state.index + 1;
 
 			this.setState({
 				transitioning: true
@@ -80,11 +69,9 @@ class Announcements extends React.Component<
 						<FontAwesomeIcon icon="bullhorn" />
 					</div>
 					<div id="announcements">
-						<span
-							className={this.state.transitioning ? 'cyclingAnnouncements' : ''}
-						>
+						<span className={this.state.transitioning ? 'cyclingAnnouncements' : ''}>
 							<Linkify properties={{ target: 'blank' }}>
-								{this.state.announcements[this.state.index].content}
+								{this.state.announcements[this.state.index].messageContent}
 							</Linkify>
 						</span>
 					</div>

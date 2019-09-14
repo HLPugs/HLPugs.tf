@@ -1,16 +1,22 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
-import { IsEnum, IsString, IsNumberString, IsBoolean, IsDate, IsNotEmpty } from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn } from 'typeorm';
+import { IsEnum, IsString, IsNumberString, IsBoolean, IsDate, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import Region from '../../../Common/Enums/Region';
 import SteamID from '../../../Common/Types/SteamID';
 @Entity('announcements')
 export default class Announcement {
 	@PrimaryGeneratedColumn()
-	id: number;
+	@IsOptional()
+	@IsNumber()
+	id?: number;
+
+	@Column()
+	@IsNumber()
+	order: number;
 
 	@Column()
 	@IsString()
 	@IsNotEmpty()
-	message: string;
+	messageContent: string;
 
 	@Column()
 	@IsEnum(Region)

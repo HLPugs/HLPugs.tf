@@ -11,15 +11,3 @@ export interface CompletionItem {
 	customName?: string;
 	url?: string;
 }
-
-export interface BasicAnnouncement {
-	content: string;
-	priority: boolean;
-}
-
-export interface FullAnnouncement extends BasicAnnouncement {
-	id: number;
-	region: Region;
-	creator: string;
-	timestamp: Date;
-}
