@@ -5,7 +5,6 @@ import AddToDraftTFClassListDTO from '../../../../Common/DTOs/AddToDraftClassLis
 import GetDraftTFClassListDTO from '../../../../Common/DTOs/GetDraftTFClassListDTO';
 import RemovePlayerFromDraftTFClassDTO from '../../../../Common/DTOs/RemovePlayerFromDraftTFClassDTO';
 import ValidateClass from '../../utils/ValidateClass';
-import PlayerService from '../../services/PlayerService';
 import SteamID from '../../../../Common/Types/SteamID';
 
 @SocketController()

@@ -1,14 +1,4 @@
-import {
-	Entity,
-	PrimaryGeneratedColumn,
-	Column,
-	Index,
-	OneToMany,
-	PrimaryColumn,
-	ManyToMany,
-	JoinTable,
-	OneToOne
-} from 'typeorm';
+import { Entity, Column, Index, OneToMany, PrimaryColumn, ManyToMany, OneToOne } from 'typeorm';
 import {
 	Length,
 	IsInt,
