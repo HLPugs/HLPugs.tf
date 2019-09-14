@@ -5,6 +5,7 @@ import { EmojiData, CustomEmoji } from 'emoji-mart';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { CompletionItem } from '../../../common/types';
 import { SearchEmojis, SearchMentions } from './SearchCompletions';
+import CHAT_MESSAGE_THRESHOLD from '../../../../../Common/Constants/ChatMessageThreshold';
 import SendMessageRequest from '../../../../../Common/Requests/SendMessageRequest';
 import './style.scss';
 
@@ -158,7 +159,10 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 			return;
 		}
 
-		if (this.messageInput.current.value.length && Date.now() - this.state.lastMessageSentTimestamp > 1000) {
+		if (
+			this.messageInput.current.value.length &&
+			Date.now() - this.state.lastMessageSentTimestamp > CHAT_MESSAGE_THRESHOLD
+		) {
 			const sendMessageRequest: SendMessageRequest = {
 				messageContent: this.messageInput.current.value
 			};

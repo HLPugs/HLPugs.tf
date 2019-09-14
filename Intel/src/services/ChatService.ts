@@ -3,12 +3,12 @@ import ValidateClass from '../utils/ValidateClass';
 import Message from '../../../Common/Models/Message';
 import StorePlayerMessageRequest from '../../../Common/Requests/SendMessageRequest';
 import ChatWordService from './ChatWordService';
+import CHAT_MESSAGE_THRESHOLD from '../../../Common/Constants/ChatMessageThreshold';
 
 export default class ChatService {
 	private readonly chatWordService = new ChatWordService();
 	private readonly messageHistory: Message[] = [];
 	private readonly MESSAGE_HISTORY_MAX = 150;
-	private readonly CHAT_THRESHOLD_LIMIT = 1000;
 	private blacklistedWords: string[];
 	private whitelistedWords: string[];
 
@@ -38,7 +38,7 @@ export default class ChatService {
 	private playerSentMessageTooFast(steamid: SteamID): boolean {
 		const currentTimestamp = new Date();
 		return this.messageHistory.some(message => {
-			message.authorSteamid === steamid && message.timestamp - currentTimestamp.valueOf() < this.CHAT_THRESHOLD_LIMIT;
+			message.authorSteamid === steamid && message.timestamp - currentTimestamp.valueOf() < CHAT_MESSAGE_THRESHOLD;
 		});
 	}
 
