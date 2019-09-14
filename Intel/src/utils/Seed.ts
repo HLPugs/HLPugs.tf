@@ -84,7 +84,7 @@ const SeedMatches = async () => {
 
 const Seed = async () => {
 	await SeedPlayers();
-	// await SeedMatches();
+	await SeedMatches();
 	await SeedAnnouncements();
 };
 
