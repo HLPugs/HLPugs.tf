@@ -5,6 +5,8 @@ import { SiteConfigurationModel } from '../../../Common/Models/SiteConfiguration
 import Home from '../pages/Home';
 import Player from '../pages/Player';
 import Banned from '../pages/Banned';
+import Admin from '../pages/Admin';
+import Debug from '../components/Debug';
 import Loading from '../components/Loading';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -31,7 +33,6 @@ import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 import Region from '../../../Common/Enums/Region';
 import Gamemode from '../../../Common/Enums/Gamemode';
 import MatchType from '../../../Common/Enums/MatchType';
-import Admin from '../pages/Admin';
 
 library.add(
 	faSteamSymbol,
@@ -187,6 +188,7 @@ class App extends React.Component<{}, AppState> {
 							<Redirect from="*" to="/" />
 						</Switch>
 					</Router>
+					<Debug socket={this.socket} />
 				</>
 			);
 		}
