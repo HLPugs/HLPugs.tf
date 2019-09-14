@@ -6,7 +6,8 @@ import {
 	SocketIO,
 	OnDisconnect,
 	SocketRooms,
-	EmitOnSuccess
+	EmitOnSuccess,
+	SocketRequest
 } from 'socket-controllers';
 import * as dotenv from 'dotenv';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
@@ -18,6 +19,7 @@ import { Socket, Server } from 'socket.io';
 import ValidateClass from '../../utils/ValidateClass';
 import Player from '../../entities/Player';
 import SocketRequestWithPlayer from '../../interfaces/SocketRequestWithPlayer';
+import { FAKE_OFFLINE_STEAMID } from '../../utils/Seed';
 
 const env = dotenv.config().parsed;
 
@@ -49,8 +51,10 @@ export class HomeSocketController {
 		} else {
 			// Used for development
 			if (env.offline.toLowerCase() === 'true') {
-				await this.sessionService.addFakePlayer('76561198119135809', socket.request.session.id);
-				const player = await this.playerService.getPlayer('76561198119135809');
+				if (!(await this.sessionService.playerExists(FAKE_OFFLINE_STEAMID))) {
+					await this.sessionService.addFakePlayer(FAKE_OFFLINE_STEAMID, socket.request.session.id);
+				}
+				const player = await this.playerService.getPlayer(FAKE_OFFLINE_STEAMID);
 				socket.request.session.player = player;
 
 				const isCurrentlySiteBanned = await this.playerService.isCurrentlySiteBanned(player.steamid);
@@ -89,33 +93,22 @@ export class HomeSocketController {
 	}
 
 	@OnDisconnect()
-	playerDisconnected(@ConnectedSocket() socket: Socket, @SocketIO() io: Server) {
-		if (!socket.request.session || socket.request.session.sockets === undefined) return;
+	playerDisconnected(
+		@ConnectedSocket() socket: Socket,
+		@SocketIO() io: Server,
+		@SocketRequest() request: SocketRequestWithPlayer
+	) {
+		if (!request.session.player.alias) return;
 
-		socket.request.session.reload((e: any) => {
-			if (e !== undefined) throw e;
+		if (0 === 0) {
+			this.draftService.removePlayerFromAllDraftTFClasses(request.session.player.steamid);
 
-			const socketIndex = socket.request.session.sockets.indexOf(socket.id);
+			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
+				io.emit('removePlayerFromDraftTFClass', scheme.tf2class, request.session.player.steamid);
+			});
 
-			if (socketIndex >= 0) {
-				socket.request.session.sockets.splice(socketIndex, 1);
-				socket.request.session.save((e: Error) => {
-					if (e !== undefined) {
-						throw e;
-					}
-				});
-
-				if (socket.request.session.sockets.length === 0) {
-					this.draftService.removePlayerFromAllDraftTFClasses(socket.request.session.player.steamid);
-
-					SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-						io.emit('removePlayerFromDraftTFClass', scheme.tf2class, socket.request.session.player.steamid);
-					});
-
-					this.sessionService.removePlayer(socket.request.session.player.steamid);
-					io.emit('removePlayerFromSession', socket.request.session.player.steamid);
-				}
-			}
-		});
+			this.sessionService.removePlayer(request.session.player.steamid);
+			io.emit('removePlayerFromSession', request.session.player.steamid);
+		}
 	}
 }

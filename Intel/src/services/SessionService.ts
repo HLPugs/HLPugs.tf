@@ -6,9 +6,9 @@ import Player from '../entities/Player';
 import PlayerNotFoundError from '../custom-errors/PlayerNotFoundError';
 import SteamID from '../../../Common/Types/SteamID';
 import SessionID from '../../../Common/Types/SessionID';
-import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
+import { DEFAULT_STEAM_AVATAR } from '../utils/Seed';
 
-const PlayerSessionMap = new Map<SteamID, SessionID>();
+export const PlayerSessionMap = new Map<SteamID, SessionID>();
 
 /**
  * A service that provides methods for the retrieval, insertion
@@ -22,7 +22,7 @@ class SessionService {
 	 * @param {SessionID} sessionId - The Player's sessionId to add (or update if existing).
 	 * @param {SteamID} steamid - The SteamID that references the session ID.
 	 */
-	async upsertPlayer(sessionId: SessionID, steamid: SteamID) {
+	upsertPlayer(sessionId: SessionID, steamid: SteamID) {
 		PlayerSessionMap.set(steamid, sessionId);
 	}
 
@@ -48,7 +48,7 @@ class SessionService {
 
 	async updatePlayer(player: Player) {
 		const sessionId = PlayerSessionMap.get(player.steamid);
-		await this.upsertPlayer(sessionId, player.steamid);
+		this.upsertPlayer(sessionId, player.steamid);
 	}
 
 	/**
@@ -83,7 +83,7 @@ class SessionService {
 	 * @return {Promise<void>} - Resolves once the Player is successfully added
 	 */
 
-	addFakePlayer(steamid: SteamID, sessionId?: SessionID): Promise<void> {
+	addFakePlayer(steamid?: SteamID, sessionId?: SessionID): Promise<void> {
 		if (process.env.NODE_ENV !== 'production') {
 			return new Promise((resolve, reject) => {
 				const fakeSess = {
@@ -105,10 +105,13 @@ class SessionService {
 				// @ts-ignore
 				const fakeSession = store.createSession(fakeRequest, fakeSess);
 				const fakePlayer = new Player();
-				fakePlayer.steamid = steamid;
-				fakePlayer.alias = 'Gabe';
+				const fakePlayerCount = PlayerSessionMap.values.length;
+				fakePlayer.steamid = steamid ? steamid : fakePlayerCount.toString();
+				fakePlayer.alias = `FakePlayer${fakePlayerCount + 1}`;
+				fakePlayer.avatarUrl = DEFAULT_STEAM_AVATAR;
 				fakeSession.player = fakePlayer;
-				store.set(fakeSession.id, fakeSession, err => {
+				this.upsertPlayer(sessionId, steamid);
+				store.set(sessionId ? sessionId : fakeSession.id, fakeSession, err => {
 					if (err) reject(err);
 					this.upsertPlayer(fakeSession.id, fakePlayer.steamid);
 					resolve();
