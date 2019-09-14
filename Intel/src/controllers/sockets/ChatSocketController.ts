@@ -1,9 +1,11 @@
-import { Server } from 'socket.io';
-import { SocketIO, SocketController, OnMessage, MessageBody, SocketRequest } from 'socket-controllers';
+import { Server, Socket } from 'socket.io';
+import { SocketIO, SocketController, OnMessage, MessageBody, SocketRequest, ConnectedSocket } from 'socket-controllers';
 import ChatService from '../../services/ChatService';
 import SendMessageRequest from '../../../../Common/Requests/SendMessageRequest';
 import Message from '../../../../Common/Models/Message';
 import SocketRequestWithPlayer from '../../interfaces/SocketRequestWithPlayer';
+import ValidateClass from '../../utils/ValidateClass';
+import uuid = require('uuid');
 
 @SocketController()
 export default class ChatSocketController {
@@ -21,9 +23,24 @@ export default class ChatSocketController {
 		@SocketIO() io: Server,
 		@MessageBody() body: SendMessageRequest
 	) {
-		const message = Message.fromRequest(body, req.session.player);
-		this.chatService.storePlayerMessage(message);
+		const message: Message = {
+			authorSteamid: req.session.player.steamid,
+			messageContent: body.messageContent,
+			timestamp: new Date().getTime(),
+			username: req.session.player.alias,
+			id: uuid()
+		};
 
-		io.emit('newMessage', message);
+		ValidateClass(message);
+		this.chatService.storePlayerMessage(message);
+		io.emit('sendMessage', message);
 	}
+
+	@OnMessage('getMessageHistory')
+	getMessageHistory(@ConnectedSocket() socket: Socket) {
+		const messageHistory = this.chatService.getMessageHistory();
+		socket.emit('getMessageHistory', messageHistory);
+	}
+	
+	
 }

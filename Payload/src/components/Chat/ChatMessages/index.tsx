@@ -25,9 +25,9 @@ class ChatMessages extends React.Component<ChatMessagesProps, ChatMessagesState>
 
 		this.messageList = React.createRef();
 
-		this.props.socket.emit('requestMessageHistory');
+		this.props.socket.emit('getMessageHistory');
 
-		this.props.socket.on('messageHistory', (messageHistory: Message[]) => {
+		this.props.socket.on('getMessageHistory', (messageHistory: Message[]) => {
 			this.setState({
 				messages: messageHistory
 			});
@@ -35,7 +35,7 @@ class ChatMessages extends React.Component<ChatMessagesProps, ChatMessagesState>
 			this.scrollToBottom();
 		});
 
-		this.props.socket.on('newMessage', (message: Message) => {
+		this.props.socket.on('sendMessage', (message: Message) => {
 			if (this.messageList.current) {
 				const scrollPosition = this.messageList.current.scrollTop;
 				const scrollHeight = this.messageList.current.scrollHeight - this.messageList.current.clientHeight;

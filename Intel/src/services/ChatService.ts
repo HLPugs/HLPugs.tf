@@ -31,6 +31,10 @@ export default class ChatService {
 		}
 	}
 
+	getMessageHistory(): Message[] {
+		return this.messageHistory;
+	}
+
 	private playerSentMessageTooFast(steamid: SteamID): boolean {
 		const currentTimestamp = new Date();
 		return this.messageHistory.some(message => {
