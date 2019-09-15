@@ -25,7 +25,7 @@ export default class PlayerService {
 	async getPlayer(steamid: SteamID): Promise<Player> {
 		try {
 			const player = await this.sessionService.getPlayer(steamid);
-			return ValidateClass(player);
+			return ValidateClass<Player>(player);
 		} catch (e) {
 			const playerRepository = new LinqRepository(Player);
 			const player = await playerRepository
@@ -36,7 +36,7 @@ export default class PlayerService {
 			if (player === undefined) {
 				throw new PlayerNotFoundError(steamid);
 			}
-			return ValidateClass(player);
+			return ValidateClass<Player>(player);
 		}
 	}
 
@@ -163,7 +163,14 @@ export default class PlayerService {
 		const playerRepository = new LinqRepository(Player);
 
 		if (await this.playerExists(player.steamid)) {
-			await playerRepository.update(player);
+			let playerToUpdate = await playerRepository
+				.getOne()
+				.where(x => x.steamid)
+				.equal(player.steamid);
+			playerToUpdate.alias = player.alias;
+			playerToUpdate.avatarUrl = player.avatarUrl;
+			playerToUpdate.ip = player.ip;
+			playerRepository.update(playerToUpdate);
 		} else {
 			player.settings = new PlayerSettings();
 			await playerRepository.create(player);

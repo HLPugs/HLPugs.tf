@@ -7,6 +7,7 @@ import * as uuid from 'uuid';
 import * as crypto from 'crypto';
 import Player from '../entities/Player';
 import PlayerService from './PlayerService';
+import PlayerSettings from '../entities/PlayerSettings';
 
 export default class DebugService {
 	private readonly playerService = new PlayerService();
@@ -21,9 +22,9 @@ export default class DebugService {
 	 * @return {Promise<void>} - Resolves once the Player is successfully added
 	 */
 
-	addFakePlayer(steamid?: SteamID, sessionId?: SessionID): Promise<void> {
+	async addFakePlayer(steamid?: SteamID, sessionId?: SessionID): Promise<void> {
 		if (process.env.NODE_ENV !== 'production') {
-			return new Promise((resolve, reject) => {
+			return new Promise(async (resolve, reject) => {
 				const fakeSess = {
 					cookie: {
 						expires: '2000000000',
@@ -49,11 +50,12 @@ export default class DebugService {
 				fakePlayer.alias = `FakePlayer${fakePlayerCount + 1}`;
 				fakePlayer.avatarUrl = DebugService.DEFAULT_STEAM_AVATAR;
 				fakePlayer.ip = '127.0.0.1';
-				fakeSession.player = fakePlayer;
+				fakePlayer.settings = new PlayerSettings();
+				await this.playerService.upsertPlayer(fakePlayer);
+				fakeSession.player = await this.playerService.getPlayer(fakePlayer.steamid);
 				store.set(sessionId ? sessionId : fakeSession.id, fakeSession, async err => {
 					if (err) reject(err);
 					this.sessionService.upsertPlayer(fakePlayer.steamid, fakeSession.id);
-					await this.playerService.upsertPlayer(fakePlayer);
 					resolve();
 				});
 			});

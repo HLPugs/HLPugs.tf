@@ -28,6 +28,7 @@ export default class DebugSocketController {
 			}
 			const player = await this.playerService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
 			request.session.player = player;
+			socket.request.session.save();
 			const playerViewModel = PlayerViewModel.fromPlayer(player);
 			playerViewModel.isBanned = await this.playerService.isCurrentlySiteBanned(player.steamid);
 			playerViewModel.isLoggedIn = !playerViewModel.isLoggedIn;

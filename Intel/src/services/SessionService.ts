@@ -11,7 +11,7 @@ import PlayerNotFoundError from '../custom-errors/PlayerNotFoundError';
  */
 
 class SessionService {
-	private playerSessionMap = new Map<SteamID, SessionID>();
+	private static playerSessionMap = new Map<SteamID, SessionID>();
 	/**
 	 * Adds or updates a session ID in the Player map.
 	 * @param {SessionID} sessionId - The Player's sessionId to add (or update if existing).
@@ -19,11 +19,11 @@ class SessionService {
 	 */
 
 	upsertPlayer(steamid: SteamID, sessionId: SessionID) {
-		this.playerSessionMap.set(steamid, sessionId);
+		SessionService.playerSessionMap.set(steamid, sessionId);
 	}
 
 	playerExists(steamid: SteamID): boolean {
-		return this.playerSessionMap.has(steamid);
+		return SessionService.playerSessionMap.has(steamid);
 	}
 
 	/**
@@ -32,8 +32,8 @@ class SessionService {
 	 */
 	getPlayer(steamid: SteamID): Promise<Player> {
 		return new Promise((resolve, reject) => {
-			if (this.playerSessionMap.has(steamid)) {
-				const sessionId = this.playerSessionMap.get(steamid);
+			if (SessionService.playerSessionMap.has(steamid)) {
+				const sessionId = SessionService.playerSessionMap.get(steamid);
 				store.get(sessionId, (err, session) => {
 					if (err) throw new Error(err);
 					if (!session) {
@@ -49,12 +49,12 @@ class SessionService {
 	}
 
 	getPlayerCount(): number {
-		return this.playerSessionMap.values.length;
+		return SessionService.playerSessionMap.values.length;
 	}
 
 	async updatePlayer(player: Player) {
 		if (this.playerExists(player.steamid)) {
-			const sessionId = this.playerSessionMap.get(player.steamid);
+			const sessionId = SessionService.playerSessionMap.get(player.steamid);
 			this.upsertPlayer(player.steamid, sessionId);
 		}
 	}
@@ -64,7 +64,7 @@ class SessionService {
 	 */
 	async getAllPlayers(): Promise<Player[]> {
 		return new Promise(resolve => {
-			const playersArr = Array.from(this.playerSessionMap.keys());
+			const playersArr = Array.from(SessionService.playerSessionMap.keys());
 			const newPlayerArr = playersArr.map(steamid => this.getPlayer(steamid));
 			resolve(Promise.all(newPlayerArr));
 		});
@@ -75,13 +75,13 @@ class SessionService {
 	 * @param {SteamID} steamid - The SteamID to remove.
 	 */
 	removePlayer(steamid: SteamID) {
-		this.playerSessionMap.delete(steamid);
+		SessionService.playerSessionMap.delete(steamid);
 	}
 	/**
 	 * Removes all sessions
 	 */
 	clearSessions() {
-		this.playerSessionMap.clear();
+		SessionService.playerSessionMap.clear();
 	}
 }
 
