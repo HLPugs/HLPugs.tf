@@ -1,4 +1,4 @@
-import { validateSync } from 'class-validator';
+import { validateSync, ValidationError } from 'class-validator';
 
 import { ClassValidationError } from '../custom-errors/ClassValidationError';
 
@@ -9,6 +9,11 @@ import { ClassValidationError } from '../custom-errors/ClassValidationError';
  * @param classNeedingValidation
  */
 function ValidateClass<T>(classNeedingValidation: T): T {
+	if (classNeedingValidation === null || classNeedingValidation === undefined) {
+		const error = new ValidationError();
+		error.value = 'Cannot validate null or undefined';
+		throw new ClassValidationError([error]);
+	}
 	if (Array.isArray(classNeedingValidation)) {
 		classNeedingValidation.forEach(x => {
 			const errors = validateSync(classNeedingValidation);
