@@ -10,7 +10,7 @@
 		"serve": "node dist/Intel/src/server.js",
 		"watch-node": "nodemon dist/server.js",
 		"build-ts": "tsc -p tsconfig.json",
-		"seed": "node dist/Intel/src/utils/Seed.js",
+		"seed": "rimraf localdb && node dist/Intel/src/utils/Seed.js",
 		"watch-ts": "tsc -w",
 		"watch-prettier": "onchange '**/*.ts' -- prettier --write {{changed}}",
 		"test": "mocha",
