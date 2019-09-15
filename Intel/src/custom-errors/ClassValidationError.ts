@@ -6,6 +6,7 @@ export class ClassValidationError extends Error {
 		this.name = 'ClassValidationError';
 		this.errors = errors;
 		Error.captureStackTrace(this, ClassValidationError);
+		console.error(this);
 	}
 
 	errors: ValidationError[];

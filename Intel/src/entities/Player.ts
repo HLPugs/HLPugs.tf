@@ -1,4 +1,4 @@
-import { Entity, Column, Index, OneToMany, PrimaryColumn, ManyToMany, OneToOne } from 'typeorm';
+import { Entity, Column, Index, OneToMany, PrimaryColumn, ManyToMany, OneToOne, JoinColumn } from 'typeorm';
 import {
 	Length,
 	IsInt,
@@ -39,54 +39,53 @@ export default class Player {
 	alias: string;
 
 	@Column()
-	@IsFQDN()
+	@IsString()
 	avatarUrl: string;
 
-	@Column({ nullable: true })
-	@IsOptional()
+	@Column({ default: PermissionGroup.NONE })
 	@IsEnum(PermissionGroup)
-	permissionGroup: PermissionGroup;
+	permissionGroup: PermissionGroup = PermissionGroup.NONE;
 
 	@Column('simple-array', { nullable: true })
 	@IsOptional()
 	@ArrayUnique()
-	roles: Role[];
+	roles: Role[] = [];
 
 	@Column()
-	@IsIP(4)
+	@IsString()
 	ip: string;
 
 	@Column({ default: 0 })
 	@IsInt()
-	totalPugCount: number;
+	totalPugCount: number = 0;
 
 	@Column({ default: 0 })
 	@IsInt()
-	totalWinCount: number;
+	totalWinCount: number = 0;
 
 	@Column({ default: 0 })
 	@IsInt()
-	totalTieCount: number;
+	totalTieCount: number = 0;
 
 	@Column({ default: 0 })
 	@IsInt()
-	totalLossCount: number;
+	totalLossCount: number = 0;
 
 	@Column({ default: false })
 	@IsBoolean()
-	isCaptain: boolean;
+	isCaptain: boolean = false;
 
 	@Column({ default: 0 })
 	@IsInt()
-	subsIn: number;
+	subsIn: number = 0;
 
 	@Column({ default: 0 })
 	@IsInt()
-	subsOut: number;
+	subsOut: number = 0;
 
 	@Column({ default: false })
 	@IsBoolean()
-	isCrestricted: boolean;
+	isCrestricted: boolean = false;
 
 	@OneToOne(type => PlayerSettings, settings => settings.player, {
 		cascade: true

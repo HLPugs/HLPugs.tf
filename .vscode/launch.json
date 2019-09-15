@@ -10,7 +10,11 @@
 			"cwd": "${workspaceFolder}/Intel",
 			"sourceMaps": true,
 			"smartStep": true,
-			"skipFiles": ["${workspaceFolder}/Intel/dist/Intel/src/**/*.js"],
+			"skipFiles": [
+				"${workspaceFolder}/Intel/dist/Intel/src/**/*.js",
+				"${workspaceFolder}/Intel/node_modules/**/*.js",
+				"<node_internals>/**/*.js"
+			],
 			"internalConsoleOptions": "openOnFirstSessionStart",
 			"outFiles": ["${workspaceFolder}/Intel/dist/Intel/src/**/*.js"]
 		},
@@ -23,7 +27,11 @@
 			"cwd": "${workspaceFolder}/Intel",
 			"sourceMaps": true,
 			"smartStep": true,
-			"skipFiles": ["${workspaceFolder}/Intel/dist/Intel/src/**/*.js"],
+			"skipFiles": [
+				"${workspaceFolder}/Intel/dist/Intel/src/**/*.js",
+				"${workspaceFolder}/Intel/node_modules/**/*.js",
+				"<node_internals>/**/*.js"
+			],
 			"internalConsoleOptions": "openOnSessionStart",
 			"outFiles": ["${workspaceFolder}/Intel/dist/Intel/src/**/*.js"]
 		},

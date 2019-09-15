@@ -1,14 +1,8 @@
-// import logger from './logger';
-import * as crypto from 'crypto';
-import * as uuid from 'uuid';
 import store from '../modules/store';
 import Player from '../entities/Player';
-import PlayerNotFoundError from '../custom-errors/PlayerNotFoundError';
 import SteamID from '../../../Common/Types/SteamID';
 import SessionID from '../../../Common/Types/SessionID';
-import { DEFAULT_STEAM_AVATAR } from '../utils/Seed';
-
-export const PlayerSessionMap = new Map<SteamID, SessionID>();
+import PlayerNotFoundError from '../custom-errors/PlayerNotFoundError';
 
 /**
  * A service that provides methods for the retrieval, insertion
@@ -17,17 +11,19 @@ export const PlayerSessionMap = new Map<SteamID, SessionID>();
  */
 
 class SessionService {
+	private playerSessionMap = new Map<SteamID, SessionID>();
 	/**
 	 * Adds or updates a session ID in the Player map.
 	 * @param {SessionID} sessionId - The Player's sessionId to add (or update if existing).
 	 * @param {SteamID} steamid - The SteamID that references the session ID.
 	 */
-	upsertPlayer(sessionId: SessionID, steamid: SteamID) {
-		PlayerSessionMap.set(steamid, sessionId);
+
+	upsertPlayer(steamid: SteamID, sessionId: SessionID) {
+		this.playerSessionMap.set(steamid, sessionId);
 	}
 
 	playerExists(steamid: SteamID): boolean {
-		return PlayerSessionMap.has(steamid);
+		return this.playerSessionMap.has(steamid);
 	}
 
 	/**
@@ -35,20 +31,32 @@ class SessionService {
 	 * @param {string} steamid - The Player to retrieve.
 	 */
 	getPlayer(steamid: SteamID): Promise<Player> {
-		return new Promise(resolve => {
-			if (PlayerSessionMap.has(steamid)) {
-				const sessionId = PlayerSessionMap.get(steamid);
+		return new Promise((resolve, reject) => {
+			if (this.playerSessionMap.has(steamid)) {
+				const sessionId = this.playerSessionMap.get(steamid);
 				store.get(sessionId, (err, session) => {
 					if (err) throw new Error(err);
-					resolve(session.player);
+					if (!session) {
+						reject(new PlayerNotFoundError(steamid));
+					} else {
+						resolve(session.player);
+					}
 				});
+			} else {
+				resolve();
 			}
 		});
 	}
 
+	getPlayerCount(): number {
+		return this.playerSessionMap.values.length;
+	}
+
 	async updatePlayer(player: Player) {
-		const sessionId = PlayerSessionMap.get(player.steamid);
-		this.upsertPlayer(sessionId, player.steamid);
+		if (this.playerExists(player.steamid)) {
+			const sessionId = this.playerSessionMap.get(player.steamid);
+			this.upsertPlayer(player.steamid, sessionId);
+		}
 	}
 
 	/**
@@ -56,7 +64,7 @@ class SessionService {
 	 */
 	async getAllPlayers(): Promise<Player[]> {
 		return new Promise(resolve => {
-			const playersArr = Array.from(PlayerSessionMap.keys());
+			const playersArr = Array.from(this.playerSessionMap.keys());
 			const newPlayerArr = playersArr.map(steamid => this.getPlayer(steamid));
 			resolve(Promise.all(newPlayerArr));
 		});
@@ -67,57 +75,13 @@ class SessionService {
 	 * @param {SteamID} steamid - The SteamID to remove.
 	 */
 	removePlayer(steamid: SteamID) {
-		PlayerSessionMap.delete(steamid);
+		this.playerSessionMap.delete(steamid);
 	}
 	/**
 	 * Removes all sessions
 	 */
 	clearSessions() {
-		PlayerSessionMap.clear();
-	}
-
-	/**
-	 *  Adds a fake session to the Player map. ( FOR DEBUGGING USE ONLY )
-	 * @param {string} steamid - The fake SteamID to add
-	 * @param {string} alias - The site alias of the player
-	 * @return {Promise<void>} - Resolves once the Player is successfully added
-	 */
-
-	addFakePlayer(steamid?: SteamID, sessionId?: SessionID): Promise<void> {
-		if (process.env.NODE_ENV !== 'production') {
-			return new Promise((resolve, reject) => {
-				const fakeSess = {
-					cookie: {
-						expires: '2000000000',
-						originalMaxAge: 999999999
-					}
-				};
-				const fakeRequest = {
-					sessionID: sessionId
-						? sessionId
-						: crypto
-								.createHash('sha256')
-								.update(uuid.v1())
-								.update(crypto.randomBytes(256))
-								.digest('hex')
-				};
-
-				// @ts-ignore
-				const fakeSession = store.createSession(fakeRequest, fakeSess);
-				const fakePlayer = new Player();
-				const fakePlayerCount = PlayerSessionMap.values.length;
-				fakePlayer.steamid = steamid ? steamid : fakePlayerCount.toString();
-				fakePlayer.alias = `FakePlayer${fakePlayerCount + 1}`;
-				fakePlayer.avatarUrl = DEFAULT_STEAM_AVATAR;
-				fakeSession.player = fakePlayer;
-				this.upsertPlayer(sessionId, steamid);
-				store.set(sessionId ? sessionId : fakeSession.id, fakeSession, err => {
-					if (err) reject(err);
-					this.upsertPlayer(fakeSession.id, fakePlayer.steamid);
-					resolve();
-				});
-			});
-		}
+		this.playerSessionMap.clear();
 	}
 }
 

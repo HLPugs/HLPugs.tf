@@ -16,10 +16,9 @@ import SessionService from '../../services/SessionService';
 import DraftService from '../../services/DraftService';
 import { SiteConfiguration } from '../../constants/SiteConfiguration';
 import { Socket, Server } from 'socket.io';
-import ValidateClass from '../../utils/ValidateClass';
-import Player from '../../entities/Player';
 import SocketRequestWithPlayer from '../../interfaces/SocketRequestWithPlayer';
-import { FAKE_OFFLINE_STEAMID } from '../../utils/Seed';
+import DebugService from '../../services/DebugService';
+import ValidateClass from '../../utils/ValidateClass';
 
 const env = dotenv.config().parsed;
 
@@ -42,29 +41,13 @@ export class HomeSocketController {
 
 		if (socket.request.session.player) {
 			const player = socket.request.session.player;
-			const isCurrentlySiteBanned = await this.playerService.isCurrentlySiteBanned(player.steamid);
 			const playerViewModel = PlayerViewModel.fromPlayer(player);
-			playerViewModel.isBanned = isCurrentlySiteBanned;
-			playerViewModel.isLoggedIn = !isCurrentlySiteBanned;
+			playerViewModel.isBanned = await this.playerService.isCurrentlySiteBanned(player.steamid);
+			playerViewModel.isLoggedIn = !playerViewModel.isLoggedIn;
 			socket.join(player.steamid);
 			socket.emit('updateCurrentPlayer', playerViewModel);
 		} else {
-			// Used for development
-			if (env.offline.toLowerCase() === 'true') {
-				if (!(await this.sessionService.playerExists(FAKE_OFFLINE_STEAMID))) {
-					await this.sessionService.addFakePlayer(FAKE_OFFLINE_STEAMID, socket.request.session.id);
-				}
-				const player = await this.playerService.getPlayer(FAKE_OFFLINE_STEAMID);
-				socket.request.session.player = player;
-
-				const isCurrentlySiteBanned = await this.playerService.isCurrentlySiteBanned(player.steamid);
-				const playerViewModel = PlayerViewModel.fromPlayer(player);
-				playerViewModel.isBanned = isCurrentlySiteBanned;
-				playerViewModel.isLoggedIn = !isCurrentlySiteBanned;
-				socket.emit('updateCurrentPlayer', playerViewModel);
-			} else {
-				socket.emit('updateCurrentPlayer', { loggedIn: false });
-			}
+			socket.emit('updateCurrentPlayer', { loggedIn: false });
 		}
 	}
 
@@ -74,41 +57,47 @@ export class HomeSocketController {
 		@SocketIO() io: Server,
 		@SocketRooms() rooms: any
 	) {
-		const loggedInPlayers = await this.sessionService.getAllPlayers();
-		const playerViewModels = loggedInPlayers
-			.filter(player => player.alias !== undefined)
-			.map(player => PlayerViewModel.fromPlayer(player));
-		socket.emit('getLoggedInPlayers', playerViewModels);
 		const { steamid } = socket.request.session.player;
 		if (steamid) {
 			socket.join(steamid);
 		}
 		if (io.sockets.adapter.rooms[steamid].length === 1) {
-			this.sessionService.upsertPlayer(socket.request.session.id, steamid);
+			this.sessionService.upsertPlayer(steamid, socket.request.session.id);
 			if (socket.request.session.player.alias) {
-				ValidateClass(socket.request.session.player);
-				io.emit('addPlayerToSession', await this.sessionService.getPlayer(steamid));
+				const playerViewModel = PlayerViewModel.fromPlayer(await this.sessionService.getPlayer(steamid));
+				playerViewModel.isBanned = await this.playerService.isCurrentlySiteBanned(steamid);
+				playerViewModel.isLoggedIn = playerViewModel.isLoggedIn;
+				io.emit('addPlayerToSession', ValidateClass(playerViewModel));
 			}
 		}
+		const loggedInPlayers = await this.sessionService.getAllPlayers();
+		const playerViewModels = loggedInPlayers
+			.filter(player => player.alias !== null && player.alias !== undefined) // Only send players who have made an alias
+			.map(player => PlayerViewModel.fromPlayer(player));
+		for (const vm of playerViewModels) {
+			vm.isBanned = await this.playerService.isCurrentlySiteBanned(steamid);
+			vm.isLoggedIn = !vm.isBanned;
+		}
+		socket.emit('getLoggedInPlayers', ValidateClass(playerViewModels));
 	}
 
 	@OnDisconnect()
-	playerDisconnected(
-		@ConnectedSocket() socket: Socket,
-		@SocketIO() io: Server,
-		@SocketRequest() request: SocketRequestWithPlayer
-	) {
+	playerDisconnected(@SocketIO() io: Server, @SocketRequest() request: SocketRequestWithPlayer) {
 		if (!request.session.player.alias) return;
 
-		if (0 === 0) {
-			this.draftService.removePlayerFromAllDraftTFClasses(request.session.player.steamid);
+		/* Don't disconnect the player and remove them from the draft if they close a connection and have multiple tabs/windows open
+		 The player just disconnected, so if a room named by the player's steamid still exists, this means the player is still connected in another tab/window
+		 We can confirm the player still has one or more tab/windows open by seeing if there is a room named by their SteamID and checking if it is undefined or not
+		 *** IMPORTANT *** this will still remove the player from the draft (and everything else) if they reload the page or temporarily lose connection, however.
+		 One possible solution is having a setTimeout() around the disconnect, and waiting approximately 10 seconds to see if the player is still disconnected. */
+		if (io.sockets.adapter.rooms[request.session.player.steamid] !== undefined) return;
+		this.draftService.removePlayerFromAllDraftTFClasses(request.session.player.steamid);
 
-			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-				io.emit('removePlayerFromDraftTFClass', scheme.tf2class, request.session.player.steamid);
-			});
+		SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
+			io.emit('removePlayerFromDraftTFClass', scheme.tf2class, request.session.player.steamid);
+		});
 
-			this.sessionService.removePlayer(request.session.player.steamid);
-			io.emit('removePlayerFromSession', request.session.player.steamid);
-		}
+		this.sessionService.removePlayer(request.session.player.steamid);
+		io.emit('removePlayerFromSession', request.session.player.steamid);
 	}
 }

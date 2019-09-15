@@ -4,6 +4,7 @@ class PlayerNotFoundError extends Error {
 		this.name = 'PlayerNotFoundError';
 		this.message = `Player ("${identifier}") does not exist`;
 		Error.captureStackTrace(this, PlayerNotFoundError);
+		console.error(this);
 	}
 }
 

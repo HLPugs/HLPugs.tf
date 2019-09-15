@@ -1,7 +1,7 @@
 {
 	"name": "default",
 	"type": "sqlite",
-	"logging": true,
+	"logging": ["error"],
 	"synchronize": true,
 	"database": "localdb/database.sqlite",
 	"entities": ["dist/Intel/src/entities/*.js"],

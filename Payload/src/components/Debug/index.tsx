@@ -12,17 +12,19 @@ interface DebugState {
 const buttons = [
 	{
 		title: 'Login',
-		command: 'login',
+		emit: 'fakeLogin',
 		options: {}
 	},
 	{
 		title: 'Log out',
-		command: 'logout',
-		options: {}
+		emit: 'fakeLogout',
+		options: {
+			steamid: '76561198119135809'
+		}
 	},
 	{
 		title: 'Add Fake Player',
-		command: 'fake-player',
+		emit: 'addFakePlayer',
 		options: {
 			name: 'Nicell'
 		}
@@ -42,10 +44,6 @@ class Debug extends React.Component<DebugProps, DebugState> {
 		this.setState({ open: !this.state.open });
 	};
 
-	runCommand = (command: string, options: any) => {
-		this.props.socket.emit('debug', { command, options });
-	};
-
 	render() {
 		return process.env.NODE_ENV === 'development' ? (
 			<div id="Debug">
@@ -59,7 +57,7 @@ class Debug extends React.Component<DebugProps, DebugState> {
 						{buttons.map(action => (
 							<div
 								key={action.title}
-								onClick={() => this.runCommand(action.command, action.options)}
+								onClick={() => this.props.socket.emit(action.emit, action.options)}
 								className="DebugAction"
 							>
 								{action.title}

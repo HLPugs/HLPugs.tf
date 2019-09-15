@@ -25,7 +25,7 @@ export class HomeController {
 		@Req() req: RequestWithPlayer,
 		@Res() res: Response
 	): Promise<void> {
-		await this.playerService.updateOrInsertPlayer(player);
+		await this.playerService.upsertPlayer(player);
 		req.player = player;
 		req.session.player = player;
 

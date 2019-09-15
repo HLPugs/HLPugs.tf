@@ -27,9 +27,10 @@ export class AliasSocketController {
 		socket.request.session.reload(async (err: string) => {
 			if (err) throw new Error(err);
 			const player: Player = socket.request.session.player;
-			await this.sessionService.upsertPlayer(socket.request.session.id, steamid);
+			this.sessionService.upsertPlayer(steamid, socket.request.session.id);
 			const playerViewModel = PlayerViewModel.fromPlayer(player);
-			playerViewModel.isLoggedIn = true;
+			playerViewModel.isBanned = await this.playerService.isCurrentlySiteBanned(steamid);
+			playerViewModel.isLoggedIn = !playerViewModel.isLoggedIn;
 			ValidateClass(playerViewModel);
 			socket.emit('updateCurrentPlayer', playerViewModel);
 			io.emit('addPlayerToSession', playerViewModel);

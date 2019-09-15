@@ -15,10 +15,10 @@ export default class AnnouncementSocketController {
 	@OnMessage('getHomepageAnnouncements')
 	async getHomepageAnnouncements(@ConnectedSocket() socket: Socket) {
 		const announcements = await this.announcementService.getAnnouncements(EnvironmentConfig.region);
-		const viewmodels = announcements
+		const announcementViewModels = announcements
 			.sort((a, b) => (a.order > b.order ? 1 : -1)) // sort by order ascending
 			.map(x => HomepageAnnouncementViewModel.fromAnnouncement(x));
-		socket.emit('getHomepageAnnouncements', viewmodels);
+		socket.emit('getHomepageAnnouncements', announcementViewModels);
 	}
 
 	@OnMessage('createAnnouncement')
@@ -38,7 +38,7 @@ export default class AnnouncementSocketController {
 		};
 		ValidateClass(announcement);
 		const createdAnnouncement = await this.announcementService.createAnnouncement(announcement);
-		const viewmodel = HomepageAnnouncementViewModel.fromAnnouncement(createdAnnouncement);
-		io.emit('createAnnouncement', viewmodel);
+		const announcementViewModel = HomepageAnnouncementViewModel.fromAnnouncement(createdAnnouncement);
+		io.emit('createAnnouncement', announcementViewModel);
 	}
 }

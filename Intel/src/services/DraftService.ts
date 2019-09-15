@@ -11,8 +11,7 @@ const DraftTFClassLists = new Map<DraftTFClass, SteamID[]>();
 SiteConfiguration.gamemodeClassSchemes.forEach(scheme => DraftTFClassLists.set(scheme.tf2class, []));
 
 class DraftService {
-
-	isPlayerAddedToDraftTFClass(steamid: SteamID, draftTFClass: DraftTFClass):  boolean {
+	isPlayerAddedToDraftTFClass(steamid: SteamID, draftTFClass: DraftTFClass): boolean {
 		return DraftTFClassLists.get(draftTFClass).indexOf(steamid) !== -1;
 	}
 

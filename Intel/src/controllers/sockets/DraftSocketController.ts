@@ -26,8 +26,10 @@ export default class DraftSocketController {
 	) {
 		ValidateClass(body);
 		const { steamid } = socket.request.session.player;
-		this.draftService.addPlayerToDraftTFClass(steamid, body.draftTFClass);
-		io.emit('addPlayerToDraftTFClass', body.draftTFClass, steamid);
+		if (!this.draftService.isPlayerAddedToDraftTFClass(steamid, body.draftTFClass)) {
+			this.draftService.addPlayerToDraftTFClass(steamid, body.draftTFClass);
+			io.emit('addPlayerToDraftTFClass', body.draftTFClass, steamid);
+		}
 	}
 
 	@OnMessage('removePlayerFromDraftTFClass')

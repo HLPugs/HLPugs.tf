@@ -9,26 +9,23 @@ import { consoleLogStatus } from './ConsoleColors';
 import Region from '../../../Common/Enums/Region';
 import Gamemode from '../../../Common/Enums/Gamemode';
 import GamemodeClassSchemes from '../../../Common/Constants/GamemodeClassSchemes';
-import { createConnection } from 'typeorm';
+import { createConnection, getManager } from 'typeorm';
 import Announcement from '../entities/Announcement';
 import SessionService from '../services/SessionService';
-
-export const FAKE_OFFLINE_STEAMID = '76561198119135809';
-export const DEFAULT_STEAM_AVATAR =
-	'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
+import DebugService from '../services/DebugService';
 
 const SeedPlayers = async () => {
-	const sessionService = new SessionService();
+	const debugService = new DebugService();
 	consoleLogStatus('SEEDING PLAYERS');
 	const playerRepository = new LinqRepository(Player);
 
 	const player = new Player();
-	player.steamid = FAKE_OFFLINE_STEAMID;
+	player.steamid = DebugService.FAKE_OFFLINE_STEAMID;
 	player.alias = 'Gabe';
-	player.avatarUrl = DEFAULT_STEAM_AVATAR;
+	player.avatarUrl = DebugService.DEFAULT_STEAM_AVATAR;
 	player.ip = '127.0.0.1';
 
-	sessionService.addFakePlayer(FAKE_OFFLINE_STEAMID);
+	debugService.addFakePlayer(DebugService.FAKE_OFFLINE_STEAMID);
 	await playerRepository.create(player);
 };
 
@@ -38,7 +35,7 @@ const SeedAnnouncements = async () => {
 	const announcementRepository = new LinqRepository(Announcement);
 	for (let i = 1; i <= 10; i++) {
 		const announcement: Announcement = {
-			creatorSteamid: FAKE_OFFLINE_STEAMID,
+			creatorSteamid: DebugService.FAKE_OFFLINE_STEAMID,
 			messageContent: 'Test Announcement #' + i,
 			order: i,
 			priority: false,
@@ -56,7 +53,7 @@ const SeedMatches = async () => {
 	const playerService = new PlayerService();
 	const matchRepository = new LinqRepository(Match);
 
-	const player = await playerService.getPlayer(FAKE_OFFLINE_STEAMID);
+	const player = await playerService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
 
 	const gamemodeClassScheme = GamemodeClassSchemes.get(Gamemode.Highlander);
 
@@ -84,16 +81,11 @@ const SeedMatches = async () => {
 	}
 };
 
+const t = getManager();
 const Seed = async () => {
 	await SeedAnnouncements();
-	await SeedPlayers();
-	await SeedMatches();
+	// await SeedPlayers();
+	// await SeedMatches();
 };
 
-createConnection()
-	.then(async () => {
-		await Seed();
-	})
-	.then(() => {
-		consoleLogStatus('Finished seeding database');
-	});
+Seed();
