@@ -33,6 +33,7 @@ import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 import Region from '../../../Common/Enums/Region';
 import Gamemode from '../../../Common/Enums/Gamemode';
 import MatchType from '../../../Common/Enums/MatchType';
+import PermissionGroup from '../../../Common/Enums/PermissionGroup';
 
 library.add(
 	faSteamSymbol,
@@ -174,7 +175,7 @@ class App extends React.Component<{}, AppState> {
 							<Route
 								path="/admin"
 								render={() =>
-									this.state.currentPlayer!.permissionGroup ? (
+									this.state.currentPlayer!.permissionGroup !== PermissionGroup.NONE ? (
 										<Admin
 											socket={this.socket}
 											configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
