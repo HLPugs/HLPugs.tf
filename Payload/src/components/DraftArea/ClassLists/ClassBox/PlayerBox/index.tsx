@@ -20,11 +20,17 @@ class PlayerBox extends React.PureComponent<PlayerBoxProps, {}> {
 							<div
 								className="playerIcon"
 								style={{
-									backgroundImage: `url(${loggedInPlayers.find(p => p.steamid === this.props.steamid)!.avatarUrl})`
+									backgroundImage: `url(${
+										loggedInPlayers.find(p => p.steamid === this.props.steamid)
+											? loggedInPlayers.find(p => p.steamid === this.props.steamid)!.avatarUrl
+											: null
+									})`
 								}}
 							/>
 							<div className="playerName">
-								{loggedInPlayers.find(player => player.steamid === this.props.steamid)!.alias}
+								{loggedInPlayers.find(p => p.steamid === this.props.steamid)
+									? loggedInPlayers.find(p => p.steamid === this.props.steamid)!.alias
+									: null}
 							</div>
 							<div className="captainStar">
 								<FontAwesomeIcon icon="star" />
