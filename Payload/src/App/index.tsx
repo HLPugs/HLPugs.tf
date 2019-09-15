@@ -6,7 +6,6 @@ import Home from '../pages/Home';
 import Player from '../pages/Player';
 import Banned from '../pages/Banned';
 import Admin from '../pages/Admin';
-import Debug from '../components/Debug';
 import Loading from '../components/Loading';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
@@ -189,7 +188,6 @@ class App extends React.Component<{}, AppState> {
 							<Redirect from="*" to="/" />
 						</Switch>
 					</Router>
-					<Debug socket={this.socket} />
 				</>
 			);
 		}

@@ -11,6 +11,7 @@ import './style.scss';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import { SiteConfigurationModel } from '../../../../Common/Models/SiteConfigurationModel';
 import SteamID from '../../../../Common/Types/SteamID';
+import Debug from '../../components/Debug';
 
 interface HomeProps {
 	socket: SocketIOClient.Socket;
@@ -115,6 +116,7 @@ class Home extends React.Component<HomeProps, HomeState> {
 							settingsOnClick={this.toggleSettings}
 							userAlias={this.props.currentPlayer.alias}
 						/>
+						<Debug socket={this.props.socket} classes={this.props.configuration.gamemodeClassSchemes} />
 						{this.AliasModal()}
 					</SocketProvider>
 				</LoggedInPlayersProvider>

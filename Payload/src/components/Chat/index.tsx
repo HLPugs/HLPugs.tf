@@ -44,7 +44,7 @@ class Chat extends React.PureComponent<ChatProps, ChatState> {
 	render() {
 		return (
 			<LoggedInPlayersConsumer>
-				{(playerData: any) => (
+				{(playerData: PlayerViewModel[]) => (
 					<aside className={this.state.active ? 'chatActive' : ''}>
 						<div id="chatOpener" onClick={this.toggleChat}>
 							<FontAwesomeIcon icon="comments" />
@@ -59,7 +59,7 @@ class Chat extends React.PureComponent<ChatProps, ChatState> {
 							socket={this.props.socket}
 							isLoggedIn={this.props.currentPlayer.isLoggedIn}
 							customEmojis={this.state.customEmojis}
-							mentions={playerData ? Object.keys(playerData).map(p => playerData[p].alias) : []}
+							mentions={playerData ? playerData.map(p => p.alias) : []}
 						/>
 					</aside>
 				)}

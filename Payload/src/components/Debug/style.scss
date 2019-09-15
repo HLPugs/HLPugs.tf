@@ -57,6 +57,7 @@
 				background: var(--color);
 				box-shadow: var(--paper-1);
 				cursor: pointer;
+				user-select: none;
 			}
 		}
 	}
