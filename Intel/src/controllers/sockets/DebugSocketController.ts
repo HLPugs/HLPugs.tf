@@ -8,12 +8,16 @@ import PlayerService from '../../services/PlayerService';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import { SiteConfiguration } from '../../constants/SiteConfiguration';
 import FakeLogoutRequest from '../../../../Common/Requests/FakeLogoutRequest';
+import FakeAddPlayerToDraftTFClassRequest from '../../../../Common/Requests/FakeAddPlayerToDraftTFClassRequest';
+import FakeRemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests/FakeRemovePlayerFromDraftTFClassRequest';
+import DraftService from '../../services/DraftService';
 
 @SocketController()
 export default class DebugSocketController {
 	private readonly playerService = new PlayerService();
 	private readonly sessionService = new SessionService();
 	private readonly debugService = new DebugService();
+	private readonly draftService = new DraftService();
 
 	@OnMessage('fakeLogin')
 	async fakeLogin(
@@ -67,5 +71,19 @@ export default class DebugSocketController {
 
 			io.emit('addPlayerToSesssion', fakePlayerViewModel);
 		}
+	}
+
+	@OnMessage('fakeAddPlayerToDraftTFClass')
+	fakeAddPlayerToDraftTFClass(@SocketIO() io: Server, @MessageBody() body: FakeAddPlayerToDraftTFClassRequest) {
+		ValidateClass(body);
+		this.draftService.addPlayerToDraftTFClass(body.steamid, body.draftTFClass);
+		io.emit('addPlayerToDraftTFClass', body.draftTFClass, body.steamid);
+	}
+	
+	@OnMessage('fakeRemovePlayerFromDraftTFClass')
+	fakeRemovePlayerToDraftTFClass(@SocketIO() io: Server, @MessageBody() body: FakeRemovePlayerFromDraftTFClassRequest) {
+		ValidateClass(body);
+		this.draftService.removePlayerFromDraftTFClass(body.steamid, body.draftTFClass);
+		io.emit('removePlayerFromDraftTFClass', body.draftTFClass, body.steamid);
 	}
 }
