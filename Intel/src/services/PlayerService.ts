@@ -167,10 +167,9 @@ export default class PlayerService {
 				.getOne()
 				.where(x => x.steamid)
 				.equal(player.steamid);
-			playerToUpdate.alias = player.alias;
 			playerToUpdate.avatarUrl = player.avatarUrl;
 			playerToUpdate.ip = player.ip;
-			playerRepository.update(playerToUpdate);
+			await playerRepository.update(playerToUpdate);
 		} else {
 			player.settings = new PlayerSettings();
 			await playerRepository.create(player);

@@ -22,7 +22,7 @@ export default class DebugService {
 	 * @return {Promise<void>} - Resolves once the Player is successfully added
 	 */
 
-	async addFakePlayer(steamid?: SteamID, sessionId?: SessionID): Promise<void> {
+	async addFakePlayer(steamid?: SteamID, sessionId?: SessionID): Promise<Player> {
 		if (process.env.NODE_ENV !== 'production') {
 			return new Promise(async (resolve, reject) => {
 				const fakeSess = {
@@ -56,7 +56,7 @@ export default class DebugService {
 				store.set(sessionId ? sessionId : fakeSession.id, fakeSession, async err => {
 					if (err) reject(err);
 					this.sessionService.upsertPlayer(fakePlayer.steamid, fakeSession.id);
-					resolve();
+					resolve(fakePlayer);
 				});
 			});
 		}

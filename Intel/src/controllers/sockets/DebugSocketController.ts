@@ -8,7 +8,6 @@ import PlayerService from '../../services/PlayerService';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import { SiteConfiguration } from '../../constants/SiteConfiguration';
 import FakeLogoutRequest from '../../../../Common/Requests/FakeLogoutRequest';
-import PlayerSettings from '../../entities/PlayerSettings';
 
 @SocketController()
 export default class DebugSocketController {
@@ -44,17 +43,29 @@ export default class DebugSocketController {
 		@SocketIO() io: Server,
 		@MessageBody() body: FakeLogoutRequest
 	) {
-		ValidateClass(body);
-		SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-			io.emit('removePlayerFromDraftTFClass', scheme.tf2class, body.steamid);
-		});
+		if (process.env.NODE_ENV === 'dev') {
+			ValidateClass(body);
+			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
+				io.emit('removePlayerFromDraftTFClass', scheme.tf2class, body.steamid);
+			});
 
-		this.sessionService.removePlayer(body.steamid);
-		io.emit('removePlayerFromSession', body.steamid);
+			this.sessionService.removePlayer(body.steamid);
+			io.emit('removePlayerFromSession', body.steamid);
 
-		const playerViewModel = PlayerViewModel.fromPlayer(request.session.player);
-		playerViewModel.isLoggedIn = false;
-		playerViewModel.isBanned = false;
-		socket.emit('updateCurrentPlayer', ValidateClass(playerViewModel));
+			const playerViewModel = PlayerViewModel.fromPlayer(request.session.player);
+			playerViewModel.isLoggedIn = false;
+			playerViewModel.isBanned = false;
+			socket.emit('updateCurrentPlayer', ValidateClass(playerViewModel));
+		}
+	}
+
+	@OnMessage('addFakePlayer')
+	async addFakePlayer(@SocketIO() io: Server) {
+		if (process.env.NODE_ENV === 'dev') {
+			const fakePlayer = await this.debugService.addFakePlayer();
+			const fakePlayerViewModel = PlayerViewModel.fromPlayer(fakePlayer);
+
+			io.emit('addPlayerToSesssion', fakePlayerViewModel);
+		}
 	}
 }

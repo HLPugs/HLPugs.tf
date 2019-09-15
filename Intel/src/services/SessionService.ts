@@ -49,7 +49,7 @@ class SessionService {
 	}
 
 	getPlayerCount(): number {
-		return SessionService.playerSessionMap.values.length;
+		return SessionService.playerSessionMap.size;
 	}
 
 	async updatePlayer(player: Player) {
