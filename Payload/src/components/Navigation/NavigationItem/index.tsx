@@ -13,10 +13,7 @@ class NavigationItem extends React.Component<NavigationItemProps, {}> {
 	render() {
 		if (this.props.properties.type === 'divider') {
 			return <div className="navDivider" />;
-		} else if (
-			this.props.properties.type === 'tab' &&
-			this.props.properties.tabConfig
-		) {
+		} else if (this.props.properties.type === 'tab' && this.props.properties.tabConfig) {
 			return (
 				<Link
 					className="navTab"
@@ -27,10 +24,7 @@ class NavigationItem extends React.Component<NavigationItemProps, {}> {
 				>
 					<div>
 						<FontAwesomeIcon
-							icon={[
-								this.props.properties.tabConfig.iconPrefix,
-								this.props.properties.tabConfig.icon
-							]}
+							icon={[this.props.properties.tabConfig.iconPrefix, this.props.properties.tabConfig.icon]}
 						/>
 					</div>
 					<span>{this.props.properties.tabConfig.name}</span>

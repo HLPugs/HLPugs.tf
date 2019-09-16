@@ -1,5 +1,6 @@
 import GamemodeClassScheme from './GamemodeClassScheme';
 import EnvironmentConfigModel from '../Models/EnvironmentConfigModel';
+import { IconName, IconPrefix } from '@fortawesome/fontawesome-common-types';
 
 export interface SiteConfigurationModel {
 	branding: SiteBranding;
@@ -15,10 +16,10 @@ export interface SiteBranding {
 }
 
 export interface NavItem {
-	type: 'tab' | 'divider' | 'module';
+	type: 'tab' | 'divider' | 'module' | 'function';
 	tabConfig?: {
-		icon: any; // change to IconName
-		iconPrefix: any; // change to IconPrefix
+		icon: IconName;
+		iconPrefix: IconPrefix;
 		name: string;
 		link: string;
 		external: boolean;
@@ -26,5 +27,11 @@ export interface NavItem {
 	moduleConfig?: {
 		name: string;
 		moduleName: string;
+	};
+	functionConfig?: {
+		icon: any;
+		iconPrefix: any;
+		name: string;
+		function: () => void;
 	};
 }
