@@ -32,7 +32,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 
 	adminPages: { permissionValue: number; navItem: NavItem }[] = [
 		{
-			permissionValue: PrivilegeRankings.get(PermissionGroup.ADMIN)!,
+			permissionValue: PrivilegeRankings[PermissionGroup.ADMIN],
 			navItem: {
 				type: 'tab',
 				tabConfig: {
@@ -45,7 +45,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 			}
 		},
 		{
-			permissionValue: PrivilegeRankings.get(PermissionGroup.ADMIN)!,
+			permissionValue: PrivilegeRankings[PermissionGroup.ADMIN],
 			navItem: {
 				type: 'tab',
 				tabConfig: {
@@ -58,7 +58,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 			}
 		},
 		{
-			permissionValue: PrivilegeRankings.get(PermissionGroup.ADMIN)!,
+			permissionValue: PrivilegeRankings[PermissionGroup.ADMIN],
 			navItem: {
 				type: 'tab',
 				tabConfig: {
@@ -71,7 +71,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 			}
 		},
 		{
-			permissionValue: PrivilegeRankings.get(PermissionGroup.MODERATOR)!,
+			permissionValue: PrivilegeRankings[PermissionGroup.MODERATOR],
 			navItem: {
 				type: 'tab',
 				tabConfig: {
@@ -84,7 +84,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 			}
 		},
 		{
-			permissionValue: PrivilegeRankings.get(PermissionGroup.MODERATOR)!,
+			permissionValue: PrivilegeRankings[PermissionGroup.MODERATOR],
 			navItem: {
 				type: 'tab',
 				tabConfig: {
