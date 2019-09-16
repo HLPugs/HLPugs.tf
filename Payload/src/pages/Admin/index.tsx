@@ -105,9 +105,9 @@ class Admin extends React.Component<AdminProps, AdminState> {
 	};
 
 	getNavigationGroup = (): NavItem[] => {
-		const playerPermissionValue = PrivilegeRankings.get(this.props.currentPlayer.permissionGroup);
+		const playerPermissionValue = PrivilegeRankings[this.props.currentPlayer.permissionGroup];
 		return this.adminPages
-			.filter(p => p.permissionValue <= (playerPermissionValue || PrivilegeRankings.get(PermissionGroup.NONE)!))
+			.filter(p => p.permissionValue <= playerPermissionValue)
 			.map(p => p.navItem);
 	};
 
