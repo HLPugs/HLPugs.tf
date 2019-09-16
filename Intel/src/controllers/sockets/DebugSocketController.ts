@@ -11,6 +11,7 @@ import FakeLogoutRequest from '../../../../Common/Requests/FakeLogoutRequest';
 import FakeAddPlayerToDraftTFClassRequest from '../../../../Common/Requests/FakeAddPlayerToDraftTFClassRequest';
 import FakeRemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests/FakeRemovePlayerFromDraftTFClassRequest';
 import DraftService from '../../services/DraftService';
+import PermissionGroup from '../../../../Common/Enums/PermissionGroup';
 
 @SocketController()
 export default class DebugSocketController {
@@ -25,28 +26,27 @@ export default class DebugSocketController {
 		@SocketRequest() request: SocketRequestWithPlayer,
 		@SocketIO() io: Server
 	) {
-		if (process.env.NODE_ENV === 'dev') {
-			if (!this.sessionService.playerExists(DebugService.FAKE_OFFLINE_STEAMID)) {
-				await this.debugService.addFakePlayer(DebugService.FAKE_OFFLINE_STEAMID);
-			}
-			const player = await this.playerService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
-			request.session.player = player;
-			socket.request.session.save();
+		if (process.env.NODE_ENV === 'dev' && !this.sessionService.playerExists(DebugService.FAKE_OFFLINE_STEAMID)) {
+			await this.debugService.addFakePlayer(DebugService.FAKE_OFFLINE_STEAMID);
+
+			const player = await this.sessionService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
 			const playerViewModel = PlayerViewModel.fromPlayer(player);
-			playerViewModel.isBanned = await this.playerService.isCurrentlySiteBanned(player.steamid);
+			playerViewModel.isBanned = false;
 			playerViewModel.isLoggedIn = !playerViewModel.isLoggedIn;
-			socket.emit('updateCurrentPlayer', playerViewModel);
 			io.emit('addPlayerToSession', playerViewModel);
+			socket.emit('updateCurrentPlayer', playerViewModel);
+		} else {
+			const player = await this.playerService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
+			const playerViewModel = PlayerViewModel.fromPlayer(player);
+			playerViewModel.isLoggedIn = true;
+			playerViewModel.isBanned = false;
+			playerViewModel.permissionGroup = PermissionGroup.HEAD_ADMIN
+			socket.emit('updateCurrentPlayer', playerViewModel);
 		}
 	}
 
 	@OnMessage('fakeLogout')
-	fakeLogout(
-		@ConnectedSocket() socket: Socket,
-		@SocketRequest() request: SocketRequestWithPlayer,
-		@SocketIO() io: Server,
-		@MessageBody() body: FakeLogoutRequest
-	) {
+	async fakeLogout(@ConnectedSocket() socket: Socket, @SocketIO() io: Server, @MessageBody() body: FakeLogoutRequest) {
 		if (process.env.NODE_ENV === 'dev') {
 			ValidateClass(body);
 			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
@@ -56,7 +56,7 @@ export default class DebugSocketController {
 			this.sessionService.removePlayer(body.steamid);
 			io.emit('removePlayerFromSession', body.steamid);
 
-			const playerViewModel = PlayerViewModel.fromPlayer(request.session.player);
+			const playerViewModel = PlayerViewModel.fromPlayer(await this.playerService.getPlayer(body.steamid));
 			playerViewModel.isLoggedIn = false;
 			playerViewModel.isBanned = false;
 			socket.emit('updateCurrentPlayer', ValidateClass(playerViewModel));
@@ -64,12 +64,12 @@ export default class DebugSocketController {
 	}
 
 	@OnMessage('addFakePlayer')
-	async addFakePlayer(@SocketIO() io: Server) {
+	async addFakePlayer(@SocketIO() io: Server, @SocketRequest() request: SocketRequestWithPlayer) {
 		if (process.env.NODE_ENV === 'dev') {
-			const fakePlayer = await this.debugService.addFakePlayer();
-			const fakePlayerViewModel = PlayerViewModel.fromPlayer(fakePlayer);
+			const player = await this.debugService.addFakePlayer();
+			const fakePlayerViewModel = PlayerViewModel.fromPlayer(player);
 
-			io.emit('addPlayerToSesssion', fakePlayerViewModel);
+			io.emit('addPlayerToSession', fakePlayerViewModel);
 		}
 	}
 
@@ -79,7 +79,7 @@ export default class DebugSocketController {
 		this.draftService.addPlayerToDraftTFClass(body.steamid, body.draftTFClass);
 		io.emit('addPlayerToDraftTFClass', body.draftTFClass, body.steamid);
 	}
-	
+
 	@OnMessage('fakeRemovePlayerFromDraftTFClass')
 	fakeRemovePlayerToDraftTFClass(@SocketIO() io: Server, @MessageBody() body: FakeRemovePlayerFromDraftTFClassRequest) {
 		ValidateClass(body);
