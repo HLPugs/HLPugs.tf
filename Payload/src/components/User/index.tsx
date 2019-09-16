@@ -15,7 +15,7 @@ class User extends React.PureComponent<UserProps, {}> {
 		return this.props.currentPlayer.isLoggedIn ? (
 			<div id="User">
 				<UserInfo alias={this.props.currentPlayer.alias} avatarUrl={this.props.currentPlayer.avatarUrl} />
-				<UserDropDown steamid={this.props.currentPlayer.steamid} settingsOnClick={this.props.settingsOnClick} />
+				<UserDropDown permissionGroup={this.props.currentPlayer.permissionGroup} steamid={this.props.currentPlayer.steamid} settingsOnClick={this.props.settingsOnClick} />
 			</div>
 		) : (
 			<div id="User">
