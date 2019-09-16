@@ -9,6 +9,7 @@ import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import { Route } from 'react-router';
 
 import PrivilegeRankings from '../../../../Intel/src/constants/PrivilegeRankings';
+import PermissionGroup from '../../../../Common/Enums/PermissionGroup';
 
 interface AdminProps {
 	socket: SocketIOClient.Socket;
@@ -31,7 +32,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 
 	adminPages: { permissionValue: number; navItem: NavItem }[] = [
 		{
-			permissionValue: 20,
+			permissionValue: PrivilegeRankings.get(PermissionGroup.ADMIN)!,
 			navItem: {
 				type: 'tab',
 				tabConfig: {
@@ -44,7 +45,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 			}
 		},
 		{
-			permissionValue: 20,
+			permissionValue: PrivilegeRankings.get(PermissionGroup.ADMIN)!,
 			navItem: {
 				type: 'tab',
 				tabConfig: {
@@ -57,7 +58,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 			}
 		},
 		{
-			permissionValue: 20,
+			permissionValue: PrivilegeRankings.get(PermissionGroup.ADMIN)!,
 			navItem: {
 				type: 'tab',
 				tabConfig: {
@@ -70,7 +71,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 			}
 		},
 		{
-			permissionValue: 10,
+			permissionValue: PrivilegeRankings.get(PermissionGroup.MODERATOR)!,
 			navItem: {
 				type: 'tab',
 				tabConfig: {
@@ -83,7 +84,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 			}
 		},
 		{
-			permissionValue: 10,
+			permissionValue: PrivilegeRankings.get(PermissionGroup.MODERATOR)!,
 			navItem: {
 				type: 'tab',
 				tabConfig: {
@@ -105,7 +106,9 @@ class Admin extends React.Component<AdminProps, AdminState> {
 
 	getNavigationGroup = (): NavItem[] => {
 		const playerPermissionValue = PrivilegeRankings.get(this.props.currentPlayer.permissionGroup);
-		return this.adminPages.filter(p => p.permissionValue <= (playerPermissionValue || 0)).map(p => p.navItem);
+		return this.adminPages
+			.filter(p => p.permissionValue <= (playerPermissionValue || PrivilegeRankings.get(PermissionGroup.NONE)!))
+			.map(p => p.navItem);
 	};
 
 	render() {

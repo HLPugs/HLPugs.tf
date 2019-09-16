@@ -79,13 +79,17 @@ class Debug extends React.Component<DebugProps, DebugState> {
 								<span>Target Player: </span>
 								<select onChange={this.updateTargetPlayer} value={this.state.targetPlayer}>
 									{playerData.map(p => (
-										<option value={p.steamid}>{p.alias}</option>
+										<option key={p.steamid} value={p.steamid}>
+											{p.alias}
+										</option>
 									))}
 								</select>
 								<span>Target Class: </span>
 								<select onChange={this.updateTargetClass} value={this.state.targetClass}>
 									{this.props.classes.map(c => (
-										<option value={c.tf2class}>{c.tf2class}</option>
+										<option key={c.tf2class} value={c.tf2class}>
+											{c.tf2class}
+										</option>
 									))}
 								</select>
 							</div>
