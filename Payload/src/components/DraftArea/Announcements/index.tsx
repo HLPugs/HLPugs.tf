@@ -29,12 +29,7 @@ class Announcements extends React.Component<AnnouncementsProps, AnnouncementsSta
 		this.announcementsTimer = window.setInterval(this.cycleAnnouncements, 15000);
 
 		this.state = {
-			announcements: [
-				{
-					messageContent: '',
-					priority: false
-				}
-			],
+			announcements: [],
 			index: 0,
 			transitioning: false
 		};
