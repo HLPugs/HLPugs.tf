@@ -21,26 +21,15 @@ export default class DebugSocketController {
 	private readonly draftService = new DraftService();
 
 	@OnMessage('fakeLogin')
-	async fakeLogin(
-		@ConnectedSocket() socket: Socket,
-		@SocketRequest() request: SocketRequestWithPlayer,
-		@SocketIO() io: Server
-	) {
-		if (process.env.NODE_ENV === 'dev' && !this.sessionService.playerExists(DebugService.FAKE_OFFLINE_STEAMID)) {
-			await this.debugService.addFakePlayer(DebugService.FAKE_OFFLINE_STEAMID);
-
-			const player = await this.sessionService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
-			const playerViewModel = PlayerViewModel.fromPlayer(player);
-			playerViewModel.isBanned = false;
-			playerViewModel.isLoggedIn = !playerViewModel.isLoggedIn;
-			io.emit('addPlayerToSession', playerViewModel);
-			socket.emit('updateCurrentPlayer', playerViewModel);
-		} else {
+	async fakeLogin(@ConnectedSocket() socket: Socket, @SocketIO() io: Server) {
+		if (process.env.NODE_ENV === 'dev') {
+			if (!this.sessionService.playerExists(DebugService.FAKE_OFFLINE_STEAMID)) {
+				await this.debugService.addFakePlayer(DebugService.FAKE_OFFLINE_STEAMID, socket.request.sessionID);
+			}
 			const player = await this.playerService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
+			socket.request.session.player = player;
+			socket.request.session.save();
 			const playerViewModel = PlayerViewModel.fromPlayer(player);
-			playerViewModel.isLoggedIn = true;
-			playerViewModel.isBanned = false;
-			playerViewModel.permissionGroup = PermissionGroup.HEAD_ADMIN
 			socket.emit('updateCurrentPlayer', playerViewModel);
 		}
 	}
