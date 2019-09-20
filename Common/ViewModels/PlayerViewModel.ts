@@ -13,6 +13,7 @@ import {
 	IsEnum
 } from 'class-validator';
 import PlayerService from '../../Intel/src/services/PlayerService';
+import ValidateClass from '../../Intel/src/utils/ValidateClass';
 
 export default class PlayerViewModel {
 	@IsBoolean()
@@ -51,7 +52,9 @@ export default class PlayerViewModel {
 		playerViewModel.steamid = player.steamid;
 		playerViewModel.roles = player.roles;
 		playerViewModel.permissionGroup = player.permissionGroup;
+		playerViewModel.isBanned = false;
+		playerViewModel.isLoggedIn = true;
 
-		return playerViewModel;
+		return ValidateClass(playerViewModel);
 	}
 }
