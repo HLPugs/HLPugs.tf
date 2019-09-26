@@ -4,17 +4,17 @@ import Message from '../../../Common/Models/Message';
 import StorePlayerMessageRequest from '../../../Common/Requests/SendMessageRequest';
 import ChatWordService from './ChatWordService';
 import CHAT_MESSAGE_THRESHOLD from '../../../Common/Constants/ChatMessageThreshold';
+import { chatWordService } from '.';
 
 export default class ChatService {
-	private readonly chatWordService = new ChatWordService();
 	private readonly messageHistory: Message[] = [];
 	private readonly MESSAGE_HISTORY_MAX = 150;
 	private blacklistedWords: string[];
 	private whitelistedWords: string[];
 
 	constructor() {
-		this.chatWordService.getBlacklistedWords().then(words => (this.blacklistedWords = words));
-		this.chatWordService.getWhitelistedWords().then(words => (this.whitelistedWords = words));
+		chatWordService.getBlacklistedWords().then(words => (this.blacklistedWords = words));
+		chatWordService.getWhitelistedWords().then(words => (this.whitelistedWords = words));
 	}
 
 	storePlayerMessage(message: Message) {

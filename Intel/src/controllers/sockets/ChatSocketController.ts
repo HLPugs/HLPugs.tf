@@ -1,16 +1,14 @@
 import { Server, Socket } from 'socket.io';
 import { SocketIO, SocketController, OnMessage, MessageBody, SocketRequest, ConnectedSocket } from 'socket-controllers';
-import ChatService from '../../services/ChatService';
 import SendMessageRequest from '../../../../Common/Requests/SendMessageRequest';
 import Message from '../../../../Common/Models/Message';
 import SocketRequestWithPlayer from '../../interfaces/SocketRequestWithPlayer';
 import ValidateClass from '../../utils/ValidateClass';
 import uuid = require('uuid');
+import { chatService } from '../../services';
 
 @SocketController()
 export default class ChatSocketController {
-	private readonly chatService = new ChatService();
-
 	/**
 	 * Handles a player sending a chat message
 	 * @param socket
@@ -32,15 +30,13 @@ export default class ChatSocketController {
 		};
 
 		ValidateClass(message);
-		this.chatService.storePlayerMessage(message);
+		chatService.storePlayerMessage(message);
 		io.emit('sendMessage', message);
 	}
 
 	@OnMessage('getMessageHistory')
 	getMessageHistory(@ConnectedSocket() socket: Socket) {
-		const messageHistory = this.chatService.getMessageHistory();
+		const messageHistory = chatService.getMessageHistory();
 		socket.emit('getMessageHistory', messageHistory);
 	}
-	
-	
 }

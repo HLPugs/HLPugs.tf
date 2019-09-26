@@ -7,12 +7,11 @@ import ProfilePaginatedMatchesViewModel from '../../../Common/ViewModels/Profile
 import ProfileMatchViewModel from '../../../Common/ViewModels/ProfileMatchViewModel';
 import { isSteamID } from '../utils/SteamIDChecker';
 import SteamID from '../../../Common/Types/SteamID';
-
-const playerService = new PlayerService();
+import { playerService } from '.';
 
 const matchRepository = new LinqRepository(Match);
 
-export class ProfileService {
+export default class ProfileService {
 	async getPaginatedMatches(
 		identifier: string,
 		pageSize: number,

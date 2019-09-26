@@ -1,5 +1,4 @@
 import { Get, Param, QueryParam, JsonController } from 'routing-controllers';
-import { ProfileService } from '../../services/ProfileService';
 import { ProfileViewModel } from '../../../../Common/ViewModels/ProfileViewModel';
 import ProfilePaginatedMatchesViewModel from '../../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
 import Region from '../../../../Common/Enums/Region';
@@ -8,16 +7,14 @@ import MatchType from '../../../../Common/Enums/MatchType';
 import ClassStatisticsFilterOptions from '../../../../Common/Models/ClassStatisticsFilterOptions';
 import ProfileClassStatisticsViewModel from '../../../../Common/ViewModels/ProfileClassStatisticsViewModel';
 import ValidateClass from '../../utils/ValidateClass';
-import PlayerService from '../../services/PlayerService';
+import { profileService, playerService } from '../../services';
 
 @JsonController('/profile')
 export class ProfileController {
-	private readonly playerService = new PlayerService();
-	private readonly profileService = new ProfileService();
 
 	@Get('/:identifier')
 	getProfile(@Param('identifier') identifier: string): Promise<ProfileViewModel> {
-		return this.profileService.getProfile(identifier);
+		return profileService.getProfile(identifier);
 	}
 
 	@Get('/:identifier/matches')
@@ -26,7 +23,7 @@ export class ProfileController {
 		@QueryParam('pageSize') pageSize: number,
 		@QueryParam('currentPage') currentPage: number
 	): Promise<ProfilePaginatedMatchesViewModel> {
-		return this.profileService.getPaginatedMatches(identifier, pageSize, currentPage);
+		return profileService.getPaginatedMatches(identifier, pageSize, currentPage);
 	}
 
 	@Get('/:identifier/classStatistics')
@@ -43,10 +40,10 @@ export class ProfileController {
 				matchType
 			};
 			ValidateClass(filterOptions);
-			const classStatistics = await this.playerService.getClassStatistics(identifier, filterOptions);
+			const classStatistics = await playerService.getClassStatistics(identifier, filterOptions);
 			return ProfileClassStatisticsViewModel.fromClassStatistics(classStatistics);
 		} else {
-			const classStatistics = await this.playerService.getClassStatistics(identifier);
+			const classStatistics = await playerService.getClassStatistics(identifier);
 			return ProfileClassStatisticsViewModel.fromClassStatistics(classStatistics);
 		}
 	}

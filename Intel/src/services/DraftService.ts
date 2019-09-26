@@ -4,8 +4,7 @@ import SteamID from '../../../Common/Types/SteamID';
 import { SiteConfiguration } from '../constants/SiteConfiguration';
 import PlayerService from './PlayerService';
 import Player from '../entities/Player';
-
-const playerService = new PlayerService();
+import { playerService } from '.';
 
 const DraftTFClassLists = new Map<DraftTFClass, SteamID[]>();
 SiteConfiguration.gamemodeClassSchemes.forEach(scheme => DraftTFClassLists.set(scheme.tf2class, []));

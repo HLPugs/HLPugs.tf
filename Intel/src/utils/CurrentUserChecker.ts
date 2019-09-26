@@ -2,8 +2,7 @@ import { Action } from 'routing-controllers';
 import PlayerService from '../services/PlayerService';
 import Player from '../entities/Player';
 import ValidateClass from './ValidateClass';
-
-const playerService = new PlayerService();
+import { playerService } from '../services';
 
 const CurrentUserChecker = async (action: Action) => {
 	const newIp = action.request.header('x-forwarded-for') || action.request.connection.remoteAddress;

@@ -8,10 +8,9 @@ import * as crypto from 'crypto';
 import Player from '../entities/Player';
 import PlayerService from './PlayerService';
 import PlayerSettings from '../entities/PlayerSettings';
+import { sessionService, playerService } from '.';
 
 export default class DebugService {
-	private readonly playerService = new PlayerService();
-	private readonly sessionService = new SessionService();
 	static FAKE_OFFLINE_STEAMID = '76561198119135809';
 	static DEFAULT_STEAM_AVATAR =
 		'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
@@ -41,7 +40,7 @@ export default class DebugService {
 								.digest('hex')
 				};
 
-				const fakePlayerCount = this.sessionService.getPlayerCount();
+				const fakePlayerCount = sessionService.getPlayerCount();
 
 				// @ts-ignore
 				const fakeSession = store.createSession(fakeRequest, fakeSess);
@@ -51,11 +50,11 @@ export default class DebugService {
 				fakePlayer.avatarUrl = DebugService.DEFAULT_STEAM_AVATAR;
 				fakePlayer.ip = '127.0.0.1';
 				fakePlayer.settings = new PlayerSettings();
-				await this.playerService.upsertPlayer(fakePlayer);
-				fakeSession.player = await this.playerService.getPlayer(fakePlayer.steamid);
+				await playerService.upsertPlayer(fakePlayer);
+				fakeSession.player = await playerService.getPlayer(fakePlayer.steamid);
 				store.set(sessionId ? sessionId : fakeSession.id, fakeSession, async err => {
 					if (err) reject(err);
-					this.sessionService.upsertPlayer(fakePlayer.steamid, fakeSession.id);
+					sessionService.upsertPlayer(fakePlayer.steamid, fakeSession.id);
 					resolve(fakePlayer);
 				});
 			});

@@ -18,13 +18,12 @@ import GetAllDraftTFClasses from '../utils/GetAllDraftTFClasses';
 import SteamID from '../../../Common/Types/SteamID';
 import SessionService from './SessionService';
 import ValidateClass from '../utils/ValidateClass';
+import { sessionService } from '.';
 
 export default class PlayerService {
-	private readonly sessionService = new SessionService();
-
 	async getPlayer(steamid: SteamID): Promise<Player> {
 		try {
-			const player = await this.sessionService.getPlayer(steamid);
+			const player = await sessionService.getPlayer(steamid);
 			return ValidateClass<Player>(player);
 		} catch (e) {
 			const playerRepository = new LinqRepository(Player);
@@ -139,7 +138,7 @@ export default class PlayerService {
 
 		const player = await this.getPlayer(steamid);
 		player.alias = alias;
-		await this.sessionService.updatePlayer(player);
+		await sessionService.updatePlayer(player);
 		await playerRepository.update(player);
 	}
 
@@ -201,7 +200,7 @@ export default class PlayerService {
 	}
 
 	async playerExists(steamid: string): Promise<boolean> {
-		if (this.sessionService.playerExists(steamid)) {
+		if (sessionService.playerExists(steamid)) {
 			return true;
 		}
 
