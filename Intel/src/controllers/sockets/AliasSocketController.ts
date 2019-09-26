@@ -29,9 +29,6 @@ export class AliasSocketController {
 			const player: Player = socket.request.session.player;
 			this.sessionService.upsertPlayer(steamid, socket.request.session.id);
 			const playerViewModel = PlayerViewModel.fromPlayer(player);
-			playerViewModel.isBanned = await this.playerService.isCurrentlySiteBanned(steamid);
-			playerViewModel.isLoggedIn = !playerViewModel.isLoggedIn;
-			ValidateClass(playerViewModel);
 			socket.emit('updateCurrentPlayer', playerViewModel);
 			io.emit('addPlayerToSession', playerViewModel);
 		});

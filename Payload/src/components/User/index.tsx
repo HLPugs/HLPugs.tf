@@ -12,14 +12,18 @@ interface UserProps {
 
 class User extends React.PureComponent<UserProps, {}> {
 	render() {
-		return this.props.currentPlayer.isLoggedIn ? (
+		return this.props.currentPlayer.steamid === undefined ? (
 			<div id="User">
-				<UserInfo alias={this.props.currentPlayer.alias} avatarUrl={this.props.currentPlayer.avatarUrl} />
-				<UserDropDown permissionGroup={this.props.currentPlayer.permissionGroup} steamid={this.props.currentPlayer.steamid} settingsOnClick={this.props.settingsOnClick} />
+				<SteamLogIn />
 			</div>
 		) : (
 			<div id="User">
-				<SteamLogIn />
+				<UserInfo alias={this.props.currentPlayer.alias} avatarUrl={this.props.currentPlayer.avatarUrl} />
+				<UserDropDown
+					permissionGroup={this.props.currentPlayer.permissionGroup}
+					steamid={this.props.currentPlayer.steamid}
+					settingsOnClick={this.props.settingsOnClick}
+				/>
 			</div>
 		);
 	}

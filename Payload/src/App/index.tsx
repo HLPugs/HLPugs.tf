@@ -62,7 +62,7 @@ library.add(
 
 interface AppState {
 	configuration?: SiteConfigurationModel;
-	currentPlayer?: PlayerViewModel;
+	currentPlayer: PlayerViewModel;
 	disconnected: boolean;
 }
 
@@ -111,6 +111,7 @@ class App extends React.Component<{}, AppState> {
 		});
 
 		this.state = {
+			currentPlayer: new PlayerViewModel(),
 			disconnected: false
 		};
 	}
@@ -137,7 +138,7 @@ class App extends React.Component<{}, AppState> {
 	};
 
 	render() {
-		if (this.state.configuration && this.state.currentPlayer) {
+		if (this.state.configuration) {
 			return (
 				<>
 					{this.reconnectMessage()}
@@ -150,7 +151,7 @@ class App extends React.Component<{}, AppState> {
 									<Home
 										socket={this.socket}
 										configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
-										currentPlayer={this.state.currentPlayer ? this.state.currentPlayer : new PlayerViewModel()}
+										currentPlayer={this.state.currentPlayer}
 									/>
 								)}
 							/>
@@ -160,7 +161,7 @@ class App extends React.Component<{}, AppState> {
 									<Player
 										socket={this.socket}
 										configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
-										currentPlayer={this.state.currentPlayer ? this.state.currentPlayer : new PlayerViewModel()}
+										currentPlayer={this.state.currentPlayer}
 										{...routeProps}
 									/>
 								)}

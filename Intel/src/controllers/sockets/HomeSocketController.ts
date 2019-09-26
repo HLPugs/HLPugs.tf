@@ -29,56 +29,46 @@ export class HomeSocketController {
 	private readonly draftService = new DraftService();
 
 	@OnConnect()
-	async playerConnected(
-		@ConnectedSocket() socket: SocketRequestWithPlayer,
-		@SocketIO() io: Server,
-		@SocketRooms() rooms: any
-	) {
+	async socketConnected(@ConnectedSocket() socket: Socket, @SocketIO() io: Server, @SocketRooms() rooms: any) {
 		socket.emit('siteConfiguration', SiteConfiguration);
 		if (socket.request.session.err) {
 			socket.emit('serverError', socket.request.session.err);
 		}
 
 		if (socket.request.session.player) {
-			const player = socket.request.session.player;
-			const playerViewModel = PlayerViewModel.fromPlayer(player);
-			playerViewModel.isBanned = await this.playerService.isCurrentlySiteBanned(player.steamid);
-			playerViewModel.isLoggedIn = !playerViewModel.isLoggedIn;
-			socket.join(player.steamid);
-			socket.emit('updateCurrentPlayer', playerViewModel);
-		} else {
-			socket.emit('updateCurrentPlayer', { loggedIn: false });
+			if (socket.request.session.player.alias) {
+				const player = socket.request.session.player;
+				const playerViewModel = PlayerViewModel.fromPlayer(player);
+				socket.join(player.steamid);
+				socket.emit('updateCurrentPlayer', playerViewModel);
+			} else {
+				socket.emit('showAliasModal');
+			}
 		}
 	}
 
 	@OnMessage('playerLoadedHomepage')
-	async playerLoadedHomepage(
-		@ConnectedSocket() socket: SocketRequestWithPlayer,
-		@SocketIO() io: Server,
-		@SocketRooms() rooms: any
-	) {
-		const { steamid } = socket.request.session.player;
-		if (steamid) {
-			socket.join(steamid);
-		}
-		if (io.sockets.adapter.rooms[steamid].length === 1) {
-			this.sessionService.upsertPlayer(steamid, socket.request.session.id);
-			if (socket.request.session.player.alias) {
-				const playerViewModel = PlayerViewModel.fromPlayer(await this.sessionService.getPlayer(steamid));
-				playerViewModel.isBanned = await this.playerService.isCurrentlySiteBanned(steamid);
-				playerViewModel.isLoggedIn = playerViewModel.isLoggedIn;
-				io.emit('addPlayerToSession', ValidateClass(playerViewModel));
+	async playerLoadedHomepage(@ConnectedSocket() socket: Socket, @SocketIO() io: Server, @SocketRooms() rooms: any) {
+		if (socket.request.session.player) {
+			const { steamid } = socket.request.session.player;
+
+			if (steamid) {
+				socket.join(steamid);
+			}
+			if (!socket.request.session.player.alias) {
+				if (io.sockets.adapter.rooms[steamid].length === 1) {
+					this.sessionService.upsertPlayer(steamid, socket.request.session.id);
+					const playerViewModel = PlayerViewModel.fromPlayer(await this.sessionService.getPlayer(steamid));
+					io.emit('addPlayerToSession', ValidateClass(playerViewModel));
+				}
 			}
 		}
+
 		const loggedInPlayers = await this.sessionService.getAllPlayers();
 		const playerViewModels = loggedInPlayers
 			.filter(player => player.alias !== null && player.alias !== undefined) // Only send players who have made an alias
 			.map(player => PlayerViewModel.fromPlayer(player));
-		for (const vm of playerViewModels) {
-			vm.isBanned = await this.playerService.isCurrentlySiteBanned(steamid);
-			vm.isLoggedIn = !vm.isBanned;
-		}
-		socket.emit('getLoggedInPlayers', ValidateClass(playerViewModels));
+		socket.emit('getLoggedInPlayers', playerViewModels);
 	}
 
 	@OnDisconnect()

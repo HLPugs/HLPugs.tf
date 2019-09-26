@@ -32,6 +32,22 @@ class Player extends React.Component<ProfileProps, ProfileState> {
 			settingsOpen: false
 		};
 	}
+	Settings = () => {
+		if (this.props.currentPlayer) {
+			return (
+				<Settings
+					visibility={this.state.settingsOpen}
+					socket={this.props.socket}
+					classes={this.props.configuration.gamemodeClassSchemes}
+					settingsOnClick={this.toggleSettings}
+					userAlias={this.props.currentPlayer.alias}
+					settings={this.props.currentPlayer.settings}
+				/>
+			);
+		} else {
+			return null;
+		}
+	};
 
 	toggleSettings = () => {
 		this.setState({
@@ -53,14 +69,7 @@ class Player extends React.Component<ProfileProps, ProfileState> {
 				<User currentPlayer={this.props.currentPlayer} settingsOnClick={this.toggleSettings} />
 				<Navigation navigationGroup={this.props.configuration.navigation} />
 				<Profile steamid={steamid} />
-				<Settings
-					visibility={this.state.settingsOpen}
-					socket={this.props.socket}
-					classes={this.props.configuration.gamemodeClassSchemes}
-					settingsOnClick={this.toggleSettings}
-					userAlias={this.props.currentPlayer.alias}
-					settings={this.props.currentPlayer.settings}
-				/>
+				{this.Settings()}
 			</div>
 		);
 	}

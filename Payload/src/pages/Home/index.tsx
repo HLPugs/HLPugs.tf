@@ -20,6 +20,7 @@ interface HomeProps {
 }
 
 interface HomeState {
+	showAliasModal: boolean;
 	isSettingsOpen: boolean;
 	loggedInPlayers: PlayerViewModel[];
 }
@@ -41,8 +42,13 @@ class Home extends React.Component<HomeProps, HomeState> {
 		super(props);
 
 		this.state = {
+			showAliasModal: false,
 			isSettingsOpen: false,
 			loggedInPlayers: []
+		};
+
+		this.componentDidUpdate = () => {
+			this.props.socket.emit('playerLoadedHomepage');
 		};
 
 		this.props.socket.on('getLoggedInPlayers', (loggedInPlayers: PlayerViewModel[]) => {
@@ -69,22 +75,39 @@ class Home extends React.Component<HomeProps, HomeState> {
 			});
 		});
 
-		// Tell server that this socket connection is on the homepage
-		this.props.socket.emit('playerLoadedHomepage');
-
 		this.props.socket.on('reconnect', () => {
 			this.props.socket.emit('playerLoadedHomepage');
+		});
+
+		this.props.socket.on('showAliasModal', () => {
+			this.setState({ showAliasModal: true });
 		});
 	}
 
 	AliasModal = () => {
-		if (!this.props.currentPlayer.alias && this.props.currentPlayer.isLoggedIn) {
+		if (this.state.showAliasModal && !this.props.currentPlayer.steamid) {
 			return <AliasModal socket={this.props.socket} />;
 		}
 
 		return null;
 	};
 
+	Settings = () => {
+		if (this.props.currentPlayer) {
+			return (
+				<Settings
+					settings={this.props.currentPlayer.settings}
+					socket={this.props.socket}
+					visibility={this.state.isSettingsOpen}
+					classes={this.props.configuration.gamemodeClassSchemes}
+					settingsOnClick={this.toggleSettings}
+					userAlias={this.props.currentPlayer.alias}
+				/>
+			);
+		} else {
+			return null;
+		}
+	};
 	toggleSettings = () => {
 		this.setState({
 			isSettingsOpen: !this.state.isSettingsOpen
@@ -108,15 +131,9 @@ class Home extends React.Component<HomeProps, HomeState> {
 							steamid={this.props.currentPlayer.steamid}
 						/>
 						<Chat socket={this.props.socket} currentPlayer={this.props.currentPlayer} />
-						<Settings
-							settings={this.props.currentPlayer.settings}
-							socket={this.props.socket}
-							visibility={this.state.isSettingsOpen}
-							classes={this.props.configuration.gamemodeClassSchemes}
-							settingsOnClick={this.toggleSettings}
-							userAlias={this.props.currentPlayer.alias}
-						/>
+
 						<Debug socket={this.props.socket} classes={this.props.configuration.gamemodeClassSchemes} />
+						{this.Settings()}
 						{this.AliasModal()}
 					</SocketProvider>
 				</LoggedInPlayersProvider>

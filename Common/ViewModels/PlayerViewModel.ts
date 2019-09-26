@@ -16,10 +16,6 @@ import PlayerService from '../../Intel/src/services/PlayerService';
 import ValidateClass from '../../Intel/src/utils/ValidateClass';
 
 export default class PlayerViewModel {
-	@IsBoolean()
-	@IsDefined()
-	isLoggedIn = false;
-
 	@IsString()
 	alias: string;
 
@@ -32,10 +28,6 @@ export default class PlayerViewModel {
 	@IsDefined()
 	@ValidateNested()
 	settings: PlayerSettings;
-
-	@IsBoolean()
-	@IsDefined()
-	isBanned: boolean;
 
 	@IsDefined()
 	roles: Role[];
@@ -52,8 +44,6 @@ export default class PlayerViewModel {
 		playerViewModel.steamid = player.steamid;
 		playerViewModel.roles = player.roles;
 		playerViewModel.permissionGroup = player.permissionGroup;
-		playerViewModel.isBanned = false;
-		playerViewModel.isLoggedIn = true;
 
 		return ValidateClass(playerViewModel);
 	}

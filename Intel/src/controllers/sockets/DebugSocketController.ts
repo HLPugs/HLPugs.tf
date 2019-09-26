@@ -54,8 +54,6 @@ export default class DebugSocketController {
 			io.emit('removePlayerFromSession', body.steamid);
 
 			const playerViewModel = PlayerViewModel.fromPlayer(await this.playerService.getPlayer(body.steamid));
-			playerViewModel.isLoggedIn = false;
-			playerViewModel.isBanned = false;
 			socket.emit('updateCurrentPlayer', ValidateClass(playerViewModel));
 			this.draftService.removePlayerFromAllDraftTFClasses(body.steamid);
 			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {

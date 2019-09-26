@@ -10,7 +10,7 @@ interface SettingsProps {
 	visibility: boolean;
 	settingsOnClick: Function;
 	classes: GamemodeClassScheme[];
-	userAlias?: string;
+	userAlias: string;
 	settings: SettingsViewModel;
 }
 
