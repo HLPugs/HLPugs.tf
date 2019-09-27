@@ -30,6 +30,7 @@ export class AliasSocketController {
 			this.sessionService.upsertPlayer(steamid, socket.request.session.id);
 			const playerViewModel = PlayerViewModel.fromPlayer(player);
 			socket.emit('updateCurrentPlayer', playerViewModel);
+			socket.emit('hideAliasModal');
 			io.emit('addPlayerToSession', playerViewModel);
 		});
 	}

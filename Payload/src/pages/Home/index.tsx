@@ -82,14 +82,14 @@ class Home extends React.Component<HomeProps, HomeState> {
 		this.props.socket.on('showAliasModal', () => {
 			this.setState({ showAliasModal: true });
 		});
+
+		this.props.socket.on('hideAliasModal', () => {
+			this.setState({ showAliasModal: false });
+		});
 	}
 
 	AliasModal = () => {
-		if (this.state.showAliasModal && !this.props.currentPlayer.steamid) {
-			return <AliasModal socket={this.props.socket} />;
-		}
-
-		return null;
+		return this.state.showAliasModal ? <AliasModal socket={this.props.socket} /> : null;
 	};
 
 	Settings = () => {
