@@ -6,12 +6,13 @@ import PlayerService from '../services/PlayerService';
 import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 import Player from '../entities/Player';
 import RequestWithPlayer from '../interfaces/RequestWithPlayer';
-import { playerService } from '../services';
 
 const frontURL: string = config.get('app.frontURL');
 
 @Controller()
 export class HomeController {
+	private readonly playerService = new PlayerService();
+
 	@Get('/')
 	frontURL(@Res() res: Response): void {
 		res.redirect(frontURL);
@@ -24,7 +25,7 @@ export class HomeController {
 		@Req() req: RequestWithPlayer,
 		@Res() res: Response
 	): Promise<void> {
-		await playerService.upsertPlayer(player);
+		await this.playerService.upsertPlayer(player);
 		req.player = player;
 		req.session.player = player;
 

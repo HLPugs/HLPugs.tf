@@ -9,7 +9,7 @@ import * as request from 'request';
  * @param {boolean} [fancy=false] - If fancy = true, put the message contents in a Discord embed
  * @returns {string} Successful if no errors thrown
  */
-export default class DiscordService {
+export class DiscordService {
 	static async postToDiscord(message: string, channel: string, fancy = false): Promise<void> {
 		const { username } = config.get('discord');
 		const url = config.get(`discord.webhooks.${channel}`);

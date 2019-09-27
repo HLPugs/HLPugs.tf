@@ -1,5 +1,5 @@
 import { JsonController, Get, Param, QueryParam } from 'routing-controllers';
-import { playerService } from '../../services';
+import PlayerService from '../../services/PlayerService';
 import Region from '../../../../Common/Enums/Region';
 import Gamemode from '../../../../Common/Enums/Gamemode';
 import MatchType from '../../../../Common/Enums/MatchType';
@@ -9,6 +9,8 @@ import SteamID from '../../../../Common/Types/SteamID';
 
 @JsonController('/player')
 export class PlayerController {
+	private readonly playerService = new PlayerService();
+	
 	@Get('/:steamid/classStatistics')
 	getClassStatistics(
 		@Param('steamid') steamid: SteamID,
@@ -22,9 +24,9 @@ export class PlayerController {
 			filterOptions.region = region;
 			filterOptions.matchType = matchType;
 			ValidateClass(filterOptions);
-			return playerService.getClassStatistics(steamid, filterOptions);
+			return this.playerService.getClassStatistics(steamid, filterOptions);
 		} else {
-			return playerService.getClassStatistics(steamid);
+			return this.playerService.getClassStatistics(steamid);
 		}
 	}
 }

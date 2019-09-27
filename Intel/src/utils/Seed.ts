@@ -13,9 +13,9 @@ import { createConnection, getManager } from 'typeorm';
 import Announcement from '../entities/Announcement';
 import SessionService from '../services/SessionService';
 import DebugService from '../services/DebugService';
-import { playerService, debugService } from '../services';
 
 const SeedPlayers = async () => {
+	const debugService = new DebugService();
 	consoleLogStatus('SEEDING PLAYERS');
 	const playerRepository = new LinqRepository(Player);
 
@@ -50,6 +50,7 @@ const SeedAnnouncements = async () => {
 const SeedMatches = async () => {
 	consoleLogStatus('SEEDING MATCHES');
 
+	const playerService = new PlayerService();
 	const matchRepository = new LinqRepository(Match);
 
 	const player = await playerService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);

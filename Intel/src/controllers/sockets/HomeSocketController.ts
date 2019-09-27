@@ -6,20 +6,28 @@ import {
 	SocketIO,
 	OnDisconnect,
 	SocketRooms,
+	EmitOnSuccess,
 	SocketRequest
 } from 'socket-controllers';
 import * as dotenv from 'dotenv';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
+import PlayerService from '../../services/PlayerService';
+import SessionService from '../../services/SessionService';
+import DraftService from '../../services/DraftService';
 import { SiteConfiguration } from '../../constants/SiteConfiguration';
 import { Socket, Server } from 'socket.io';
 import SocketRequestWithPlayer from '../../interfaces/SocketRequestWithPlayer';
+import DebugService from '../../services/DebugService';
 import ValidateClass from '../../utils/ValidateClass';
-import { sessionService, draftService } from '../../services';
 
 const env = dotenv.config().parsed;
 
 @SocketController()
 export class HomeSocketController {
+	private readonly playerService = new PlayerService();
+	private readonly sessionService = new SessionService();
+	private readonly draftService = new DraftService();
+
 	@OnConnect()
 	async socketConnected(@ConnectedSocket() socket: Socket, @SocketIO() io: Server, @SocketRooms() rooms: any) {
 		socket.emit('siteConfiguration', SiteConfiguration);
@@ -49,14 +57,14 @@ export class HomeSocketController {
 			}
 			if (!socket.request.session.player.alias) {
 				if (io.sockets.adapter.rooms[steamid].length === 1) {
-					sessionService.upsertPlayer(steamid, socket.request.session.id);
-					const playerViewModel = PlayerViewModel.fromPlayer(await sessionService.getPlayer(steamid));
+					this.sessionService.upsertPlayer(steamid, socket.request.session.id);
+					const playerViewModel = PlayerViewModel.fromPlayer(await this.sessionService.getPlayer(steamid));
 					io.emit('addPlayerToSession', ValidateClass(playerViewModel));
 				}
 			}
 		}
 
-		const loggedInPlayers = await sessionService.getAllPlayers();
+		const loggedInPlayers = await this.sessionService.getAllPlayers();
 		const playerViewModels = loggedInPlayers
 			.filter(player => player.alias !== null && player.alias !== undefined) // Only send players who have made an alias
 			.map(player => PlayerViewModel.fromPlayer(player));
@@ -73,13 +81,13 @@ export class HomeSocketController {
 		 *** IMPORTANT *** this will still remove the player from the draft (and everything else) if they reload the page or temporarily lose connection, however.
 		 One possible solution is having a setTimeout() around the disconnect, and waiting approximately 10 seconds to see if the player is still disconnected. */
 		if (io.sockets.adapter.rooms[request.session.player.steamid] !== undefined) return;
-		draftService.removePlayerFromAllDraftTFClasses(request.session.player.steamid);
+		this.draftService.removePlayerFromAllDraftTFClasses(request.session.player.steamid);
 
 		SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
 			io.emit('removePlayerFromDraftTFClass', scheme.tf2class, request.session.player.steamid);
 		});
 
-		sessionService.removePlayer(request.session.player.steamid);
+		this.sessionService.removePlayer(request.session.player.steamid);
 		io.emit('removePlayerFromSession', request.session.player.steamid);
 	}
 }

@@ -6,15 +6,15 @@ import GetDraftTFClassListRequest from '../../../../Common/Requests/GetDraftTFCl
 import RemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests/RemovePlayerFromDraftTFClassRequest';
 import ValidateClass from '../../utils/ValidateClass';
 import SteamID from '../../../../Common/Types/SteamID';
-import { draftService } from '../../services';
 
 @SocketController()
 export default class DraftSocketController {
+	private readonly draftService = new DraftService();
 
 	@OnMessage('getDraftTFClassList')
 	async getDraftTFClassList(@ConnectedSocket() socket: Socket, @MessageBody() body: GetDraftTFClassListRequest) {
 		ValidateClass(body);
-		const players: SteamID[] = draftService.getAllPlayersByDraftTFClass(body.draftTFClass);
+		const players: SteamID[] = this.draftService.getAllPlayersByDraftTFClass(body.draftTFClass);
 		socket.emit('draftTFClassList', body.draftTFClass, players);
 	}
 
@@ -26,8 +26,8 @@ export default class DraftSocketController {
 	) {
 		ValidateClass(body);
 		const { steamid } = socket.request.session.player;
-		if (!draftService.isPlayerAddedToDraftTFClass(steamid, body.draftTFClass)) {
-			draftService.addPlayerToDraftTFClass(steamid, body.draftTFClass);
+		if (!this.draftService.isPlayerAddedToDraftTFClass(steamid, body.draftTFClass)) {
+			this.draftService.addPlayerToDraftTFClass(steamid, body.draftTFClass);
 			io.emit('addPlayerToDraftTFClass', body.draftTFClass, steamid);
 		}
 	}
@@ -40,7 +40,7 @@ export default class DraftSocketController {
 	) {
 		ValidateClass(body);
 		const { steamid } = socket.request.session.player;
-		draftService.removePlayerFromDraftTFClass(steamid, body.draftTFClass);
+		this.draftService.removePlayerFromDraftTFClass(steamid, body.draftTFClass);
 		io.emit('removePlayerFromDraftTFClass', body.draftTFClass, steamid);
 	}
 }
