@@ -51,6 +51,8 @@ export default class DebugSocketController {
 			});
 
 			this.sessionService.removePlayer(body.steamid);
+			socket.request.session.player = undefined;
+			socket.request.session.save();
 			io.emit('removePlayerFromSession', body.steamid);
 
 			socket.emit('updateCurrentPlayer', new PlayerViewModel());
