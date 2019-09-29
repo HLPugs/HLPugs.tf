@@ -126,8 +126,14 @@ export default class PlayerService {
 
 		const playerRepository = new LinqRepository(Player);
 
-		const player = await this.getPlayer(steamid);
+		const player = await playerRepository
+			.getOne()
+			.where(p => p.steamid)
+			.equal(steamid)
+			.include(p => p.settings);
+		const settingsId = player.settings.id;
 		player.settings = settings;
+		player.settings.id = settingsId;
 		await playerRepository.update(player);
 	}
 

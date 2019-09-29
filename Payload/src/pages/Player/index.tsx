@@ -41,7 +41,7 @@ class Player extends React.Component<ProfileProps, ProfileState> {
 					classes={this.props.configuration.gamemodeClassSchemes}
 					settingsOnClick={this.toggleSettings}
 					userAlias={this.props.currentPlayer.alias}
-					settings={this.props.currentPlayer.settings}
+					steamid={this.props.currentPlayer.steamid}
 				/>
 			);
 		} else {

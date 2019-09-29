@@ -93,15 +93,15 @@ class Home extends React.Component<HomeProps, HomeState> {
 	};
 
 	Settings = () => {
-		if (this.props.currentPlayer) {
+		if (this.props.currentPlayer.steamid) {
 			return (
 				<Settings
-					settings={this.props.currentPlayer.settings}
 					socket={this.props.socket}
 					visibility={this.state.isSettingsOpen}
 					classes={this.props.configuration.gamemodeClassSchemes}
 					settingsOnClick={this.toggleSettings}
 					userAlias={this.props.currentPlayer.alias}
+					steamid={this.props.currentPlayer.steamid}
 				/>
 			);
 		} else {

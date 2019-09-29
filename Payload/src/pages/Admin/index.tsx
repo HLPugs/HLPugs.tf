@@ -127,7 +127,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 					classes={this.props.configuration.gamemodeClassSchemes}
 					settingsOnClick={this.toggleSettings}
 					userAlias={this.props.currentPlayer.alias}
-					settings={this.props.currentPlayer.settings}
+					steamid={this.props.currentPlayer.steamid}
 				/>
 				<Route path={'/admin/roles'} render={() => <span>roles</span>} />
 				<Route path={'/admin/games'} render={() => <span>games</span>} />

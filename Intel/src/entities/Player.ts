@@ -11,7 +11,8 @@ import {
 	Matches,
 	Allow,
 	IsEnum,
-	ArrayUnique
+	ArrayUnique,
+	ValidateNested
 } from 'class-validator';
 import Match from './Match';
 import PermissionGroup from '../../../Common/Enums/PermissionGroup';
@@ -46,7 +47,7 @@ export default class Player {
 	@IsEnum(PermissionGroup)
 	permissionGroup: PermissionGroup = PermissionGroup.NONE;
 
-	@Column('simple-array', { nullable: true })
+	@Column('simple-array', { default: '' })
 	@IsOptional()
 	@ArrayUnique()
 	roles: Role[] = [];
@@ -90,6 +91,7 @@ export default class Player {
 	@OneToOne(type => PlayerSettings, settings => settings.player, {
 		cascade: true
 	})
+	@ValidateNested()
 	settings: PlayerSettings;
 
 	@ManyToMany(type => Match, match => match.players)
