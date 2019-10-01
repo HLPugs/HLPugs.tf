@@ -44,6 +44,8 @@ export class HomeSocketController {
 			} else {
 				socket.emit('showAliasModal');
 			}
+		} else {
+			socket.emit('updateCurrentPlayer', new PlayerViewModel());
 		}
 	}
 
