@@ -20,8 +20,7 @@ export default class SettingsSocketController {
 
 	@OnMessage('getPlayerSettings')
 	async loadSettings(@ConnectedSocket() socket: Socket, @MessageBody() body: GetPlayerSettingsRequest) {
-		ValidateClass(body);
-		const { steamid } = body;
+		const { steamid } = ValidateClass(body);
 		const settings = await this.playerService.getSettings(steamid);
 		const playerSettingsViewModel = PlayerSettingsViewModel.fromSettings(settings);
 		socket.emit('getPlayerSettings', playerSettingsViewModel);

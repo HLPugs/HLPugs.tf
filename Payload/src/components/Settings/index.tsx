@@ -58,9 +58,13 @@ class Settings extends React.PureComponent<SettingsProps, SettingsState> {
 		if (e.target.name === 'favoriteClasses') {
 			this.toggleFavoriteClass(e.target.dataset.tfclass as DraftTFClass);
 		} else {
-			const newSettings = this.state.settings;
+			const newSettings = { ...this.state.settings };
 			const setting = e.target.name as keyof PlayerSettingsViewModel;
-			const value = (e.target.type === 'checkbox' ? e.target.checked : e.target.value) as never;
+			const value = (e.target.type === 'checkbox'
+				? e.target.checked
+				: e.target.type === 'range'
+				? parseInt(e.target.value)
+				: e.target.value) as never;
 			newSettings[setting] = value;
 			this.setState({ settings: newSettings });
 		}
@@ -71,7 +75,7 @@ class Settings extends React.PureComponent<SettingsProps, SettingsState> {
 	};
 
 	toggleFavoriteClass = (toggledTFClass: DraftTFClass) => {
-		const newSettings = this.state.settings;
+		const newSettings = { ...this.state.settings };
 		newSettings.favoriteClasses[toggledTFClass] = !this.state.settings.favoriteClasses[toggledTFClass];
 		this.setState({
 			settings: newSettings
