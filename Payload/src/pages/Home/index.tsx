@@ -20,6 +20,7 @@ interface HomeProps {
 }
 
 interface HomeState {
+	loadedOnce: boolean;
 	showAliasModal: boolean;
 	isSettingsOpen: boolean;
 	loggedInPlayers: PlayerViewModel[];
@@ -42,13 +43,17 @@ class Home extends React.Component<HomeProps, HomeState> {
 		super(props);
 
 		this.state = {
+			loadedOnce: false,
 			showAliasModal: false,
 			isSettingsOpen: false,
 			loggedInPlayers: []
 		};
 
 		this.componentDidUpdate = () => {
-			this.props.socket.emit('playerLoadedHomepage');
+			if (!this.state.loadedOnce) {
+				this.props.socket.emit('playerLoadedHomepage');
+				this.setState({ loadedOnce: true });
+			}
 		};
 
 		this.props.socket.on('getLoggedInPlayers', (loggedInPlayers: PlayerViewModel[]) => {
