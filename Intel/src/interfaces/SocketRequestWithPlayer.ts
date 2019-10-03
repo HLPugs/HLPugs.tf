@@ -1,8 +1,6 @@
-import { Socket } from 'socket.io';
+import { IncomingMessage } from 'http';
 import RequestWithPlayer from './RequestWithPlayer';
 
-interface SocketRequestWithPlayer extends Socket {
-		session: RequestWithPlayer;
+export default interface SocketRequestWithPlayer extends IncomingMessage {
+	session: RequestWithPlayer;
 }
-
-export default SocketRequestWithPlayer;
