@@ -3,6 +3,10 @@ import './style.scss';
 import { LoggedInPlayersConsumer } from '../../pages/Home';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import GamemodeClassScheme from '../../../../Common/Models/GamemodeClassScheme';
+import SteamID from '../../../../Common/Types/SteamID';
+import FakeAddPlayerToDraftTFClassRequest from '../../../../Common/Requests/FakeAddPlayerToDraftTFClassRequest';
+import DraftTFClass from '../../../../Common/Enums/DraftTFClass';
+import FakeRemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests/FakeRemovePlayerFromDraftTFClassRequest';
 
 interface DebugProps {
 	socket: SocketIOClient.Socket;
@@ -11,31 +15,9 @@ interface DebugProps {
 
 interface DebugState {
 	open: boolean;
-	targetPlayer: string;
+	targetPlayerSteamid: SteamID;
 	targetClass: string;
 }
-
-const buttons = [
-	{
-		title: 'Login',
-		emit: 'fakeLogin',
-		options: {}
-	},
-	{
-		title: 'Log out',
-		emit: 'fakeLogout',
-		options: {
-			steamid: '76561198119135809'
-		}
-	},
-	{
-		title: 'Add Fake Player',
-		emit: 'addFakePlayer',
-		options: {
-			name: 'Nicell'
-		}
-	}
-];
 
 class Debug extends React.Component<DebugProps, DebugState> {
 	constructor(props: DebugProps) {
@@ -43,10 +25,61 @@ class Debug extends React.Component<DebugProps, DebugState> {
 
 		this.state = {
 			open: false,
-			targetPlayer: '',
-			targetClass: ''
+			targetPlayerSteamid: '',
+			targetClass: DraftTFClass.SCOUT
 		};
+
+		this.props.socket.on('addPlayerToSession', (playerViewModel: PlayerViewModel) => {
+			this.setState({ targetPlayerSteamid: playerViewModel.steamid });
+		});
 	}
+
+	buttons = () => {
+		return [
+			{
+				title: 'Login',
+				emit: 'fakeLogin',
+				options: {}
+			},
+			{
+				title: 'Log out',
+				emit: 'fakeLogout',
+				options: {
+					steamid: '76561198119135809'
+				}
+			},
+			{
+				title: 'Add Fake Player',
+				emit: 'addFakePlayer',
+				options: {
+					name: 'Nicell'
+				}
+			},
+			{
+				title: 'Add to class',
+				emit: 'fakeAddPlayerToDraftTFClass',
+				options: {
+					steamid: this.state.targetPlayerSteamid,
+					draftTFClass: this.state.targetClass
+				} as FakeAddPlayerToDraftTFClassRequest
+			},
+			{
+				title: 'Remove from class',
+				emit: 'fakeRemovePlayerFromDraftTFClass',
+				options: {
+					steamid: this.state.targetPlayerSteamid,
+					draftTFClass: this.state.targetClass
+				} as FakeRemovePlayerFromDraftTFClassRequest
+			},
+			{
+				title: 'Add to all classes',
+				emit: 'fakeAddPlayerToAllDraftTFClasses',
+				options: {
+					steamid: this.state.targetPlayerSteamid
+				}
+			}
+		];
+	};
 
 	toggleDebug = () => {
 		this.setState({ open: !this.state.open });
@@ -54,7 +87,7 @@ class Debug extends React.Component<DebugProps, DebugState> {
 
 	updateTargetPlayer = (e: React.ChangeEvent<HTMLSelectElement>) => {
 		this.setState({
-			targetPlayer: e.target.value
+			targetPlayerSteamid: e.target.value
 		});
 	};
 
@@ -77,7 +110,7 @@ class Debug extends React.Component<DebugProps, DebugState> {
 							</div>
 							<div>
 								<span>Target Player: </span>
-								<select onChange={this.updateTargetPlayer} value={this.state.targetPlayer}>
+								<select onChange={this.updateTargetPlayer} value={this.state.targetPlayerSteamid}>
 									{playerData.map(p => (
 										<option key={p.steamid} value={p.steamid}>
 											{p.alias}
@@ -94,7 +127,7 @@ class Debug extends React.Component<DebugProps, DebugState> {
 								</select>
 							</div>
 							<div className="DebugButtons">
-								{buttons.map(action => (
+								{this.buttons().map(action => (
 									<div
 										key={action.title}
 										onClick={() => this.props.socket.emit(action.emit, action.options)}

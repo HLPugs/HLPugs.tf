@@ -9,9 +9,9 @@ import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import { SiteConfiguration } from '../../constants/SiteConfiguration';
 import FakeLogoutRequest from '../../../../Common/Requests/FakeLogoutRequest';
 import FakeAddPlayerToDraftTFClassRequest from '../../../../Common/Requests/FakeAddPlayerToDraftTFClassRequest';
+import FakeAddPlayerToAllDraftTFClassesRequest from '../../../../Common/Requests/FakeAddPlayerToAllDraftTFClassesRequest';
 import FakeRemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests/FakeRemovePlayerFromDraftTFClassRequest';
 import DraftService from '../../services/DraftService';
-import PermissionGroup from '../../../../Common/Enums/PermissionGroup';
 
 @SocketController()
 export default class DebugSocketController {
@@ -26,6 +26,7 @@ export default class DebugSocketController {
 			if (!this.sessionService.playerExists(DebugService.FAKE_OFFLINE_STEAMID)) {
 				await this.debugService.addFakePlayer(DebugService.FAKE_OFFLINE_STEAMID, socket.request.sessionID);
 				const player = await this.playerService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
+				player.isCaptain = true;
 				socket.request.session.player = player;
 				socket.request.session.save();
 				const playerViewModel = PlayerViewModel.fromPlayer(player);
@@ -36,20 +37,24 @@ export default class DebugSocketController {
 	}
 
 	@OnMessage('fakeLogout')
-	async fakeLogout(@ConnectedSocket() socket: Socket, @SocketIO() io: Server, @MessageBody() body: FakeLogoutRequest) {
+	async fakeLogout(
+		@ConnectedSocket() socket: Socket,
+		@SocketIO() io: Server,
+		@MessageBody() payload: FakeLogoutRequest
+	) {
 		if (process.env.NODE_ENV === 'dev') {
-			ValidateClass(body);
+			ValidateClass(payload);
 			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-				io.emit('removePlayerFromDraftTFClass', scheme.tf2class, body.steamid);
+				io.emit('removePlayerFromDraftTFClass', scheme.tf2class, payload.steamid);
 			});
 
-			this.sessionService.removePlayer(body.steamid);
+			this.sessionService.removePlayer(payload.steamid);
 			socket.request.session.player = undefined;
 			socket.request.session.save();
-			io.emit('removePlayerFromSession', body.steamid);
+			io.emit('removePlayerFromSession', payload.steamid);
 
 			socket.emit('updateCurrentPlayer', new PlayerViewModel());
-			this.draftService.removePlayerFromAllDraftTFClasses(body.steamid);
+			this.draftService.removePlayerFromAllDraftTFClasses(payload.steamid);
 			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
 				io.emit('removePlayerFromDraftTFClass', scheme.tf2class, socket.request.session.player.steamid);
 			});
@@ -67,16 +72,34 @@ export default class DebugSocketController {
 	}
 
 	@OnMessage('fakeAddPlayerToDraftTFClass')
-	fakeAddPlayerToDraftTFClass(@SocketIO() io: Server, @MessageBody() body: FakeAddPlayerToDraftTFClassRequest) {
-		ValidateClass(body);
-		this.draftService.addPlayerToDraftTFClass(body.steamid, body.draftTFClass);
-		io.emit('addPlayerToDraftTFClass', body.draftTFClass, body.steamid);
+	fakeAddPlayerToDraftTFClass(@SocketIO() io: Server, @MessageBody() payload: FakeAddPlayerToDraftTFClassRequest) {
+		ValidateClass(payload);
+		if (!this.draftService.isPlayerAddedToDraftTFClass(payload.steamid, payload.draftTFClass)) {
+			this.draftService.addPlayerToDraftTFClass(payload.steamid, payload.draftTFClass);
+			io.emit('addPlayerToDraftTFClass', payload.draftTFClass, payload.steamid);
+		}
 	}
 
 	@OnMessage('fakeRemovePlayerFromDraftTFClass')
-	fakeRemovePlayerToDraftTFClass(@SocketIO() io: Server, @MessageBody() body: FakeRemovePlayerFromDraftTFClassRequest) {
-		ValidateClass(body);
-		this.draftService.removePlayerFromDraftTFClass(body.steamid, body.draftTFClass);
-		io.emit('removePlayerFromDraftTFClass', body.draftTFClass, body.steamid);
+	fakeRemovePlayerFromDraftTFClass(
+		@SocketIO() io: Server,
+		@MessageBody() payload: FakeRemovePlayerFromDraftTFClassRequest
+	) {
+		ValidateClass(payload);
+		this.draftService.removePlayerFromDraftTFClass(payload.steamid, payload.draftTFClass);
+		io.emit('removePlayerFromDraftTFClass', payload.draftTFClass, payload.steamid);
+	}
+
+	@OnMessage('fakeAddPlayerToAllDraftTFClasses')
+	fakeAddPlayerToAllDraftTFClasses(
+		@SocketIO() io: Server,
+		@MessageBody() payload: FakeAddPlayerToAllDraftTFClassesRequest
+	) {
+		SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
+			if (!this.draftService.isPlayerAddedToDraftTFClass(payload.steamid, scheme.tf2class)) {
+				this.draftService.addPlayerToDraftTFClass(payload.steamid, scheme.tf2class);
+				io.emit('addPlayerToDraftTFClass', scheme.tf2class, payload.steamid);
+			}
+		});
 	}
 }
