@@ -19,8 +19,8 @@ export default class SettingsSocketController {
 	private readonly playerService = new PlayerService();
 
 	@OnMessage('getPlayerSettings')
-	async loadSettings(@ConnectedSocket() socket: Socket, @MessageBody() body: GetPlayerSettingsRequest) {
-		const { steamid } = ValidateClass(body);
+	async loadSettings(@ConnectedSocket() socket: Socket, @MessageBody() payload: GetPlayerSettingsRequest) {
+		const { steamid } = ValidateClass(payload);
 		const settings = await this.playerService.getSettings(steamid);
 		const playerSettingsViewModel = PlayerSettingsViewModel.fromSettings(settings);
 		socket.emit('getPlayerSettings', playerSettingsViewModel);
@@ -29,8 +29,8 @@ export default class SettingsSocketController {
 	@OnMessage('saveSettings')
 	@EmitOnSuccess('settingsSuccess')
 	@EmitOnFail('settingsError')
-	async saveSettings(@ConnectedSocket() socket: Socket, @MessageBody() body: UpdatePlayerSettingsRequest) {
-		const { steamid, playerSettingsViewModel } = body;
+	async saveSettings(@ConnectedSocket() socket: Socket, @MessageBody() payload: UpdatePlayerSettingsRequest) {
+		const { steamid, playerSettingsViewModel } = payload;
 		const settings = PlayerSettings.fromViewModel(playerSettingsViewModel);
 		await this.playerService.updateSettings(steamid, settings);
 	}

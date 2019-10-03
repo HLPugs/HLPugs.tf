@@ -12,23 +12,23 @@ export default class DraftSocketController {
 	private readonly draftService = new DraftService();
 
 	@OnMessage('getDraftTFClassList')
-	async getDraftTFClassList(@ConnectedSocket() socket: Socket, @MessageBody() body: GetDraftTFClassListRequest) {
-		ValidateClass(body);
-		const players: SteamID[] = this.draftService.getAllPlayersByDraftTFClass(body.draftTFClass);
-		socket.emit('draftTFClassList', body.draftTFClass, players);
+	async getDraftTFClassList(@ConnectedSocket() socket: Socket, @MessageBody() payload: GetDraftTFClassListRequest) {
+		ValidateClass(payload);
+		const players: SteamID[] = this.draftService.getAllPlayersByDraftTFClass(payload.draftTFClass);
+		socket.emit('draftTFClassList', payload.draftTFClass, players);
 	}
 
 	@OnMessage('addPlayerToDraftTFClass')
 	addToDraftTFClass(
 		@ConnectedSocket() socket: Socket,
 		@SocketIO() io: Server,
-		@MessageBody() body: AddPlayerToDraftTFClassRequest
+		@MessageBody() payload: AddPlayerToDraftTFClassRequest
 	) {
-		ValidateClass(body);
+		ValidateClass(payload);
 		const { steamid } = socket.request.session.player;
-		if (!this.draftService.isPlayerAddedToDraftTFClass(steamid, body.draftTFClass)) {
-			this.draftService.addPlayerToDraftTFClass(steamid, body.draftTFClass);
-			io.emit('addPlayerToDraftTFClass', body.draftTFClass, steamid);
+		if (!this.draftService.isPlayerAddedToDraftTFClass(steamid, payload.draftTFClass)) {
+			this.draftService.addPlayerToDraftTFClass(steamid, payload.draftTFClass);
+			io.emit('addPlayerToDraftTFClass', payload.draftTFClass, steamid);
 		}
 	}
 
@@ -36,11 +36,11 @@ export default class DraftSocketController {
 	removePlayerFromDraftTFClass(
 		@ConnectedSocket() socket: Socket,
 		@SocketIO() io: Server,
-		@MessageBody() body: RemovePlayerFromDraftTFClassRequest
+		@MessageBody() payload: RemovePlayerFromDraftTFClassRequest
 	) {
-		ValidateClass(body);
+		ValidateClass(payload);
 		const { steamid } = socket.request.session.player;
-		this.draftService.removePlayerFromDraftTFClass(steamid, body.draftTFClass);
-		io.emit('removePlayerFromDraftTFClass', body.draftTFClass, steamid);
+		this.draftService.removePlayerFromDraftTFClass(steamid, payload.draftTFClass);
+		io.emit('removePlayerFromDraftTFClass', payload.draftTFClass, steamid);
 	}
 }

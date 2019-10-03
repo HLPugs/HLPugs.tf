@@ -24,16 +24,16 @@ export default class AnnouncementSocketController {
 	@OnMessage('createAnnouncement')
 	async createAnnouncement(
 		@SocketIO() io: Server,
-		@MessageBody() body: CreateAnnouncementRequest,
+		@MessageBody() payload: CreateAnnouncementRequest,
 		@SocketRequest() request: SocketRequestWithPlayer
 	) {
-		ValidateClass(body);
+		ValidateClass(payload);
 		const announcement: Announcement = {
 			creatorSteamid: request.session.player.steamid,
-			messageContent: body.messageContent,
-			order: body.order,
-			priority: body.priority,
-			region: body.region,
+			messageContent: payload.messageContent,
+			order: payload.order,
+			priority: payload.priority,
+			region: payload.region,
 			timestamp: new Date()
 		};
 		ValidateClass(announcement);

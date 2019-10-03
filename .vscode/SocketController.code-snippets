@@ -54,8 +54,8 @@
 		"scope": "typescript",
 		"body": [
 			"@OnMessage('${1:messageName}')",
-			"${1:messageName}(@ConnectedSocket() socket: Socket, @MessageBody() body: ${2:any}) {",
-			"\tValidateClass(body);",
+			"${1:messageName}(@ConnectedSocket() socket: Socket, @MessageBody() payload: ${2:any}) {",
+			"\tValidateClass(payload);",
 			"\tsocket.emit('${1:messageName}');",
 			"}",
 			"",

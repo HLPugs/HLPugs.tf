@@ -21,11 +21,11 @@ export default class ChatSocketController {
 	sendMessage(
 		@SocketRequest() req: SocketRequestWithPlayer,
 		@SocketIO() io: Server,
-		@MessageBody() body: SendMessageRequest
+		@MessageBody() payload: SendMessageRequest
 	) {
 		const message: Message = {
 			authorSteamid: req.session.player.steamid,
-			messageContent: body.messageContent,
+			messageContent: payload.messageContent,
 			timestamp: new Date().getTime(),
 			username: req.session.player.alias,
 			id: uuid()
@@ -41,6 +41,4 @@ export default class ChatSocketController {
 		const messageHistory = this.chatService.getMessageHistory();
 		socket.emit('getMessageHistory', messageHistory);
 	}
-	
-	
 }

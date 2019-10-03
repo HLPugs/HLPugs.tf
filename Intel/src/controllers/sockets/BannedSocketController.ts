@@ -11,9 +11,12 @@ export default class BannedSocketController {
 	private readonly playerService = new PlayerService();
 
 	@OnMessage('getBannedPageViewModel')
-	async getBannedPageViewModel(@ConnectedSocket() socket: Socket, @MessageBody() body: GetBannedPageViewModelRequest) {
-		ValidateClass(body);
-		const activePunishments = await this.playerService.getActivePunishments(body.steamid);
+	async getBannedPageViewModel(
+		@ConnectedSocket() socket: Socket,
+		@MessageBody() payload: GetBannedPageViewModelRequest
+	) {
+		ValidateClass(payload);
+		const activePunishments = await this.playerService.getActivePunishments(payload.steamid);
 		const activeBan = activePunishments.filter(p => p.punishmentType === PunishmentType.BAN)[0];
 
 		const bannedPageViewModel = BannedPageViewModel.fromBan(activeBan);

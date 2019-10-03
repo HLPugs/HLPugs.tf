@@ -13,8 +13,8 @@ export class AliasSocketController {
 	private readonly sessionService = new SessionService();
 
 	@OnMessage('submitAlias')
-	async submitAlias(@ConnectedSocket() socket: Socket, @SocketIO() io: Server, @MessageBody() body: any) {
-		const alias: string = body.alias;
+	async submitAlias(@ConnectedSocket() socket: Socket, @SocketIO() io: Server, @MessageBody() payload: any) {
+		const alias: string = payload.alias;
 		const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
 
 		if (!aliasRules.test(alias) || (await this.aliasExists(alias))) return;
@@ -36,8 +36,8 @@ export class AliasSocketController {
 	}
 
 	@OnMessage('checkAlias')
-	async checkAlias(@ConnectedSocket() socket: any, @MessageBody() body: any) {
-		const player = await this.aliasExists(body.alias);
+	async checkAlias(@ConnectedSocket() socket: any, @MessageBody() payload: any) {
+		const player = await this.aliasExists(payload.alias);
 		socket.emit('aliasStatus', player);
 	}
 
