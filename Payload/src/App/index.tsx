@@ -64,6 +64,7 @@ interface AppState {
 	configuration?: SiteConfigurationModel;
 	currentPlayer: PlayerViewModel;
 	disconnected: boolean;
+	isBanned: boolean;
 }
 
 class App extends React.Component<{}, AppState> {
@@ -110,9 +111,14 @@ class App extends React.Component<{}, AppState> {
 			});
 		});
 
+		this.socket.on('playerIsBanned', () => {
+			this.setState({ isBanned: true });
+		});
+
 		this.state = {
 			currentPlayer: new PlayerViewModel(),
-			disconnected: false
+			disconnected: false,
+			isBanned: false
 		};
 	}
 
@@ -137,6 +143,29 @@ class App extends React.Component<{}, AppState> {
 		return null;
 	};
 
+	redirectIfBanned = () => {
+		if (this.state.isBanned) {
+			return (
+				<>
+					<Route
+						exact={true}
+						path="/banned"
+						render={() => (
+							<Banned
+								socket={this.socket}
+								configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
+								steamid={this.state.currentPlayer.steamid}
+							/>
+						)}
+					/>
+					<Redirect from="*" to="/banned" />
+				</>
+			);
+		}
+
+		return null;
+	};
+
 	render() {
 		if (this.state.configuration) {
 			return (
@@ -144,6 +173,7 @@ class App extends React.Component<{}, AppState> {
 					{this.reconnectMessage()}
 					<Router>
 						<Switch>
+							{this.redirectIfBanned()}
 							<Route
 								exact={true}
 								path="/"
@@ -163,16 +193,6 @@ class App extends React.Component<{}, AppState> {
 										configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
 										currentPlayer={this.state.currentPlayer}
 										{...routeProps}
-									/>
-								)}
-							/>
-							<Route
-								exact={true}
-								path="/banned"
-								render={() => (
-									<Banned
-										socket={this.socket}
-										configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
 									/>
 								)}
 							/>

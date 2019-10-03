@@ -13,9 +13,11 @@ import { createConnection, getManager } from 'typeorm';
 import Announcement from '../entities/Announcement';
 import SessionService from '../services/SessionService';
 import DebugService from '../services/DebugService';
+import PlayerSettings from '../entities/PlayerSettings';
+import Punishment from '../entities/Punishment';
+import PunishmentType from '../../../Common/Enums/PunishmentType';
 
 const SeedPlayers = async () => {
-	const debugService = new DebugService();
 	consoleLogStatus('SEEDING PLAYERS');
 	const playerRepository = new LinqRepository(Player);
 
@@ -24,8 +26,8 @@ const SeedPlayers = async () => {
 	player.alias = 'Gabe';
 	player.avatarUrl = DebugService.DEFAULT_STEAM_AVATAR;
 	player.ip = '127.0.0.1';
+	player.settings = new PlayerSettings();
 
-	debugService.addFakePlayer(DebugService.FAKE_OFFLINE_STEAMID);
 	await playerRepository.create(player);
 };
 
@@ -81,11 +83,30 @@ const SeedMatches = async () => {
 	}
 };
 
-const t = getManager();
-const Seed = async () => {
-	await SeedAnnouncements();
-	// await SeedPlayers();
-	// await SeedMatches();
+const SeedPunishments = async () => {
+	consoleLogStatus('SEEDING PUNISHMENTS');
+	const playerRepository = new LinqRepository(Player);
+	const punishmentRepository = new LinqRepository(Punishment);
+	const punishment = new Punishment();
+	punishment.creationDate = new Date();
+	punishment.expirationDate = new Date(new Date().valueOf() + 999999999);
+	punishment.reason = 'You did something stupid';
+	const player = await playerRepository
+		.getOne()
+		.where(p => p.steamid)
+		.equal(DebugService.FAKE_OFFLINE_STEAMID);
+	punishment.offender = player;
+	punishment.creator = player;
+	punishment.punishmentType = PunishmentType.BAN;
+	punishment.lastModifiedDate = new Date();
+	await punishmentRepository.create(punishment);
 };
 
-Seed();
+const Seed = async () => {
+	await SeedPlayers();
+	await SeedPunishments();
+};
+
+createConnection().then(async () => {
+	await Seed();
+});

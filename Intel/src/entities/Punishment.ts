@@ -1,9 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { IsNumberString, IsString, MinDate, IsDate, IsEnum } from 'class-validator';
 import PunishmentType from '../../../Common/Enums/PunishmentType';
 import SteamID from '../../../Common/Types/SteamID';
+import Player from './Player';
 
-@Entity()
+@Entity('punishments')
 export default class Punishment {
 	@PrimaryGeneratedColumn()
 	id: number;
@@ -12,13 +13,12 @@ export default class Punishment {
 	@IsEnum(PunishmentType)
 	punishmentType: PunishmentType;
 
-	@Column()
-	@IsNumberString()
-	offenderSteamid: SteamID;
+	@ManyToOne(type => Player, player => player.punishments)
+	offender: Player;
 
-	@Column()
 	@IsNumberString()
-	creatorSteamid: SteamID;
+	@ManyToOne(type => Player, player => player.createdPunishments)
+	creator: Player;
 
 	@Column()
 	@IsString()
@@ -31,11 +31,9 @@ export default class Punishment {
 
 	@Column()
 	@IsDate()
-	createdDate: Date;
+	creationDate: Date;
 
 	@Column()
 	@IsDate()
 	lastModifiedDate: Date;
-
-	isActive: boolean;
 }

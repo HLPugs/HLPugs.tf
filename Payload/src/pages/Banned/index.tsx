@@ -2,18 +2,22 @@ import React from 'react';
 import Header from '../../components/Header';
 import Navigation from '../../components/Navigation';
 import { SiteConfigurationModel } from '../../../../Common/Models/SiteConfigurationModel';
+import GetBannedPageViewModelRequest from '../../../../Common/Requests/GetBannedPageViewModelRequest';
+import BannedPageViewModel from '../../../../Common/ViewModels/BannedPageViewModel';
 import moment from 'moment';
 import './style.scss';
+import SteamID from '../../../../Common/Types/SteamID';
+import LoadingDots from '../../components/LoadingDots';
 
 interface BannedProps {
 	socket: SocketIOClient.Socket;
 	configuration: SiteConfigurationModel;
+	steamid: SteamID;
 }
 
 interface BannedState {
-	banReason: string;
-	banDate: moment.Moment;
-	unBanDate: moment.Moment;
+	bannedPageViewModelLoaded: boolean;
+	bannedPageViewModel: BannedPageViewModel;
 }
 
 class Banned extends React.Component<BannedProps, BannedState> {
@@ -21,10 +25,16 @@ class Banned extends React.Component<BannedProps, BannedState> {
 		super(props);
 
 		this.state = {
-			banReason: 'Mic Spamming',
-			banDate: moment(),
-			unBanDate: moment().add(14, 'days')
+			bannedPageViewModelLoaded: false,
+			bannedPageViewModel: new BannedPageViewModel()
 		};
+
+		this.props.socket.emit('getBannedPageViewModel', { steamid: this.props.steamid } as GetBannedPageViewModelRequest);
+
+		this.props.socket.on('getBannedPageViewModel', (bannedPageViewModel: BannedPageViewModel) => {
+			this.setState({ bannedPageViewModel });
+			this.setState({ bannedPageViewModelLoaded: true });
+		});
 	}
 
 	render() {
@@ -36,11 +46,13 @@ class Banned extends React.Component<BannedProps, BannedState> {
 					logoPath={this.props.configuration.branding.logoPath}
 				/>
 				<Navigation navigationGroup={this.props.configuration.navigation} />
-				<div id="BannedInfo">
-					<span>Ban Reason: {this.state.banReason}</span>
-					<span>Ban Start: {this.state.banDate.format('LLL')}</span>
-					<span>Ban End: {this.state.unBanDate.format('LLL')}</span>
-				</div>
+				{this.state.bannedPageViewModelLoaded ? (
+					<div id="BannedInfo">
+						<span>Ban Reason: {this.state.bannedPageViewModel.reason}</span>
+						<span>Ban Start: {moment(this.state.bannedPageViewModel.creationDate).format('LLL')}</span>
+						<span>Ban End: {moment(this.state.bannedPageViewModel.expirationDate).format('LLL')}</span>
+					</div>
+				) : null}
 			</div>
 		);
 	}

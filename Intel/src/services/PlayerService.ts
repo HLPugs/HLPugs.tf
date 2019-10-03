@@ -192,8 +192,12 @@ export default class PlayerService {
 			.getAll()
 			.where(p => p.expirationDate)
 			.greaterThan(new Date())
-			.and(p => p.offenderSteamid)
-			.equal(steamid);
+			.and(p => p.offender.steamid)
+			.equal(steamid)
+			.include(p => p.creator)
+			.include(p => p.offender);
+
+		let m = await punishmentRepository.getAll();
 
 		return activePunishments;
 	}

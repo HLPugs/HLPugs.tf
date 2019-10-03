@@ -29,18 +29,27 @@ export class HomeSocketController {
 	private readonly draftService = new DraftService();
 
 	@OnConnect()
-	async socketConnected(@ConnectedSocket() socket: Socket, @SocketIO() io: Server, @SocketRooms() rooms: any) {
+	async socketConnected(
+		@ConnectedSocket() socket: Socket,
+		@SocketRequest() request: SocketRequestWithPlayer,
+		@SocketIO() io: Server,
+		@SocketRooms() rooms: any
+	) {
 		socket.emit('siteConfiguration', SiteConfiguration);
 		if (socket.request.session.err) {
 			socket.emit('serverError', socket.request.session.err);
 		}
 
-		if (socket.request.session.player) {
-			if (socket.request.session.player.alias) {
-				const player = socket.request.session.player;
-				const playerViewModel = PlayerViewModel.fromPlayer(player);
+		if (request.session.player) {
+			if (request.session.player.alias) {
+				const player = request.session.player;
 				socket.join(player.steamid);
+				const playerViewModel = PlayerViewModel.fromPlayer(player);
 				socket.emit('updateCurrentPlayer', playerViewModel);
+				const isCurrentlySiteBanned = await this.playerService.isCurrentlySiteBanned(player.steamid);
+				if (isCurrentlySiteBanned) {
+					socket.emit('playerIsBanned');
+				}
 			} else {
 				socket.emit('showAliasModal');
 			}

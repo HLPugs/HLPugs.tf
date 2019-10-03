@@ -20,6 +20,7 @@ import Role from '../../../Common/Enums/Role';
 import PlayerSettings from './PlayerSettings';
 import MatchPlayerData from './MatchPlayerData';
 import SteamID from '../../../Common/Types/SteamID';
+import Punishment from './Punishment';
 
 @Entity({ name: 'players' })
 export default class Player {
@@ -29,7 +30,7 @@ export default class Player {
 	@PrimaryColumn()
 	@Index({ unique: true })
 	@IsNumberString()
-	steamid: SteamID;
+	steamid: string;
 
 	@Column({ nullable: true })
 	@IsOptional()
@@ -93,6 +94,12 @@ export default class Player {
 	})
 	@ValidateNested()
 	settings: PlayerSettings;
+
+	@OneToMany(type => Punishment, punishment => punishment.offender)
+	punishments: Punishment[];
+
+	@OneToMany(type => Punishment, punishment => punishment.creator)
+	createdPunishments: Punishment[];
 
 	@ManyToMany(type => Match, match => match.players)
 	matches: Match[];
