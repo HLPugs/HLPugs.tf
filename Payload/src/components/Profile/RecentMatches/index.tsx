@@ -7,6 +7,7 @@ import ProfilePaginatedMatchesViewModel from '../../../../../Common/ViewModels/P
 import HttpClient from '../../../common/HttpClient';
 import LoadingDots from '../../LoadingDots';
 import SteamID from '../../../../../Common/Types/SteamID';
+import Outcome from '../../../../../Common/Enums/Outcome';
 
 interface RecentMatchesProps {
 	steamid: SteamID;
@@ -18,10 +19,7 @@ interface RecentMatchesState {
 	matches?: ProfilePaginatedMatchesViewModel;
 }
 
-class RecentMatches extends React.Component<
-	RecentMatchesProps,
-	RecentMatchesState
-> {
+class RecentMatches extends React.Component<RecentMatchesProps, RecentMatchesState> {
 	http: HttpClient;
 
 	constructor(props: RecentMatchesProps) {
@@ -51,10 +49,7 @@ class RecentMatches extends React.Component<
 
 	changePage = async (delta: number) => {
 		const newPage = this.state.matchesPage + delta;
-		if (
-			newPage >= 0 &&
-			newPage < this.state.matches!.totalMatches / this.state.matchesPageSize
-		) {
+		if (newPage >= 0 && newPage < this.state.matches!.totalMatches / this.state.matchesPageSize) {
 			this.setState(
 				{
 					matchesPage: this.state.matchesPage + delta
@@ -74,13 +69,7 @@ class RecentMatches extends React.Component<
 							{this.state.matches.matches.map(match => (
 								<div
 									key={match.id}
-									className={`match ${
-										match.outcome === 0
-											? 'Win'
-											: match.outcome === 1
-											? 'Loss'
-											: 'Tie'
-									}`}
+									className={`match ${match.outcome === Outcome.WIN ? 'Win' : match.outcome === Outcome.LOSS ? 'Loss' : 'Tie'}`}
 								>
 									<a
 										href={`https://logs.tf/${match.logsId}`}
@@ -109,13 +98,7 @@ class RecentMatches extends React.Component<
 										</div>
 										<div>
 											<span>{moment(match.date).fromNow()}</span>
-											<span>
-												{match.outcome === 0
-													? 'Win'
-													: match.outcome === 1
-													? 'Loss'
-													: 'Tie'}
-											</span>
+											<span>{match.outcome === Outcome.WIN ? 'Win' : match.outcome === Outcome.LOSS ? 'Loss' : 'Tie'}</span>
 										</div>
 									</div>
 								</div>
@@ -124,25 +107,17 @@ class RecentMatches extends React.Component<
 
 						<div className="pagination">
 							<div
-								className={`${
-									this.state.matchesPage === 0 ? 'disabled' : ''
-								} pager`}
+								className={`${this.state.matchesPage === 0 ? 'disabled' : ''} pager`}
 								onClick={() => this.changePage(-1)}
 							>
 								<FontAwesomeIcon icon="arrow-left" />
 							</div>
 							<div className="pages">
-								{this.state.matchesPage + 1} /{' '}
-								{Math.ceil(
-									this.state.matches.totalMatches / this.state.matchesPageSize
-								)}
+								{this.state.matchesPage + 1} / {Math.ceil(this.state.matches.totalMatches / this.state.matchesPageSize)}
 							</div>
 							<div
 								className={`${
-									this.state.matchesPage + 1 ===
-									Math.ceil(
-										this.state.matches.totalMatches / this.state.matchesPageSize
-									)
+									this.state.matchesPage + 1 === Math.ceil(this.state.matches.totalMatches / this.state.matchesPageSize)
 										? 'disabled'
 										: ''
 								} pager`}
