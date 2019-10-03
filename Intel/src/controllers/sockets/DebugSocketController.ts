@@ -23,14 +23,7 @@ export default class DebugSocketController {
 	@OnMessage('fakeLogin')
 	async fakeLogin(@ConnectedSocket() socket: Socket, @SocketIO() io: Server) {
 		if (process.env.NODE_ENV === 'dev') {
-			if (this.sessionService.playerExists(DebugService.FAKE_OFFLINE_STEAMID)) {
-				await this.debugService.addFakePlayer(DebugService.FAKE_OFFLINE_STEAMID, socket.request.sessionID);
-				const player = await this.playerService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
-				socket.request.session.player = player;
-				socket.request.session.save();
-				const playerViewModel = PlayerViewModel.fromPlayer(player);
-				socket.emit('updateCurrentPlayer', playerViewModel);
-			} else {
+			if (!this.sessionService.playerExists(DebugService.FAKE_OFFLINE_STEAMID)) {
 				await this.debugService.addFakePlayer(DebugService.FAKE_OFFLINE_STEAMID, socket.request.sessionID);
 				const player = await this.playerService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
 				socket.request.session.player = player;
