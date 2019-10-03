@@ -1,12 +1,14 @@
 import React from 'react';
 import './style.scss';
+import CheckIfAliasIsTakenRequest from '../../../../Common/Requests/CheckIfAliasIsTakenRequest';
+import SubmitAliasRequest from '../../../../Common/Requests/SubmitAliasRequest';
 
 interface AliasModalProps {
 	socket: SocketIOClient.Socket;
 }
 
 interface AliasModalState {
-	aliasTaken: boolean;
+	aliasIsTaken: boolean;
 	invalidInput: boolean;
 }
 
@@ -20,14 +22,12 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
 
 		this.aliasInput = React.createRef();
 
-		this.props.socket.on('aliasStatus', (aliasStatus: boolean) => {
-			this.setState({
-				aliasTaken: aliasStatus
-			});
+		this.props.socket.on('checkIfAliasIsTaken', (aliasIsTaken: boolean) => {
+			this.setState({ aliasIsTaken });
 		});
 
 		this.state = {
-			aliasTaken: false,
+			aliasIsTaken: false,
 			invalidInput: false
 		};
 	}
@@ -46,9 +46,9 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
 				return;
 			}
 
-			this.props.socket.emit('checkAlias', {
+			this.props.socket.emit('checkIfAliasIsTaken', {
 				alias: this.aliasInput.current.value
-			});
+			} as CheckIfAliasIsTakenRequest);
 		}, 500);
 	};
 
@@ -59,13 +59,13 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
 
 		this.props.socket.emit('submitAlias', {
 			alias: this.aliasInput.current.value
-		});
+		} as SubmitAliasRequest);
 	};
 
 	submitText = () => {
 		if (this.state.invalidInput) {
 			return 'Invalid';
-		} else if (this.state.aliasTaken) {
+		} else if (this.state.aliasIsTaken) {
 			return 'Alias Taken';
 		} else {
 			return 'Set Alias';
@@ -93,14 +93,12 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
 						<button
 							className="button"
 							onClick={this.submitAlias}
-							disabled={this.state.aliasTaken || this.state.invalidInput}
+							disabled={this.state.aliasIsTaken || this.state.invalidInput}
 						>
 							{this.submitText()}
 						</button>
 					</div>
-					<span>
-						Alias must be 2-17 characters using only alphanumeric and "_"
-					</span>
+					<span>Alias must be 2-17 characters using only alphanumeric and "_"</span>
 				</div>
 			</div>
 		);

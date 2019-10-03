@@ -2,10 +2,14 @@ import { SocketController, SocketIO, OnMessage, ConnectedSocket, MessageBody } f
 import PlayerService from '../../services/PlayerService';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import { LinqRepository } from 'typeorm-linq-repository';
+import SubmitAliasRequest from '../../../../Common/Requests/SubmitAliasRequest';
+import CheckIfAliasIsTakenRequest from '../../../../Common/Requests/CheckIfAliasIsTakenRequest';
 import Player from '../../entities/Player';
 import ValidateClass from '../../utils/ValidateClass';
 import SessionService from '../../services/SessionService';
 import { Socket, Server } from 'socket.io';
+import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
+import { Validate } from 'class-validator';
 
 @SocketController()
 export class AliasSocketController {
@@ -13,11 +17,16 @@ export class AliasSocketController {
 	private readonly sessionService = new SessionService();
 
 	@OnMessage('submitAlias')
-	async submitAlias(@ConnectedSocket() socket: Socket, @SocketIO() io: Server, @MessageBody() payload: any) {
-		const alias: string = payload.alias;
+	async submitAlias(
+		@ConnectedSocket() socket: Socket,
+		@SocketIO() io: Server,
+		@MessageBody() payload: SubmitAliasRequest
+	) {
+		ValidateClass(payload);
+		const { alias } = payload;
 		const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
 
-		if (!aliasRules.test(alias) || (await this.aliasExists(alias))) return;
+		if (!aliasRules.test(alias) || (await this.isAliasTaken(alias))) return;
 
 		const steamid = socket.request.session.player.steamid;
 		await this.playerService.updateAlias(steamid, alias);
@@ -35,13 +44,17 @@ export class AliasSocketController {
 		});
 	}
 
-	@OnMessage('checkAlias')
-	async checkAlias(@ConnectedSocket() socket: any, @MessageBody() payload: any) {
-		const player = await this.aliasExists(payload.alias);
-		socket.emit('aliasStatus', player);
+	@OnMessage('checkIfAliasIsTaken')
+	async checkIfAliasIsTaken(
+		@ConnectedSocket() socket: SocketWithPlayer,
+		@MessageBody() payload: CheckIfAliasIsTakenRequest
+	) {
+		ValidateClass(payload);
+		const aliasIsTaken = await this.isAliasTaken(payload.alias);
+		socket.emit('checkIfAliasIsTaken', aliasIsTaken);
 	}
 
-	private async aliasExists(alias: string) {
+	private async isAliasTaken(alias: string) {
 		const playerRepository = new LinqRepository(Player);
 		return (
 			(await playerRepository
