@@ -197,8 +197,6 @@ export default class PlayerService {
 			.include(p => p.creator)
 			.include(p => p.offender);
 
-		let m = await punishmentRepository.getAll();
-
 		return activePunishments;
 	}
 
