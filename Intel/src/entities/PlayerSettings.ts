@@ -12,35 +12,35 @@ export default class PlayerSettings {
 
 	@Column({ default: false })
 	@IsBoolean()
-	isNotifiableByMention: boolean;
+	isNotifiableByMention: boolean = false;
 
 	@Column({ default: 50 })
 	@IsNumber()
-	volume: number;
+	volume: number = 50;
 
 	@Column('simple-array', { default: '' })
 	@IsArray()
-	favoriteClasses: DraftTFClass[];
+	favoriteClasses: DraftTFClass[] = [];
 
 	@Column({ default: false })
 	@IsBoolean()
-	addToFavoritesAfterMatch: boolean;
+	addToFavoritesAfterMatch: boolean = false;
 
 	@Column({ default: false })
 	@IsBoolean()
-	addToFavoritesOnLogin: boolean;
+	addToFavoritesOnLogin: boolean = false;
 
 	@Column({ default: true })
 	@IsBoolean()
-	audioCuesEnabled: boolean;
+	audioCuesEnabled: boolean = false;
 
 	@Column({ default: 'default' })
 	@IsString()
-	voicepack: string; // enum ?
+	voicepack: string = 'default'; // enum ?
 
 	@Column({ default: 'default' })
 	@IsString()
-	colorOfNameInChat: string; // enum?
+	colorOfNameInChat: string = 'default'; // enum?
 
 	@OneToOne(type => Player, player => player.settings)
 	@JoinColumn()
