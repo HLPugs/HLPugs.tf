@@ -1,9 +1,10 @@
 import { IsString, IsDefined, MinLength, MaxLength } from 'class-validator';
+import { MIN_ALIAS_LENGTH, MAX_ALIAS_LENGTH } from '../Constants/AliasConstraints';
 
 export default class SubmitAliasRequest {
 	@IsString()
 	@IsDefined()
-	@MinLength(2)
-	@MaxLength(17)
+	@MinLength(MIN_ALIAS_LENGTH)
+	@MaxLength(MAX_ALIAS_LENGTH)
 	alias: string;
 }

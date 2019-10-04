@@ -2,6 +2,7 @@ import React from 'react';
 import './style.scss';
 import CheckIfAliasIsTakenRequest from '../../../../Common/Requests/CheckIfAliasIsTakenRequest';
 import SubmitAliasRequest from '../../../../Common/Requests/SubmitAliasRequest';
+import { MIN_ALIAS_LENGTH, MAX_ALIAS_LENGTH, ALIAS_REGEX_PATTERN } from '../../../../Common/Constants/AliasConstraints';
 
 interface AliasModalProps {
 	socket: SocketIOClient.Socket;
@@ -83,9 +84,9 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
 						<input
 							type="text"
 							placeholder="Set your desired alias"
-							minLength={2}
-							maxLength={17}
-							pattern="^[a-zA-Z0-9_]{2,17}$"
+							minLength={MIN_ALIAS_LENGTH}
+							maxLength={MAX_ALIAS_LENGTH}
+							pattern={ALIAS_REGEX_PATTERN}
 							ref={this.aliasInput}
 							onChange={this.handleInputChange}
 							autoFocus={true}
@@ -98,7 +99,9 @@ class AliasModal extends React.Component<AliasModalProps, AliasModalState> {
 							{this.submitText()}
 						</button>
 					</div>
-					<span>Alias must be 2-17 characters using only alphanumeric and "_"</span>
+					<span>
+						Alias must be {MIN_ALIAS_LENGTH}-{MAX_ALIAS_LENGTH} characters using only alphanumeric and "_"
+					</span>
 				</div>
 			</div>
 		);

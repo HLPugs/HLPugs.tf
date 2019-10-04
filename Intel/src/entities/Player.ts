@@ -21,6 +21,7 @@ import PlayerSettings from './PlayerSettings';
 import MatchPlayerData from './MatchPlayerData';
 import SteamID from '../../../Common/Types/SteamID';
 import Punishment from './Punishment';
+import { ALIAS_REGEX_PATTERN, MIN_ALIAS_LENGTH, MAX_ALIAS_LENGTH } from '../../../Common/Constants/AliasConstraints';
 
 @Entity({ name: 'players' })
 export default class Player {
@@ -36,8 +37,7 @@ export default class Player {
 	@IsOptional()
 	@IsString()
 	@Index({ unique: true })
-	@Matches(/^[a-zA-Z0-9_]{2,17}$/)
-	@Length(2, 17)
+	@Matches(new RegExp(ALIAS_REGEX_PATTERN))
 	alias: string;
 
 	@Column()

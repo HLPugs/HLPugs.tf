@@ -10,6 +10,7 @@ import SessionService from '../../services/SessionService';
 import { Socket, Server } from 'socket.io';
 import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
 import { Validate } from 'class-validator';
+import { ALIAS_REGEX_PATTERN } from '../../../../Common/Constants/AliasConstraints';
 
 @SocketController()
 export class AliasSocketController {
@@ -24,11 +25,13 @@ export class AliasSocketController {
 	) {
 		ValidateClass(payload);
 		const { alias } = payload;
-		const aliasRules = new RegExp('^[a-zA-Z0-9_]{2,17}$');
+		const aliasRules = new RegExp(ALIAS_REGEX_PATTERN);
+		const aliasIsTaken = await this.isAliasTaken(alias);
+		const aliasMatchesRegexCheck = aliasRules.test(alias);
 
-		if (!aliasRules.test(alias) || (await this.isAliasTaken(alias))) return;
+		if (aliasIsTaken || !aliasMatchesRegexCheck) return;
 
-		const steamid = socket.request.session.player.steamid;
+		const { steamid } = socket.request.session.player;
 		await this.playerService.updateAlias(steamid, alias);
 
 		socket.request.session.player.alias = alias;
