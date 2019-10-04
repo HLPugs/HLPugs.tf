@@ -9,7 +9,6 @@ import ValidateClass from '../../utils/ValidateClass';
 import SessionService from '../../services/SessionService';
 import { Socket, Server } from 'socket.io';
 import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
-import { Validate } from 'class-validator';
 import { ALIAS_REGEX_PATTERN } from '../../../../Common/Constants/AliasConstraints';
 
 @SocketController()

@@ -9,7 +9,6 @@ import {
 	EmitOnSuccess,
 	SocketRequest
 } from 'socket-controllers';
-import * as dotenv from 'dotenv';
 import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import PlayerService from '../../services/PlayerService';
 import SessionService from '../../services/SessionService';
@@ -19,8 +18,7 @@ import { Socket, Server } from 'socket.io';
 import SocketRequestWithPlayer from '../../interfaces/SocketRequestWithPlayer';
 import DebugService from '../../services/DebugService';
 import ValidateClass from '../../utils/ValidateClass';
-
-const env = dotenv.config().parsed;
+import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
 
 @SocketController()
 export class HomeSocketController {
@@ -59,19 +57,29 @@ export class HomeSocketController {
 	}
 
 	@OnMessage('playerLoadedHomepage')
-	async playerLoadedHomepage(@ConnectedSocket() socket: Socket, @SocketIO() io: Server, @SocketRooms() rooms: any) {
+	async playerLoadedHomepage(
+		@ConnectedSocket() socket: SocketWithPlayer,
+		@SocketIO() io: Server,
+		@SocketRooms() rooms: any
+	) {
 		if (socket.request.session.player) {
-			const { steamid } = socket.request.session.player;
+			const { player } = socket.request.session;
 
-			if (steamid) {
-				socket.join(steamid);
+			if (player.steamid) {
+				socket.join(player.steamid);
 			}
-			if (!socket.request.session.player.alias) {
-				if (io.sockets.adapter.rooms[steamid].length === 1) {
-					this.sessionService.upsertPlayer(steamid, socket.request.session.id);
-					const playerViewModel = PlayerViewModel.fromPlayer(await this.sessionService.getPlayer(steamid));
-					io.emit('addPlayerToSession', ValidateClass(playerViewModel));
-				}
+			if (io.sockets.adapter.rooms[player.steamid].length === 1) {
+				this.sessionService.upsertPlayer(player.steamid, socket.request.session.id);
+				const playerViewModel = PlayerViewModel.fromPlayer(await this.sessionService.getPlayer(player.steamid));
+				io.emit('addPlayerToSession', ValidateClass(playerViewModel));
+			}
+			if (player.settings.addToFavoritesOnLogin) {
+				player.settings.favoriteClasses.forEach(draftTFClass => {
+					if (!this.draftService.isPlayerAddedToDraftTFClass(player.steamid, draftTFClass)) {
+						this.draftService.addPlayerToDraftTFClass(player.steamid, draftTFClass);
+						io.emit('addPlayerToDraftTFClass', draftTFClass, player.steamid);
+					}
+				});
 			}
 		}
 
