@@ -42,10 +42,8 @@ class Settings extends React.PureComponent<SettingsProps, SettingsState> {
 	}
 
 	savePress = () => {
-		this.props.socket.emit('saveSettings', {
-			steamid: this.props.steamid,
-			playerSettingsViewModel: this.state.settings
-		} as UpdatePlayerSettingsRequest);
+		const updatePlayerSettingsRequest = new UpdatePlayerSettingsRequest(this.state.settings);
+		this.props.socket.emit('saveSettings', updatePlayerSettingsRequest);
 		this.props.settingsOnClick();
 	};
 

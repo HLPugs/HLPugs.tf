@@ -58,7 +58,9 @@ export default class PlayerSettings {
 		playerSettings.volume = playerSettingsViewModel.volume;
 		playerSettings.favoriteClasses = [];
 		for (const tf2class in playerSettingsViewModel.favoriteClasses) {
-			playerSettings.favoriteClasses.push(tf2class as DraftTFClass);
+			if (playerSettingsViewModel.favoriteClasses[tf2class as DraftTFClass]) {
+				playerSettings.favoriteClasses.push(tf2class as DraftTFClass);
+			}
 		}
 		return ValidateClass(playerSettings);
 	}

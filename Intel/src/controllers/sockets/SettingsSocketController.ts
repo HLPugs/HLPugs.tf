@@ -31,7 +31,8 @@ export default class SettingsSocketController {
 	@EmitOnSuccess('settingsSuccess')
 	@EmitOnFail('settingsError')
 	async saveSettings(@ConnectedSocket() socket: SocketWithPlayer, @MessageBody() payload: UpdatePlayerSettingsRequest) {
-		const { steamid, playerSettingsViewModel } = payload;
+		const { playerSettingsViewModel } = payload;
+		const { steamid } = socket.request.session.player;
 		const settings = PlayerSettings.fromViewModel(playerSettingsViewModel);
 		await this.playerService.updateSettings(steamid, settings);
 		socket.request.session.player.settings = settings;
