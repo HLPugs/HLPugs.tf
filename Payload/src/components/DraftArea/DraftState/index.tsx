@@ -1,14 +1,15 @@
 import React from 'react';
 import PreDraftRequirements from './PreDraftRequirements';
-import { PreDraftRequirementType } from '../../../common/types';
 import './style.scss';
+import PlayerViewModel from '../../../../../Common/ViewModels/PlayerViewModel';
+import PreDraftRequirementViewModel from '../../../../../Common/ViewModels/PreDraftRequirementViewModel';
 
 interface DraftStateProps {
 	socket: SocketIOClient.Socket;
 }
 
 interface DraftStateState {
-	requirements: PreDraftRequirementType[];
+	requirements: PreDraftRequirementViewModel[];
 	preDraftDetails: boolean;
 }
 
@@ -19,24 +20,28 @@ class DraftState extends React.Component<DraftStateProps, DraftStateState> {
 		this.state = {
 			requirements: [
 				{
-					name: 'Captains',
-					state: true
+					requirementName: 'Captains',
+					isFulfilled: false
 				},
 				{
-					name: 'Players',
-					state: false
+					requirementName: 'Players',
+					isFulfilled: false
 				},
 				{
-					name: 'Roles',
-					state: false
+					requirementName: 'Classes',
+					isFulfilled: false
 				},
 				{
-					name: 'Server',
-					state: true
+					requirementName: 'Server',
+					isFulfilled: false
 				}
 			],
 			preDraftDetails: false
 		};
+
+		this.props.socket.on('sendNewDraftRequirements', (requirements: PreDraftRequirementViewModel[]) => {
+			this.setState({ requirements });
+		});
 	}
 
 	togglePreDraftDetails = () => {

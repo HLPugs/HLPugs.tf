@@ -1,21 +1,18 @@
 import React from 'react';
-import { PreDraftRequirementType } from '../../../../../common/types';
 import { FontAwesomeIcon } from '../../../../../../node_modules/@fortawesome/react-fontawesome';
 import './style.scss';
+import PreDraftRequirementsViewModel from '../../../../../../../Common/ViewModels/PreDraftRequirementViewModel';
 
 interface PreDraftRequirementItemProps {
-	state: PreDraftRequirementType;
+	state: PreDraftRequirementsViewModel;
 }
 
-class PreDraftRequirementItem extends React.Component<
-	PreDraftRequirementItemProps,
-	{}
-> {
+class PreDraftRequirementItem extends React.Component<PreDraftRequirementItemProps, {}> {
 	render() {
 		return (
 			<div className="preDraftRequirementItem">
-				<FontAwesomeIcon icon={this.props.state.state ? 'check' : 'times'} />
-				<span>{this.props.state.name}</span>
+				<FontAwesomeIcon icon={this.props.state.isFulfilled ? 'check' : 'times'} />
+				<span>{this.props.state.requirementName}</span>
 			</div>
 		);
 	}

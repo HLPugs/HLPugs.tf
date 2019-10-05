@@ -15,6 +15,44 @@ class DraftService {
 		return DraftTFClassLists.get(draftTFClass).indexOf(steamid) !== -1;
 	}
 
+	checkIfAllDraftRequirementsAreFulfilled(): boolean {
+		return (
+			this.checkIfCaptainCountRequirementIsFulfilled() &&
+			this.checkIfClassesRequirementIsFulfilled() &&
+			this.checkIfPlayerCountRequirementIsFulfilled() &&
+			this.checkIfServerRequirementIsFulfilled()
+		);
+	}
+
+	checkIfPlayerCountRequirementIsFulfilled(): boolean {
+		const totalPlayersNeeded = SiteConfiguration.gamemodeClassSchemes.map(x => x.numberPerTeam).reduce((a, b) => a + b);
+		return this.getAllPlayersAddedToDraft().length >= totalPlayersNeeded;
+	}
+
+	checkIfCaptainCountRequirementIsFulfilled(): boolean {
+		// need captain logic implemented first
+		return false;
+	}
+
+	checkIfClassesRequirementIsFulfilled(): boolean {
+		// implement algorithm independent of gamemode
+		return false;
+	}
+
+	checkIfServerRequirementIsFulfilled(): boolean {
+		// check servers when we get to that point
+		return false;
+	}
+
+	getAllPlayersAddedToDraft(): SteamID[] {
+		const players: SteamID[] = [];
+		SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
+			players.push(...this.getAllPlayersByDraftTFClass(scheme.tf2class));
+		});
+		const uniqueSteamIDs = [...new Set(players)];
+		return uniqueSteamIDs;
+	}
+
 	/**
 	 * Adds a Player to a class
 	 * @param {string} steamid - The SteamID of the Player to add

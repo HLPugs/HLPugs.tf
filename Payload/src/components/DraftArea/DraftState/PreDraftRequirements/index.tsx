@@ -1,21 +1,17 @@
 import React from 'react';
 import PreDraftRequirementItem from './PreDraftRequirementItem';
-import { PreDraftRequirementType } from '../../../../common/types';
 import './style.scss';
-
+import PreDraftRequirementViewModel from '../../../../../../Common/ViewModels/PreDraftRequirementViewModel';
 interface PreDraftRequirementsProps {
-	requirements: PreDraftRequirementType[];
+	requirements: PreDraftRequirementViewModel[];
 }
 
-class PreDraftRequirements extends React.Component<
-	PreDraftRequirementsProps,
-	{}
-> {
+class PreDraftRequirements extends React.Component<PreDraftRequirementsProps, {}> {
 	render() {
 		return (
 			<div id="PreDraftRequirements">
-				{this.props.requirements.map((requirement: PreDraftRequirementType) => (
-					<PreDraftRequirementItem state={requirement} key={requirement.name} />
+				{this.props.requirements.map((requirement: PreDraftRequirementViewModel) => (
+					<PreDraftRequirementItem state={requirement} key={requirement.requirementName} />
 				))}
 			</div>
 		);
