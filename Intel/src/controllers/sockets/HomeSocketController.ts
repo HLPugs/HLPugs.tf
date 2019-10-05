@@ -67,7 +67,6 @@ export class HomeSocketController {
 		@SocketIO() io: Server,
 		@SocketRooms() rooms: any
 	) {
-		this.draftEvents.sendNewDraftRequirements(io);
 		if (socket.request.session.player) {
 			const { player } = socket.request.session;
 
@@ -117,5 +116,10 @@ export class HomeSocketController {
 	@OnMessage('logout')
 	logout(@SocketIO() io: Server, @ConnectedSocket() socket: SocketWithPlayer) {
 		this.playerEvents.logout(io, socket, socket.request.session.player.steamid);
+	}
+
+	@OnMessage('getPreDraftRequirements')
+	getPreDraftRequirements(@SocketIO() io: Server) {
+		this.draftEvents.sendPreDraftRequirements(io);
 	}
 }

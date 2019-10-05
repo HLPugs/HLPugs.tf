@@ -10,13 +10,14 @@ import { SiteConfiguration } from '../constants/SiteConfiguration';
 
 export default class DraftEvents {
 	private readonly draftService = new DraftService();
+	private readyUpPhaseActive = false;
 
 	addPlayerToDraftTFClass(io: Server, steamid: SteamID, draftTFClass: DraftTFClass) {
 		if (!this.draftService.isPlayerAddedToDraftTFClass(steamid, draftTFClass)) {
 			this.draftService.addPlayerToDraftTFClass(steamid, draftTFClass);
 			const response = new AddPlayerToDraftTFClassResponse(steamid, draftTFClass);
 			io.emit('addPlayerToDraftTFClass', response);
-			this.sendNewDraftRequirements(io);
+			this.sendPreDraftRequirements(io);
 		}
 	}
 
@@ -31,45 +32,48 @@ export default class DraftEvents {
 			this.draftService.removePlayerFromDraftTFClass(steamid, draftTFClass);
 			const response = new RemovePlayerFromDraftTFClassResponse(steamid, draftTFClass);
 			io.emit('removePlayerFromDraftTFClass', response);
-			this.sendNewDraftRequirements(io);
+			this.sendPreDraftRequirements(io);
 		}
 	}
 
-	sendNewDraftRequirements(io: Server) {
-		const readyUpPhaseCanStart = this.draftService.checkIfAllDraftRequirementsAreFulfilled();
+	sendPreDraftRequirements(io: Server) {
+		if (!this.readyUpPhaseActive) {
+			const readyUpPhaseCanStart = this.draftService.checkIfAllDraftRequirementsAreFulfilled();
 
-		if (readyUpPhaseCanStart) {
-			this.startReadyUpPhase(io);
-		} else {
-			const draftRequirements: PreDraftRequirementViewModel[] = [];
-			const captainCountRequirement = new PreDraftRequirementViewModel(
-				'Captains',
-				this.draftService.checkIfCaptainCountRequirementIsFulfilled()
-			);
-			const playerCountRequirement = new PreDraftRequirementViewModel(
-				'Players',
-				this.draftService.checkIfPlayerCountRequirementIsFulfilled()
-			);
-			const classesRequirement = new PreDraftRequirementViewModel(
-				'Classes',
-				this.draftService.checkIfClassesRequirementIsFulfilled()
-			);
-			const serverRequirement = new PreDraftRequirementViewModel(
-				'Server',
-				this.draftService.checkIfServerRequirementIsFulfilled()
-			);
-			draftRequirements.push(captainCountRequirement);
-			draftRequirements.push(playerCountRequirement);
-			draftRequirements.push(classesRequirement);
-			draftRequirements.push(serverRequirement);
+			if (readyUpPhaseCanStart) {
+				this.startReadyUpPhase(io);
+			} else {
+				const draftRequirements: PreDraftRequirementViewModel[] = [];
+				const captainCountRequirement = new PreDraftRequirementViewModel(
+					'Captains',
+					this.draftService.checkIfCaptainCountRequirementIsFulfilled()
+				);
+				const playerCountRequirement = new PreDraftRequirementViewModel(
+					'Players',
+					this.draftService.checkIfPlayerCountRequirementIsFulfilled()
+				);
+				const classesRequirement = new PreDraftRequirementViewModel(
+					'Classes',
+					this.draftService.checkIfClassesRequirementIsFulfilled()
+				);
+				const serverRequirement = new PreDraftRequirementViewModel(
+					'Server',
+					this.draftService.checkIfServerRequirementIsFulfilled()
+				);
+				draftRequirements.push(captainCountRequirement);
+				draftRequirements.push(playerCountRequirement);
+				draftRequirements.push(classesRequirement);
+				draftRequirements.push(serverRequirement);
 
-			draftRequirements.forEach(x => ValidateClass(x));
+				draftRequirements.forEach(x => ValidateClass(x));
 
-			io.emit('sendNewDraftRequirements', draftRequirements);
+				io.emit('getPreDraftRequirements', draftRequirements);
+			}
 		}
 	}
 
 	startReadyUpPhase(io: Server) {
+		this.readyUpPhaseActive = true;
 		const playersAddedToDraft = this.draftService.getAllPlayersAddedToDraft();
 		// Emit to all steamid's to ready up
 		playersAddedToDraft.forEach(steamid => io.to(steamid).emit('showReadyUpModal'));

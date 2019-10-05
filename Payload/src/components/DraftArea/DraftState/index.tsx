@@ -39,7 +39,9 @@ class DraftState extends React.Component<DraftStateProps, DraftStateState> {
 			preDraftDetails: false
 		};
 
-		this.props.socket.on('sendNewDraftRequirements', (requirements: PreDraftRequirementViewModel[]) => {
+		this.props.socket.emit('getPreDraftRequirements');
+
+		this.props.socket.on('getPreDraftRequirements', (requirements: PreDraftRequirementViewModel[]) => {
 			this.setState({ requirements });
 		});
 	}
