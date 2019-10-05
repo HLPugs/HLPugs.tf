@@ -20,10 +20,13 @@ import DebugService from '../../services/DebugService';
 import ValidateClass from '../../utils/ValidateClass';
 import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
 import DraftEvents from '../../events/DraftEvents';
+import PlayerEvents from '../../events/PlayerEvents';
 
 @SocketController()
 export class HomeSocketController {
+	private readonly playerEvents = new PlayerEvents();
 	private readonly draftEvents = new DraftEvents();
+
 	private readonly playerService = new PlayerService();
 	private readonly sessionService = new SessionService();
 	private readonly draftService = new DraftService();
@@ -108,5 +111,10 @@ export class HomeSocketController {
 
 		this.sessionService.removePlayer(request.session.player.steamid);
 		io.emit('removePlayerFromSession', request.session.player.steamid);
+	}
+
+	@OnMessage('logout')
+	logout(@SocketIO() io: Server, @ConnectedSocket() socket: SocketWithPlayer) {
+		this.playerEvents.logout(io, socket, socket.request.session.player.steamid);
 	}
 }

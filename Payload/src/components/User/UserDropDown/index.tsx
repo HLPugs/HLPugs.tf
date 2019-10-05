@@ -9,17 +9,20 @@ interface UserDropDownProps {
 	permissionGroup?: PermissionGroup;
 	steamid?: string;
 	settingsOnClick: Function;
+	socket: SocketIOClient.Socket;
 }
 
 class UserDropDown extends React.Component<UserDropDownProps, {}> {
+	sendLogoutRequest() {
+		this.props.socket.emit('logout');
+	}
+
 	render() {
 		return (
 			<ul id="UserDropDown">
 				{this.props.permissionGroup !== PermissionGroup.NONE ? (
 					<li>
-						<Link to="/Admin">
-							Admin
-						</Link>
+						<Link to="/Admin">Admin</Link>
 					</li>
 				) : null}
 				<li>
@@ -31,6 +34,13 @@ class UserDropDown extends React.Component<UserDropDownProps, {}> {
 				<li onClick={() => this.props.settingsOnClick()}>
 					<FontAwesomeIcon icon="cog" />
 					Settings
+				</li>
+				<li
+					onClick={() => {
+						this.sendLogoutRequest();
+					}}
+				>
+					Logout
 				</li>
 			</ul>
 		);

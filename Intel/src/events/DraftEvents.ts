@@ -1,11 +1,12 @@
 import SteamID from '../../../Common/Types/SteamID';
 import DraftTFClass from '../../../Common/Enums/DraftTFClass';
-import { Server, Socket } from 'socket.io';
+import { Server } from 'socket.io';
 import AddPlayerToDraftTFClassResponse from '../../../Common/Responses/AddPlayerToDraftTFClassResponse';
 import RemovePlayerFromDraftTFClassResponse from '../../../Common/Responses/RemovePlayerFromDraftTFClassResponse';
 import DraftService from '../services/DraftService';
 import PreDraftRequirementViewModel from '../../../Common/ViewModels/PreDraftRequirementViewModel';
 import ValidateClass from '../utils/ValidateClass';
+import { SiteConfiguration } from '../constants/SiteConfiguration';
 
 export default class DraftEvents {
 	private readonly draftService = new DraftService();
@@ -17,6 +18,12 @@ export default class DraftEvents {
 			io.emit('addPlayerToDraftTFClass', response);
 			this.sendNewDraftRequirements(io);
 		}
+	}
+
+	removePlayerFromAllDraftTFClasses(io: Server, steamid: SteamID) {
+		SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
+			this.removePlayerFromDraftTFClass(io, steamid, scheme.tf2class);
+		});
 	}
 
 	removePlayerFromDraftTFClass(io: Server, steamid: SteamID, draftTFClass: DraftTFClass) {

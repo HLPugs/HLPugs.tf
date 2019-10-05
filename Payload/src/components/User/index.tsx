@@ -8,6 +8,7 @@ import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 interface UserProps {
 	currentPlayer: PlayerViewModel;
 	settingsOnClick: Function;
+	socket: SocketIOClient.Socket;
 }
 
 class User extends React.PureComponent<UserProps, {}> {
@@ -20,6 +21,7 @@ class User extends React.PureComponent<UserProps, {}> {
 			<div id="User">
 				<UserInfo alias={this.props.currentPlayer.alias} avatarUrl={this.props.currentPlayer.avatarUrl} />
 				<UserDropDown
+					socket={this.props.socket}
 					permissionGroup={this.props.currentPlayer.permissionGroup}
 					steamid={this.props.currentPlayer.steamid}
 					settingsOnClick={this.props.settingsOnClick}

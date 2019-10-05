@@ -13,10 +13,13 @@ import FakeAddPlayerToAllDraftTFClassesRequest from '../../../../Common/Requests
 import FakeRemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests/FakeRemovePlayerFromDraftTFClassRequest';
 import DraftService from '../../services/DraftService';
 import DraftEvents from '../../events/DraftEvents';
+import PlayerEvents from '../../events/PlayerEvents';
 
 @SocketController()
 export default class DebugSocketController {
+	private readonly playerEvents = new PlayerEvents();
 	private readonly draftEvents = new DraftEvents();
+
 	private readonly playerService = new PlayerService();
 	private readonly sessionService = new SessionService();
 	private readonly debugService = new DebugService();
@@ -46,21 +49,8 @@ export default class DebugSocketController {
 	) {
 		if (process.env.NODE_ENV === 'dev') {
 			ValidateClass(payload);
-			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-				this.draftEvents.removePlayerFromDraftTFClass(io, payload.steamid, scheme.tf2class);
-			});
+			this.playerEvents.logout(io, socket, payload.steamid);
 		}
-
-		this.sessionService.removePlayer(payload.steamid);
-		socket.request.session.player = undefined;
-		socket.request.session.save();
-		io.emit('removePlayerFromSession', payload.steamid);
-
-		socket.emit('updateCurrentPlayer', new PlayerViewModel());
-		this.draftService.removePlayerFromAllDraftTFClasses(payload.steamid);
-		SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-			this.draftEvents.removePlayerFromDraftTFClass(io, payload.steamid, scheme.tf2class);
-		});
 	}
 
 	@OnMessage('addFakePlayer')

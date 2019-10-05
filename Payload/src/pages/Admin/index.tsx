@@ -119,7 +119,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 					siteSubTitle={this.props.configuration.branding.siteSubTitle}
 					logoPath={this.props.configuration.branding.logoPath}
 				/>
-				<User currentPlayer={this.props.currentPlayer} settingsOnClick={this.toggleSettings} />
+				<User socket={this.props.socket} currentPlayer={this.props.currentPlayer} settingsOnClick={this.toggleSettings} />
 				<Navigation navigationGroup={this.getNavigationGroup()} />
 				<Settings
 					visibility={this.state.settingsOpen}

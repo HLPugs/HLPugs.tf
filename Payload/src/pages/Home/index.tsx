@@ -129,7 +129,7 @@ class Home extends React.Component<HomeProps, HomeState> {
 							siteSubTitle={this.props.configuration.branding.siteSubTitle}
 							logoPath={this.props.configuration.branding.logoPath}
 						/>
-						<User currentPlayer={this.props.currentPlayer} settingsOnClick={this.toggleSettings} />
+						<User socket={this.props.socket} currentPlayer={this.props.currentPlayer} settingsOnClick={this.toggleSettings} />
 						<Navigation navigationGroup={this.props.configuration.navigation} />
 						<DraftArea
 							classes={this.props.configuration.gamemodeClassSchemes}
