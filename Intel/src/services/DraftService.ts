@@ -25,7 +25,8 @@ class DraftService {
 	}
 
 	checkIfPlayerCountRequirementIsFulfilled(): boolean {
-		const totalPlayersNeeded = SiteConfiguration.gamemodeClassSchemes.map(x => x.numberPerTeam).reduce((a, b) => a + b);
+		const totalPlayersNeeded =
+			SiteConfiguration.gamemodeClassSchemes.map(x => x.numberPerTeam).reduce((a, b) => a + b) * 2;
 		return this.getAllPlayersAddedToDraft().length >= totalPlayersNeeded;
 	}
 

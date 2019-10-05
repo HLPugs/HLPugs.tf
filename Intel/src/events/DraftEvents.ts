@@ -58,8 +58,8 @@ export default class DraftEvents {
 				'Server',
 				this.draftService.checkIfServerRequirementIsFulfilled()
 			);
-			draftRequirements.push(playerCountRequirement);
 			draftRequirements.push(captainCountRequirement);
+			draftRequirements.push(playerCountRequirement);
 			draftRequirements.push(classesRequirement);
 			draftRequirements.push(serverRequirement);
 
