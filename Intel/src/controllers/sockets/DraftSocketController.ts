@@ -23,22 +23,20 @@ export default class DraftSocketController {
 	@OnMessage('addPlayerToDraftTFClass')
 	addToDraftTFClass(
 		@ConnectedSocket() socket: Socket,
-		@SocketIO() io: Server,
 		@MessageBody() payload: AddPlayerToDraftTFClassRequest
 	) {
 		ValidateClass(payload);
 		const { steamid } = socket.request.session.player;
-		this.draftEvents.addPlayerToDraftTFClass(io, steamid, payload.draftTFClass);
+		this.draftEvents.addPlayerToDraftTFClass(steamid, payload.draftTFClass);
 	}
 
 	@OnMessage('removePlayerFromDraftTFClass')
 	removePlayerFromDraftTFClass(
 		@ConnectedSocket() socket: Socket,
-		@SocketIO() io: Server,
 		@MessageBody() payload: RemovePlayerFromDraftTFClassRequest
 	) {
 		ValidateClass(payload);
 		const { steamid } = socket.request.session.player;
-		this.draftEvents.removePlayerFromDraftTFClass(io, steamid, payload.draftTFClass);
+		this.draftEvents.removePlayerFromDraftTFClass(steamid, payload.draftTFClass);
 	}
 }

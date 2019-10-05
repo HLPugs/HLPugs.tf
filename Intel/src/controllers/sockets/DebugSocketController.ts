@@ -44,12 +44,11 @@ export default class DebugSocketController {
 	@OnMessage('fakeLogout')
 	async fakeLogout(
 		@ConnectedSocket() socket: Socket,
-		@SocketIO() io: Server,
 		@MessageBody() payload: FakeLogoutRequest
 	) {
 		if (process.env.NODE_ENV === 'dev') {
 			ValidateClass(payload);
-			this.playerEvents.logout(io, socket, payload.steamid);
+			this.playerEvents.logout(socket, payload.steamid);
 		}
 	}
 
@@ -67,29 +66,27 @@ export default class DebugSocketController {
 	fakeAddPlayerToDraftTFClass(@SocketIO() io: Server, @MessageBody() payload: FakeAddPlayerToDraftTFClassRequest) {
 		if (process.env.NODE_ENV === 'dev') {
 			ValidateClass(payload);
-			this.draftEvents.addPlayerToDraftTFClass(io, payload.steamid, payload.draftTFClass);
+			this.draftEvents.addPlayerToDraftTFClass(payload.steamid, payload.draftTFClass);
 		}
 	}
 
 	@OnMessage('fakeRemovePlayerFromDraftTFClass')
 	fakeRemovePlayerFromDraftTFClass(
-		@SocketIO() io: Server,
 		@MessageBody() payload: FakeRemovePlayerFromDraftTFClassRequest
 	) {
 		if (process.env.NODE_ENV === 'dev') {
 			ValidateClass(payload);
-			this.draftEvents.removePlayerFromDraftTFClass(io, payload.steamid, payload.draftTFClass);
+			this.draftEvents.removePlayerFromDraftTFClass(payload.steamid, payload.draftTFClass);
 		}
 	}
 
 	@OnMessage('fakeAddPlayerToAllDraftTFClasses')
 	fakeAddPlayerToAllDraftTFClasses(
-		@SocketIO() io: Server,
 		@MessageBody() payload: FakeAddPlayerToAllDraftTFClassesRequest
 	) {
 		if (process.env.NODE_ENV === 'dev') {
 			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-				this.draftEvents.addPlayerToDraftTFClass(io, payload.steamid, scheme.tf2class);
+				this.draftEvents.addPlayerToDraftTFClass(payload.steamid, scheme.tf2class);
 			});
 		}
 	}

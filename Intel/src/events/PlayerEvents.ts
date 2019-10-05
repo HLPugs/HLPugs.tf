@@ -6,6 +6,7 @@ import { Socket, Server } from 'socket.io';
 import DraftEvents from './DraftEvents';
 import SessionService from '../services/SessionService';
 import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
+import { io } from '../server';
 
 export default class PlayerEvents {
 	private readonly draftEvents = new DraftEvents();
@@ -13,14 +14,14 @@ export default class PlayerEvents {
 	private readonly playerService = new PlayerService();
 	private readonly sessionService = new SessionService();
 
-	logout(io: Server, socket: SocketWithPlayer, steamid: SteamID) {
-		this.disconnectPlayer(io, socket, steamid);
+	logout(socket: SocketWithPlayer, steamid: SteamID) {
+		this.disconnectPlayer(socket, steamid);
 		socket.request.session.player = undefined;
 		socket.request.session.save();
 	}
 
-	disconnectPlayer(io: Server, socket: SocketWithPlayer, steamid: SteamID) {
-		this.draftEvents.removePlayerFromAllDraftTFClasses(io, steamid);
+	disconnectPlayer(socket: SocketWithPlayer, steamid: SteamID) {
+		this.draftEvents.removePlayerFromAllDraftTFClasses(steamid);
 		this.sessionService.removePlayer(steamid);
 		io.emit('removePlayerFromSession', steamid);
 		socket.emit('updateCurrentPlayer', new PlayerViewModel());

@@ -35,8 +35,6 @@ export class HomeSocketController {
 	async socketConnected(
 		@ConnectedSocket() socket: Socket,
 		@SocketRequest() request: SocketRequestWithPlayer,
-		@SocketIO() io: Server,
-		@SocketRooms() rooms: any
 	) {
 		socket.emit('siteConfiguration', SiteConfiguration);
 		if (socket.request.session.err) {
@@ -80,7 +78,7 @@ export class HomeSocketController {
 			}
 			if (player.settings.addToFavoritesOnLogin) {
 				player.settings.favoriteClasses.forEach(draftTFClass => {
-					this.draftEvents.addPlayerToDraftTFClass(io, player.steamid, draftTFClass);
+					this.draftEvents.addPlayerToDraftTFClass(player.steamid, draftTFClass);
 				});
 			}
 		}
@@ -93,33 +91,30 @@ export class HomeSocketController {
 	}
 
 	@OnDisconnect()
-	playerDisconnected(@SocketIO() io: Server, @SocketRequest() request: SocketRequestWithPlayer) {
+	playerDisconnected(
+		@SocketIO() io: Server,
+		@ConnectedSocket() socket: Socket,
+		@SocketRequest() request: SocketRequestWithPlayer
+	) {
 		if (!request.session.player.alias) return;
-		const { steamid } = request.session.player;
 
 		/* Don't disconnect the player and remove them from the draft if they close a connection and have multiple tabs/windows open
-		 The player just disconnected, so if a room named by the player's steamid still exists, this means the player is still connected in another tab/window
-		 We can confirm the player still has one or more tab/windows open by seeing if there is a room named by their SteamID and checking if it is undefined or not
-		 *** IMPORTANT *** this will still remove the player from the draft (and everything else) if they reload the page or temporarily lose connection, however.
-		 One possible solution is having a setTimeout() around the disconnect, and waiting approximately 10 seconds to see if the player is still disconnected. */
+		The player just disconnected, so if a room named by the player's steamid still exists, this means the player is still connected in another tab/window
+		We can confirm the player still has one or more tab/windows open by seeing if there is a room named by their SteamID and checking if it is undefined or not
+		*** IMPORTANT *** this will still remove the player from the draft (and everything else) if they reload the page or temporarily lose connection, however.
+		One possible solution is having a setTimeout() around the disconnect, and waiting approximately 10 seconds to see if the player is still disconnected. */
+		const { steamid } = request.session.player;
 		if (io.sockets.adapter.rooms[steamid] !== undefined) return;
-		this.draftService.removePlayerFromAllDraftTFClasses(steamid);
-
-		SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-			this.draftEvents.removePlayerFromDraftTFClass(io, steamid, scheme.tf2class);
-		});
-
-		this.sessionService.removePlayer(request.session.player.steamid);
-		io.emit('removePlayerFromSession', request.session.player.steamid);
+		this.playerEvents.disconnectPlayer(socket, steamid);
 	}
 
 	@OnMessage('logout')
-	logout(@SocketIO() io: Server, @ConnectedSocket() socket: SocketWithPlayer) {
-		this.playerEvents.logout(io, socket, socket.request.session.player.steamid);
+	logout(@ConnectedSocket() socket: SocketWithPlayer) {
+		this.playerEvents.logout(socket, socket.request.session.player.steamid);
 	}
 
 	@OnMessage('getPreDraftRequirements')
-	getPreDraftRequirements(@SocketIO() io: Server) {
-		this.draftEvents.sendPreDraftRequirements(io);
+	getPreDraftRequirements() {
+		this.draftEvents.sendPreDraftRequirements();
 	}
 }

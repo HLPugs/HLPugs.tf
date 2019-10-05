@@ -38,6 +38,8 @@ const sessionConfig = expressSession({
 });
 
 app.use(sessionConfig);
+const server = new Server(app);
+export const io = socketIO(server);
 
 consoleLogStatus(`\n${Underscore}${FgBlue}HLPugs.tf Bootstrap Initializing`);
 consoleLogStatus(`Synchronizing models to database with ${FgYellow}TypeORM${Reset}...\n`);
@@ -61,9 +63,6 @@ createConnection()
 			controllers: [__dirname + '/controllers/*.js']
 		});
 
-		const server = new Server(app);
-
-		const io = socketIO(server);
 		io.use((socket, next) => {
 			sessionConfig(socket.request, socket.request.res, next);
 		});
