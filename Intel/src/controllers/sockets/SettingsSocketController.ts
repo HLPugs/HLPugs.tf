@@ -14,9 +14,11 @@ import ValidateClass from '../../utils/ValidateClass';
 import UpdatePlayerSettingsRequest from '../../../../Common/Requests/UpdatePlayerSettingsRequest';
 import PlayerSettings from '../../entities/PlayerSettings';
 import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
+import PlayerEvents from '../../events/PlayerEvents';
 
 @SocketController()
 export default class SettingsSocketController {
+	private readonly playerEvents = new PlayerEvents();
 	private readonly playerService = new PlayerService();
 
 	@OnMessage('getPlayerSettings')
@@ -28,14 +30,11 @@ export default class SettingsSocketController {
 	}
 
 	@OnMessage('saveSettings')
-	@EmitOnSuccess('settingsSuccess')
 	@EmitOnFail('settingsError')
 	async saveSettings(@ConnectedSocket() socket: SocketWithPlayer, @MessageBody() payload: UpdatePlayerSettingsRequest) {
-		const { playerSettingsViewModel } = payload;
+		const { playerSettingsViewModel } = ValidateClass(payload);
 		const { steamid } = socket.request.session.player;
 		const settings = PlayerSettings.fromViewModel(playerSettingsViewModel);
-		await this.playerService.updateSettings(steamid, settings);
-		socket.request.session.player.settings = settings;
-		socket.request.session.save();
+		await this.playerEvents.updateSettings(socket, steamid, settings);
 	}
 }

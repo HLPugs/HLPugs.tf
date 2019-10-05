@@ -47,26 +47,20 @@ export default class DebugSocketController {
 		if (process.env.NODE_ENV === 'dev') {
 			ValidateClass(payload);
 			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-				this.draftEvents.removePlayerFromDraftTFClass(io, {
-					draftTFClass: scheme.tf2class,
-					steamid: payload.steamid
-				});
-			});
-
-			this.sessionService.removePlayer(payload.steamid);
-			socket.request.session.player = undefined;
-			socket.request.session.save();
-			io.emit('removePlayerFromSession', payload.steamid);
-
-			socket.emit('updateCurrentPlayer', new PlayerViewModel());
-			this.draftService.removePlayerFromAllDraftTFClasses(payload.steamid);
-			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-				this.draftEvents.removePlayerFromDraftTFClass(io, {
-					draftTFClass: scheme.tf2class,
-					steamid: payload.steamid
-				});
+				this.draftEvents.removePlayerFromDraftTFClass(io, payload.steamid, scheme.tf2class);
 			});
 		}
+
+		this.sessionService.removePlayer(payload.steamid);
+		socket.request.session.player = undefined;
+		socket.request.session.save();
+		io.emit('removePlayerFromSession', payload.steamid);
+
+		socket.emit('updateCurrentPlayer', new PlayerViewModel());
+		this.draftService.removePlayerFromAllDraftTFClasses(payload.steamid);
+		SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
+			this.draftEvents.removePlayerFromDraftTFClass(io, payload.steamid, scheme.tf2class);
+		});
 	}
 
 	@OnMessage('addFakePlayer')
@@ -81,13 +75,9 @@ export default class DebugSocketController {
 
 	@OnMessage('fakeAddPlayerToDraftTFClass')
 	fakeAddPlayerToDraftTFClass(@SocketIO() io: Server, @MessageBody() payload: FakeAddPlayerToDraftTFClassRequest) {
-		ValidateClass(payload);
-		if (!this.draftService.isPlayerAddedToDraftTFClass(payload.steamid, payload.draftTFClass)) {
-			this.draftService.addPlayerToDraftTFClass(payload.steamid, payload.draftTFClass);
-			this.draftEvents.addPlayerToDraftTFClass(io, {
-				draftTFClass: payload.draftTFClass,
-				steamid: payload.steamid
-			});
+		if (process.env.NODE_ENV === 'dev') {
+			ValidateClass(payload);
+			this.draftEvents.addPlayerToDraftTFClass(io, payload.steamid, payload.draftTFClass);
 		}
 	}
 
@@ -96,9 +86,10 @@ export default class DebugSocketController {
 		@SocketIO() io: Server,
 		@MessageBody() payload: FakeRemovePlayerFromDraftTFClassRequest
 	) {
-		ValidateClass(payload);
-		this.draftService.removePlayerFromDraftTFClass(payload.steamid, payload.draftTFClass);
-		io.emit('removePlayerFromDraftTFClass', payload.draftTFClass, payload.steamid);
+		if (process.env.NODE_ENV === 'dev') {
+			ValidateClass(payload);
+			this.draftEvents.removePlayerFromDraftTFClass(io, payload.steamid, payload.draftTFClass);
+		}
 	}
 
 	@OnMessage('fakeAddPlayerToAllDraftTFClasses')
@@ -106,11 +97,10 @@ export default class DebugSocketController {
 		@SocketIO() io: Server,
 		@MessageBody() payload: FakeAddPlayerToAllDraftTFClassesRequest
 	) {
-		SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-			if (!this.draftService.isPlayerAddedToDraftTFClass(payload.steamid, scheme.tf2class)) {
-				this.draftService.addPlayerToDraftTFClass(payload.steamid, scheme.tf2class);
-				io.emit('addPlayerToDraftTFClass', scheme.tf2class, payload.steamid);
-			}
-		});
+		if (process.env.NODE_ENV === 'dev') {
+			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
+				this.draftEvents.addPlayerToDraftTFClass(io, payload.steamid, scheme.tf2class);
+			});
+		}
 	}
 }
