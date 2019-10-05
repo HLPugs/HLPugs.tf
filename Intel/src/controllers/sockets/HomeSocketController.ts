@@ -77,7 +77,7 @@ export class HomeSocketController {
 			}
 			if (player.settings.addToFavoritesOnLogin) {
 				player.settings.favoriteClasses.forEach(draftTFClass => {
-					this.draftEvents.addPlayerToDraftTFClass(io, { steamid: player.steamid, draftTFClass });
+					this.draftEvents.addPlayerToDraftTFClass(io, player.steamid, draftTFClass);
 				});
 			}
 		}
@@ -103,7 +103,7 @@ export class HomeSocketController {
 		this.draftService.removePlayerFromAllDraftTFClasses(steamid);
 
 		SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-			this.draftEvents.removePlayerFromDraftTFClass(io, { draftTFClass: scheme.tf2class, steamid });
+			this.draftEvents.removePlayerFromDraftTFClass(io, steamid, scheme.tf2class);
 		});
 
 		this.sessionService.removePlayer(request.session.player.steamid);

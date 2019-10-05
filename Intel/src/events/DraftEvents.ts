@@ -7,32 +7,22 @@ import DraftService from '../services/DraftService';
 import PreDraftRequirementViewModel from '../../../Common/ViewModels/PreDraftRequirementViewModel';
 import ValidateClass from '../utils/ValidateClass';
 
-interface AddPlayerToDraftTFClassEventData {
-	steamid: SteamID;
-	draftTFClass: DraftTFClass;
-}
-
-interface RemovePlayerFromDraftTFClassEventData {
-	steamid: SteamID;
-	draftTFClass: DraftTFClass;
-}
-
 export default class DraftEvents {
 	private readonly draftService = new DraftService();
 
-	addPlayerToDraftTFClass(io: Server, eventData: AddPlayerToDraftTFClassEventData) {
-		if (!this.draftService.isPlayerAddedToDraftTFClass(eventData.steamid, eventData.draftTFClass)) {
-			this.draftService.addPlayerToDraftTFClass(eventData.steamid, eventData.draftTFClass);
-			const response = new AddPlayerToDraftTFClassResponse(eventData.steamid, eventData.draftTFClass);
+	addPlayerToDraftTFClass(io: Server, steamid: SteamID, draftTFClass: DraftTFClass) {
+		if (!this.draftService.isPlayerAddedToDraftTFClass(steamid, draftTFClass)) {
+			this.draftService.addPlayerToDraftTFClass(steamid, draftTFClass);
+			const response = new AddPlayerToDraftTFClassResponse(steamid, draftTFClass);
 			io.emit('addPlayerToDraftTFClass', response);
 			this.sendNewDraftRequirements(io);
 		}
 	}
 
-	removePlayerFromDraftTFClass(io: Server, eventData: RemovePlayerFromDraftTFClassEventData) {
-		if (this.draftService.isPlayerAddedToDraftTFClass(eventData.steamid, eventData.draftTFClass)) {
-			this.draftService.removePlayerFromDraftTFClass(eventData.steamid, eventData.draftTFClass);
-			const response = new RemovePlayerFromDraftTFClassResponse(eventData.steamid, eventData.draftTFClass);
+	removePlayerFromDraftTFClass(io: Server, steamid: SteamID, draftTFClass: DraftTFClass) {
+		if (this.draftService.isPlayerAddedToDraftTFClass(steamid, draftTFClass)) {
+			this.draftService.removePlayerFromDraftTFClass(steamid, draftTFClass);
+			const response = new RemovePlayerFromDraftTFClassResponse(steamid, draftTFClass);
 			io.emit('removePlayerFromDraftTFClass', response);
 			this.sendNewDraftRequirements(io);
 		}
