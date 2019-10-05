@@ -67,6 +67,7 @@ export class HomeSocketController {
 		@SocketIO() io: Server,
 		@SocketRooms() rooms: any
 	) {
+		this.draftEvents.sendNewDraftRequirements(io);
 		if (socket.request.session.player) {
 			const { player } = socket.request.session;
 
