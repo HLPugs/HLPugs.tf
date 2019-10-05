@@ -6,9 +6,11 @@ import GetDraftTFClassListRequest from '../../../../Common/Requests/GetDraftTFCl
 import RemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests/RemovePlayerFromDraftTFClassRequest';
 import ValidateClass from '../../utils/ValidateClass';
 import SteamID from '../../../../Common/Types/SteamID';
+import DraftEvents from '../../events/DraftEvents';
 
 @SocketController()
 export default class DraftSocketController {
+	private readonly draftEvents = new DraftEvents();
 	private readonly draftService = new DraftService();
 
 	@OnMessage('getDraftTFClassList')
@@ -26,10 +28,7 @@ export default class DraftSocketController {
 	) {
 		ValidateClass(payload);
 		const { steamid } = socket.request.session.player;
-		if (!this.draftService.isPlayerAddedToDraftTFClass(steamid, payload.draftTFClass)) {
-			this.draftService.addPlayerToDraftTFClass(steamid, payload.draftTFClass);
-			io.emit('addPlayerToDraftTFClass', payload.draftTFClass, steamid);
-		}
+		this.draftEvents.addPlayerToDraftTFClass(io, { steamid, draftTFClass: payload.draftTFClass });
 	}
 
 	@OnMessage('removePlayerFromDraftTFClass')
@@ -40,7 +39,6 @@ export default class DraftSocketController {
 	) {
 		ValidateClass(payload);
 		const { steamid } = socket.request.session.player;
-		this.draftService.removePlayerFromDraftTFClass(steamid, payload.draftTFClass);
-		io.emit('removePlayerFromDraftTFClass', payload.draftTFClass, steamid);
+		this.draftEvents.removePlayerFromDraftTFClass(io, { steamid, draftTFClass: payload.draftTFClass });
 	}
 }

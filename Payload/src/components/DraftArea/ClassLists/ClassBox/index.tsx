@@ -8,6 +8,8 @@ import GamemodeClassScheme from '../../../../../../Common/Models/GamemodeClassSc
 import GetDraftTFClassListRequest from '../../../../../../Common/Requests/GetDraftTFClassListRequest';
 import RemovePlayerFromDraftTFClassRequest from '../../../../../../Common/Requests/RemovePlayerFromDraftTFClassRequest';
 import SteamID from '../../../../../../Common/Types/SteamID';
+import AddPlayerToDraftTFClassResponse from '../../../../../../Common/Responses/AddPlayerToDraftTFClassResponse';
+import RemovePlayerFromDraftTFClassResponse from '../../../../../../Common/Responses/RemovePlayerFromDraftTFClassResponse';
 
 interface ClassBoxProps {
 	properties: GamemodeClassScheme;
@@ -23,16 +25,16 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 	constructor(props: ClassBoxProps) {
 		super(props);
 
-		const getDraftTFClassListRequest: GetDraftTFClassListRequest = {
+		const request: GetDraftTFClassListRequest = {
 			draftTFClass: this.props.properties.tf2class
 		};
-		this.props.socket.emit('getDraftTFClassList', getDraftTFClassListRequest);
+		this.props.socket.emit('getDraftTFClassList', request);
 
 		this.props.socket.on('reconnect', () => {
-			const getDraftTFClassListRequest: GetDraftTFClassListRequest = {
+			const request: GetDraftTFClassListRequest = {
 				draftTFClass: this.props.properties.tf2class
 			};
-			this.props.socket.emit('getDraftTFClassList', getDraftTFClassListRequest);
+			this.props.socket.emit('getDraftTFClassList', request);
 		});
 
 		this.props.socket.on('draftTFClassList', (tfClass: DraftTFClass, playersAddedToClass: SteamID[]) => {
@@ -41,18 +43,18 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 			}
 		});
 
-		this.props.socket.on('addPlayerToDraftTFClass', (tfClass: DraftTFClass, steamid: SteamID) => {
-			if (tfClass === this.props.properties.tf2class) {
+		this.props.socket.on('addPlayerToDraftTFClass', (response: AddPlayerToDraftTFClassResponse) => {
+			if (response.draftTFClass === this.props.properties.tf2class) {
 				this.setState({
-					playersAddedToClass: [...this.state.playersAddedToClass, steamid]
+					playersAddedToClass: [...this.state.playersAddedToClass, response.steamid]
 				});
 			}
 		});
 
-		this.props.socket.on('removePlayerFromDraftTFClass', (tfClass: DraftTFClass, steamid: SteamID) => {
-			if (tfClass === this.props.properties.tf2class) {
+		this.props.socket.on('removePlayerFromDraftTFClass', (response: RemovePlayerFromDraftTFClassResponse) => {
+			if (response.draftTFClass === this.props.properties.tf2class) {
 				const newPlayers = [...this.state.playersAddedToClass];
-				const indexOfPlayer = newPlayers.indexOf(steamid);
+				const indexOfPlayer = newPlayers.indexOf(response.steamid);
 
 				if (indexOfPlayer >= 0) {
 					newPlayers.splice(indexOfPlayer, 1);
@@ -75,17 +77,17 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 		}
 
 		if (this.state.playersAddedToClass.includes(this.props.steamid)) {
-			const removePlayerFromDraftTFClassRequest: RemovePlayerFromDraftTFClassRequest = {
+			const request: RemovePlayerFromDraftTFClassRequest = {
 				draftTFClass: this.props.properties.tf2class
 			};
 
-			this.props.socket.emit('removePlayerFromDraftTFClass', removePlayerFromDraftTFClassRequest);
+			this.props.socket.emit('removePlayerFromDraftTFClass', request);
 		} else {
-			const addPlayerToDraftTFClassRequest: AddPlayerToDraftTFClassRequest = {
+			const request: AddPlayerToDraftTFClassRequest = {
 				draftTFClass: this.props.properties.tf2class
 			};
 
-			this.props.socket.emit('addPlayerToDraftTFClass', addPlayerToDraftTFClassRequest);
+			this.props.socket.emit('addPlayerToDraftTFClass', request);
 		}
 	};
 
@@ -97,9 +99,7 @@ class ClassBox extends React.Component<ClassBoxProps, ClassBoxState> {
 		return (
 			<div
 				className={
-					this.state.playersAddedToClass.includes(this.props.steamid)
-						? 'classCheckbox checked'
-						: 'classCheckbox'
+					this.state.playersAddedToClass.includes(this.props.steamid) ? 'classCheckbox checked' : 'classCheckbox'
 				}
 				onClick={this.toggleClass}
 			/>

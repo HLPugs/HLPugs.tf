@@ -12,9 +12,11 @@ import FakeAddPlayerToDraftTFClassRequest from '../../../../Common/Requests/Fake
 import FakeAddPlayerToAllDraftTFClassesRequest from '../../../../Common/Requests/FakeAddPlayerToAllDraftTFClassesRequest';
 import FakeRemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests/FakeRemovePlayerFromDraftTFClassRequest';
 import DraftService from '../../services/DraftService';
+import DraftEvents from '../../events/DraftEvents';
 
 @SocketController()
 export default class DebugSocketController {
+	private readonly draftEvents = new DraftEvents();
 	private readonly playerService = new PlayerService();
 	private readonly sessionService = new SessionService();
 	private readonly debugService = new DebugService();
@@ -45,7 +47,10 @@ export default class DebugSocketController {
 		if (process.env.NODE_ENV === 'dev') {
 			ValidateClass(payload);
 			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-				io.emit('removePlayerFromDraftTFClass', scheme.tf2class, payload.steamid);
+				this.draftEvents.removePlayerFromDraftTFClass(io, {
+					draftTFClass: scheme.tf2class,
+					steamid: payload.steamid
+				});
 			});
 
 			this.sessionService.removePlayer(payload.steamid);
@@ -56,7 +61,10 @@ export default class DebugSocketController {
 			socket.emit('updateCurrentPlayer', new PlayerViewModel());
 			this.draftService.removePlayerFromAllDraftTFClasses(payload.steamid);
 			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
-				io.emit('removePlayerFromDraftTFClass', scheme.tf2class, socket.request.session.player.steamid);
+				this.draftEvents.removePlayerFromDraftTFClass(io, {
+					draftTFClass: scheme.tf2class,
+					steamid: payload.steamid
+				});
 			});
 		}
 	}
@@ -76,7 +84,10 @@ export default class DebugSocketController {
 		ValidateClass(payload);
 		if (!this.draftService.isPlayerAddedToDraftTFClass(payload.steamid, payload.draftTFClass)) {
 			this.draftService.addPlayerToDraftTFClass(payload.steamid, payload.draftTFClass);
-			io.emit('addPlayerToDraftTFClass', payload.draftTFClass, payload.steamid);
+			this.draftEvents.addPlayerToDraftTFClass(io, {
+				draftTFClass: payload.draftTFClass,
+				steamid: payload.steamid
+			});
 		}
 	}
 
