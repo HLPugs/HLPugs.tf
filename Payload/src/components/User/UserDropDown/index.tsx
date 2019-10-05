@@ -40,6 +40,7 @@ class UserDropDown extends React.Component<UserDropDownProps, {}> {
 						this.sendLogoutRequest();
 					}}
 				>
+					<FontAwesomeIcon icon="sign-out-alt"></FontAwesomeIcon>
 					Logout
 				</li>
 			</ul>
