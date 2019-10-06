@@ -28,6 +28,10 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-common-types": "^0.2.22",
-    "@fortawesome/fontawesome-svg-core": "^1.2.22"
+    "@fortawesome/fontawesome-svg-core": "^1.2.22",
+    "dnd-core": "^9.4.0",
+    "immutability-helper": "^3.0.1",
+    "react-dnd": "^9.4.0",
+    "react-dnd-html5-backend": "^9.4.0"
   }
 }

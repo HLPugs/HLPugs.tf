@@ -7,6 +7,8 @@ import Player from '../pages/Player';
 import Banned from '../pages/Banned';
 import Admin from '../pages/Admin';
 import Loading from '../components/Loading';
+import HTML5Backend from 'react-dnd-html5-backend';
+import { DndProvider } from 'react-dnd';
 
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faSteamSymbol, faDiscord, faPatreon } from '@fortawesome/free-brands-svg-icons';
@@ -28,7 +30,9 @@ import {
 	faArrowDown,
 	faArrowLeft,
 	faArrowRight,
-	faChartPie
+	faChartPie,
+	faPlus,
+	faGripVertical
 } from '@fortawesome/free-solid-svg-icons';
 import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 import Region from '../../../Common/Enums/Region';
@@ -57,7 +61,9 @@ library.add(
 	faArrowDown,
 	faArrowLeft,
 	faArrowRight,
-	faChartPie
+	faChartPie,
+	faPlus,
+	faGripVertical
 );
 
 interface AppState {
@@ -169,7 +175,7 @@ class App extends React.Component<{}, AppState> {
 	render() {
 		if (this.state.configuration) {
 			return (
-				<>
+				<DndProvider backend={HTML5Backend}>
 					{this.reconnectMessage()}
 					<Router>
 						<Switch>
@@ -199,11 +205,11 @@ class App extends React.Component<{}, AppState> {
 							<Route
 								path="/admin"
 								render={() =>
-									this.state.currentPlayer!.permissionGroup !== PermissionGroup.NONE ? (
+									this.state.currentPlayer.alias && this.state.currentPlayer.permissionGroup !== PermissionGroup.NONE ? (
 										<Admin
 											socket={this.socket}
 											configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}
-											currentPlayer={this.state.currentPlayer ? this.state.currentPlayer : new PlayerViewModel()}
+											currentPlayer={this.state.currentPlayer}
 										/>
 									) : (
 										<Redirect to="/" />
@@ -213,7 +219,7 @@ class App extends React.Component<{}, AppState> {
 							<Redirect from="*" to="/" />
 						</Switch>
 					</Router>
-				</>
+				</DndProvider>
 			);
 		}
 

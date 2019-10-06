@@ -10,6 +10,7 @@ import { Route } from 'react-router';
 
 import PrivilegeRankings from '../../../../Intel/src/constants/PrivilegeRankings';
 import PermissionGroup from '../../../../Common/Enums/PermissionGroup';
+import AnnouncementsManager from '../../components/AnnouncementsManager';
 
 interface AdminProps {
 	socket: SocketIOClient.Socket;
@@ -106,9 +107,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 
 	getNavigationGroup = (): NavItem[] => {
 		const playerPermissionValue = PrivilegeRankings[this.props.currentPlayer.permissionGroup];
-		return this.adminPages
-			.filter(p => p.permissionValue <= playerPermissionValue)
-			.map(p => p.navItem);
+		return this.adminPages.filter(p => p.permissionValue <= playerPermissionValue).map(p => p.navItem);
 	};
 
 	render() {
@@ -131,7 +130,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 				/>
 				<Route path={'/admin/roles'} render={() => <span>roles</span>} />
 				<Route path={'/admin/games'} render={() => <span>games</span>} />
-				<Route path={'/admin/announcements'} render={() => <span>announcements</span>} />
+				<Route path={'/admin/announcements'} render={() => <AnnouncementsManager />} />
 				<Route path={'/admin/punishments'} render={() => <span>punishments</span>} />
 				<Route path={'/admin/alts'} render={() => <span>alts</span>} />
 			</div>

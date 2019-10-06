@@ -1,0 +1,101 @@
+main {
+	grid-area: main;
+	display: flex;
+
+	.ManagementWindow {
+		display: flex;
+		flex-direction: column;
+		align-self: center;
+		width: 900px;
+		margin: 20px;
+		background: var(--background-dark);
+		padding: 20px;
+		border-radius: 4px;
+		box-shadow: var(--paper-2);
+
+		h1 {
+			font-size: 18px;
+		}
+
+		.AddBar {
+			display: flex;
+			background-color: var(--background);
+			border-radius: 4px;
+			box-shadow: var(--paper-1);
+			padding: 10px;
+			margin: 10px 0;
+			align-items: center;
+
+			input {
+				border: none;
+				padding: 10px 15px;
+				border-radius: 4px;
+				background: var(--background-light);
+				outline: none;
+				color: var(--font-primary);
+				font-size: 18px;
+				flex-grow: 1;
+			}
+
+			div {
+				font-size: 24px;
+				margin: 5px;
+				margin-left: 15px;
+				cursor: pointer;
+			}
+		}
+
+		.ListBox {
+			display: flex;
+			flex-direction: column;
+			background-color: var(--background);
+			border-radius: 4px;
+			box-shadow: var(--paper-1);
+			padding: 10px 10px 0px;
+			margin: 10px 0;
+
+			.Announcement {
+				background: var(--background-light);
+				border-radius: 4px;
+				font-size: 16px;
+				padding: 0px 15px 0px 0px;
+				margin-bottom: 10px;
+				display: flex;
+				justify-content: space-between;
+				align-items: center;
+
+				.AnnouncementHandle {
+					padding: 10px 15px;
+					cursor: move;
+				}
+
+				.AnnouncementText {
+					flex-grow: 1;
+					padding: 10px;
+					padding-left: 0px;
+				}
+
+				.AnnouncementDelete {
+					cursor: pointer;
+				}
+			}
+		}
+
+		.Save {
+			font-size: 20px;
+			opacity: .5;
+			background: var(--color);
+			align-self: flex-start;
+			padding: 15px 25px;
+			border-radius: 4px;
+			transition: all .5s;
+
+			&.Unsaved {
+				opacity: 1;
+				cursor: pointer;
+				background: hsl(26, 100%, 50%);
+				box-shadow: var(--paper-2);
+			}
+		}
+	}
+}
