@@ -83,12 +83,12 @@ main {
 
 		.Save {
 			font-size: 20px;
-			opacity: .5;
+			opacity: 0.5;
 			background: var(--color);
 			align-self: flex-start;
 			padding: 15px 25px;
 			border-radius: 4px;
-			transition: all .5s;
+			transition: all 0.5s;
 
 			&.Unsaved {
 				opacity: 1;

@@ -1,5 +1,11 @@
 import React, { useImperativeHandle, useRef } from 'react';
-import { ConnectDropTarget, ConnectDragSource, DropTargetMonitor, DragSourceMonitor, ConnectDragPreview } from 'react-dnd';
+import {
+	ConnectDropTarget,
+	ConnectDragSource,
+	DropTargetMonitor,
+	DragSourceMonitor,
+	ConnectDragPreview
+} from 'react-dnd';
 import { DragSource, DropTarget, DropTargetConnector, DragSourceConnector } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -117,8 +123,8 @@ export default DropTarget(
 			})
 		},
 		(connect: DragSourceConnector, monitor: DragSourceMonitor) => ({
-      connectDragSource: connect.dragSource(),
-      connectDragPreview: connect.dragPreview(),
+			connectDragSource: connect.dragSource(),
+			connectDragPreview: connect.dragPreview(),
 			isDragging: monitor.isDragging()
 		})
 	)(Announcement)
