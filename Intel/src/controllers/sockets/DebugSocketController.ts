@@ -14,6 +14,7 @@ import FakeRemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests
 import DraftService from '../../services/DraftService';
 import DraftEvents from '../../events/DraftEvents';
 import PlayerEvents from '../../events/PlayerEvents';
+import PermissionGroup from '../../../../Common/Enums/PermissionGroup';
 
 @SocketController()
 export default class DebugSocketController {
@@ -31,7 +32,7 @@ export default class DebugSocketController {
 			if (!this.sessionService.playerExists(DebugService.FAKE_OFFLINE_STEAMID)) {
 				await this.debugService.addFakePlayer(DebugService.FAKE_OFFLINE_STEAMID, socket.request.sessionID);
 				const player = await this.playerService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
-				player.isCaptain = true;
+				player.permissionGroup = PermissionGroup.HEAD_ADMIN;
 				socket.request.session.player = player;
 				socket.request.session.save();
 				const playerViewModel = PlayerViewModel.fromPlayer(player);

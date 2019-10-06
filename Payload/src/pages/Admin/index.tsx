@@ -130,7 +130,7 @@ class Admin extends React.Component<AdminProps, AdminState> {
 				/>
 				<Route path={'/admin/roles'} render={() => <span>roles</span>} />
 				<Route path={'/admin/games'} render={() => <span>games</span>} />
-				<Route path={'/admin/announcements'} render={() => <AnnouncementsManager />} />
+				<Route path={'/admin/announcements'} render={() => <AnnouncementsManager socket={this.props.socket} />} />
 				<Route path={'/admin/punishments'} render={() => <span>punishments</span>} />
 				<Route path={'/admin/alts'} render={() => <span>alts</span>} />
 			</div>

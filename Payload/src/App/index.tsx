@@ -205,7 +205,8 @@ class App extends React.Component<{}, AppState> {
 							<Route
 								path="/admin"
 								render={() =>
-									this.state.currentPlayer.alias && this.state.currentPlayer.permissionGroup !== PermissionGroup.NONE ? (
+									this.state.currentPlayer.alias &&
+									this.state.currentPlayer.permissionGroup !== PermissionGroup.NONE ? (
 										<Admin
 											socket={this.socket}
 											configuration={this.state.configuration ? this.state.configuration : this.dummyConfiguration}

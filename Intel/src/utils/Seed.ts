@@ -35,7 +35,7 @@ const SeedAnnouncements = async () => {
 	consoleLogStatus('SEEDING ANNOUNCEMENTS');
 
 	const announcementRepository = new LinqRepository(Announcement);
-	for (let i = 1; i <= 10; i++) {
+	for (let i = 1; i <= 1; i++) {
 		const announcement: Announcement = {
 			creatorSteamid: DebugService.FAKE_OFFLINE_STEAMID,
 			messageContent: 'Test Announcement #' + i,
@@ -104,7 +104,7 @@ const SeedPunishments = async () => {
 
 const Seed = async () => {
 	await SeedPlayers();
-	await SeedPunishments();
+	await SeedAnnouncements();
 };
 
 createConnection().then(async () => {

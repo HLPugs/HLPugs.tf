@@ -3,23 +3,22 @@ import './style.scss';
 import React, { useState, useRef } from 'react';
 import update from 'immutability-helper';
 import Announcement from './Announcment';
+import AdminAnnouncementViewModel from '../../../../Common/ViewModels/AdminAnnouncementViewModel';
+import Region from '../../../../Common/Enums/Region';
 
-interface Announcement {
-	id?: number;
-	text: string;
+interface AdminAnnouncementProps {
+	socket: SocketIOClient.Socket;
 }
 
-export default function AnnouncementsManager() {
-	const [announcements, setAnnouncements] = useState<Announcement[]>([
-		{
-			id: 1,
-			text: 'Test announcement here'
-		},
-		{
-			id: 2,
-			text: 'Testing all of the announcements'
-		}
-	]);
+export default function AnnouncementsManager(props: AdminAnnouncementProps) {
+	props.socket.emit('getAdminAnnouncements');
+
+	props.socket.on('getAdminAnnouncements', (viewmodels: AdminAnnouncementViewModel[]) => {
+		setAnnouncements(viewmodels);
+		setOriginalAnnouncements(viewmodels);
+	});
+
+	const [announcements, setAnnouncements] = useState<AdminAnnouncementViewModel[]>([]);
 
 	const [originalAnnouncements, setOriginalAnnouncements] = useState([...announcements]);
 
@@ -38,9 +37,9 @@ export default function AnnouncementsManager() {
 		const announcementText = announcementInput.current!.value;
 
 		if (announcementText.length > 0) {
-			const newAnnouncement = {
-				text: announcementText
-			};
+			const newAnnouncement = new AdminAnnouncementViewModel();
+			newAnnouncement.messageContent = announcementText;
+			newAnnouncement.region = Region.All;
 
 			setAnnouncements(
 				update(announcements, {
@@ -60,7 +59,7 @@ export default function AnnouncementsManager() {
 		);
 	};
 
-	const diffCheck = (): boolean => {
+	const announcementsModified = (): boolean => {
 		console.log(announcements, originalAnnouncements);
 		if (announcements.length !== originalAnnouncements.length) {
 			return false;
@@ -92,16 +91,16 @@ export default function AnnouncementsManager() {
 				<div className="ListBox">
 					{announcements.map((announcement, i) => (
 						<Announcement
-							key={announcement.id + announcement.text}
+							key={announcement.id + announcement.messageContent}
 							index={i}
 							id={announcement.id}
-							text={announcement.text}
+							text={announcement.messageContent}
 							moveAnnouncement={moveAnnouncement}
 							removeAnnouncement={removeAnnouncement}
 						/>
 					))}
 				</div>
-				<div className={diffCheck() ? 'Save' : 'Save Unsaved'} onClick={saveAnnouncements}>
+				<div className={announcementsModified() ? 'Save' : 'Save Unsaved'} onClick={saveAnnouncements}>
 					Save
 				</div>
 			</div>
