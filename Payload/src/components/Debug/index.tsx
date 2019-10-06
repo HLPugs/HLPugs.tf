@@ -77,6 +77,13 @@ class Debug extends React.Component<DebugProps, DebugState> {
 				options: {
 					steamid: this.state.targetPlayerSteamid
 				}
+			},
+			{
+				title: 'Find Player',
+				emit: 'findPlayerByAlias',
+				options: {
+					alias: 'f'
+				}
 			}
 		];
 	};

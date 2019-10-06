@@ -40,6 +40,15 @@ export default class PlayerService {
 		}
 	}
 
+	async getPlayersByPartialAlias(alias: string): Promise<Player[]> {
+		const playerRepository = new LinqRepository(Player);
+		const players = await playerRepository
+			.getAll()
+			.where(p => p.alias)
+			.beginsWith(alias);
+		return players;
+	}
+
 	async getClassStatistics(identifier: string, filterOptions?: ClassStatisticsFilterOptions): Promise<ClassStatistics> {
 		let filterQuery = '';
 		const filters: (MatchType | Region | Gamemode)[] = [];
