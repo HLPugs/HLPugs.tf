@@ -15,9 +15,12 @@ import DraftService from '../../services/DraftService';
 import DraftEvents from '../../events/DraftEvents';
 import PlayerEvents from '../../events/PlayerEvents';
 import FAKE_OFFLINE_STEAMID from '../../../../Common/Constants/FakeOfflineSteamid';
+import { HomeSocketController } from './HomeSocketController';
 
 @SocketController()
 export default class DebugSocketController {
+	private readonly homeSocketController = new HomeSocketController();
+
 	private readonly playerEvents = new PlayerEvents();
 	private readonly draftEvents = new DraftEvents();
 

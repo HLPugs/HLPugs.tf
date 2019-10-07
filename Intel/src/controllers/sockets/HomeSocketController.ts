@@ -32,10 +32,7 @@ export class HomeSocketController {
 	private readonly draftService = new DraftService();
 
 	@OnConnect()
-	async socketConnected(
-		@ConnectedSocket() socket: Socket,
-		@SocketRequest() request: SocketRequestWithPlayer,
-	) {
+	async socketConnected(@ConnectedSocket() socket: Socket, @SocketRequest() request: SocketRequestWithPlayer) {
 		socket.emit('siteConfiguration', SiteConfiguration);
 		if (socket.request.session.err) {
 			socket.emit('serverError', socket.request.session.err);
@@ -60,11 +57,7 @@ export class HomeSocketController {
 	}
 
 	@OnMessage('playerLoadedHomepage')
-	async playerLoadedHomepage(
-		@ConnectedSocket() socket: SocketWithPlayer,
-		@SocketIO() io: Server,
-		@SocketRooms() rooms: any
-	) {
+	async playerLoadedHomepage(@ConnectedSocket() socket: SocketWithPlayer, @SocketIO() io: Server) {
 		if (socket.request.session.player) {
 			const { player } = socket.request.session;
 
