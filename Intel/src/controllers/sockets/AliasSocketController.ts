@@ -38,7 +38,7 @@ export class AliasSocketController {
 		socket.request.session.reload(async (err: string) => {
 			if (err) throw new Error(err);
 			const player: Player = socket.request.session.player;
-			this.sessionService.upsertPlayer(steamid, socket.request.session.id);
+			this.sessionService.associateSteamidWithSessionid(steamid, socket.request.session.id);
 			const playerViewModel = PlayerViewModel.fromPlayer(player);
 			socket.emit('updateCurrentPlayer', playerViewModel);
 			socket.emit('hideAliasModal');

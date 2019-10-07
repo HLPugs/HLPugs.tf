@@ -12,7 +12,6 @@ import PlayerSettings from '../entities/PlayerSettings';
 export default class DebugService {
 	private readonly playerService = new PlayerService();
 	private readonly sessionService = new SessionService();
-	static FAKE_OFFLINE_STEAMID = '76561198119135809';
 	static DEFAULT_STEAM_AVATAR =
 		'https://steamcdn-a.akamaihd.net/steamcommunity/public/images/avatars/fe/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg';
 	/**
@@ -55,7 +54,7 @@ export default class DebugService {
 				fakeSession.player = await this.playerService.getPlayer(fakePlayer.steamid);
 				store.set(sessionId ? sessionId : fakeSession.id, fakeSession, async err => {
 					if (err) reject(err);
-					this.sessionService.upsertPlayer(fakePlayer.steamid, fakeSession.id);
+					this.sessionService.associateSteamidWithSessionid(fakePlayer.steamid, fakeSession.id);
 					resolve(fakePlayer);
 				});
 			});

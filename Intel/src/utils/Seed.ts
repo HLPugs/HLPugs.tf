@@ -16,13 +16,14 @@ import DebugService from '../services/DebugService';
 import PlayerSettings from '../entities/PlayerSettings';
 import Punishment from '../entities/Punishment';
 import PunishmentType from '../../../Common/Enums/PunishmentType';
+import FAKE_OFFLINE_STEAMID from '../../../Common/Constants/FakeOfflineSteamid';
 
 const SeedPlayers = async () => {
 	consoleLogStatus('SEEDING PLAYERS');
 	const playerRepository = new LinqRepository(Player);
 
 	const player = new Player();
-	player.steamid = DebugService.FAKE_OFFLINE_STEAMID;
+	player.steamid = FAKE_OFFLINE_STEAMID;
 	player.alias = 'Gabe';
 	player.avatarUrl = DebugService.DEFAULT_STEAM_AVATAR;
 	player.ip = '127.0.0.1';
@@ -37,7 +38,7 @@ const SeedAnnouncements = async () => {
 	const announcementRepository = new LinqRepository(Announcement);
 	for (let i = 1; i <= 10; i++) {
 		const announcement: Announcement = {
-			creatorSteamid: DebugService.FAKE_OFFLINE_STEAMID,
+			creatorSteamid: FAKE_OFFLINE_STEAMID,
 			messageContent: 'Test Announcement #' + i,
 			order: i,
 			priority: false,
@@ -55,7 +56,7 @@ const SeedMatches = async () => {
 	const playerService = new PlayerService();
 	const matchRepository = new LinqRepository(Match);
 
-	const player = await playerService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
+	const player = await playerService.getPlayer(FAKE_OFFLINE_STEAMID);
 
 	const gamemodeClassScheme = GamemodeClassSchemes.get(Gamemode.Highlander);
 
@@ -94,7 +95,7 @@ const SeedPunishments = async () => {
 	const player = await playerRepository
 		.getOne()
 		.where(p => p.steamid)
-		.equal(DebugService.FAKE_OFFLINE_STEAMID);
+		.equal(FAKE_OFFLINE_STEAMID);
 	punishment.offender = player;
 	punishment.creator = player;
 	punishment.punishmentType = PunishmentType.BAN;

@@ -14,7 +14,7 @@ import FakeRemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests
 import DraftService from '../../services/DraftService';
 import DraftEvents from '../../events/DraftEvents';
 import PlayerEvents from '../../events/PlayerEvents';
-import PermissionGroup from '../../../../Common/Enums/PermissionGroup';
+import FAKE_OFFLINE_STEAMID from '../../../../Common/Constants/FakeOfflineSteamid';
 
 @SocketController()
 export default class DebugSocketController {
@@ -29,10 +29,10 @@ export default class DebugSocketController {
 	@OnMessage('fakeLogin')
 	async fakeLogin(@ConnectedSocket() socket: Socket, @SocketIO() io: Server) {
 		if (process.env.NODE_ENV === 'dev') {
-			if (!this.sessionService.playerExists(DebugService.FAKE_OFFLINE_STEAMID)) {
-				await this.debugService.addFakePlayer(DebugService.FAKE_OFFLINE_STEAMID, socket.request.sessionID);
-				const player = await this.playerService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
-				socket.join(DebugService.FAKE_OFFLINE_STEAMID);
+			if (!this.sessionService.playerExists(FAKE_OFFLINE_STEAMID)) {
+				await this.debugService.addFakePlayer(FAKE_OFFLINE_STEAMID, socket.request.sessionID);
+				const player = await this.playerService.getPlayer(FAKE_OFFLINE_STEAMID);
+				socket.join(FAKE_OFFLINE_STEAMID);
 				socket.request.session.player = player;
 				socket.request.session.save();
 				const playerViewModel = PlayerViewModel.fromPlayer(player);

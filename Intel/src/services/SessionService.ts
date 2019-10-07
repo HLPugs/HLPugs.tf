@@ -18,7 +18,7 @@ class SessionService {
 	 * @param {SteamID} steamid - The SteamID that references the session ID.
 	 */
 
-	upsertPlayer(steamid: SteamID, sessionId: SessionID) {
+	associateSteamidWithSessionid(steamid: SteamID, sessionId: SessionID) {
 		SessionService.playerSessionMap.set(steamid, sessionId);
 	}
 

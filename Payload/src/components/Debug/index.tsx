@@ -9,6 +9,7 @@ import DraftTFClass from '../../../../Common/Enums/DraftTFClass';
 import FakeRemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests/FakeRemovePlayerFromDraftTFClassRequest';
 import Role from '../../../../Common/Enums/Role';
 import PermissionGroup from '../../../../Common/Enums/PermissionGroup';
+import FAKE_OFFLINE_STEAMID from '../../../../Common/Constants/FakeOfflineSteamid';
 
 interface DebugProps {
 	socket: SocketIOClient.Socket;
@@ -47,7 +48,7 @@ class Debug extends React.Component<DebugProps, DebugState> {
 				title: 'Log out',
 				emit: 'fakeLogout',
 				options: {
-					steamid: '76561198119135809'
+					steamid: FAKE_OFFLINE_STEAMID
 				}
 			},
 			{

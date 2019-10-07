@@ -186,9 +186,11 @@ export default class PlayerService {
 				.equal(player.steamid);
 			playerToUpdate.avatarUrl = player.avatarUrl;
 			playerToUpdate.ip = player.ip;
+			await this.sessionService.updatePlayer(playerToUpdate);
 			await playerRepository.update(playerToUpdate);
 		} else {
 			player.settings = new PlayerSettings();
+			await this.sessionService.updatePlayer(player);
 			await playerRepository.create(player);
 		}
 	}

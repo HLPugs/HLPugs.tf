@@ -72,7 +72,7 @@ export class HomeSocketController {
 				socket.join(player.steamid);
 			}
 			if (io.sockets.adapter.rooms[player.steamid].length === 1) {
-				this.sessionService.upsertPlayer(player.steamid, socket.request.session.id);
+				this.sessionService.associateSteamidWithSessionid(player.steamid, socket.request.session.id);
 				const playerViewModel = PlayerViewModel.fromPlayer(await this.sessionService.getPlayer(player.steamid));
 				io.emit('addPlayerToSession', ValidateClass(playerViewModel));
 			}
