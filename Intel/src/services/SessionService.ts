@@ -55,7 +55,16 @@ class SessionService {
 	async updatePlayer(player: Player) {
 		if (this.playerExists(player.steamid)) {
 			const sessionId = SessionService.playerSessionMap.get(player.steamid);
-			this.upsertPlayer(player.steamid, sessionId);
+			const cookie = await this.getCookie(player.steamid);
+			return new Promise((resolve, reject) => {
+				store.set(sessionId, { player, cookie }, (err?) => {
+					if (err) {
+						reject(new Error(err));
+					} else {
+						resolve();
+					}
+				});
+			});
 		}
 	}
 
@@ -82,6 +91,24 @@ class SessionService {
 	 */
 	clearSessions() {
 		SessionService.playerSessionMap.clear();
+	}
+
+	getCookie(steamid: SteamID): Promise<Express.SessionCookieData> {
+		return new Promise((resolve, reject) => {
+			if (SessionService.playerSessionMap.has(steamid)) {
+				const sessionId = SessionService.playerSessionMap.get(steamid);
+				store.get(sessionId, (err, session) => {
+					if (err) throw new Error(err);
+					if (!session) {
+						reject(new PlayerNotFoundError(steamid));
+					} else {
+						resolve(session.cookie);
+					}
+				});
+			} else {
+				resolve();
+			}
+		});
 	}
 }
 

@@ -7,6 +7,8 @@ import SteamID from '../../../../Common/Types/SteamID';
 import FakeAddPlayerToDraftTFClassRequest from '../../../../Common/Requests/FakeAddPlayerToDraftTFClassRequest';
 import DraftTFClass from '../../../../Common/Enums/DraftTFClass';
 import FakeRemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests/FakeRemovePlayerFromDraftTFClassRequest';
+import Role from '../../../../Common/Enums/Role';
+import PermissionGroup from '../../../../Common/Enums/PermissionGroup';
 
 interface DebugProps {
 	socket: SocketIOClient.Socket;
@@ -83,6 +85,14 @@ class Debug extends React.Component<DebugProps, DebugState> {
 				emit: 'findPlayerByAlias',
 				options: {
 					alias: 'f'
+				}
+			},
+			{
+				title: 'Update role',
+				emit: 'updatePlayerRoles',
+				options: {
+					roles: [Role.CONTRIBUTOR, Role.DEVELOPER],
+					permissionGroup: PermissionGroup.HEAD_ADMIN
 				}
 			}
 		];

@@ -1,12 +1,16 @@
 import { Socket } from 'socket.io';
-import { SocketIO, SocketController, OnMessage, MessageBody, ConnectedSocket } from 'socket-controllers';
+import { SocketIO, SocketController, OnMessage, MessageBody, ConnectedSocket, SocketRooms } from 'socket-controllers';
 import FindPlayerByAliasRequest from '../../../../Common/Requests/FindPlayerByAliasRequest';
-import UpdatePlayerRoleRequest from '../../../../Common/Requests/UpdatePlayerRoleRequest';
+import UpdatePlayerRolesRequest from '../../../../Common/Requests/UpdatePlayerRoleRequest';
 import RoleService from '../../services/RoleService';
 import ValidateClass from '../../utils/ValidateClass';
+import PlayerEvents from '../../events/PlayerEvents';
+import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
 
 @SocketController()
 export default class RoleSocketController {
+	private readonly playerEvents = new PlayerEvents();
+
 	private readonly roleService = new RoleService();
 
 	@OnMessage('findPlayerByAlias')
@@ -16,9 +20,14 @@ export default class RoleSocketController {
 		socket.emit('findPlayerByAlias', viewmodels);
 	}
 
-	@OnMessage('updatePlayerRole')
-	updatePlayerRole(@ConnectedSocket() socket: Socket, @MessageBody() payload: UpdatePlayerRoleRequest) {
+	@OnMessage('updatePlayerRoles')
+	async updatePlayerRoles(
+		@ConnectedSocket() socket: SocketWithPlayer,
+		@MessageBody() payload: UpdatePlayerRolesRequest
+	) {
 		ValidateClass(payload);
-		socket.emit('updatePlayerRole');
+		const { steamid } = socket.request.session.player;
+		await this.playerEvents.updateRoles(steamid, payload.roles);
+		await this.playerEvents.updatePermissionGroup(steamid, payload.permissionGroup);
 	}
 }

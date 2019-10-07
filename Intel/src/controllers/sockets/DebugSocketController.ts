@@ -14,6 +14,7 @@ import FakeRemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests
 import DraftService from '../../services/DraftService';
 import DraftEvents from '../../events/DraftEvents';
 import PlayerEvents from '../../events/PlayerEvents';
+import PermissionGroup from '../../../../Common/Enums/PermissionGroup';
 
 @SocketController()
 export default class DebugSocketController {
@@ -31,7 +32,7 @@ export default class DebugSocketController {
 			if (!this.sessionService.playerExists(DebugService.FAKE_OFFLINE_STEAMID)) {
 				await this.debugService.addFakePlayer(DebugService.FAKE_OFFLINE_STEAMID, socket.request.sessionID);
 				const player = await this.playerService.getPlayer(DebugService.FAKE_OFFLINE_STEAMID);
-				player.isCaptain = true;
+				socket.join(DebugService.FAKE_OFFLINE_STEAMID);
 				socket.request.session.player = player;
 				socket.request.session.save();
 				const playerViewModel = PlayerViewModel.fromPlayer(player);
@@ -42,10 +43,7 @@ export default class DebugSocketController {
 	}
 
 	@OnMessage('fakeLogout')
-	async fakeLogout(
-		@ConnectedSocket() socket: Socket,
-		@MessageBody() payload: FakeLogoutRequest
-	) {
+	async fakeLogout(@ConnectedSocket() socket: Socket, @MessageBody() payload: FakeLogoutRequest) {
 		if (process.env.NODE_ENV === 'dev') {
 			ValidateClass(payload);
 			this.playerEvents.logout(socket, payload.steamid);
@@ -71,9 +69,7 @@ export default class DebugSocketController {
 	}
 
 	@OnMessage('fakeRemovePlayerFromDraftTFClass')
-	fakeRemovePlayerFromDraftTFClass(
-		@MessageBody() payload: FakeRemovePlayerFromDraftTFClassRequest
-	) {
+	fakeRemovePlayerFromDraftTFClass(@MessageBody() payload: FakeRemovePlayerFromDraftTFClassRequest) {
 		if (process.env.NODE_ENV === 'dev') {
 			ValidateClass(payload);
 			this.draftEvents.removePlayerFromDraftTFClass(payload.steamid, payload.draftTFClass);
@@ -81,9 +77,7 @@ export default class DebugSocketController {
 	}
 
 	@OnMessage('fakeAddPlayerToAllDraftTFClasses')
-	fakeAddPlayerToAllDraftTFClasses(
-		@MessageBody() payload: FakeAddPlayerToAllDraftTFClassesRequest
-	) {
+	fakeAddPlayerToAllDraftTFClasses(@MessageBody() payload: FakeAddPlayerToAllDraftTFClassesRequest) {
 		if (process.env.NODE_ENV === 'dev') {
 			SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
 				this.draftEvents.addPlayerToDraftTFClass(payload.steamid, scheme.tf2class);

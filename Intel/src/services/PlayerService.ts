@@ -18,6 +18,8 @@ import GetAllDraftTFClasses from '../utils/GetAllDraftTFClasses';
 import SteamID from '../../../Common/Types/SteamID';
 import SessionService from './SessionService';
 import ValidateClass from '../utils/ValidateClass';
+import Role from '../../../Common/Enums/Role';
+import PermissionGroup from '../../../Common/Enums/PermissionGroup';
 
 export default class PlayerService {
 	private readonly sessionService = new SessionService();
@@ -207,6 +209,30 @@ export default class PlayerService {
 			.include(p => p.offender);
 
 		return activePunishments;
+	}
+
+	async updateRoles(steamid: SteamID, roles: Role[]): Promise<Player> {
+		if (!(await this.playerExists(steamid))) {
+			throw new PlayerNotFoundError(steamid);
+		}
+		const playerRepository = new LinqRepository(Player);
+		const player = await this.getPlayer(steamid);
+		player.roles = roles;
+		const updatedPlayer = await playerRepository.update(player);
+		await this.sessionService.updatePlayer(updatedPlayer);
+		return updatedPlayer;
+	}
+
+	async updatePermissionGroup(steamid: SteamID, permissionGroup: PermissionGroup): Promise<Player> {
+		if (!(await this.playerExists(steamid))) {
+			throw new PlayerNotFoundError(steamid);
+		}
+		const playerRepository = new LinqRepository(Player);
+		const player = await this.getPlayer(steamid);
+		player.permissionGroup = permissionGroup;
+		const updatedPlayer = await playerRepository.update(player);
+		await this.sessionService.updatePlayer(updatedPlayer);
+		return updatedPlayer;
 	}
 
 	async isCurrentlySiteBanned(steamid: SteamID): Promise<boolean> {
