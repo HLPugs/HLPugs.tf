@@ -1,4 +1,3 @@
-import logger from './logger';
 import { SteamRequest } from 'steam-login';
 
 // This import is used to let the tests know that session exists on the SteamRequest.

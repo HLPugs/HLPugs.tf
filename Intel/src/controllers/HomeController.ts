@@ -6,6 +6,7 @@ import PlayerService from '../services/PlayerService';
 import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 import Player from '../entities/Player';
 import RequestWithPlayer from '../interfaces/RequestWithPlayer';
+import Logger from '../modules/Logger';
 
 const frontURL: string = config.get('app.frontURL');
 
@@ -20,11 +21,8 @@ export class HomeController {
 
 	@Get('/verify')
 	@UseBefore(steam.verify())
-	async login(
-		@CurrentUser() player: Player,
-		@Req() req: RequestWithPlayer,
-		@Res() res: Response
-	): Promise<void> {
+	async login(@CurrentUser() player: Player, @Req() req: RequestWithPlayer, @Res() res: Response): Promise<void> {
+		Logger.logInfo('login', { player });
 		await this.playerService.upsertPlayer(player);
 		req.player = player;
 		req.session.player = player;

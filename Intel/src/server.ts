@@ -13,7 +13,6 @@ import { Bold, Underscore, FgYellow, Reset, consoleLogStatus, FgRed, FgGreen, Fg
 import CurrentUserChecker from './utils/CurrentUserChecker';
 import { useSocketServer } from 'socket-controllers';
 import * as dotenv from 'dotenv';
-import { ErrorModel } from '../../Common/Models/ErrorModel';
 
 const env = dotenv.config().parsed;
 
@@ -40,7 +39,6 @@ const sessionConfig = expressSession({
 app.use(sessionConfig);
 const server = new Server(app);
 export const io = socketIO(server);
-
 consoleLogStatus(`\n${Underscore}${FgBlue}HLPugs.tf Bootstrap Initializing`);
 consoleLogStatus(`Synchronizing models to database with ${FgYellow}TypeORM${Reset}...\n`);
 createConnection()

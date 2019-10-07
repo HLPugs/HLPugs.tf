@@ -1,6 +1,7 @@
 import { validateSync, ValidationError } from 'class-validator';
 
 import { ClassValidationError } from '../custom-errors/ClassValidationError';
+import Logger from '../modules/Logger';
 
 /**
  * Returns the class if its validation decorators succeed

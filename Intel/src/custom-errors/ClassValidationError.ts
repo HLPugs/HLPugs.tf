@@ -1,4 +1,5 @@
 import { ValidationError } from 'class-validator';
+import Logger from '../modules/Logger';
 
 export class ClassValidationError extends Error {
 	constructor(errors: ValidationError[]) {

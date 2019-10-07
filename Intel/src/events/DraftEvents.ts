@@ -7,12 +7,15 @@ import PreDraftRequirementViewModel from '../../../Common/ViewModels/PreDraftReq
 import ValidateClass from '../utils/ValidateClass';
 import { SiteConfiguration } from '../constants/SiteConfiguration';
 import { io } from '../server';
-
+import Logger from '../modules/Logger';
+import PlayerNotFoundError from '../custom-errors/PlayerNotFoundError';
 export default class DraftEvents {
 	private readonly draftService = new DraftService();
+
 	private readyUpPhaseActive = false;
 
 	addPlayerToDraftTFClass(steamid: SteamID, draftTFClass: DraftTFClass) {
+		Logger.logInfo('addPlayerToDraftTFClass', { steamid, draftTFClass });
 		if (!this.draftService.isPlayerAddedToDraftTFClass(steamid, draftTFClass)) {
 			this.draftService.addPlayerToDraftTFClass(steamid, draftTFClass);
 			const response = new AddPlayerToDraftTFClassResponse(steamid, draftTFClass);
@@ -22,12 +25,14 @@ export default class DraftEvents {
 	}
 
 	removePlayerFromAllDraftTFClasses(steamid: SteamID) {
+		Logger.logDebugEvent('removePlayerFromAllDraftTFClasses', { steamid });
 		SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
 			this.removePlayerFromDraftTFClass(steamid, scheme.tf2class);
 		});
 	}
 
 	removePlayerFromDraftTFClass(steamid: SteamID, draftTFClass: DraftTFClass) {
+		Logger.logInfo('removePlayerFromDraftTFClass', { steamid, draftTFClass });
 		if (this.draftService.isPlayerAddedToDraftTFClass(steamid, draftTFClass)) {
 			this.draftService.removePlayerFromDraftTFClass(steamid, draftTFClass);
 			const response = new RemovePlayerFromDraftTFClassResponse(steamid, draftTFClass);
@@ -37,6 +42,7 @@ export default class DraftEvents {
 	}
 
 	sendPreDraftRequirements() {
+		Logger.logDebugEvent('sendPreDraftRequirements');
 		if (!this.readyUpPhaseActive) {
 			const readyUpPhaseCanStart = this.draftService.checkIfAllDraftRequirementsAreFulfilled();
 

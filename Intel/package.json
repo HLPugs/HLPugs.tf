@@ -4,7 +4,8 @@
 	"private": true,
 	"scripts": {
 		"start": "npm run serve",
-		"build": "rimraf localdb && rimraf dist && npm run build-ts",
+		"build": "rimraf localdb && rimraf dist && npm run build-ts && npm run build-logging-directory",
+		"build-logging-directory": "node dist/Intel/src/utils/BuildLoggingDirectory.js",
 		"build-and-seed": "npm run build && npm run seed",
 		"dev": "npm run build && npm run watch-node && npm run watch-ts && npm run watch-prettier",
 		"serve": "node dist/Intel/src/server.js",

@@ -16,6 +16,8 @@ import DraftEvents from '../../events/DraftEvents';
 import PlayerEvents from '../../events/PlayerEvents';
 import FAKE_OFFLINE_STEAMID from '../../../../Common/Constants/FakeOfflineSteamid';
 import { HomeSocketController } from './HomeSocketController';
+import Logger from '../../modules/Logger';
+import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
 
 @SocketController()
 export default class DebugSocketController {
@@ -30,10 +32,10 @@ export default class DebugSocketController {
 	private readonly draftService = new DraftService();
 
 	@OnMessage('fakeLogin')
-	async fakeLogin(@ConnectedSocket() socket: Socket, @SocketIO() io: Server) {
+	async fakeLogin(@ConnectedSocket() socket: SocketWithPlayer, @SocketIO() io: Server) {
 		if (process.env.NODE_ENV === 'dev') {
 			if (!this.sessionService.playerExists(FAKE_OFFLINE_STEAMID)) {
-				await this.debugService.addFakePlayer(FAKE_OFFLINE_STEAMID, socket.request.sessionID);
+				await this.debugService.addFakePlayer(FAKE_OFFLINE_STEAMID, socket.request.session.id);
 				const player = await this.playerService.getPlayer(FAKE_OFFLINE_STEAMID);
 				socket.join(FAKE_OFFLINE_STEAMID);
 				socket.request.session.player = player;
@@ -42,6 +44,8 @@ export default class DebugSocketController {
 				socket.emit('updateCurrentPlayer', playerViewModel);
 				io.emit('addPlayerToSession', playerViewModel);
 			}
+		} else {
+			Logger.logWarning('Tried to fake login during prod', socket.request.session.player);
 		}
 	}
 
