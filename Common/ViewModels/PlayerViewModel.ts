@@ -35,6 +35,9 @@ export default class PlayerViewModel {
 	@IsEnum(PermissionGroup)
 	permissionGroup: PermissionGroup;
 
+	// @IsBoolean()
+	isMutedInChat: boolean;
+
 	static fromPlayer(player: Player) {
 		const playerViewModel = new PlayerViewModel();
 

@@ -12,6 +12,7 @@ import Role from '../../../Common/Enums/Role';
 import Player from '../entities/Player';
 import Logger from '../modules/Logger';
 import SessionID from '../../../Common/Types/SessionID';
+import { ALIAS_REGEX_PATTERN } from '../../../Common/Constants/AliasConstraints';
 
 export default class PlayerEvents {
 	private readonly draftEvents = new DraftEvents();
@@ -57,5 +58,22 @@ export default class PlayerEvents {
 		Logger.logInfo('updatePermissionGroup', { steamid, permissionGroup });
 		const player = await this.playerService.updatePermissionGroup(steamid, permissionGroup);
 		this.updateLoggedInPlayer(player);
+	}
+
+	async submitAlias(steamid: SteamID, alias: string, sessionId: SessionID) {
+		const aliasRules = new RegExp(ALIAS_REGEX_PATTERN);
+		const aliasIsTaken = await this.playerService.isAliasTaken(alias);
+		const aliasMatchesRegexCheck = aliasRules.test(alias);
+
+		if (aliasIsTaken || !aliasMatchesRegexCheck) return;
+
+		const player = await this.playerService.updateAlias(steamid, alias);
+
+		this.sessionService.associateSteamidWithSessionid(steamid, sessionId);
+		const isCurrentlyMutedInChat = await this.playerService.isCurrentlyMutedInChat(steamid);
+		const playerViewModel = Player.toPlayerViewModel(player, isCurrentlyMutedInChat);
+		io.to(steamid).emit('updateCurrentPlayer', playerViewModel);
+		io.to(steamid).emit('hideAliasModal');
+		io.emit('addPlayerToSession', playerViewModel);
 	}
 }

@@ -22,6 +22,8 @@ import MatchPlayerData from './MatchPlayerData';
 import SteamID from '../../../Common/Types/SteamID';
 import Punishment from './Punishment';
 import { ALIAS_REGEX_PATTERN, MIN_ALIAS_LENGTH, MAX_ALIAS_LENGTH } from '../../../Common/Constants/AliasConstraints';
+import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
+import ValidateClass from '../utils/ValidateClass';
 
 @Entity({ name: 'players' })
 export default class Player {
@@ -106,4 +108,16 @@ export default class Player {
 
 	@OneToMany(type => MatchPlayerData, matchPlayerData => matchPlayerData.player)
 	matchPlayerData: MatchPlayerData[];
+
+	static toPlayerViewModel(player: Player, isMutedInChat: boolean) {
+		return ValidateClass<PlayerViewModel>({
+			alias: player.alias,
+			avatarUrl: player.avatarUrl,
+			settings: player.settings,
+			steamid: player.steamid,
+			roles: player.roles,
+			permissionGroup: player.permissionGroup,
+			isMutedInChat
+		});
+	}
 }

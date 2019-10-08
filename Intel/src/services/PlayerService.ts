@@ -148,7 +148,7 @@ export default class PlayerService {
 		await playerRepository.update(player);
 	}
 
-	async updateAlias(steamid: SteamID, alias: string): Promise<void> {
+	async updateAlias(steamid: SteamID, alias: string): Promise<Player> {
 		if (!(await this.playerExists(steamid))) {
 			throw new PlayerNotFoundError(steamid);
 		}
@@ -157,7 +157,18 @@ export default class PlayerService {
 		const player = await this.getPlayer(steamid);
 		player.alias = alias;
 		await this.sessionService.updatePlayer(player);
-		await playerRepository.update(player);
+		return await playerRepository.update(player);
+	}
+
+	async isAliasTaken(alias: string) {
+		const playerRepository = new LinqRepository(Player);
+		return (
+			(await playerRepository
+				.getOne()
+				.where(p => p.alias)
+				.equal(alias)
+				.count()) > 0
+		);
 	}
 
 	async getSettings(steamid: SteamID): Promise<PlayerSettings> {
@@ -211,6 +222,12 @@ export default class PlayerService {
 			.include(p => p.offender);
 
 		return activePunishments;
+	}
+
+	async isCurrentlyMutedInChat(steamid: SteamID): Promise<boolean> {
+		const activePunishments = await this.getActivePunishments(steamid);
+		const isCurrentlyMutedInChat = activePunishments.some(x => x.punishmentType === PunishmentType.CHAT_MUTE);
+		return isCurrentlyMutedInChat;
 	}
 
 	async updateRoles(steamid: SteamID, roles: Role[]): Promise<Player> {
