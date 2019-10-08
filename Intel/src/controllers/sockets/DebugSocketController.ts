@@ -5,7 +5,6 @@ import SessionService from '../../services/SessionService';
 import DebugService from '../../services/DebugService';
 import SocketRequestWithPlayer from '../../interfaces/SocketRequestWithPlayer';
 import PlayerService from '../../services/PlayerService';
-import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import { SiteConfiguration } from '../../constants/SiteConfiguration';
 import FakeLogoutRequest from '../../../../Common/Requests/FakeLogoutRequest';
 import FakeAddPlayerToDraftTFClassRequest from '../../../../Common/Requests/FakeAddPlayerToDraftTFClassRequest';
@@ -18,31 +17,33 @@ import FAKE_OFFLINE_STEAMID from '../../../../Common/Constants/FakeOfflineSteami
 import { HomeSocketController } from './HomeSocketController';
 import Logger from '../../modules/Logger';
 import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
+import Player from '../../entities/Player';
+import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 
 @SocketController()
 export default class DebugSocketController {
-	private readonly homeSocketController = new HomeSocketController();
-
 	private readonly playerEvents = new PlayerEvents();
 	private readonly draftEvents = new DraftEvents();
 
 	private readonly playerService = new PlayerService();
 	private readonly sessionService = new SessionService();
 	private readonly debugService = new DebugService();
-	private readonly draftService = new DraftService();
 
 	@OnMessage('fakeLogin')
 	async fakeLogin(@ConnectedSocket() socket: SocketWithPlayer, @SocketIO() io: Server) {
+		Logger.logInfo('Received fakeLogin request');
 		if (process.env.NODE_ENV === 'dev') {
 			if (!this.sessionService.playerExists(FAKE_OFFLINE_STEAMID)) {
 				await this.debugService.addFakePlayer(FAKE_OFFLINE_STEAMID, socket.request.session.id);
-				const player = await this.playerService.getPlayer(FAKE_OFFLINE_STEAMID);
+				const player: Player = await this.playerService.getPlayer(FAKE_OFFLINE_STEAMID);
 				socket.join(FAKE_OFFLINE_STEAMID);
+				await this.sessionService.updatePlayer(player);
 				socket.request.session.player = player;
 				socket.request.session.save();
-				const playerViewModel = PlayerViewModel.fromPlayer(player);
+				const playerViewModel = await Player.toPlayerViewModel(player);
 				socket.emit('updateCurrentPlayer', playerViewModel);
 				io.emit('addPlayerToSession', playerViewModel);
+				Logger.logInfo('Logged in successfully');
 			}
 		} else {
 			Logger.logWarning('Tried to fake login during prod', socket.request.session.player);
@@ -51,6 +52,7 @@ export default class DebugSocketController {
 
 	@OnMessage('fakeLogout')
 	async fakeLogout(@ConnectedSocket() socket: Socket, @MessageBody() payload: FakeLogoutRequest) {
+		Logger.logInfo('Received fakeLogout request');
 		if (process.env.NODE_ENV === 'dev') {
 			ValidateClass(payload);
 			this.playerEvents.logout(socket, payload.steamid);
@@ -58,17 +60,17 @@ export default class DebugSocketController {
 	}
 
 	@OnMessage('addFakePlayer')
-	async addFakePlayer(@SocketIO() io: Server, @SocketRequest() request: SocketRequestWithPlayer) {
+	async addFakePlayer(@SocketIO() io: Server) {
 		if (process.env.NODE_ENV === 'dev') {
 			const player = await this.debugService.addFakePlayer();
-			const fakePlayerViewModel = PlayerViewModel.fromPlayer(player);
+			const fakePlayerViewModel = await Player.toPlayerViewModel(player);
 
 			io.emit('addPlayerToSession', fakePlayerViewModel);
 		}
 	}
 
 	@OnMessage('fakeAddPlayerToDraftTFClass')
-	fakeAddPlayerToDraftTFClass(@SocketIO() io: Server, @MessageBody() payload: FakeAddPlayerToDraftTFClassRequest) {
+	fakeAddPlayerToDraftTFClass(@MessageBody() payload: FakeAddPlayerToDraftTFClassRequest) {
 		if (process.env.NODE_ENV === 'dev') {
 			ValidateClass(payload);
 			this.draftEvents.addPlayerToDraftTFClass(payload.steamid, payload.draftTFClass);

@@ -14,6 +14,7 @@ import {
 } from 'class-validator';
 import PlayerService from '../../Intel/src/services/PlayerService';
 import ValidateClass from '../../Intel/src/utils/ValidateClass';
+import PlayerRoleViewModel from './PlayerRoleViewModel';
 
 export default class PlayerViewModel {
 	@IsString()
@@ -37,17 +38,4 @@ export default class PlayerViewModel {
 
 	// @IsBoolean()
 	isMutedInChat: boolean;
-
-	static fromPlayer(player: Player) {
-		const playerViewModel = new PlayerViewModel();
-
-		playerViewModel.alias = player.alias;
-		playerViewModel.avatarUrl = player.avatarUrl;
-		playerViewModel.settings = player.settings;
-		playerViewModel.steamid = player.steamid;
-		playerViewModel.roles = player.roles;
-		playerViewModel.permissionGroup = player.permissionGroup;
-
-		return ValidateClass(playerViewModel);
-	}
 }

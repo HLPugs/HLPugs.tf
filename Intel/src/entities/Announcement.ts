@@ -2,6 +2,8 @@ import { Entity, PrimaryGeneratedColumn, Column, PrimaryColumn } from 'typeorm';
 import { IsEnum, IsString, IsNumberString, IsBoolean, IsDate, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
 import Region from '../../../Common/Enums/Region';
 import SteamID from '../../../Common/Types/SteamID';
+import ValidateClass from '../utils/ValidateClass';
+import HomepageAnnouncementViewModel from '../../../Common/ViewModels/HomepageAnnouncementViewModel';
 @Entity('announcements')
 export default class Announcement {
 	@PrimaryGeneratedColumn()
@@ -33,4 +35,11 @@ export default class Announcement {
 	@Column()
 	@IsDate()
 	timestamp?: Date;
+
+	static toHomepageAnnouncementViewModel(announcement: Announcement) {
+		return ValidateClass<HomepageAnnouncementViewModel>({
+			messageContent: announcement.messageContent,
+			priority: announcement.priority
+		});
+	}
 }

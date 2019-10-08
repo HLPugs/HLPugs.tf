@@ -64,4 +64,20 @@ export default class PlayerSettings {
 		}
 		return ValidateClass(playerSettings);
 	}
+
+	static toPlayerSettingsViewmodel(settings: PlayerSettings) {
+		const playerSettingsViewModel = new PlayerSettingsViewModel();
+		playerSettingsViewModel.addToFavoritesAfterMatch = settings.addToFavoritesAfterMatch;
+		playerSettingsViewModel.addToFavoritesOnLogin = settings.addToFavoritesOnLogin;
+		playerSettingsViewModel.audioCuesEnabled = settings.audioCuesEnabled;
+		playerSettingsViewModel.colorOfNameInChat = settings.colorOfNameInChat;
+		playerSettingsViewModel.isNotifiableByMention = settings.isNotifiableByMention;
+		playerSettingsViewModel.voicepack = settings.voicepack;
+		playerSettingsViewModel.volume = settings.volume;
+
+		settings.favoriteClasses.forEach(tf2class => {
+			playerSettingsViewModel.favoriteClasses[tf2class] = true;
+		});
+		return ValidateClass(playerSettingsViewModel);
+	}
 }

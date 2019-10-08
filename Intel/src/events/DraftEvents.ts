@@ -15,34 +15,34 @@ export default class DraftEvents {
 	private readyUpPhaseActive = false;
 
 	addPlayerToDraftTFClass(steamid: SteamID, draftTFClass: DraftTFClass) {
-		Logger.logInfo('addPlayerToDraftTFClass', { steamid, draftTFClass });
 		if (!this.draftService.isPlayerAddedToDraftTFClass(steamid, draftTFClass)) {
 			this.draftService.addPlayerToDraftTFClass(steamid, draftTFClass);
 			const response = new AddPlayerToDraftTFClassResponse(steamid, draftTFClass);
 			io.emit('addPlayerToDraftTFClass', response);
+			Logger.logInfo(`Added to ${draftTFClass}`, { steamid });
 			this.sendPreDraftRequirements();
 		}
 	}
 
 	removePlayerFromAllDraftTFClasses(steamid: SteamID) {
-		Logger.logDebugEvent('removePlayerFromAllDraftTFClasses', { steamid });
+		Logger.logInfo('Attempting to remove player from all draft classes', { steamid });
 		SiteConfiguration.gamemodeClassSchemes.forEach(scheme => {
 			this.removePlayerFromDraftTFClass(steamid, scheme.tf2class);
 		});
 	}
 
 	removePlayerFromDraftTFClass(steamid: SteamID, draftTFClass: DraftTFClass) {
-		Logger.logInfo('removePlayerFromDraftTFClass', { steamid, draftTFClass });
 		if (this.draftService.isPlayerAddedToDraftTFClass(steamid, draftTFClass)) {
 			this.draftService.removePlayerFromDraftTFClass(steamid, draftTFClass);
 			const response = new RemovePlayerFromDraftTFClassResponse(steamid, draftTFClass);
 			io.emit('removePlayerFromDraftTFClass', response);
+			Logger.logInfo(`Removed from ${draftTFClass}`, { steamid });
 			this.sendPreDraftRequirements();
 		}
 	}
 
 	sendPreDraftRequirements() {
-		Logger.logDebugEvent('sendPreDraftRequirements');
+		Logger.logDebugEvent('Attempting to send new pre draft requirements');
 		if (!this.readyUpPhaseActive) {
 			const readyUpPhaseCanStart = this.draftService.checkIfAllDraftRequirementsAreFulfilled();
 

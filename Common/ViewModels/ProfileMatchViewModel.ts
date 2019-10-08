@@ -3,14 +3,7 @@ import MatchType from '../Enums/MatchType';
 import Team from '../Enums/Team';
 import DraftTFClass from '../Enums/DraftTFClass';
 import Outcome from '../Enums/Outcome';
-import {
-	IsBoolean,
-	IsOptional,
-	IsDate,
-	IsString,
-	IsEnum,
-	IsNumber
-} from 'class-validator';
+import { IsBoolean, IsOptional, IsDate, IsString, IsEnum, IsNumber } from 'class-validator';
 import Validate from '../../Intel/src/utils/ValidateClass';
 
 export default class ProfileMatchViewModel {
@@ -41,32 +34,4 @@ export default class ProfileMatchViewModel {
 
 	@IsEnum(DraftTFClass)
 	tf2class: DraftTFClass;
-
-	static fromMatch(match: Match): ProfileMatchViewModel {
-		const profileMatchViewModel = new ProfileMatchViewModel();
-
-		profileMatchViewModel.id = match.id;
-		profileMatchViewModel.date = match.date;
-		if (match.logsId !== null) {
-			profileMatchViewModel.logsId = match.logsId;
-		}
-		profileMatchViewModel.map = match.map;
-		profileMatchViewModel.matchType = match.matchType;
-		profileMatchViewModel.wasCaptain = match.matchPlayerData[0].wasCaptain;
-
-		if (match.winningTeam === match.matchPlayerData[0].team) {
-			profileMatchViewModel.outcome = Outcome.WIN;
-		} else if (match.winningTeam === Team.NONE) {
-			profileMatchViewModel.outcome = Outcome.TIE;
-		} else {
-			profileMatchViewModel.outcome = Outcome.LOSS;
-		}
-
-		profileMatchViewModel.team = match.matchPlayerData[0].team;
-		profileMatchViewModel.tf2class = match.matchPlayerData[0].tf2class;
-
-		Validate(profileMatchViewModel);
-
-		return profileMatchViewModel;
-	}
 }

@@ -40,10 +40,8 @@ export class ProfileService {
 			.skip(currentPage * pageSize)
 			.take(Math.min(pageSize, 50));
 
-		const paginatedMatchesViewModel = paginatedMatches.map(match => ProfileMatchViewModel.fromMatch(match));
-
 		const profilePaginatedMatchesViewModel = new ProfilePaginatedMatchesViewModel();
-		profilePaginatedMatchesViewModel.matches = paginatedMatchesViewModel;
+		profilePaginatedMatchesViewModel.matches = paginatedMatches.map(match => Match.toProfileMatchViewModel(match));
 		profilePaginatedMatchesViewModel.totalMatches = totalMatchCount;
 
 		return profilePaginatedMatchesViewModel;
@@ -51,8 +49,6 @@ export class ProfileService {
 
 	async getProfile(steamid: SteamID): Promise<ProfileViewModel> {
 		const player = await playerService.getPlayer(steamid);
-		const profileViewModel = ProfileViewModel.fromPlayer(player);
-
-		return profileViewModel;
+		return Player.toProfileViewModel(player);
 	}
 }

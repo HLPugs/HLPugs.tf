@@ -3,6 +3,8 @@ import { IsNumberString, IsString, MinDate, IsDate, IsEnum } from 'class-validat
 import PunishmentType from '../../../Common/Enums/PunishmentType';
 import SteamID from '../../../Common/Types/SteamID';
 import Player from './Player';
+import BannedPageViewModel from '../../../Common/ViewModels/BannedPageViewModel';
+import ValidateClass from '../utils/ValidateClass';
 
 @Entity('punishments')
 export default class Punishment {
@@ -36,4 +38,13 @@ export default class Punishment {
 	@Column()
 	@IsDate()
 	lastModifiedDate: Date;
+
+	static toBannedPageViewModel(punishment: Punishment) {
+		return ValidateClass<BannedPageViewModel>({
+			creationDate: punishment.creationDate,
+			creatorSteamid: punishment.creator.steamid,
+			expirationDate: punishment.expirationDate,
+			reason: punishment.reason
+		});
+	}
 }

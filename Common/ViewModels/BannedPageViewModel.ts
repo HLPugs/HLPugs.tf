@@ -17,13 +17,4 @@ export default class BannedPageViewModel {
 
 	@IsDate()
 	expirationDate: Date;
-
-	static fromBan(ban: Punishment) {
-		const bannedPageViewModel = new BannedPageViewModel();
-		bannedPageViewModel.creationDate = ban.creationDate;
-		bannedPageViewModel.creatorSteamid = ban.creator.steamid;
-		bannedPageViewModel.expirationDate = ban.expirationDate;
-		bannedPageViewModel.reason = ban.reason;
-		return ValidateClass(bannedPageViewModel);
-	}
 }

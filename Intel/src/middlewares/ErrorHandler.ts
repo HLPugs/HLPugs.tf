@@ -2,6 +2,7 @@ import { Middleware, ExpressErrorMiddlewareInterface, HttpError } from 'routing-
 import { Response, Request, NextFunction } from 'express';
 import { ValidationError } from 'class-validator';
 import { ErrorModel } from '../../../Common/Models/ErrorModel';
+import Logger from '../modules/Logger';
 
 @Middleware({ type: 'after' })
 export default class ErrorHandler implements ExpressErrorMiddlewareInterface {
@@ -45,6 +46,7 @@ export default class ErrorHandler implements ExpressErrorMiddlewareInterface {
 				}
 			}
 			res.json(responseObject);
+			Logger.logError(responseObject);
 		}
 	}
 }

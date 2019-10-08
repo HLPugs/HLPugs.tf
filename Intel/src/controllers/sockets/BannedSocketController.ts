@@ -5,6 +5,7 @@ import ValidateClass from '../../utils/ValidateClass';
 import PlayerService from '../../services/PlayerService';
 import PunishmentType from '../../../../Common/Enums/PunishmentType';
 import BannedPageViewModel from '../../../../Common/ViewModels/BannedPageViewModel';
+import Punishment from '../../entities/Punishment';
 
 @SocketController()
 export default class BannedSocketController {
@@ -19,7 +20,7 @@ export default class BannedSocketController {
 		const activePunishments = await this.playerService.getActivePunishments(payload.steamid);
 		const activeBan = activePunishments.filter(p => p.punishmentType === PunishmentType.BAN)[0];
 
-		const bannedPageViewModel = BannedPageViewModel.fromBan(activeBan);
+		const bannedPageViewModel = Punishment.toBannedPageViewModel(activeBan);
 		socket.emit('getBannedPageViewModel', bannedPageViewModel);
 	}
 }

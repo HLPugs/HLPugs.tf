@@ -24,6 +24,9 @@ import Punishment from './Punishment';
 import { ALIAS_REGEX_PATTERN, MIN_ALIAS_LENGTH, MAX_ALIAS_LENGTH } from '../../../Common/Constants/AliasConstraints';
 import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 import ValidateClass from '../utils/ValidateClass';
+import PlayerService from '../services/PlayerService';
+import PlayerRoleViewModel from '../../../Common/ViewModels/PlayerRoleViewModel';
+import { ProfileViewModel } from '../../../Common/ViewModels/ProfileViewModel';
 
 @Entity({ name: 'players' })
 export default class Player {
@@ -109,7 +112,7 @@ export default class Player {
 	@OneToMany(type => MatchPlayerData, matchPlayerData => matchPlayerData.player)
 	matchPlayerData: MatchPlayerData[];
 
-	static toPlayerViewModel(player: Player, isMutedInChat: boolean) {
+	static async toPlayerViewModel(player: Player) {
 		return ValidateClass<PlayerViewModel>({
 			alias: player.alias,
 			avatarUrl: player.avatarUrl,
@@ -117,7 +120,27 @@ export default class Player {
 			steamid: player.steamid,
 			roles: player.roles,
 			permissionGroup: player.permissionGroup,
-			isMutedInChat
+			isMutedInChat: await new PlayerService().isCurrentlyMutedInChat(player.steamid)
+		});
+	}
+
+	static toProfileViewModel(player: Player) {
+		return ValidateClass<ProfileViewModel>({
+			alias: player.alias,
+			avatarUrl: player.avatarUrl,
+			steamid: player.steamid,
+			subsIn: player.subsIn,
+			subsOut: player.subsOut
+		});
+	}
+
+	static toPlayerRoleViewModel(player: Player) {
+		return ValidateClass<PlayerRoleViewModel>({
+			alias: player.alias,
+			steamid: player.steamid,
+			avatarUrl: player.avatarUrl,
+			permissionGroup: player.permissionGroup,
+			roles: player.roles
 		});
 	}
 }

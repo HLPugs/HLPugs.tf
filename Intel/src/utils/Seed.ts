@@ -37,14 +37,14 @@ const SeedAnnouncements = async () => {
 
 	const announcementRepository = new LinqRepository(Announcement);
 	for (let i = 1; i <= 10; i++) {
-		const announcement: Announcement = {
+		const announcement = {
 			creatorSteamid: FAKE_OFFLINE_STEAMID,
 			messageContent: 'Test Announcement #' + i,
 			order: i,
 			priority: false,
 			region: Region.NorthAmerica,
 			timestamp: new Date()
-		};
+		} as Announcement;
 
 		await announcementRepository.create(announcement);
 	}
@@ -68,7 +68,7 @@ const SeedMatches = async () => {
 			player
 		};
 
-		const match: Match = {
+		const match = {
 			date: new Date(),
 			map: 'koth_ashville_rc1',
 			matchPlayerData: [matchPlayerData],
@@ -78,7 +78,7 @@ const SeedMatches = async () => {
 			logsId: 12345867,
 			region: Math.random() > 0.5 ? Region.NorthAmerica : Region.Europe,
 			gamemode: Gamemode.Highlander
-		};
+		} as Match;
 
 		await matchRepository.create(match);
 	}

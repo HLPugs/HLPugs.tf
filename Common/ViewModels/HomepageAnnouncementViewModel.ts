@@ -8,11 +8,4 @@ export default class HomepageAnnouncementViewModel {
 
 	@IsBoolean()
 	priority: boolean;
-
-	static fromAnnouncement(announcement: Announcement) {
-		return ValidateClass<HomepageAnnouncementViewModel>({
-			messageContent: announcement.messageContent,
-			priority: announcement.priority,
-		});
-	}
 }

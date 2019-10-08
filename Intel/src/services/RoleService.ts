@@ -1,12 +1,13 @@
 import PlayerService from './PlayerService';
 import PlayerRoleViewModel from '../../../Common/ViewModels/PlayerRoleViewModel';
+import Player from '../entities/Player';
 
 export default class RoleService {
 	private readonly playerService = new PlayerService();
 
 	async getPlayersByAlias(alias: string): Promise<PlayerRoleViewModel[]> {
 		const players = await this.playerService.getPlayersByPartialAlias(alias);
-		const viewmodels = players.map(x => PlayerRoleViewModel.fromPlayer(x));
+		const viewmodels = players.map(player => Player.toPlayerRoleViewModel(player));
 		return viewmodels;
 	}
 }

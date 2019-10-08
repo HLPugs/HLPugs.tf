@@ -21,6 +21,7 @@ import ValidateClass from '../../utils/ValidateClass';
 import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
 import DraftEvents from '../../events/DraftEvents';
 import PlayerEvents from '../../events/PlayerEvents';
+import Player from '../../entities/Player';
 
 @SocketController()
 export class HomeSocketController {
@@ -42,7 +43,7 @@ export class HomeSocketController {
 			if (request.session.player.alias) {
 				const player = request.session.player;
 				socket.join(player.steamid);
-				const playerViewModel = PlayerViewModel.fromPlayer(player);
+				const playerViewModel = await Player.toPlayerViewModel(player);
 				socket.emit('updateCurrentPlayer', playerViewModel);
 				const isCurrentlySiteBanned = await this.playerService.isCurrentlySiteBanned(player.steamid);
 				if (isCurrentlySiteBanned) {
@@ -66,7 +67,8 @@ export class HomeSocketController {
 			}
 			if (io.sockets.adapter.rooms[player.steamid].length === 1) {
 				this.sessionService.associateSteamidWithSessionid(player.steamid, socket.request.session.id);
-				const playerViewModel = PlayerViewModel.fromPlayer(await this.sessionService.getPlayer(player.steamid));
+				const updatedPlayer = await this.sessionService.getPlayer(player.steamid);
+				const playerViewModel = await Player.toPlayerViewModel(player);
 				io.emit('addPlayerToSession', ValidateClass(playerViewModel));
 			}
 			if (player.settings.addToFavoritesOnLogin) {
@@ -79,7 +81,7 @@ export class HomeSocketController {
 		const loggedInPlayers = await this.sessionService.getAllPlayers();
 		const playerViewModels = loggedInPlayers
 			.filter(player => player.alias !== null && player.alias !== undefined) // Only send players who have made an alias
-			.map(player => PlayerViewModel.fromPlayer(player));
+			.map(async player => await Player.toPlayerViewModel(player));
 		socket.emit('getLoggedInPlayers', playerViewModels);
 	}
 

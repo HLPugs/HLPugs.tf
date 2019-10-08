@@ -52,7 +52,7 @@ class SessionService {
 		return SessionService.playerSessionMap.size;
 	}
 
-	async updatePlayer(player: Player) {
+	async updatePlayer(player: Player): Promise<Player> {
 		if (this.playerExists(player.steamid)) {
 			const sessionId = SessionService.playerSessionMap.get(player.steamid);
 			const cookie = await this.getCookie(player.steamid);
@@ -61,7 +61,7 @@ class SessionService {
 					if (err) {
 						reject(new Error(err));
 					} else {
-						resolve();
+						resolve(player);
 					}
 				});
 			});

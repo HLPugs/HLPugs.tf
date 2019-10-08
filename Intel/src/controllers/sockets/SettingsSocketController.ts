@@ -15,6 +15,7 @@ import UpdatePlayerSettingsRequest from '../../../../Common/Requests/UpdatePlaye
 import PlayerSettings from '../../entities/PlayerSettings';
 import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
 import PlayerEvents from '../../events/PlayerEvents';
+import Logger from '../../modules/Logger';
 
 @SocketController()
 export default class SettingsSocketController {
@@ -23,15 +24,15 @@ export default class SettingsSocketController {
 
 	@OnMessage('getPlayerSettings')
 	async loadSettings(@ConnectedSocket() socket: Socket, @MessageBody() payload: GetPlayerSettingsRequest) {
+		Logger.logInfo("Received request to get a player's settings");
 		const { steamid } = ValidateClass(payload);
-		const settings = await this.playerService.getSettings(steamid);
-		const playerSettingsViewModel = PlayerSettingsViewModel.fromSettings(settings);
-		socket.emit('getPlayerSettings', playerSettingsViewModel);
+		await this.playerEvents.sendPlayerSettings(steamid);
 	}
 
 	@OnMessage('saveSettings')
 	@EmitOnFail('settingsError')
 	async saveSettings(@ConnectedSocket() socket: SocketWithPlayer, @MessageBody() payload: UpdatePlayerSettingsRequest) {
+		Logger.logInfo("Received request to update a player's settings", payload.playerSettingsViewModel);
 		const { playerSettingsViewModel } = ValidateClass(payload);
 		const { steamid } = socket.request.session.player;
 		const settings = PlayerSettings.fromViewModel(playerSettingsViewModel);

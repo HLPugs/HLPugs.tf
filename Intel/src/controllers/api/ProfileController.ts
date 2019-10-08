@@ -9,6 +9,7 @@ import ClassStatisticsFilterOptions from '../../../../Common/Models/ClassStatist
 import ProfileClassStatisticsViewModel from '../../../../Common/ViewModels/ProfileClassStatisticsViewModel';
 import ValidateClass from '../../utils/ValidateClass';
 import PlayerService from '../../services/PlayerService';
+import { ClassStatistics } from '../../../../Common/Models/ClassStatistics';
 
 @JsonController('/profile')
 export class ProfileController {
@@ -44,10 +45,10 @@ export class ProfileController {
 			};
 			ValidateClass(filterOptions);
 			const classStatistics = await this.playerService.getClassStatistics(identifier, filterOptions);
-			return ProfileClassStatisticsViewModel.fromClassStatistics(classStatistics);
+			return classStatistics.toProfileClassStatisticsViewModel();
 		} else {
 			const classStatistics = await this.playerService.getClassStatistics(identifier);
-			return ProfileClassStatisticsViewModel.fromClassStatistics(classStatistics);
+			return classStatistics.toProfileClassStatisticsViewModel();
 		}
 	}
 }

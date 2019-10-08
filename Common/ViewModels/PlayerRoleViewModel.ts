@@ -3,8 +3,6 @@ import { ALIAS_REGEX_PATTERN } from '../Constants/AliasConstraints';
 import SteamID from '../Types/SteamID';
 import PermissionGroup from '../Enums/PermissionGroup';
 import Role from '../Enums/Role';
-import Player from '../../Intel/src/entities/Player';
-import ValidateClass from '../../Intel/src/utils/ValidateClass';
 
 export default class PlayerRoleViewModel {
 	@IsString()
@@ -22,14 +20,4 @@ export default class PlayerRoleViewModel {
 
 	@IsEnum(PermissionGroup)
 	permissionGroup: PermissionGroup;
-
-	static fromPlayer(player: Player) {
-		return ValidateClass<PlayerRoleViewModel>({
-			alias: player.alias,
-			steamid: player.steamid,
-			avatarUrl: player.avatarUrl,
-			permissionGroup: player.permissionGroup,
-			roles: player.roles
-		});
-	}
 }

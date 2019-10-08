@@ -17,7 +17,7 @@ export default class AnnouncementSocketController {
 		const announcements = await this.announcementService.getAnnouncements(EnvironmentConfig.region);
 		const announcementViewModels = announcements
 			.sort((a, b) => (a.order > b.order ? 1 : -1)) // sort by order ascending
-			.map(x => HomepageAnnouncementViewModel.fromAnnouncement(x));
+			.map(announcement => Announcement.toHomepageAnnouncementViewModel(announcement));
 		socket.emit('getHomepageAnnouncements', announcementViewModels);
 	}
 
@@ -28,17 +28,16 @@ export default class AnnouncementSocketController {
 		@SocketRequest() request: SocketRequestWithPlayer
 	) {
 		ValidateClass(payload);
-		const announcement: Announcement = {
+		const announcement = {
 			creatorSteamid: request.session.player.steamid,
 			messageContent: payload.messageContent,
 			order: payload.order,
 			priority: payload.priority,
 			region: payload.region,
 			timestamp: new Date()
-		};
+		} as Announcement;
 		ValidateClass(announcement);
 		const createdAnnouncement = await this.announcementService.createAnnouncement(announcement);
-		const announcementViewModel = HomepageAnnouncementViewModel.fromAnnouncement(createdAnnouncement);
-		io.emit('createAnnouncement', announcementViewModel);
+		io.emit('createAnnouncement', Announcement.toHomepageAnnouncementViewModel(createdAnnouncement));
 	}
 }

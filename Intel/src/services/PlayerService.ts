@@ -25,10 +25,10 @@ export default class PlayerService {
 	private readonly sessionService = new SessionService();
 
 	async getPlayer(steamid: SteamID): Promise<Player> {
-		try {
-			const player = await this.sessionService.getPlayer(steamid);
-			return ValidateClass<Player>(player);
-		} catch (e) {
+		const player = await this.sessionService.getPlayer(steamid);
+		if (player !== undefined) {
+			return ValidateClass(player);
+		} else {
 			const playerRepository = new LinqRepository(Player);
 			const player = await playerRepository
 				.getOne()
@@ -38,7 +38,9 @@ export default class PlayerService {
 			if (player === undefined) {
 				throw new PlayerNotFoundError(steamid);
 			}
-			return ValidateClass<Player>(player);
+			let t = new Player();
+			let m = Object.assign(t, player);
+			return ValidateClass(Object.assign(new Player(), player));
 		}
 	}
 

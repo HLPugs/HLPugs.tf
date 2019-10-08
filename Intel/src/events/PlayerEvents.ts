@@ -21,43 +21,49 @@ export default class PlayerEvents {
 	private readonly sessionService = new SessionService();
 
 	logout(socket: SocketWithPlayer, steamid: SteamID) {
-		Logger.logInfo('logout', { steamid });
 		this.disconnectPlayer(socket, steamid);
 		socket.request.session.player = undefined;
 		socket.request.session.save();
+		Logger.logInfo('Logged out successfully', { steamid });
 	}
 
 	disconnectPlayer(socket: SocketWithPlayer, steamid: SteamID) {
-		Logger.logInfo('disconnect', { steamid });
 		this.draftEvents.removePlayerFromAllDraftTFClasses(steamid);
 		this.sessionService.removePlayer(steamid);
 		io.emit('removePlayerFromSession', steamid);
 		socket.emit('updateCurrentPlayer', new PlayerViewModel());
+		Logger.logInfo('Disconnected player', { steamid });
 	}
 
 	async updateLoggedInPlayer(player: Player) {
-		const viewmodel = PlayerViewModel.fromPlayer(player);
-		io.to(player.steamid).emit('updateCurrentPlayer', viewmodel);
-		io.emit('updatePlayerGlobally', viewmodel);
+		const playerViewModel = await Player.toPlayerViewModel(player);
+		io.to(player.steamid).emit('updateCurrentPlayer', playerViewModel);
+		io.emit('updatePlayerGlobally', playerViewModel);
 	}
 
 	async updateSettings(socket: SocketWithPlayer, steamid: SteamID, settings: PlayerSettings) {
-		Logger.logInfo('updateSettings', { steamid, settings });
 		await this.playerService.updateSettings(steamid, settings);
 		socket.request.session.player.settings = settings;
 		socket.request.session.save();
+		Logger.logInfo('Updated player settings', { steamid, settings });
+	}
+
+	async sendPlayerSettings(steamid: SteamID) {
+		const settings = await this.playerService.getSettings(steamid);
+		io.to(steamid).emit('getPlayerSettings', PlayerSettings.toPlayerSettingsViewmodel(settings));
+		Logger.logInfo('Sent settings to player', { steamid, settings });
 	}
 
 	async updateRoles(steamid: SteamID, roles: Role[]) {
-		Logger.logInfo('updateRoles', { steamid, roles });
 		const player = await this.playerService.updateRoles(steamid, roles);
 		this.updateLoggedInPlayer(player);
+		Logger.logInfo('Updated role', { steamid, roles });
 	}
 
 	async updatePermissionGroup(steamid: SteamID, permissionGroup: PermissionGroup) {
-		Logger.logInfo('updatePermissionGroup', { steamid, permissionGroup });
 		const player = await this.playerService.updatePermissionGroup(steamid, permissionGroup);
 		this.updateLoggedInPlayer(player);
+		Logger.logInfo('Updated permission group', { steamid, permissionGroup });
 	}
 
 	async submitAlias(steamid: SteamID, alias: string, sessionId: SessionID) {
@@ -70,10 +76,10 @@ export default class PlayerEvents {
 		const player = await this.playerService.updateAlias(steamid, alias);
 
 		this.sessionService.associateSteamidWithSessionid(steamid, sessionId);
-		const isCurrentlyMutedInChat = await this.playerService.isCurrentlyMutedInChat(steamid);
-		const playerViewModel = Player.toPlayerViewModel(player, isCurrentlyMutedInChat);
+		const playerViewModel = await Player.toPlayerViewModel(player);
 		io.to(steamid).emit('updateCurrentPlayer', playerViewModel);
 		io.to(steamid).emit('hideAliasModal');
 		io.emit('addPlayerToSession', playerViewModel);
+		Logger.logInfo('Player created alias', { steamid, alias });
 	}
 }

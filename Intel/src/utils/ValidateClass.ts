@@ -2,7 +2,6 @@ import { validateSync, ValidationError } from 'class-validator';
 
 import { ClassValidationError } from '../custom-errors/ClassValidationError';
 import Logger from '../modules/Logger';
-
 /**
  * Returns the class if its validation decorators succeed
  *
@@ -13,12 +12,14 @@ function ValidateClass<T>(classNeedingValidation: T): T {
 	if (classNeedingValidation === null || classNeedingValidation === undefined) {
 		const error = new ValidationError();
 		error.value = 'Cannot validate null or undefined';
+		Logger.logError(JSON.stringify(error) + new Error().stack);
 		throw new ClassValidationError([error]);
 	}
 	if (Array.isArray(classNeedingValidation)) {
 		classNeedingValidation.forEach(x => {
 			const errors = validateSync(classNeedingValidation);
 			if (errors.length) {
+				Logger.logError(errors);
 				throw new ClassValidationError(errors);
 			}
 		});
@@ -26,7 +27,8 @@ function ValidateClass<T>(classNeedingValidation: T): T {
 	} else {
 		const errors = validateSync(classNeedingValidation);
 		if (errors.length) {
-			throw new ClassValidationError(errors);
+			const error = new ClassValidationError(errors);
+			Logger.logError(error.message);
 		}
 		return classNeedingValidation;
 	}
