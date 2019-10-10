@@ -8,6 +8,7 @@ import { SearchEmojis, SearchMentions } from './SearchCompletions';
 import CHAT_MESSAGE_THRESHOLD from '../../../../../Common/Constants/ChatMessageThreshold';
 import SendMessageRequest from '../../../../../Common/Requests/SendMessageRequest';
 import './style.scss';
+import PlayerViewModel from '../../../../../Common/ViewModels/PlayerViewModel';
 
 interface ChatInputProps {
 	socket: SocketIOClient.Socket;
@@ -22,7 +23,9 @@ interface ChatInputState {
 	autoCompleteIndex: number;
 	emojiCompletions: CompletionItem[];
 	mentionCompletions: string[];
+	isMutedInChat: boolean;
 	lastMessageSentTimestamp: number;
+	isEnabled: boolean;
 }
 
 class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
@@ -39,8 +42,17 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 			autoCompleteIndex: 0,
 			emojiCompletions: [],
 			mentionCompletions: [],
-			lastMessageSentTimestamp: 0
+			lastMessageSentTimestamp: 0,
+			isMutedInChat: false,
+			isEnabled: true
 		};
+
+		this.props.socket.on('updateCurrentPlayer', (playerViewModel: PlayerViewModel) => {
+			this.setState({
+				isMutedInChat: playerViewModel.isMutedInChat,
+				isEnabled: !playerViewModel.isMutedInChat && !!this.props.isLoggedIn
+			});
+		});
 	}
 
 	addEmoji = (emoji: EmojiData) => {
@@ -212,17 +224,29 @@ class ChatInput extends React.Component<ChatInputProps, ChatInputState> {
 		}, 200);
 	};
 
+	chatPlaceHolder() {
+		if (this.props.isLoggedIn) {
+			if (this.state.isMutedInChat) {
+				return 'You are muted in chat';
+			} else {
+				return '@Support for serious concerns';
+			}
+		} else {
+			return 'Login to chat!';
+		}
+	}
+
 	render() {
 		return (
 			<div id="inputHolder">
 				<textarea
-					placeholder={this.props.isLoggedIn ? '@Support for serious concerns' : 'Login to chat!'}
+					placeholder={this.chatPlaceHolder()}
 					id="messageInput"
 					ref={this.messageInput}
 					onChange={this.handleChange}
 					onKeyDown={this.handleKeyPress}
 					maxLength={300}
-					disabled={!this.props.isLoggedIn}
+					disabled={!this.state.isEnabled}
 				/>
 				<AutoCompletions
 					autoCompleteIndex={this.state.autoCompleteIndex}

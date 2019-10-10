@@ -31,7 +31,7 @@ export default class DebugSocketController {
 
 	@OnMessage('fakeLogin')
 	async fakeLogin(@ConnectedSocket() socket: SocketWithPlayer, @SocketIO() io: Server) {
-		Logger.logInfo('Received fakeLogin request');
+		Logger.logDebug('Received fakeLogin request');
 		if (process.env.NODE_ENV === 'dev') {
 			if (!this.sessionService.playerExists(FAKE_OFFLINE_STEAMID)) {
 				await this.debugService.addFakePlayer(FAKE_OFFLINE_STEAMID, socket.request.session.id);

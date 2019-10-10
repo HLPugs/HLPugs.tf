@@ -42,7 +42,7 @@ export default class DraftEvents {
 	}
 
 	sendPreDraftRequirements() {
-		Logger.logDebugEvent('Attempting to send new pre draft requirements');
+		Logger.logDebug('Attempting to send new pre draft requirements');
 		if (!this.readyUpPhaseActive) {
 			const readyUpPhaseCanStart = this.draftService.checkIfAllDraftRequirementsAreFulfilled();
 

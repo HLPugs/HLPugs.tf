@@ -18,8 +18,6 @@ export default class ChatService {
 	}
 
 	storePlayerMessage(message: Message) {
-		if (this.playerSentMessageTooFast(message.authorSteamid)) return;
-
 		message.messageContent = message.messageContent
 			.split(' ')
 			.map(word => this.censorWordIfBlacklisted(word))
@@ -35,11 +33,23 @@ export default class ChatService {
 		return this.messageHistory;
 	}
 
-	private playerSentMessageTooFast(steamid: SteamID): boolean {
+	playerSentMessageTooFast(steamid: SteamID): boolean {
+		const latestMessage = this.getLatestMessage(steamid);
 		const currentTimestamp = new Date();
-		return this.messageHistory.some(message => {
-			message.authorSteamid === steamid && message.timestamp - currentTimestamp.valueOf() < CHAT_MESSAGE_THRESHOLD;
-		});
+		console.log(latestMessage);
+		if (!latestMessage) {
+			return false;
+		} else {
+			console.log(currentTimestamp.valueOf() - latestMessage.timestamp);
+			return currentTimestamp.valueOf() - latestMessage.timestamp < CHAT_MESSAGE_THRESHOLD;
+		}
+	}
+
+	private getLatestMessage(steamid: SteamID) {
+		const playerMessagesOrderedByTimestampDescending = this.messageHistory
+			.filter(x => x.authorSteamid === steamid)
+			.sort((a, b) => b.timestamp - a.timestamp);
+		return playerMessagesOrderedByTimestampDescending[0];
 	}
 
 	private censorWordIfBlacklisted(word: string) {

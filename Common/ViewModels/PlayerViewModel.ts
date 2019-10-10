@@ -36,6 +36,6 @@ export default class PlayerViewModel {
 	@IsEnum(PermissionGroup)
 	permissionGroup: PermissionGroup;
 
-	// @IsBoolean()
+	@IsBoolean()
 	isMutedInChat: boolean;
 }

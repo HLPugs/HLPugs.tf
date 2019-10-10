@@ -95,6 +95,13 @@ class Debug extends React.Component<DebugProps, DebugState> {
 					roles: [Role.CONTRIBUTOR, Role.DEVELOPER],
 					permissionGroup: PermissionGroup.HEAD_ADMIN
 				}
+			},
+			{
+				title: 'Send message',
+				emit: 'sendMessage',
+				options: {
+					messageContent: 'test message'
+				}
 			}
 		];
 	};

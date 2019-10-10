@@ -14,8 +14,17 @@ const format = winston.format.combine(
 
 const logger = winston.createLogger({
 	format,
-	level: 'info',
+	levels: {
+		debug: 3,
+		info: 2,
+		warning: 1,
+		error: 0
+	},
 	transports: [
+		new winston.transports.File({
+			level: 'debug',
+			filename: path.join(logDirectory, 'debug.log')
+		}),
 		new winston.transports.File({
 			filename: path.join(logDirectory, 'events.log')
 		})
@@ -40,7 +49,7 @@ export default class Logger {
 		}
 	}
 
-	static logDebugEvent(eventName: string, eventData?: any) {
+	static logDebug(eventName: string, eventData?: any) {
 		if (eventData) {
 			logger.log('debug', `${eventName}: ${JSON.stringify(eventData)}`);
 		} else {
