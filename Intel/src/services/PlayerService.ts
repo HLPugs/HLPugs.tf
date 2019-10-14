@@ -38,9 +38,7 @@ export default class PlayerService {
 			if (player === undefined) {
 				throw new PlayerNotFoundError(steamid);
 			}
-			let t = new Player();
-			let m = Object.assign(t, player);
-			return ValidateClass(Object.assign(new Player(), player));
+			return ValidateClass(player);
 		}
 	}
 

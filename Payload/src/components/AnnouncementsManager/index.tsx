@@ -61,7 +61,6 @@ export default function AnnouncementsManager() {
 	};
 
 	const diffCheck = (): boolean => {
-		console.log(announcements, originalAnnouncements);
 		if (announcements.length !== originalAnnouncements.length) {
 			return false;
 		}

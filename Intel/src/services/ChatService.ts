@@ -36,7 +36,6 @@ export default class ChatService {
 	playerSentMessageTooFast(steamid: SteamID): boolean {
 		const latestMessage = this.getLatestMessage(steamid);
 		const currentTimestamp = new Date();
-		console.log(latestMessage);
 		if (!latestMessage) {
 			return false;
 		} else {
