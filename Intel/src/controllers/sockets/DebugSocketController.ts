@@ -43,6 +43,7 @@ export default class DebugSocketController {
 				const playerViewModel = await Player.toPlayerViewModel(player);
 				socket.emit('updateCurrentPlayer', playerViewModel);
 				io.emit('addPlayerToSession', playerViewModel);
+				socket.emit('setCookie', 'steamid=' + player.steamid);
 				Logger.logInfo('Logged in successfully');
 			}
 		} else {
@@ -56,6 +57,7 @@ export default class DebugSocketController {
 		if (process.env.NODE_ENV === 'dev') {
 			ValidateClass(payload);
 			this.playerEvents.logout(socket, payload.steamid);
+			socket.emit('setCookie', 'steamid=;');
 		}
 	}
 

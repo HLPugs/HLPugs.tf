@@ -34,6 +34,20 @@ export class HomeSocketController {
 
 	@OnConnect()
 	async socketConnected(@ConnectedSocket() socket: Socket, @SocketRequest() request: SocketRequestWithPlayer) {
+		if (process.env.NODE_ENV === 'dev') {
+			const cookies = socket.request.headers.cookie.split('; ');
+			for (const cookie of cookies) {
+				if (cookie.includes('steamid')) {
+					const steamid = cookie.replace('steamid=', '');
+					if (await this.playerService.playerExists(steamid)) {
+						const player = await this.playerService.getPlayer(steamid);
+						socket.request.session.player = player;
+						socket.request.session.save();
+					}
+				}
+			}
+		}
+
 		socket.emit('siteConfiguration', SiteConfiguration);
 		if (socket.request.session.err) {
 			socket.emit('serverError', socket.request.session.err);
@@ -79,9 +93,9 @@ export class HomeSocketController {
 		}
 
 		const loggedInPlayers = await this.sessionService.getAllPlayers();
-		const playerViewModels = loggedInPlayers
-			.filter(player => player.alias !== null && player.alias !== undefined) // Only send players who have made an alias
-			.map(async player => await Player.toPlayerViewModel(player));
+		const playerViewModels = await Promise.all(
+			loggedInPlayers.map(async player => await Player.toPlayerViewModel(player))
+		);
 		socket.emit('getLoggedInPlayers', playerViewModels);
 	}
 

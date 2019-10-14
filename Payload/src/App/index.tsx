@@ -121,6 +121,10 @@ class App extends React.Component<{}, AppState> {
 			this.setState({ isBanned: true });
 		});
 
+		this.socket.on('setCookie', (cookie: string) => {
+			document.cookie = cookie;
+		});
+
 		this.state = {
 			currentPlayer: new PlayerViewModel(),
 			disconnected: false,
