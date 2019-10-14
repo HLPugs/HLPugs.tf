@@ -13,6 +13,7 @@ import { Bold, Underscore, FgYellow, Reset, consoleLogStatus, FgRed, FgGreen, Fg
 import CurrentUserChecker from './utils/CurrentUserChecker';
 import { useSocketServer } from 'socket-controllers';
 import * as dotenv from 'dotenv';
+import AddFakePlayerToSession from './middlewares/sockets/LogSocketEmit';
 
 const env = dotenv.config().parsed;
 
@@ -66,7 +67,8 @@ createConnection()
 		});
 
 		useSocketServer(io, {
-			controllers: [__dirname + '/controllers/sockets/*.js']
+			controllers: [__dirname + '/controllers/sockets/*.js'],
+			middlewares: process.env.NODE_ENV === 'dev' ? [AddFakePlayerToSession] : []
 		});
 
 		server.listen(3001, () => {

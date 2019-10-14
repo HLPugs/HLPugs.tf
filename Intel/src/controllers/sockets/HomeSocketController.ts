@@ -34,20 +34,6 @@ export class HomeSocketController {
 
 	@OnConnect()
 	async socketConnected(@ConnectedSocket() socket: Socket, @SocketRequest() request: SocketRequestWithPlayer) {
-		if (process.env.NODE_ENV === 'dev') {
-			const cookies = socket.request.headers.cookie.split('; ');
-			for (const cookie of cookies) {
-				if (cookie.includes('steamid')) {
-					const steamid = cookie.replace('steamid=', '');
-					if (await this.playerService.playerExists(steamid)) {
-						const player = await this.playerService.getPlayer(steamid);
-						request.session.player = player;
-						request.session.save();
-					}
-				}
-			}
-		}
-
 		socket.emit('siteConfiguration', SiteConfiguration);
 		if (socket.request.session.err) {
 			socket.emit('serverError', socket.request.session.err);
