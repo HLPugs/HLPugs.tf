@@ -41,8 +41,8 @@ export class HomeSocketController {
 					const steamid = cookie.replace('steamid=', '');
 					if (await this.playerService.playerExists(steamid)) {
 						const player = await this.playerService.getPlayer(steamid);
-						socket.request.session.player = player;
-						socket.request.session.save();
+						request.session.player = player;
+						request.session.save();
 					}
 				}
 			}

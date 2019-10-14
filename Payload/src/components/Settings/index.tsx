@@ -6,7 +6,6 @@ import { PlayerSettingsViewModel } from '../../../../Common/ViewModels/PlayerSet
 import GamemodeClassScheme from '../../../../Common/Models/GamemodeClassScheme';
 import DraftTFClass from '../../../../Common/Enums/DraftTFClass';
 import SteamID from '../../../../Common/Types/SteamID';
-import GetPlayerSettingsRequest from '../../../../Common/Requests/GetPlayerSettingsRequest';
 import UpdatePlayerSettingsRequest from '../../../../Common/Requests/UpdatePlayerSettingsRequest';
 import PropertyOf from '../../../../Common/Utils/PropertyOf';
 
@@ -34,7 +33,7 @@ class Settings extends React.PureComponent<SettingsProps, SettingsState> {
 	}
 
 	componentDidMount() {
-		this.props.socket.emit('getPlayerSettings', { steamid: this.props.steamid } as GetPlayerSettingsRequest);
+		this.props.socket.emit('getPlayerSettings');
 
 		this.props.socket.on('getPlayerSettings', (settings: PlayerSettingsViewModel) => {
 			this.setState({ settings });
@@ -48,7 +47,7 @@ class Settings extends React.PureComponent<SettingsProps, SettingsState> {
 	};
 
 	cancelPress = () => {
-		this.props.socket.emit('getPlayerSettings', { steamid: this.props.steamid } as GetPlayerSettingsRequest);
+		this.props.socket.emit('getPlayerSettings');
 		this.props.settingsOnClick();
 	};
 

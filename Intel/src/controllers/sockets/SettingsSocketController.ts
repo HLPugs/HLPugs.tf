@@ -4,18 +4,19 @@ import {
 	EmitOnSuccess,
 	EmitOnFail,
 	MessageBody,
-	ConnectedSocket
+	ConnectedSocket,
+	SocketRequest
 } from 'socket-controllers';
 import PlayerService from '../../services/PlayerService';
 import { Socket } from 'socket.io';
 import { PlayerSettingsViewModel } from '../../../../Common/ViewModels/PlayerSettingsViewModel';
-import GetPlayerSettingsRequest from '../../../../Common/Requests/GetPlayerSettingsRequest';
 import ValidateClass from '../../utils/ValidateClass';
 import UpdatePlayerSettingsRequest from '../../../../Common/Requests/UpdatePlayerSettingsRequest';
 import PlayerSettings from '../../entities/PlayerSettings';
 import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
 import PlayerEvents from '../../events/PlayerEvents';
 import Logger from '../../modules/Logger';
+import SocketRequestWithPlayer from '../../interfaces/SocketRequestWithPlayer';
 
 @SocketController()
 export default class SettingsSocketController {
@@ -23,10 +24,9 @@ export default class SettingsSocketController {
 	private readonly playerService = new PlayerService();
 
 	@OnMessage('getPlayerSettings')
-	async loadSettings(@ConnectedSocket() socket: Socket, @MessageBody() payload: GetPlayerSettingsRequest) {
+	async loadSettings(@SocketRequest() request: SocketRequestWithPlayer) {
 		Logger.logInfo("Received request to get a player's settings");
-		const { steamid } = ValidateClass(payload);
-		await this.playerEvents.sendPlayerSettings(steamid);
+		await this.playerEvents.sendPlayerSettings(request.session.player.steamid);
 	}
 
 	@OnMessage('saveSettings')

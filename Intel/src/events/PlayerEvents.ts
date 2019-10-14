@@ -2,7 +2,6 @@ import PlayerSettings from '../entities/PlayerSettings';
 import SteamID from '../../../Common/Types/SteamID';
 import PlayerService from '../services/PlayerService';
 import SocketWithPlayer from '../interfaces/SocketWithPlayer';
-import { Socket, Server } from 'socket.io';
 import DraftEvents from './DraftEvents';
 import SessionService from '../services/SessionService';
 import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
@@ -24,6 +23,7 @@ export default class PlayerEvents {
 		this.disconnectPlayer(socket, steamid);
 		socket.request.session.player = undefined;
 		socket.request.session.save();
+		io.to(steamid).emit('setCookie', 'steamid=' + steamid + ';Expires=Thu, 01 Jan 1970 00:00:01 GMT;');
 		Logger.logInfo('Logged out successfully', { steamid });
 	}
 
@@ -49,9 +49,12 @@ export default class PlayerEvents {
 	}
 
 	async sendPlayerSettings(steamid: SteamID) {
-		const settings = await this.playerService.getSettings(steamid);
-		io.to(steamid).emit('getPlayerSettings', PlayerSettings.toPlayerSettingsViewmodel(settings));
-		Logger.logInfo('Sent settings to player', { steamid, settings });
+		if (await this.playerService.playerExists(steamid)) {
+			const settings = await this.playerService.getSettings(steamid);
+			const settingsViewModel = PlayerSettings.toPlayerSettingsViewmodel(settings);
+			io.to(steamid).emit('getPlayerSettings', settingsViewModel);
+			Logger.logInfo('Sent settings to player', { steamid, settings: settingsViewModel });
+		}
 	}
 
 	async updateRoles(steamid: SteamID, roles: Role[]) {

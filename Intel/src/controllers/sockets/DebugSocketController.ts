@@ -57,7 +57,6 @@ export default class DebugSocketController {
 		if (process.env.NODE_ENV === 'dev') {
 			ValidateClass(payload);
 			this.playerEvents.logout(socket, payload.steamid);
-			socket.emit('setCookie', 'steamid=;');
 		}
 	}
 
