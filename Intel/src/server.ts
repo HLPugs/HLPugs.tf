@@ -8,12 +8,13 @@ import * as socketIO from 'socket.io';
 import store from './modules/store';
 import { createConnection } from 'typeorm';
 import express = require('express');
-import { useExpressServer } from 'routing-controllers';
+import { useExpressServer, Action } from 'routing-controllers';
 import { Bold, Underscore, FgYellow, Reset, consoleLogStatus, FgRed, FgGreen, FgBlue } from './utils/ConsoleColors';
 import CurrentUserChecker from './utils/CurrentUserChecker';
 import { useSocketServer } from 'socket-controllers';
 import * as dotenv from 'dotenv';
-import AddFakePlayerToSession from './middlewares/sockets/LogSocketEmit';
+import AddFakePlayerToSession from './middlewares/sockets/AddFakePlayerToSession';
+import authorizationChecker from './utils/AuthorizationChecker';
 
 const env = dotenv.config().parsed;
 
@@ -50,6 +51,7 @@ createConnection()
 			defaultErrorHandler: false,
 			routePrefix: '/api',
 			currentUserChecker: CurrentUserChecker,
+			authorizationChecker,
 			cors: true,
 			middlewares: [__dirname + '/middlewares/*.js', __dirname + '/middlewares/api/*.js'],
 			controllers: [__dirname + '/controllers/api/*.js']
@@ -58,6 +60,7 @@ createConnection()
 		useExpressServer(app, {
 			defaultErrorHandler: false,
 			currentUserChecker: CurrentUserChecker,
+			authorizationChecker,
 			middlewares: [__dirname + '/middlewares/*.js'],
 			controllers: [__dirname + '/controllers/*.js']
 		});

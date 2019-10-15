@@ -3,22 +3,18 @@ import { SocketIO, SocketController, OnMessage, MessageBody, ConnectedSocket, So
 import ValidateClass from '../../utils/ValidateClass';
 import SessionService from '../../services/SessionService';
 import DebugService from '../../services/DebugService';
-import SocketRequestWithPlayer from '../../interfaces/SocketRequestWithPlayer';
 import PlayerService from '../../services/PlayerService';
 import { SiteConfiguration } from '../../constants/SiteConfiguration';
 import FakeLogoutRequest from '../../../../Common/Requests/FakeLogoutRequest';
 import FakeAddPlayerToDraftTFClassRequest from '../../../../Common/Requests/FakeAddPlayerToDraftTFClassRequest';
 import FakeAddPlayerToAllDraftTFClassesRequest from '../../../../Common/Requests/FakeAddPlayerToAllDraftTFClassesRequest';
 import FakeRemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests/FakeRemovePlayerFromDraftTFClassRequest';
-import DraftService from '../../services/DraftService';
 import DraftEvents from '../../events/DraftEvents';
 import PlayerEvents from '../../events/PlayerEvents';
 import FAKE_OFFLINE_STEAMID from '../../../../Common/Constants/FakeOfflineSteamid';
-import { HomeSocketController } from './HomeSocketController';
 import Logger from '../../modules/Logger';
 import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
 import Player from '../../entities/Player';
-import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 
 @SocketController()
 export default class DebugSocketController {

@@ -1,5 +1,4 @@
 import { Middleware, MiddlewareInterface } from 'socket-controllers';
-import Logger from '../../modules/Logger';
 import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
 import PlayerService from '../../services/PlayerService';
 
