@@ -36,25 +36,4 @@ export default class ChatEvents {
 			Logger.logInfo('Chat messsage sent', { steamid, message: message.messageContent });
 		}
 	}
-
-	async mutePlayer(authorSteamID: SteamID, playerToMuteSteamid: SteamID, expirationDate: Date, reason: string) {
-		const punishments = await this.playerService.getActivePunishments(playerToMuteSteamid);
-		if (punishments.some(p => p.punishmentType === PunishmentType.CHAT_MUTE)) {
-			// Player is already muted
-		} else {
-			const punishment = ValidateClass<Punishment>({
-				creationDate: new Date(),
-				authorSteamID,
-				expirationDate,
-				lastModifiedDate: new Date(),
-				punishmentType: PunishmentType.CHAT_MUTE,
-				reason,
-				offenderSteamID: playerToMuteSteamid
-			});
-
-			await this.punishmentService.addPunishment(punishment);
-			io.to(playerToMuteSteamid).emit('mutedInChat', punishment);
-			Logger.logInfo('Player muted in chat', punishment);
-		}
-	}
 }

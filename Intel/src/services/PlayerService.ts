@@ -237,12 +237,10 @@ export default class PlayerService {
 			.getAll()
 			.where(p => p.expirationDate)
 			.greaterThan(new Date())
-			.and(p => p.offender.steamid)
-			.equal(steamid)
 			.include(p => p.author)
 			.include(p => p.offender);
 
-		return activePunishments.map(p => PunishmentEntity.toPunishment(p));
+		return activePunishments.filter(p => p.offender.steamid === steamid).map(p => PunishmentEntity.toPunishment(p));
 	}
 
 	async isCurrentlyMutedInChat(steamid: SteamID): Promise<boolean> {

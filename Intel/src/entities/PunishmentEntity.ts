@@ -20,7 +20,6 @@ export default class PunishmentEntity {
 	@ManyToOne(type => PlayerEntity, player => player.punishments)
 	offender: PlayerEntity;
 
-	@IsNumberString()
 	@ManyToOne(type => PlayerEntity, player => player.createdPunishments)
 	author: PlayerEntity;
 

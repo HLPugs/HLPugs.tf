@@ -10,6 +10,7 @@ import FakeRemovePlayerFromDraftTFClassRequest from '../../../../Common/Requests
 import Role from '../../../../Common/Enums/Role';
 import PermissionGroup from '../../../../Common/Enums/PermissionGroup';
 import FAKE_OFFLINE_STEAMID from '../../../../Common/Constants/FakeOfflineSteamid';
+import MutePlayerRequest from '../../../../Common/Requests/MutePlayerRequest';
 
 interface DebugProps {
 	socket: SocketIOClient.Socket;
@@ -102,6 +103,15 @@ class Debug extends React.Component<DebugProps, DebugState> {
 				options: {
 					messageContent: 'test message'
 				}
+			},
+			{
+				title: 'Mute',
+				emit: 'mutePlayer',
+				options: {
+					playerToMuteSteamID: FAKE_OFFLINE_STEAMID,
+					expirationDate: new Date(9999999999999),
+					reason: 'spam'
+				} as MutePlayerRequest
 			}
 		];
 	};

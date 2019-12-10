@@ -9,13 +9,21 @@ import uuid = require('uuid');
 import PlayerService from '../../services/PlayerService';
 import ChatEvents from '../../events/ChatEvents';
 import Logger from '../../modules/Logger';
+import MutePlayerRequest from '../../../../Common/Requests/MutePlayerRequest';
+import PlayerHasPermission from '../../utils/PlayerHasPermission';
+import Permission from '../../../../Common/Enums/Permission';
+import PunishmentEvents from '../../events/PunishmentEvents';
+import session = require('express-session');
+import SessionService from '../../services/SessionService';
 
 @SocketController()
 export default class ChatSocketController {
 	private readonly chatEvents = new ChatEvents();
+	private readonly punishmentEvents = new PunishmentEvents();
 
 	private readonly chatService = new ChatService();
 	private readonly playerService = new PlayerService();
+	private readonly sessionService = new SessionService();
 
 	/**
 	 * Handles a player sending a chat message
@@ -53,5 +61,17 @@ export default class ChatSocketController {
 	}
 
 	@OnMessage('mutePlayer')
-	mutePlayer(@ConnectedSocket() socket: Socket) {}
+	async mutePlayer(@SocketRequest() req: SocketRequestWithPlayer, @MessageBody() payload: MutePlayerRequest) {
+		ValidateClass(payload);
+		const { steamid } = req.session.player;
+		const player = await this.sessionService.getPlayer(steamid);
+		if (PlayerHasPermission(Permission.MUTE_PLAYER, player)) {
+			this.punishmentEvents.mutePlayer(
+				player.steamid,
+				payload.playerToMuteSteamID,
+				payload.expirationDate,
+				payload.reason
+			);
+		}
+	}
 }
