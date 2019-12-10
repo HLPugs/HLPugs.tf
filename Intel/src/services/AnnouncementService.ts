@@ -1,12 +1,11 @@
 import Region from '../../../Common/Enums/Region';
 import { LinqRepository } from 'typeorm-linq-repository';
-import Announcement from '../entities/Announcement';
-import Player from '../entities/Player';
+import AnnouncementEntity from '../entities/AnnouncementEntity';
 
 export default class AnnouncementService {
-	private readonly announcementRepository = new LinqRepository(Announcement);
+	private readonly announcementRepository = new LinqRepository(AnnouncementEntity);
 
-	async getAnnouncements(region: Region): Promise<Announcement[]> {
+	async getAnnouncements(region: Region): Promise<AnnouncementEntity[]> {
 		if (region === Region.All) {
 			return await this.announcementRepository.getAll();
 		} else {
@@ -17,7 +16,7 @@ export default class AnnouncementService {
 		}
 	}
 
-	async createAnnouncement(announcement: Announcement): Promise<Announcement> {
+	async createAnnouncement(announcement: AnnouncementEntity): Promise<AnnouncementEntity> {
 		return await this.announcementRepository.create(announcement);
 	}
 }

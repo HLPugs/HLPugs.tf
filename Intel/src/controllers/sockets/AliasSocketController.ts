@@ -4,7 +4,6 @@ import PlayerViewModel from '../../../../Common/ViewModels/PlayerViewModel';
 import { LinqRepository } from 'typeorm-linq-repository';
 import SubmitAliasRequest from '../../../../Common/Requests/SubmitAliasRequest';
 import CheckIfAliasIsTakenRequest from '../../../../Common/Requests/CheckIfAliasIsTakenRequest';
-import Player from '../../entities/Player';
 import ValidateClass from '../../utils/ValidateClass';
 import SessionService from '../../services/SessionService';
 import { Socket, Server } from 'socket.io';
@@ -17,7 +16,6 @@ export class AliasSocketController {
 	private readonly playerEvents = new PlayerEvents();
 
 	private readonly playerService = new PlayerService();
-	private readonly sessionService = new SessionService();
 
 	@OnMessage('submitAlias')
 	async submitAlias(@ConnectedSocket() socket: SocketWithPlayer, @MessageBody() payload: SubmitAliasRequest) {

@@ -1,4 +1,4 @@
-import Match from '../../Intel/src/entities/Match';
+import MatchEntity from '../../Intel/src/entities/MatchEntity';
 import MatchType from '../Enums/MatchType';
 import Team from '../Enums/Team';
 import DraftTFClass from '../Enums/DraftTFClass';

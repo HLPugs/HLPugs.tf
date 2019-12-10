@@ -2,7 +2,7 @@ import Permission from '../../../Common/Enums/Permission';
 import PermissionGroup from '../../../Common/Enums/PermissionGroup';
 import { Permissions } from '../constants/Permissions';
 import PrivilegeRankings from '../constants/PrivilegeRankings';
-import Player from '../entities/Player';
+import Player from '../../../Common/Models/Player';
 
 const PlayerHasPermission = (permission: Permission, player: Player): boolean => {
 	for (const permissionGroup in Permissions) {

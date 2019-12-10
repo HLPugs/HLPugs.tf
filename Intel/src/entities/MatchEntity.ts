@@ -1,17 +1,17 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinTable, OneToMany } from 'typeorm';
 import { IsNumberString, IsEnum, IsString, IsNotEmpty, IsDate, Validate } from 'class-validator';
-import Player from './Player';
 import MatchType from '../../../Common/Enums/MatchType';
 import Team from '../../../Common/Enums/Team';
-import MatchPlayerData from './MatchPlayerData';
+import MatchPlayerDataEntity from './MatchPlayerData';
 import Region from '../../../Common/Enums/Region';
 import Gamemode from '../../../Common/Enums/Gamemode';
 import ProfileMatchViewModel from '../../../Common/ViewModels/ProfileMatchViewModel';
 import Outcome from '../../../Common/Enums/Outcome';
 import ValidateClass from '../utils/ValidateClass';
+import PlayerEntity from './PlayerEntity';
 
 @Entity('matches')
-export default class Match {
+export default class MatchEntity {
 	@PrimaryGeneratedColumn()
 	id?: number;
 
@@ -44,7 +44,7 @@ export default class Match {
 	@IsNumberString()
 	logsId: number;
 
-	@ManyToMany(type => Player, player => player.matches)
+	@ManyToMany(type => PlayerEntity, player => player.matches)
 	@JoinTable({
 		name: 'match_players',
 		joinColumn: {
@@ -56,14 +56,14 @@ export default class Match {
 			referencedColumnName: 'steamid'
 		}
 	})
-	players: Player[];
+	players: PlayerEntity[];
 
-	@OneToMany(type => MatchPlayerData, matchPlayerData => matchPlayerData.match, {
+	@OneToMany(type => MatchPlayerDataEntity, matchPlayerData => matchPlayerData.match, {
 		cascade: true
 	})
-	matchPlayerData: MatchPlayerData[];
+	matchPlayerData: MatchPlayerDataEntity[];
 
-	static toProfileMatchViewModel(match: Match): ProfileMatchViewModel {
+	static toProfileMatchViewModel(match: MatchEntity): ProfileMatchViewModel {
 		const profileMatchViewModel = new ProfileMatchViewModel();
 
 		profileMatchViewModel.id = match.id;

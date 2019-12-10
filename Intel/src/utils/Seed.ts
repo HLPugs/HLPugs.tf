@@ -1,33 +1,33 @@
-import Player from '../entities/Player';
 import { LinqRepository } from 'typeorm-linq-repository';
-import Match from '../entities/Match';
+import MatchEntity from '../entities/MatchEntity';
 import PlayerService from '../services/PlayerService';
 import MatchType from '../../../Common/Enums/MatchType';
 import Team from '../../../Common/Enums/Team';
-import MatchPlayerData from '../entities/MatchPlayerData';
+import MatchPlayerDataEntity from '../entities/MatchPlayerData';
 import { consoleLogStatus } from './ConsoleColors';
 import Region from '../../../Common/Enums/Region';
 import Gamemode from '../../../Common/Enums/Gamemode';
 import GamemodeClassSchemes from '../../../Common/Constants/GamemodeClassSchemes';
 import { createConnection, getManager } from 'typeorm';
-import Announcement from '../entities/Announcement';
+import AnnouncementEntity from '../entities/AnnouncementEntity';
 import SessionService from '../services/SessionService';
 import DebugService from '../services/DebugService';
-import PlayerSettings from '../entities/PlayerSettings';
-import Punishment from '../entities/Punishment';
+import PlayerSettingsEntity from '../entities/PlayerSettingsEntity';
+import PunishmentEntity from '../entities/PunishmentEntity';
 import PunishmentType from '../../../Common/Enums/PunishmentType';
 import FAKE_OFFLINE_STEAMID from '../../../Common/Constants/FakeOfflineSteamid';
+import PlayerEntity from '../entities/PlayerEntity';
 
 const SeedPlayers = async () => {
 	consoleLogStatus('SEEDING PLAYERS');
-	const playerRepository = new LinqRepository(Player);
+	const playerRepository = new LinqRepository(PlayerEntity);
 
-	const player = new Player();
+	const player = new PlayerEntity();
 	player.steamid = FAKE_OFFLINE_STEAMID;
 	player.alias = 'Gabe';
 	player.avatarUrl = DebugService.DEFAULT_STEAM_AVATAR;
 	player.ip = '127.0.0.1';
-	player.settings = new PlayerSettings();
+	player.settings = new PlayerSettingsEntity();
 
 	await playerRepository.create(player);
 };
@@ -35,7 +35,7 @@ const SeedPlayers = async () => {
 const SeedAnnouncements = async () => {
 	consoleLogStatus('SEEDING ANNOUNCEMENTS');
 
-	const announcementRepository = new LinqRepository(Announcement);
+	const announcementRepository = new LinqRepository(AnnouncementEntity);
 	for (let i = 1; i <= 10; i++) {
 		const announcement = {
 			creatorSteamid: FAKE_OFFLINE_STEAMID,
@@ -44,7 +44,7 @@ const SeedAnnouncements = async () => {
 			priority: false,
 			region: Region.NorthAmerica,
 			timestamp: new Date()
-		} as Announcement;
+		} as AnnouncementEntity;
 
 		await announcementRepository.create(announcement);
 	}
@@ -54,14 +54,14 @@ const SeedMatches = async () => {
 	consoleLogStatus('SEEDING MATCHES');
 
 	const playerService = new PlayerService();
-	const matchRepository = new LinqRepository(Match);
+	const matchRepository = new LinqRepository(MatchEntity);
 
-	const player = await playerService.getPlayer(FAKE_OFFLINE_STEAMID);
+	const player = await PlayerEntity.getBySteamID(FAKE_OFFLINE_STEAMID);
 
 	const gamemodeClassScheme = GamemodeClassSchemes.get(Gamemode.Highlander);
 
 	for (let i = 0; i < 100; i++) {
-		const matchPlayerData: MatchPlayerData = {
+		const matchPlayerData: MatchPlayerDataEntity = {
 			tf2class: gamemodeClassScheme[Math.floor(Math.random() * 9)].tf2class,
 			team: Math.floor(Math.random() * 2) === 1 ? Team.RED : Team.BLU,
 			wasCaptain: Math.floor(Math.random() * 2) === 1,
@@ -78,7 +78,7 @@ const SeedMatches = async () => {
 			logsId: 12345867,
 			region: Math.random() > 0.5 ? Region.NorthAmerica : Region.Europe,
 			gamemode: Gamemode.Highlander
-		} as Match;
+		} as MatchEntity;
 
 		await matchRepository.create(match);
 	}
@@ -86,9 +86,9 @@ const SeedMatches = async () => {
 
 const SeedPunishments = async () => {
 	consoleLogStatus('SEEDING PUNISHMENTS');
-	const playerRepository = new LinqRepository(Player);
-	const punishmentRepository = new LinqRepository(Punishment);
-	const punishment = new Punishment();
+	const playerRepository = new LinqRepository(PlayerEntity);
+	const punishmentRepository = new LinqRepository(PunishmentEntity);
+	const punishment = new PunishmentEntity();
 	punishment.creationDate = new Date();
 	punishment.expirationDate = new Date(new Date().valueOf() + 999999999);
 	punishment.reason = 'You did something stupid';
@@ -97,7 +97,7 @@ const SeedPunishments = async () => {
 		.where(p => p.steamid)
 		.equal(FAKE_OFFLINE_STEAMID);
 	punishment.offender = player;
-	punishment.creator = player;
+	punishment.author = player;
 	punishment.punishmentType = PunishmentType.BAN;
 	punishment.lastModifiedDate = new Date();
 	await punishmentRepository.create(punishment);

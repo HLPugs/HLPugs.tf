@@ -4,8 +4,9 @@ import Region from '../../../Common/Enums/Region';
 import SteamID from '../../../Common/Types/SteamID';
 import ValidateClass from '../utils/ValidateClass';
 import HomepageAnnouncementViewModel from '../../../Common/ViewModels/HomepageAnnouncementViewModel';
+
 @Entity('announcements')
-export default class Announcement {
+export default class AnnouncementEntity {
 	@PrimaryGeneratedColumn()
 	@IsOptional()
 	@IsNumber()
@@ -36,7 +37,7 @@ export default class Announcement {
 	@IsDate()
 	timestamp?: Date;
 
-	static toHomepageAnnouncementViewModel(announcement: Announcement) {
+	static toHomepageAnnouncementViewModel(announcement: AnnouncementEntity) {
 		return ValidateClass<HomepageAnnouncementViewModel>({
 			messageContent: announcement.messageContent,
 			priority: announcement.priority

@@ -21,7 +21,7 @@ import ValidateClass from '../../utils/ValidateClass';
 import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
 import DraftEvents from '../../events/DraftEvents';
 import PlayerEvents from '../../events/PlayerEvents';
-import Player from '../../entities/Player';
+import Player from '../../../../Common/Models/Player';
 
 @SocketController()
 export class HomeSocketController {
@@ -68,7 +68,7 @@ export class HomeSocketController {
 			if (io.sockets.adapter.rooms[player.steamid].length === 1) {
 				this.sessionService.associateSteamidWithSessionid(player.steamid, socket.request.session.id);
 				const updatedPlayer = await this.sessionService.getPlayer(player.steamid);
-				const playerViewModel = await Player.toPlayerViewModel(player);
+				const playerViewModel = await Player.toPlayerViewModel(updatedPlayer);
 				io.emit('addPlayerToSession', ValidateClass(playerViewModel));
 			}
 			if (player.settings.addToFavoritesOnLogin) {

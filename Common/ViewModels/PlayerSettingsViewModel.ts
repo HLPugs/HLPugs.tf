@@ -1,5 +1,5 @@
 import DraftTFClass from '../Enums/DraftTFClass';
-import PlayerSettings from '../../Intel/src/entities/PlayerSettings';
+import PlayerSettingsEntity from '../../Intel/src/entities/PlayerSettingsEntity';
 import { IsNumber, IsBoolean, IsDefined, IsString } from 'class-validator';
 import ValidateClass from '../../Intel/src/utils/ValidateClass';
 

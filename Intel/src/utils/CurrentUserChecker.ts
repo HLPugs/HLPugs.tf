@@ -1,11 +1,12 @@
 import { Action } from 'routing-controllers';
 import PlayerService from '../services/PlayerService';
-import Player from '../entities/Player';
 import ValidateClass from './ValidateClass';
+import UnnamedPlayer from '../interfaces/UnnamedPlayer';
+import Player from '../../../Common/Models/Player';
 
 const playerService = new PlayerService();
 
-const CurrentUserChecker = async (action: Action) => {
+const CurrentUserChecker = async (action: Action): Promise<Player | UnnamedPlayer> => {
 	const newIp = action.request.header('x-forwarded-for') || action.request.connection.remoteAddress;
 	const newAvatarUrl = action.request.user.avatar.large;
 
@@ -24,10 +25,7 @@ const CurrentUserChecker = async (action: Action) => {
 		existingPlayer.avatarUrl = newAvatarUrl;
 		return ValidateClass(existingPlayer);
 	} else {
-		const player = new Player();
-		player.steamid = action.request.user.steamid;
-		player.ip = newIp;
-		player.avatarUrl = newAvatarUrl;
+		const player = { steamid: action.request.user.steamid, ip: newIp, avatarUrl: newAvatarUrl } as UnnamedPlayer;
 		return player;
 	}
 };

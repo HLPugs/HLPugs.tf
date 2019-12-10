@@ -1,5 +1,5 @@
 import SteamID from '../Types/SteamID';
-import Punishment from '../../Intel/src/entities/Punishment';
+import PunishmentEntity from '../../Intel/src/entities/PunishmentEntity';
 import ValidateClass from '../../Intel/src/utils/ValidateClass';
 import { IsNumberString, IsString, IsNotEmpty, IsDefined, IsDate, MaxDate, MinDate } from 'class-validator';
 

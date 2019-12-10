@@ -1,16 +1,16 @@
-import Match from '../entities/Match';
+import MatchEntity from '../entities/MatchEntity';
 import { LinqRepository } from 'typeorm-linq-repository';
-import Player from '../entities/Player';
 import { ProfileViewModel } from '../../../Common/ViewModels/ProfileViewModel';
 import PlayerService from './PlayerService';
 import ProfilePaginatedMatchesViewModel from '../../../Common/ViewModels/ProfilePaginatedMatchesViewModel';
 import ProfileMatchViewModel from '../../../Common/ViewModels/ProfileMatchViewModel';
 import { isSteamID } from '../utils/SteamIDChecker';
 import SteamID from '../../../Common/Types/SteamID';
+import Player from '../../../Common/Models/Player';
 
 const playerService = new PlayerService();
 
-const matchRepository = new LinqRepository(Match);
+const matchRepository = new LinqRepository(MatchEntity);
 
 export class ProfileService {
 	async getPaginatedMatches(
@@ -41,7 +41,9 @@ export class ProfileService {
 			.take(Math.min(pageSize, 50));
 
 		const profilePaginatedMatchesViewModel = new ProfilePaginatedMatchesViewModel();
-		profilePaginatedMatchesViewModel.matches = paginatedMatches.map(match => Match.toProfileMatchViewModel(match));
+		profilePaginatedMatchesViewModel.matches = paginatedMatches.map(match =>
+			MatchEntity.toProfileMatchViewModel(match)
+		);
 		profilePaginatedMatchesViewModel.totalMatches = totalMatchCount;
 
 		return profilePaginatedMatchesViewModel;

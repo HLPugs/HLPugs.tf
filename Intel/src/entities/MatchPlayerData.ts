@@ -1,6 +1,6 @@
 import { Entity, Column, ManyToOne } from 'typeorm';
-import Match from './Match';
-import Player from './Player';
+import MatchEntity from './MatchEntity';
+import PlayerEntity from './PlayerEntity';
 import Team from '../../../Common/Enums/Team';
 import DraftTFClass from '../../../Common/Enums/DraftTFClass';
 
@@ -15,11 +15,11 @@ export default class MatchPlayerData {
 	@Column({ default: false })
 	wasCaptain: boolean;
 
-	@ManyToOne(type => Match, match => match.matchPlayerData, { primary: true })
-	match?: Match;
+	@ManyToOne(type => MatchEntity, match => match.matchPlayerData, { primary: true })
+	match?: MatchEntity;
 
-	@ManyToOne(type => Player, player => player.matchPlayerData, {
+	@ManyToOne(type => PlayerEntity, player => player.matchPlayerData, {
 		primary: true
 	})
-	player!: Player;
+	player!: PlayerEntity;
 }

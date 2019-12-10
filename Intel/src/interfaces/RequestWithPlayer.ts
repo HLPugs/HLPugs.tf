@@ -1,5 +1,5 @@
 import { Request } from 'express';
-import Player from '../entities/Player';
+import Player from '../../../Common/Models/Player';
 
 type RequestWithPlayer = { player: Player; session: { player: Player } } & Request;
 

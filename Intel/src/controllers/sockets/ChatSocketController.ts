@@ -51,4 +51,7 @@ export default class ChatSocketController {
 		const messageHistory = this.chatService.getMessageHistory();
 		socket.emit('getMessageHistory', messageHistory);
 	}
+
+	@OnMessage('mutePlayer')
+	mutePlayer(@ConnectedSocket() socket: Socket) {}
 }

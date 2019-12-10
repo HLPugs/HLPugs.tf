@@ -1,5 +1,3 @@
-import PlayerSettings from '../../Intel/src/entities/PlayerSettings';
-import Player from '../../Intel/src/entities/Player';
 import Role from '../Enums/Role';
 import PermissionGroup from '../Enums/PermissionGroup';
 import {
@@ -12,9 +10,7 @@ import {
 	IsDefined,
 	IsEnum
 } from 'class-validator';
-import PlayerService from '../../Intel/src/services/PlayerService';
-import ValidateClass from '../../Intel/src/utils/ValidateClass';
-import PlayerRoleViewModel from './PlayerRoleViewModel';
+import PlayerSettings from '../Models/PlayerSettings';
 
 export default class PlayerViewModel {
 	@IsString()

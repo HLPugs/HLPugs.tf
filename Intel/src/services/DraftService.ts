@@ -3,7 +3,6 @@ import DraftTFClass from '../../../Common/Enums/DraftTFClass';
 import SteamID from '../../../Common/Types/SteamID';
 import { SiteConfiguration } from '../constants/SiteConfiguration';
 import PlayerService from './PlayerService';
-import Player from '../entities/Player';
 
 const playerService = new PlayerService();
 

@@ -5,9 +5,10 @@ import SteamID from '../../../Common/Types/SteamID';
 import SessionID from '../../../Common/Types/SessionID';
 import * as uuid from 'uuid';
 import * as crypto from 'crypto';
-import Player from '../entities/Player';
 import PlayerService from './PlayerService';
-import PlayerSettings from '../entities/PlayerSettings';
+import PlayerSettingsEntity from '../entities/PlayerSettingsEntity';
+import Player from '../../../Common/Models/Player';
+import PlayerSettings from '../../../Common/Models/PlayerSettings';
 
 export default class DebugService {
 	private readonly playerService = new PlayerService();
@@ -46,11 +47,12 @@ export default class DebugService {
 				const fakeSession = store.createSession(fakeRequest, fakeSess);
 				const fakePlayer = new Player();
 				fakePlayer.steamid = steamid ? steamid : fakePlayerCount.toString();
-				fakePlayer.alias = `FakePlayer${fakePlayerCount + 1}`;
 				fakePlayer.avatarUrl = DebugService.DEFAULT_STEAM_AVATAR;
 				fakePlayer.ip = '127.0.0.1';
 				fakePlayer.settings = new PlayerSettings();
-				await this.playerService.upsertPlayer(fakePlayer);
+				await this.playerService.loginNewPlayer(fakePlayer);
+				const newAlias = `FakePlayer${fakePlayerCount + 1}`;
+				await this.playerService.updateAlias(steamid, newAlias);
 				fakeSession.player = await this.playerService.getPlayer(fakePlayer.steamid);
 				store.set(sessionId ? sessionId : fakeSession.id, fakeSession, async err => {
 					if (err) reject(err);

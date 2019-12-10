@@ -1,4 +1,4 @@
-import PlayerSettings from '../entities/PlayerSettings';
+import PlayerSettingsEntity from '../entities/PlayerSettingsEntity';
 import SteamID from '../../../Common/Types/SteamID';
 import PlayerService from '../services/PlayerService';
 import SocketWithPlayer from '../interfaces/SocketWithPlayer';
@@ -8,10 +8,11 @@ import PlayerViewModel from '../../../Common/ViewModels/PlayerViewModel';
 import { io } from '../server';
 import PermissionGroup from '../../../Common/Enums/PermissionGroup';
 import Role from '../../../Common/Enums/Role';
-import Player from '../entities/Player';
 import Logger from '../modules/Logger';
 import SessionID from '../../../Common/Types/SessionID';
 import { ALIAS_REGEX_PATTERN } from '../../../Common/Constants/AliasConstraints';
+import PlayerSettings from '../../../Common/Models/PlayerSettings';
+import Player from '../../../Common/Models/Player';
 
 export default class PlayerEvents {
 	private readonly draftEvents = new DraftEvents();

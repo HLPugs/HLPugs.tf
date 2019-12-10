@@ -1,8 +1,9 @@
 import store from '../modules/store';
-import Player from '../entities/Player';
 import SteamID from '../../../Common/Types/SteamID';
 import SessionID from '../../../Common/Types/SessionID';
 import PlayerNotFoundError from '../custom-errors/PlayerNotFoundError';
+import Player from '../../../Common/Models/Player';
+import UnnamedPlayer from '../interfaces/UnnamedPlayer';
 
 /**
  * A service that provides methods for the retrieval, insertion
@@ -52,7 +53,7 @@ class SessionService {
 		return SessionService.playerSessionMap.size;
 	}
 
-	async updatePlayer(player: Player): Promise<Player> {
+	async updatePlayer(player: Player | UnnamedPlayer): Promise<Player | UnnamedPlayer> {
 		if (this.playerExists(player.steamid)) {
 			const sessionId = SessionService.playerSessionMap.get(player.steamid);
 			const cookie = await this.getCookie(player.steamid);

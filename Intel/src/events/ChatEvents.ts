@@ -7,9 +7,13 @@ import ValidateClass from '../utils/ValidateClass';
 import ChatService from '../services/ChatService';
 import { io } from '../server';
 import Logger from '../modules/Logger';
+import PunishmentType from '../../../Common/Enums/PunishmentType';
+import Punishment from '../../../Common/Models/Punishment';
+import PunishmentService from '../services/PunishmentService';
 
 export default class ChatEvents {
 	private readonly playerService = new PlayerService();
+	private readonly punishmentService = new PunishmentService();
 	private readonly chatService = new ChatService();
 
 	async sendPlayerMessage(steamid: SteamID, messageSent: string) {
@@ -30,6 +34,27 @@ export default class ChatEvents {
 			this.chatService.storePlayerMessage(message);
 			io.emit('sendMessage', message);
 			Logger.logInfo('Chat messsage sent', { steamid, message: message.messageContent });
+		}
+	}
+
+	async mutePlayer(authorSteamID: SteamID, playerToMuteSteamid: SteamID, expirationDate: Date, reason: string) {
+		const punishments = await this.playerService.getActivePunishments(playerToMuteSteamid);
+		if (punishments.some(p => p.punishmentType === PunishmentType.CHAT_MUTE)) {
+			// Player is already muted
+		} else {
+			const punishment = ValidateClass<Punishment>({
+				creationDate: new Date(),
+				authorSteamID,
+				expirationDate,
+				lastModifiedDate: new Date(),
+				punishmentType: PunishmentType.CHAT_MUTE,
+				reason,
+				offenderSteamID: playerToMuteSteamid
+			});
+
+			await this.punishmentService.addPunishment(punishment);
+			io.to(playerToMuteSteamid).emit('mutedInChat', punishment);
+			Logger.logInfo('Player muted in chat', punishment);
 		}
 	}
 }

@@ -1,11 +1,11 @@
 import { LinqRepository } from 'typeorm-linq-repository';
-import BlacklistedWord from '../entities/BlacklistedWord';
+import BlacklistedWordEntity from '../entities/BlacklistedWordEntity';
 import ValidateClass from '../utils/ValidateClass';
-import WhitelistedWord from '../entities/WhitelistedWord';
+import WhitelistedWordEntity from '../entities/WhitelistedWordEntity';
 
 export default class ChatWordService {
 	async addBlacklistedWord(word: string) {
-		const repository = new LinqRepository(BlacklistedWord);
+		const repository = new LinqRepository(BlacklistedWordEntity);
 
 		if (
 			(await repository
@@ -14,14 +14,14 @@ export default class ChatWordService {
 				.equal(word)
 				.count()) === 0
 		) {
-			const blacklistedWord = new BlacklistedWord();
+			const blacklistedWord = new BlacklistedWordEntity();
 			blacklistedWord.word = word;
 			await repository.create(ValidateClass(blacklistedWord));
 		}
 	}
 
 	async addWhitelistedWord(word: string) {
-		const repository = new LinqRepository(WhitelistedWord);
+		const repository = new LinqRepository(WhitelistedWordEntity);
 
 		if (
 			(await repository
@@ -30,19 +30,19 @@ export default class ChatWordService {
 				.equal(word)
 				.count()) === 0
 		) {
-			const whitelistedWord = new WhitelistedWord();
+			const whitelistedWord = new WhitelistedWordEntity();
 			whitelistedWord.word = word;
 			await repository.create(ValidateClass(whitelistedWord));
 		}
 	}
 
 	async getBlacklistedWords(): Promise<string[]> {
-		const repository = new LinqRepository(BlacklistedWord);
+		const repository = new LinqRepository(BlacklistedWordEntity);
 		return (await repository.getAll()).map(x => x.word);
 	}
 
 	async getWhitelistedWords(): Promise<string[]> {
-		const repository = new LinqRepository(WhitelistedWord);
+		const repository = new LinqRepository(WhitelistedWordEntity);
 		return (await repository.getAll()).map(x => x.word);
 	}
 }

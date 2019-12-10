@@ -1,4 +1,4 @@
-import Announcement from '../../Intel/src/entities/Announcement';
+import AnnouncementEntity from '../../Intel/src/entities/AnnouncementEntity';
 import { IsString, IsBoolean, IsNotEmpty, IsNumber } from 'class-validator';
 import ValidateClass from '../../Intel/src/utils/ValidateClass';
 

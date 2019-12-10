@@ -14,7 +14,7 @@ import PlayerEvents from '../../events/PlayerEvents';
 import FAKE_OFFLINE_STEAMID from '../../../../Common/Constants/FakeOfflineSteamid';
 import Logger from '../../modules/Logger';
 import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
-import Player from '../../entities/Player';
+import Player from '../../../../Common/Models/Player';
 
 @SocketController()
 export default class DebugSocketController {
@@ -31,7 +31,7 @@ export default class DebugSocketController {
 		if (process.env.NODE_ENV === 'dev') {
 			if (!this.sessionService.playerExists(FAKE_OFFLINE_STEAMID)) {
 				await this.debugService.addFakePlayer(FAKE_OFFLINE_STEAMID, socket.request.session.id);
-				const player: Player = await this.playerService.getPlayer(FAKE_OFFLINE_STEAMID);
+				const player = await this.playerService.getPlayer(FAKE_OFFLINE_STEAMID);
 				socket.join(FAKE_OFFLINE_STEAMID);
 				await this.sessionService.updatePlayer(player);
 				socket.request.session.player = player;

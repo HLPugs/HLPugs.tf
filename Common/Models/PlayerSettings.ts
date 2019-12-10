@@ -1,54 +1,36 @@
-import { Entity, Column, OneToOne, PrimaryGeneratedColumn, JoinColumn } from 'typeorm';
-import Player from './Player';
-import DraftTFClass from '../../../Common/Enums/DraftTFClass';
-import { Allow, IsArray, IsNumber, IsBoolean, IsString } from 'class-validator';
-import ValidateClass from '../utils/ValidateClass';
-import { PlayerSettingsViewModel } from '../../../Common/ViewModels/PlayerSettingsViewModel';
+import { IsBoolean, IsNumber, IsArray, IsString } from 'class-validator';
+import DraftTFClass from '../Enums/DraftTFClass';
+import { PlayerSettingsViewModel } from '../ViewModels/PlayerSettingsViewModel';
+import PlayerSettingsEntity from '../../Intel/src/entities/PlayerSettingsEntity';
+import ValidateClass from '../../Intel/src/utils/ValidateClass';
 
-@Entity()
 export default class PlayerSettings {
-	@PrimaryGeneratedColumn()
-	id: number;
-
-	@Column({ default: false })
 	@IsBoolean()
 	isNotifiableByMention: boolean = false;
 
-	@Column({ default: 50 })
 	@IsNumber()
-	volume: number = 50;
+	volume: number;
 
-	@Column('simple-array', { default: '' })
 	@IsArray()
 	favoriteClasses: DraftTFClass[] = [];
 
-	@Column({ default: false })
 	@IsBoolean()
 	addToFavoritesAfterMatch: boolean = false;
 
-	@Column({ default: false })
 	@IsBoolean()
 	addToFavoritesOnLogin: boolean = false;
 
-	@Column({ default: true })
 	@IsBoolean()
 	audioCuesEnabled: boolean = false;
 
-	@Column({ default: 'default' })
 	@IsString()
 	voicepack: string = 'default'; // enum ?
 
-	@Column({ default: 'default' })
 	@IsString()
 	colorOfNameInChat: string = 'default'; // enum?
 
-	@OneToOne(type => Player, player => player.settings)
-	@JoinColumn()
-	@Allow()
-	player: Player;
-
 	static fromViewModel(playerSettingsViewModel: PlayerSettingsViewModel): PlayerSettings {
-		const playerSettings = new PlayerSettings();
+		const playerSettings = new this();
 		playerSettings.addToFavoritesAfterMatch = playerSettingsViewModel.addToFavoritesAfterMatch;
 		playerSettings.addToFavoritesOnLogin = playerSettingsViewModel.addToFavoritesOnLogin;
 		playerSettings.audioCuesEnabled = playerSettingsViewModel.audioCuesEnabled;

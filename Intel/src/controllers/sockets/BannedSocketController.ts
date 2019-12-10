@@ -4,8 +4,7 @@ import GetBannedPageViewModelRequest from '../../../../Common/Requests/GetBanned
 import ValidateClass from '../../utils/ValidateClass';
 import PlayerService from '../../services/PlayerService';
 import PunishmentType from '../../../../Common/Enums/PunishmentType';
-import BannedPageViewModel from '../../../../Common/ViewModels/BannedPageViewModel';
-import Punishment from '../../entities/Punishment';
+import Punishment from '../../../../Common/Models/Punishment';
 
 @SocketController()
 export default class BannedSocketController {

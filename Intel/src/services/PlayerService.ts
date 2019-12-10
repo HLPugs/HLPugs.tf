@@ -1,8 +1,7 @@
-import Player from '../entities/Player';
-import Punishment from '../entities/Punishment';
+import PunishmentEntity from '../entities/PunishmentEntity';
 import { LinqRepository } from 'typeorm-linq-repository';
 import PunishmentType from '../../../Common/Enums/PunishmentType';
-import PlayerSettings from '../entities/PlayerSettings';
+import PlayerSettingsEntity from '../entities/PlayerSettingsEntity';
 import Team from '../../../Common/Enums/Team';
 import ClassStatisticsFilterOptions from '../../../Common/Models/ClassStatisticsFilterOptions';
 import { isSteamID } from '../utils/SteamIDChecker';
@@ -20,6 +19,11 @@ import SessionService from './SessionService';
 import ValidateClass from '../utils/ValidateClass';
 import Role from '../../../Common/Enums/Role';
 import PermissionGroup from '../../../Common/Enums/PermissionGroup';
+import Punishment from '../../../Common/Models/Punishment';
+import Player from '../../../Common/Models/Player';
+import PlayerSettings from '../../../Common/Models/PlayerSettings';
+import UnnamedPlayer from '../interfaces/UnnamedPlayer';
+import PlayerEntity from '../entities/PlayerEntity';
 
 export default class PlayerService {
 	private readonly sessionService = new SessionService();
@@ -29,26 +33,28 @@ export default class PlayerService {
 		if (player !== undefined) {
 			return ValidateClass(player);
 		} else {
-			const playerRepository = new LinqRepository(Player);
-			const player = await playerRepository
+			const playerRepository = new LinqRepository(PlayerEntity);
+			const playerEntity = await playerRepository
 				.getOne()
 				.where(p => p.steamid)
 				.equal(steamid)
 				.include(p => p.settings);
-			if (player === undefined) {
+			if (playerEntity === undefined) {
 				throw new PlayerNotFoundError(steamid);
 			}
+			const player = PlayerEntity.toPlayer(playerEntity);
 			return ValidateClass(player);
 		}
 	}
 
 	async getPlayersByPartialAlias(alias: string): Promise<Player[]> {
-		const playerRepository = new LinqRepository(Player);
+		const playerRepository = new LinqRepository(PlayerEntity);
 		const players = await playerRepository
 			.getAll()
 			.where(p => p.alias)
 			.beginsWith(alias);
-		return players;
+
+		return players.map(p => PlayerEntity.toPlayer(p));
 	}
 
 	async getClassStatistics(identifier: string, filterOptions?: ClassStatisticsFilterOptions): Promise<ClassStatistics> {
@@ -135,15 +141,22 @@ export default class PlayerService {
 			throw new PlayerNotFoundError(steamid);
 		}
 
-		const playerRepository = new LinqRepository(Player);
+		const playerRepository = new LinqRepository(PlayerEntity);
 
 		const player = await playerRepository
 			.getOne()
 			.where(p => p.steamid)
 			.equal(steamid)
 			.include(p => p.settings);
+
+		const playerSettingsEntity = await PlayerSettingsEntity.fromPlayerSettings(
+			player.settings.id,
+			player.steamid,
+			settings
+		);
+
 		const settingsId = player.settings.id;
-		player.settings = settings;
+		player.settings = playerSettingsEntity;
 		player.settings.id = settingsId;
 		await playerRepository.update(player);
 	}
@@ -152,16 +165,19 @@ export default class PlayerService {
 		if (!(await this.playerExists(steamid))) {
 			throw new PlayerNotFoundError(steamid);
 		}
-		const playerRepository = new LinqRepository(Player);
+		const playerRepository = new LinqRepository(PlayerEntity);
 
-		const player = await this.getPlayer(steamid);
-		player.alias = alias;
+		const playerEntity = await PlayerEntity.getBySteamID(steamid);
+		playerEntity.alias = alias;
+
+		const updatedPlayerEntity = await playerRepository.update(playerEntity);
+		const player = PlayerEntity.toPlayer(playerEntity);
 		await this.sessionService.updatePlayer(player);
-		return await playerRepository.update(player);
+		return PlayerEntity.toPlayer(updatedPlayerEntity);
 	}
 
 	async isAliasTaken(alias: string) {
-		const playerRepository = new LinqRepository(Player);
+		const playerRepository = new LinqRepository(PlayerEntity);
 		return (
 			(await playerRepository
 				.getOne()
@@ -176,21 +192,28 @@ export default class PlayerService {
 			throw new PlayerNotFoundError(steamid);
 		}
 
-		const playerSettingsRepository = new LinqRepository(PlayerSettings);
+		const playerSettingsRepository = new LinqRepository(PlayerSettingsEntity);
 
-		const settings = await playerSettingsRepository
+		const settingsEntity = await playerSettingsRepository
 			.getOne()
 			.join(s => s.player)
 			.where(player => player.steamid)
 			.equal(steamid);
 
-		return settings;
+		return PlayerSettingsEntity.toPlayerSettings(settingsEntity);
 	}
 
-	async upsertPlayer(player: Player): Promise<void> {
-		const playerRepository = new LinqRepository(Player);
+	async loginNewPlayer(player: UnnamedPlayer): Promise<void> {
+		const playerRepository = new LinqRepository(PlayerEntity);
 
+		await this.sessionService.updatePlayer(player);
+		const playerEntity = PlayerEntity.createNewPlayer(player);
+		await playerRepository.create(playerEntity);
+	}
+
+	async loginExistingPlayer(player: Player): Promise<void> {
 		if (await this.playerExists(player.steamid)) {
+			const playerRepository = new LinqRepository(PlayerEntity);
 			let playerToUpdate = await playerRepository
 				.getOne()
 				.where(x => x.steamid)
@@ -200,9 +223,7 @@ export default class PlayerService {
 			await this.sessionService.updatePlayer(playerToUpdate);
 			await playerRepository.update(playerToUpdate);
 		} else {
-			player.settings = new PlayerSettings();
-			await this.sessionService.updatePlayer(player);
-			await playerRepository.create(player);
+			throw new PlayerNotFoundError(player.steamid);
 		}
 	}
 
@@ -211,17 +232,17 @@ export default class PlayerService {
 			throw new PlayerNotFoundError(steamid);
 		}
 
-		const punishmentRepository = new LinqRepository(Punishment);
+		const punishmentRepository = new LinqRepository(PunishmentEntity);
 		const activePunishments = await punishmentRepository
 			.getAll()
 			.where(p => p.expirationDate)
 			.greaterThan(new Date())
 			.and(p => p.offender.steamid)
 			.equal(steamid)
-			.include(p => p.creator)
+			.include(p => p.author)
 			.include(p => p.offender);
 
-		return activePunishments;
+		return activePunishments.map(p => PunishmentEntity.toPunishment(p));
 	}
 
 	async isCurrentlyMutedInChat(steamid: SteamID): Promise<boolean> {
@@ -234,22 +255,22 @@ export default class PlayerService {
 		if (!(await this.playerExists(steamid))) {
 			throw new PlayerNotFoundError(steamid);
 		}
-		const playerRepository = new LinqRepository(Player);
-		const player = await this.getPlayer(steamid);
-		player.roles = roles;
-		const updatedPlayer = await playerRepository.update(player);
+		const playerRepository = new LinqRepository(PlayerEntity);
+		const playerEntity = await PlayerEntity.getBySteamID(steamid);
+		playerEntity.roles = roles;
+		const updatedPlayer = await playerRepository.update(playerEntity);
 		await this.sessionService.updatePlayer(updatedPlayer);
-		return updatedPlayer;
+		return PlayerEntity.toPlayer(updatedPlayer);
 	}
 
-	async updatePermissionGroup(steamid: SteamID, permissionGroup: PermissionGroup): Promise<Player> {
+	async updatePermissionGroup(steamid: SteamID, permissionGroup: PermissionGroup): Promise<PlayerEntity> {
 		if (!(await this.playerExists(steamid))) {
 			throw new PlayerNotFoundError(steamid);
 		}
-		const playerRepository = new LinqRepository(Player);
-		const player = await this.getPlayer(steamid);
-		player.permissionGroup = permissionGroup;
-		const updatedPlayer = await playerRepository.update(player);
+		const playerRepository = new LinqRepository(PlayerEntity);
+		const playerEntity = await PlayerEntity.getBySteamID(steamid);
+		playerEntity.permissionGroup = permissionGroup;
+		const updatedPlayer = await playerRepository.update(playerEntity);
 		await this.sessionService.updatePlayer(updatedPlayer);
 		return updatedPlayer;
 	}
@@ -267,7 +288,7 @@ export default class PlayerService {
 			return true;
 		}
 
-		const playerRepository = new LinqRepository(Player);
+		const playerRepository = new LinqRepository(PlayerEntity);
 		const playerExists =
 			(await playerRepository
 				.getOne()

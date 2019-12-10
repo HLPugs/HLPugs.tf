@@ -3,8 +3,7 @@ import SteamID from '../Types/SteamID';
 import * as uuid from 'uuid';
 import SendMessageRequest from '../Requests/SendMessageRequest';
 import ValidateClass from '../../Intel/src/utils/ValidateClass';
-import RequestWithPlayer from '../../Intel/src/interfaces/RequestWithPlayer';
-import Player from '../../Intel/src/entities/Player';
+import Player from './Player';
 
 export default class Message {
 	@IsString()

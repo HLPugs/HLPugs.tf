@@ -12,11 +12,11 @@ import { Socket } from 'socket.io';
 import { PlayerSettingsViewModel } from '../../../../Common/ViewModels/PlayerSettingsViewModel';
 import ValidateClass from '../../utils/ValidateClass';
 import UpdatePlayerSettingsRequest from '../../../../Common/Requests/UpdatePlayerSettingsRequest';
-import PlayerSettings from '../../entities/PlayerSettings';
 import SocketWithPlayer from '../../interfaces/SocketWithPlayer';
 import PlayerEvents from '../../events/PlayerEvents';
 import Logger from '../../modules/Logger';
 import SocketRequestWithPlayer from '../../interfaces/SocketRequestWithPlayer';
+import PlayerSettings from '../../../../Common/Models/PlayerSettings';
 
 @SocketController()
 export default class SettingsSocketController {

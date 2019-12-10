@@ -3,7 +3,7 @@ import { SocketController, SocketIO, OnMessage, MessageBody, ConnectedSocket, So
 import ValidateClass from '../../utils/ValidateClass';
 import CreateAnnouncementRequest from '../../../../Common/Requests/CreateAnnouncementRequest';
 import AnnouncementService from '../../services/AnnouncementService';
-import Announcement from '../../entities/Announcement';
+import AnnouncementEntity from '../../entities/AnnouncementEntity';
 import SocketRequestWithPlayer from '../../interfaces/SocketRequestWithPlayer';
 import HomepageAnnouncementViewModel from '../../../../Common/ViewModels/HomepageAnnouncementViewModel';
 import { EnvironmentConfig } from '../../constants/SiteConfiguration';
@@ -17,7 +17,7 @@ export default class AnnouncementSocketController {
 		const announcements = await this.announcementService.getAnnouncements(EnvironmentConfig.region);
 		const announcementViewModels = announcements
 			.sort((a, b) => (a.order > b.order ? 1 : -1)) // sort by order ascending
-			.map(announcement => Announcement.toHomepageAnnouncementViewModel(announcement));
+			.map(announcement => AnnouncementEntity.toHomepageAnnouncementViewModel(announcement));
 		socket.emit('getHomepageAnnouncements', announcementViewModels);
 	}
 
@@ -35,9 +35,9 @@ export default class AnnouncementSocketController {
 			priority: payload.priority,
 			region: payload.region,
 			timestamp: new Date()
-		} as Announcement;
+		} as AnnouncementEntity;
 		ValidateClass(announcement);
 		const createdAnnouncement = await this.announcementService.createAnnouncement(announcement);
-		io.emit('createAnnouncement', Announcement.toHomepageAnnouncementViewModel(createdAnnouncement));
+		io.emit('createAnnouncement', AnnouncementEntity.toHomepageAnnouncementViewModel(createdAnnouncement));
 	}
 }
