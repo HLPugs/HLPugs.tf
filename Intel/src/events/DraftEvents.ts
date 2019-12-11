@@ -8,11 +8,11 @@ import ValidateClass from '../utils/ValidateClass';
 import { SiteConfiguration } from '../constants/SiteConfiguration';
 import { io } from '../server';
 import Logger from '../modules/Logger';
-import PlayerNotFoundError from '../custom-errors/PlayerNotFoundError';
+import DraftState from '../../../Common/Enums/DraftState';
 export default class DraftEvents {
 	private readonly draftService = new DraftService();
 
-	private readyUpPhaseActive = false;
+	private currentPhase: DraftState = DraftState.WAITING_FOR_REQUIREMENTS;
 
 	addPlayerToDraftTFClass(steamid: SteamID, draftTFClass: DraftTFClass) {
 		if (!this.draftService.isPlayerAddedToDraftTFClass(steamid, draftTFClass)) {
@@ -43,7 +43,7 @@ export default class DraftEvents {
 
 	sendPreDraftRequirements() {
 		Logger.logDebug('Attempting to send new pre draft requirements');
-		if (!this.readyUpPhaseActive) {
+		if (this.currentPhase === DraftState.WAITING_FOR_REQUIREMENTS) {
 			const readyUpPhaseCanStart = this.draftService.checkIfAllDraftRequirementsAreFulfilled();
 
 			if (readyUpPhaseCanStart) {
@@ -79,7 +79,7 @@ export default class DraftEvents {
 	}
 
 	startReadyUpPhase() {
-		this.readyUpPhaseActive = true;
+		this.currentPhase === DraftState.READY_UP;
 		const playersAddedToDraft = this.draftService.getAllPlayersAddedToDraft();
 		// Emit to all steamid's to ready up
 		playersAddedToDraft.forEach(steamid => io.to(steamid).emit('showReadyUpModal'));
