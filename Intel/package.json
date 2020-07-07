@@ -29,7 +29,7 @@
 		"express-session": "^1.16.2",
 		"mysql": "^2.17.1",
 		"mysql2": "^1.6.5",
-		"npm": "^6.3.0",
+		"npm": "^6.14.6",
 		"onchange": "^6.0.0",
 		"reflect-metadata": "^0.1.13",
 		"request": "^2.88.0",
