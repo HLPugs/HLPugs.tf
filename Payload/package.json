@@ -11,7 +11,7 @@
 		"emoji-mart": "^2.11.1",
 		"immutability-helper": "^3.0.1",
 		"moment": "^2.24",
-		"node-sass": "^4.12.0",
+		"node-sass": "^7.0.0",
 		"onchange": "^6.0.0",
 		"react": "^16.8.6",
 		"react-dnd": "^9.4.0",
